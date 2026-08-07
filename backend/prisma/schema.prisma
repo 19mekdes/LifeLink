@@ -1,0 +1,346 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ ENUMS ============
+enum Role {
+  DONOR
+  HOSPITAL
+  BLOOD_BANK
+  ADMIN
+}
+
+enum BloodType {
+  A_POS
+  A_NEG
+  B_POS
+  B_NEG
+  AB_POS
+  AB_NEG
+  O_POS
+  O_NEG
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  TEMPORARILY_UNAVAILABLE
+  UNAVAILABLE
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  PROCESSING
+  FULFILLED
+  CANCELLED
+  REJECTED
+}
+
+enum UrgencyLevel {
+  NORMAL
+  URGENT
+  CRITICAL_EMERGENCY
+}
+
+enum DonationStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+// ============ MODELS ============
+model User {
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  password      String
+  phone         String
+  role          Role          @default(DONOR)
+  isActive      Boolean       @default(true)
+  lastLogin     DateTime?
+  
+  donorProfile  DonorProfile?
+  hospital      Hospital?
+  bloodBank     BloodBank?
+  notifications Notification[]
+  auditLogs     AuditLog[]
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model DonorProfile {
+  id                String             @id @default(cuid())
+  userId            String             @unique
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  age               Int
+  gender            String
+  bloodType         BloodType
+  address           String
+  city              String
+  state             String?
+  country           String             @default("Ethiopia")
+  
+  lastDonationDate  DateTime?
+  nextEligibleDate  DateTime?
+  totalDonations    Int                @default(0)
+  donationCount     Int                @default(0)
+  
+  isVerified        Boolean            @default(false)
+  availabilityStatus AvailabilityStatus @default(AVAILABLE)
+  reliabilityScore  Int                @default(50)
+  responseRate      Float              @default(0)
+  
+  donations         Donation[]
+  donorResponses    DonorResponse[]
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([bloodType])
+  @@index([city])
+  @@index([availabilityStatus])
+  @@index([reliabilityScore])
+}
+
+model Hospital {
+  id                String             @id @default(cuid())
+  userId            String             @unique
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  hospitalName      String
+  licenseNumber     String             @unique
+  address           String
+  city              String
+  state             String?
+  country           String             @default("Ethiopia")
+  phone             String
+  emergencyContact  String?
+  
+  verificationStatus VerificationStatus @default(PENDING)
+  verifiedBy        String?
+  verifiedAt        DateTime?
+  isActive          Boolean            @default(true)
+  
+  bloodRequests     BloodRequest[]
+  donations         Donation[]
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([verificationStatus])
+  @@index([city])
+}
+
+model BloodBank {
+  id                String             @id @default(cuid())
+  userId            String             @unique
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  bankName          String
+  licenseNumber     String             @unique
+  address           String
+  city              String
+  state             String?
+  country           String             @default("Ethiopia")
+  phone             String
+  emergencyContact  String?
+  
+  verificationStatus VerificationStatus @default(VERIFIED)
+  isActive          Boolean            @default(true)
+  
+  inventory         InventoryItem[]
+  bloodRequests     BloodRequest[]
+  donations         Donation[]
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([city])
+}
+
+model InventoryItem {
+  id                String             @id @default(cuid())
+  bloodBankId       String
+  bloodBank         BloodBank          @relation(fields: [bloodBankId], references: [id], onDelete: Cascade)
+  
+  bloodType         BloodType
+  unitsAvailable    Int                @default(0)
+  unitsReserved     Int                @default(0)
+  unitsExpired      Int                @default(0)
+  
+  expiryDate        DateTime?
+  status            String             @default("AVAILABLE")
+  minStockLevel     Int                @default(5)
+  
+  requestAllocations BloodRequestAllocation[]
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@unique([bloodBankId, bloodType])
+  @@index([bloodType])
+  @@index([status])
+}
+
+model BloodRequest {
+  id                String             @id @default(cuid())
+  hospitalId        String
+  hospital          Hospital           @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  
+  bloodBankId       String?
+  bloodBank         BloodBank?         @relation(fields: [bloodBankId], references: [id])
+  
+  bloodType         BloodType
+  unitsRequired     Int
+  unitsAllocated    Int                @default(0)
+  unitsFulfilled    Int                @default(0)
+  
+  location          String
+  urgency           UrgencyLevel       @default(NORMAL)
+  contactInformation String
+  description       String?
+  patientInfo       String?
+  reason            String?
+  
+  status            RequestStatus      @default(PENDING)
+  statusHistory     Json
+  
+  requestedAt       DateTime           @default(now())
+  approvedAt        DateTime?
+  fulfilledAt       DateTime?
+  expiresAt         DateTime?
+  
+  allocations       BloodRequestAllocation[]
+  donorResponses    DonorResponse[]
+  donations         Donation[]
+  notifications     Notification[]
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([hospitalId])
+  @@index([bloodBankId])
+  @@index([bloodType])
+  @@index([status])
+  @@index([urgency])
+  @@index([location])
+}
+
+model BloodRequestAllocation {
+  id                String             @id @default(cuid())
+  requestId         String
+  request           BloodRequest       @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  inventoryId       String
+  inventory         InventoryItem      @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  
+  unitsAllocated    Int
+  unitsUsed         Int                @default(0)
+  status            String             @default("ALLOCATED")
+  
+  allocatedAt       DateTime           @default(now())
+  usedAt            DateTime?
+
+  @@unique([requestId, inventoryId])
+}
+
+model DonorResponse {
+  id                String             @id @default(cuid())
+  donorId           String
+  donor             DonorProfile       @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  requestId         String
+  request           BloodRequest       @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  
+  response          String             // ACCEPTED, DECLINED, MAYBE
+  message           String?
+  respondedAt       DateTime           @default(now())
+  
+  @@unique([donorId, requestId])
+  @@index([requestId])
+  @@index([response])
+}
+
+model Donation {
+  id                String             @id @default(cuid())
+  donorId           String
+  donor             DonorProfile       @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  hospitalId        String
+  hospital          Hospital           @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  bloodBankId       String
+  bloodBank         BloodBank          @relation(fields: [bloodBankId], references: [id], onDelete: Cascade)
+  requestId         String
+  request           BloodRequest       @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  
+  donationDate      DateTime           @default(now())
+  units             Int
+  status            DonationStatus     @default(COMPLETED)
+  notes             String?
+  recordedBy        String?
+  nextEligibleDate  DateTime?
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([donorId])
+  @@index([hospitalId])
+  @@index([bloodBankId])
+  @@index([requestId])
+  @@index([donationDate])
+}
+
+model Notification {
+  id                String             @id @default(cuid())
+  userId            String
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  requestId         String?
+  request           BloodRequest?      @relation(fields: [requestId], references: [id])
+  
+  type              String             // EMERGENCY, REMINDER, STATUS_UPDATE, GENERAL
+  title             String
+  message           String
+  data              Json?
+  isRead            Boolean            @default(false)
+  readAt            DateTime?
+  
+  createdAt         DateTime           @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([type])
+}
+
+model AuditLog {
+  id                String             @id @default(cuid())
+  userId            String
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  action            String
+  entity            String
+  entityId          String
+  changes           Json?
+  ipAddress         String?
+  userAgent         String?
+  
+  createdAt         DateTime           @default(now())
+
+  @@index([userId])
+  @@index([entity])
+  @@index([createdAt])
+}

@@ -339,6 +339,67 @@
         </div>
 
 
+        <!-- MY REQUESTS -->
+        <div class="page" id="my-requests">
+
+          <div class="page-header request-header">
+
+            <div>
+              <h1>My Requests</h1>
+              <p>Dashboard / My Requests</p>
+            </div>
+
+            <button class="primary-btn" data-page-target="create-request">
+              + Create New Request
+            </button>
+
+          </div>
+
+          <div class="card table-card">
+
+            <div class="tabs" id="my-requests-tabs">
+
+              <button class="tab active" data-filter="">All</button>
+              <button class="tab" data-filter="active">Active</button>
+              <button class="tab" data-filter="inProgress">In Progress</button>
+              <button class="tab" data-filter="completed">Completed</button>
+              <button class="tab" data-filter="cancelled">Cancelled</button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Blood Type</th>
+                    <th>Units</th>
+                    <th>Urgency</th>
+                    <th>Hospital</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Posted On</th>
+                  </tr>
+                </thead>
+
+                <!-- Rows rendered by JS from hospitalApi.getMyRequests() -->
+                <tbody id="my-requests-body">
+                  <tr>
+                    <td colspan="7" class="loading-hint">Loading requests...</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        
         
             
 

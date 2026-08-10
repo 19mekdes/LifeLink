@@ -93,6 +93,109 @@
 
       </header>
 
+      <!-- PAGE CONTENT -->
+      <section class="content">
+
+        <!-- DASHBOARD -->
+        <div class="page active-page" id="dashboard">
+
+          <div class="page-header">
+            <h1>Dashboard</h1>
+            <p>Welcome back, <span id="welcome-hospital-name">Hospital</span>!</p>
+          </div>
+
+          <!-- STAT CARDS (populated by JS) -->
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-icon red">♧</div>
+              <div>
+                <span>Total Requests</span>
+                <strong id="stat-total-requests">—</strong>
+                <small>All time</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon orange">▣</div>
+              <div>
+                <span>Active Requests</span>
+                <strong id="stat-active-requests">—</strong>
+                <small>Currently open</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon green">♧</div>
+              <div>
+                <span>Total Responses</span>
+                <strong id="stat-total-responses">—</strong>
+                <small>All time</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon blue">♙</div>
+              <div>
+                <span>Completed Donations</span>
+                <strong id="stat-completed-donations">—</strong>
+                <small>All time</small>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- DASHBOARD GRID -->
+          <div class="dashboard-grid">
+
+            <!-- REQUEST STATUS OVERVIEW -->
+            <div class="card status-card">
+
+              <div class="card-header">
+                <h2>Request Status Overview</h2>
+              </div>
+
+              <div class="status-content">
+
+                <div class="donut-chart">
+                  <div class="donut-center">
+                    <strong id="status-total">—</strong>
+                    <span>Total</span>
+                  </div>
+                </div>
+
+                <div class="status-legend">
+
+                  <div>
+                    <span class="legend-dot red-dot"></span>
+                    <span>Active</span>
+                    <strong id="status-active">—</strong>
+                  </div>
+
+                  <div>
+                    <span class="legend-dot orange-dot"></span>
+                    <span>In Progress</span>
+                    <strong id="status-inProgress">—</strong>
+                  </div>
+
+                  <div>
+                    <span class="legend-dot green-dot"></span>
+                    <span>Completed</span>
+                    <strong id="status-completed">—</strong>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            
+
+      </section>
+
 
     </main>
 

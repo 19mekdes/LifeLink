@@ -398,7 +398,60 @@
 
         </div>
 
+<!-- RESPONSES -->
+        <div class="page" id="responses">
 
+          <div class="page-header">
+
+            <h1>Responses</h1>
+            <p>Dashboard / Responses</p>
+
+          </div>
+
+          <div class="card table-card">
+
+            <div class="tabs" id="responses-tabs">
+
+              <button class="tab active" data-filter="">All</button>
+              <button class="tab" data-filter="new">New</button>
+              <button class="tab" data-filter="contacted">Contacted</button>
+              <button class="tab" data-filter="confirmed">Confirmed</button>
+              <button class="tab" data-filter="declined">Declined</button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Blood Type</th>
+                    <th>Request</th>
+                    <th>Responded On</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <!-- Rows rendered by JS from hospitalApi.getResponses() -->
+                <tbody id="responses-body">
+                  <tr>
+                    <td colspan="6" class="loading-hint">Loading responses...</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        
         
         
             

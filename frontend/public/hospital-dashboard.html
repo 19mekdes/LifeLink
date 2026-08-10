@@ -451,8 +451,114 @@
         </div>
 
 
-        
-        
+        <!-- PROFILE -->
+        <div class="page" id="profile">
+
+          <div class="page-header">
+
+            <h1>Hospital Profile</h1>
+            <p>Dashboard / Hospital Profile</p>
+
+          </div>
+
+          <div class="profile-grid">
+
+            <div class="card">
+
+              <h2>Hospital Information</h2>
+
+              <!-- Values populated by JS from hospitalApi.getHospitalProfile() -->
+              <div class="profile-info" id="hospital-profile-info">
+
+                <div>
+                  <span>Hospital Name</span>
+                  <strong id="profile-name">—</strong>
+                </div>
+
+                <div>
+                  <span>Hospital Type</span>
+                  <strong id="profile-type">—</strong>
+                </div>
+
+                <div>
+                  <span>License Number</span>
+                  <strong id="profile-license">—</strong>
+                </div>
+
+                <div>
+                  <span>Established Year</span>
+                  <strong id="profile-established">—</strong>
+                </div>
+
+                <div>
+                  <span>Phone Number</span>
+                  <strong id="profile-phone">—</strong>
+                </div>
+
+                <div>
+                  <span>Email Address</span>
+                  <strong id="profile-email">—</strong>
+                </div>
+
+                <div>
+                  <span>Address</span>
+                  <strong id="profile-address">—</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <div class="card verification-card">
+
+                <h2>Verification Status</h2>
+
+                <!-- Populated by JS from hospital profile data -->
+                <div class="verified" id="verification-status">
+                  <strong>—</strong>
+                  <p>—</p>
+                  <small>—</small>
+                </div>
+
+              </div>
+
+
+              <div class="card">
+
+                <h2>Statistics</h2>
+
+                <!-- Populated by JS from hospitalApi.getDashboardStats() -->
+                <div class="profile-stat">
+                  <span>Total Requests</span>
+                  <strong id="profile-stat-total-requests">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Total Responses</span>
+                  <strong id="profile-stat-total-responses">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Completed Donations</span>
+                  <strong id="profile-stat-completed-donations">—</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <button class="primary-btn profile-edit-btn" id="edit-profile-btn">
+            Edit Profile
+          </button>
+
+        </div>
+
+
         
             
 

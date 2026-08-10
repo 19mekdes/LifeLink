@@ -1,11 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LifeLink - Login</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../src/css/styles.css" />
+    <link rel="stylesheet" href="../src/css/auth.css" />
 </head>
 <body>
-  
+    <!-- ============ MAIN LOGIN CONTAINER ============ -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Logo -->
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>LifeLink</span>
+            </div>
+            
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Login to save lives</p>
+
+            <!-- Login Form -->
+            <form id="loginForm" novalidate>
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-control" 
+                        placeholder="Enter your email" 
+                        value="admin@lifelink.com" 
+                        required
+                        autocomplete="email"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-control" 
+                            placeholder="Enter your password" 
+                            value="admin123" 
+                            required
+                            autocomplete="current-password"
+                        />
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe" />
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <div id="formError" class="error-message"></div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                Don't have an account? <a href="register.html">Register here</a>
+            </div>
+
+           
+
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- ============ IMPORTS ============ -->
+    <script type="importmap">
+        {
+            "imports": {
+                "../src/js/api/api.js": "../src/js/api/api.js",
+                "../src/js/api/authApi.js": "../src/js/api/authApi.js"
+            }
+        }
+    </script>
+
+    <!-- ============ LOGIN SCRIPT ============ -->
+    <script type="module">
+        // Import authApi from the correct path
+        import authApi from '../src/js/api/authApi.js';
+        
+        // ============ DOM ELEMENTS ============
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const formError = document.getElementById('formError');
+        const toastContainer = document.getElementById('toastContainer');
+        const togglePassword = document.getElementById('togglePassword');
+        const rememberMe = document.getElementById('rememberMe');
+
+        // ============ TOAST FUNCTION ============
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // ============ PASSWORD TOGGLE ============
+        if (togglePassword) {
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.querySelector('i').classList.toggle('fa-eye');
+                togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        }
+
+        // ============ CHECK AUTH STATUS ============
+        // Redirect if already logged in
+        if (authApi.isAuthenticated()) {
+            const user = authApi.getCurrentUser();
+            if (user) {
+                const dashboard = authApi.getDashboardUrl(user.role);
+                window.location.href = dashboard;
+            } else {
+                authApi.clearAuth();
+            }
+        }
+
+        // ============ REMEMBER ME FUNCTIONALITY ============
+        // Load saved email if remember me was checked
+        const savedEmail = localStorage.getItem('rememberedEmail');
+        if (savedEmail) {
+            emailInput.value = savedEmail;
+            rememberMe.checked = true;
+        }
+
+        // Save email when remember me is checked
+        rememberMe.addEventListener('change', () => {
+            if (rememberMe.checked) {
+                localStorage.setItem('rememberedEmail', emailInput.value);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+            }
+        });
+
+        // ============ LOGIN FORM SUBMIT ============
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Reset error
+            formError.classList.remove('show');
+            formError.textContent = '';
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Validate
+            if (!email || !password) {
+                showToast('Please enter email and password', 'error');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                return;
+            }
+
+            try {
+                console.log('Attempting login for:', email);
+                const response = await authApi.login(email, password);
+                console.log('Login response:', response);
+
+                if (response.success && response.data) {
+                    // Save auth data
+                    authApi.saveAuth(response.data.token, response.data.user);
+                    
+                    showToast(response.message || 'Login successful! 🎉', 'success');
+                    
+                    // Redirect after delay
+                    setTimeout(() => {
+                        const dashboard = authApi.getDashboardUrl(response.data.user.role);
+                        console.log('Redirecting to:', dashboard);
+                        window.location.href = dashboard;
+                    }, 1000);
+                } else {
+                    const errorMsg = response.message || 'Login failed. Please try again.';
+                    showToast(errorMsg, 'error');
+                    formError.textContent = errorMsg;
+                    formError.classList.add('show');
+                    
+                    // Highlight error fields
+                    emailInput.classList.add('error');
+                    passwordInput.classList.add('error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('Network error. Please check your connection.', 'error');
+                formError.textContent = 'Network error. Please try again.';
+                formError.classList.add('show');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+            }
+        });
+
+        // ============ CLEAR ERROR ON INPUT ============
+        emailInput.addEventListener('input', () => {
+            emailInput.classList.remove('error');
+            formError.classList.remove('show');
+        });
+
+        passwordInput.addEventListener('input', () => {
+            passwordInput.classList.remove('error');
+            formError.classList.remove('show');
+        });
+
+        // ============ ENTER KEY SUPPORT ============
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement && (activeElement.id === 'email' || activeElement.id === 'password')) {
+                    loginForm.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+    </script>
 </body>
 </html>

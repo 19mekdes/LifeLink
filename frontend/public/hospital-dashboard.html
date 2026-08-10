@@ -248,6 +248,96 @@
 
         </div>
 
+<!-- CREATE REQUEST -->
+        <div class="page" id="create-request">
+
+          <div class="page-header">
+            <h1>Create Request</h1>
+            <p>Create a new blood request.</p>
+          </div>
+
+          <div class="card form-card">
+
+            <h2>Blood Request Information</h2>
+
+            <form id="blood-request-form">
+
+              <div class="form-grid">
+
+                <div class="form-group">
+                  <label for="blood-type">Blood Type</label>
+
+                  <select id="blood-type" name="bloodType" required>
+                    <option value="">Select blood type</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="units">Units Needed</label>
+                  <input
+                    type="number"
+                    id="units"
+                    name="units"
+                    min="1"
+                    placeholder="Enter units"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="urgency">Urgency</label>
+
+                  <select id="urgency" name="urgency" required>
+                    <option value="">Select urgency</option>
+                    <option>Emergency</option>
+                    <option>High</option>
+                    <option>Medium</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="location">Location</label>
+
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Hospital location"
+                    required
+                  >
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <label for="description">Additional Information</label>
+
+                <textarea
+                  id="description"
+                  name="description"
+                  rows="5"
+                  placeholder="Provide additional information..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="primary-btn">
+                Create Request
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
 
         
             

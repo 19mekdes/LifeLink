@@ -191,7 +191,65 @@
 
             </div>
 
+            <!-- RECENT REQUESTS -->
+            <div class="card recent-card">
 
+              <div class="card-header">
+                <h2>Recent Requests</h2>
+                <button class="text-button" data-page-target="my-requests">View all</button>
+              </div>
+
+              <!-- Recent requests are rendered by JS from hospitalApi.getRecentRequests() -->
+              <div class="request-list" id="recent-requests-list">
+                <p class="loading-hint">Loading recent requests...</p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- URGENT REQUESTS -->
+          <div class="card table-card">
+
+            <div class="card-header">
+              <h2>Urgent Blood Requests Near You</h2>
+              <button class="text-button" data-page-target="responses">View all</button>
+            </div>
+
+            <div class="table-wrapper">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Blood Type</th>
+                    <th>Units Needed</th>
+                    <th>Urgency</th>
+                    <th>Hospital</th>
+                    <th>Location</th>
+                    <th>Posted On</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <!-- Rows rendered by JS from hospitalApi.getUrgentRequests() -->
+                <tbody id="urgent-requests-body">
+                  <tr>
+                    <td colspan="7" class="loading-hint">Loading urgent requests...</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        
             
 
       </section>

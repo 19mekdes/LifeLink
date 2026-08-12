@@ -1,3 +1,5 @@
+// backend/src/app.js
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -5,6 +7,9 @@ import compression from 'compression';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+// Import error handlers
+import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 // Load environment variables
 dotenv.config();
@@ -81,7 +86,7 @@ import hospitalRoutes from './routes/hospitalRoutes.js';
 
 // Register routes
 app.use('/api/auth', authRoutes);
-app.use('/api/hospitals', hospitalRoutes);  // ✅ ADD THIS LINE
+app.use('/api/hospitals', hospitalRoutes);
 
 // Other routes (to be added later)
 // app.use('/api/donors', require('./routes/donorRoutes'));
@@ -102,22 +107,10 @@ app.get('/', (req, res) => {
 });
 
 // ============ ERROR HANDLING ============
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route not found: ${req.method} ${req.path}`
-  });
-});
+// 404 handler - must be after all routes
+app.use(notFoundHandler);
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
+// Global error handler - must be last
+app.use(errorHandler);
 
 export default app;

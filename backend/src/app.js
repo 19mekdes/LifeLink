@@ -75,13 +75,16 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Auth routes
+// Import routes
 import authRoutes from './routes/authRoutes.js';
-app.use('/api/auth', authRoutes);
+import hospitalRoutes from './routes/hospitalRoutes.js';
 
-// Other routes (to be added)
+// Register routes
+app.use('/api/auth', authRoutes);
+app.use('/api/hospitals', hospitalRoutes);  // ✅ ADD THIS LINE
+
+// Other routes (to be added later)
 // app.use('/api/donors', require('./routes/donorRoutes'));
-// app.use('/api/hospitals', require('./routes/hospitalRoutes'));
 // app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));
 // app.use('/api/blood-requests', require('./routes/bloodRequestRoutes'));
 // app.use('/api/admin', require('./routes/adminRoutes'));

@@ -16,6 +16,13 @@ The main objective of LifeLink is to improve the coordination of blood donation 
 - Blood Availability Tracking — Helps determine whether requested blood is currently available.
 - Centralized Coordination — Connects the major participants in the blood donation process.
 
+- Tech Stack
+
+- Frontend - HTML5, CSS3, JavaScript 
+- Backend - Node.js, Express.js, Prisma, PostgreSQL
+- Version Control - Git, GitHub 
+
+
   Getting Started
 1. Clone the repository
 git clone https://github.com/19mekdes/LifeLink.git
@@ -29,12 +36,12 @@ npm start
 The application can then be accessed through the local address provided by the server.
 
    - Team Members
-  - Name                     -CTC                        - Role
-  - Mekdes Wale -------------566-26 -----------------------Backend Developer
-  - Kanariya Habtamu---------1783-26-----------------------Frontend Developer
-  - Kasim Muhdin-------------951-26------------------------Frontend Developer
-  -Lami Megersa---------------093-26-----------------------Frontend Developer
-  - Kiflom G/Egziaber---------909-26-----------------------Frontend Developer
+  - Name                     - CTC                        - Role
+  - Mekdes Wale ------------- 566-26 ----------------------- Backend Developer
+  - Kanariya Habtamu--------- 1783-26 ----------------------- Frontend Developer
+  - Kasim Muhdin------------- 951-26 ------------------------ Frontend Developer
+  - Lami Megersa------------- 093-26 ------------------- Frontend Developer
+  - Kiflom G/Egziaber--------- 909-26 ----------------------- Frontend Developer
    
    
 

@@ -1,5 +1,3 @@
-// backend/src/app.js
-
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -23,8 +21,7 @@ const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
 const app = express();
 
 // ============ MIDDLEWARE ============
-// Security (scoped CSP: allows the frontend's inline <script type="module"> blocks
-// while keeping the rest of the default protections)
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -36,8 +33,7 @@ app.use(helmet({
   }
 }));
 
-// CORS — allow any localhost/127.0.0.1 origin so dev servers (Live Server on :5500,
-// Vite, etc.) can call the API. Same-origin requests from :5000 don't need it.
+
 app.use(cors({
   origin(origin, callback) {
     // Allow non-browser requests (no Origin header) and any localhost origin/port

@@ -1,4 +1,3 @@
-// src/server.js
 import app from './app.js';
 import { PrismaClient } from '@prisma/client';
 

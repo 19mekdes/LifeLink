@@ -6,6 +6,9 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Import error handlers
+import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+
 // Load environment variables
 dotenv.config();
 
@@ -18,8 +21,7 @@ const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
 const app = express();
 
 // ============ MIDDLEWARE ============
-// Security (scoped CSP: allows the frontend's inline <script type="module"> blocks
-// while keeping the rest of the default protections)
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -31,8 +33,7 @@ app.use(helmet({
   }
 }));
 
-// CORS — allow any localhost/127.0.0.1 origin so dev servers (Live Server on :5500,
-// Vite, etc.) can call the API. Same-origin requests from :5000 don't need it.
+
 app.use(cors({
   origin(origin, callback) {
     // Allow non-browser requests (no Origin header) and any localhost origin/port
@@ -75,13 +76,16 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Auth routes
+// Import routes
 import authRoutes from './routes/authRoutes.js';
-app.use('/api/auth', authRoutes);
+import hospitalRoutes from './routes/hospitalRoutes.js';
 
-// Other routes (to be added)
+// Register routes
+app.use('/api/auth', authRoutes);
+app.use('/api/hospitals', hospitalRoutes);
+
+// Other routes (to be added later)
 // app.use('/api/donors', require('./routes/donorRoutes'));
-// app.use('/api/hospitals', require('./routes/hospitalRoutes'));
 // app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));
 // app.use('/api/blood-requests', require('./routes/bloodRequestRoutes'));
 // app.use('/api/admin', require('./routes/adminRoutes'));
@@ -99,22 +103,10 @@ app.get('/', (req, res) => {
 });
 
 // ============ ERROR HANDLING ============
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route not found: ${req.method} ${req.path}`
-  });
-});
+// 404 handler - must be after all routes
+app.use(notFoundHandler);
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
+// Global error handler - must be last
+app.use(errorHandler);
 
 export default app;

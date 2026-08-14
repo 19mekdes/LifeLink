@@ -1,13 +1,6 @@
 import { validationResult, body, param, query } from 'express-validator';
 
 /**
- * Validation Middleware
- * 
- * This file provides validation functions for request data.
- * It works with express-validator to validate and sanitize input.
- */
-
-/**
  * Check for validation errors and return them
  * @returns {Function} Express middleware
  * 

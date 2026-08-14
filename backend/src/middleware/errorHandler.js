@@ -1,5 +1,3 @@
-// backend/src/middleware/errorHandler.js
-
 import { Prisma } from '@prisma/client';
 
 /**

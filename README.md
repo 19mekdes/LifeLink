@@ -41,7 +41,7 @@ The application can then be accessed through the local address provided by the s
   - Kanariya Habtamu--------- 1783-26 ----------------------- Frontend Developer
   - Kasim Muhdin------------- 951-26 ------------------------ Frontend Developer
   - Lami Megersa------------- 093-26 ------------------- Frontend Developer
-  - Kiflom G/Egziaber--------- 909-26 ----------------------- Frontend Developer
+  - Kiflom Gerezgiher--------- 909-26 ----------------------- Frontend Developer
    
    
 

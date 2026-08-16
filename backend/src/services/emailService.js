@@ -1,5 +1,3 @@
-// backend/src/services/emailService.js
-
 import nodemailer from 'nodemailer';
 
 const EMAIL_HOST = process.env.EMAIL_HOST;
@@ -13,7 +11,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const transporter = nodemailer.createTransport({
   host: EMAIL_HOST,
   port: EMAIL_PORT,
-  secure: EMAIL_PORT === 465, // true for 465, false for other ports
+  secure: EMAIL_PORT === 465, 
   auth: {
     user: EMAIL_USER,
     pass: EMAIL_PASS,

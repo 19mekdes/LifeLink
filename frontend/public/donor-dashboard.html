@@ -1,11 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | Donor Dashboard</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
 </head>
+
 <body>
-  
+
+    <aside class="sidebar">
+        <div class="logo"><span>♥️</span> LifeLink</div>
+
+        <nav>
+            <a href="#" class="active">Dashboard</a>
+            <a href="#profile">My Profile</a>
+            <a href="#donations">Donation History</a>
+            <a href="#requests">Blood Requests</a>
+            <a href="#notifications">Notifications</a>
+        </nav>
+
+        <a href="login.html" class="logout">Logout</a>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Welcome, Donor 👋</h1>
+                <p>Thank you for helping save lives.</p>
+            </div>
+
+            <div class="profile">
+                <div class="profile-icon">D</div>
+                <span>Donor</span>
+            </div>
+        </header>
+
+        <!-- Profile -->
+        <section class="profile-section" id="profile">
+            <div class="section-header">
+                <div>
+                    <h2>My Profile</h2>
+                    <p>Your donor information</p>
+                </div>
+                <button class="edit-profile-btn" id="editProfileBtn">Edit Profile</button>
+            </div>
+
+            <div class="profile-content">
+                <div class="large-profile-icon" id="profileInitial">D</div>
+
+                <div class="profile-details">
+
+                    <div class="profile-field">
+                        <span>Full Name</span>
+                        <strong id="donorName">Kalkidan Donor</strong>
+                        <input id="editName" type="text" class="profile-input">
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Email</span>
+                        <strong id="donorEmail">donor@lifelink.com</strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Phone</span>
+                        <strong id="donorPhone">+251 900 000 000</strong>
+                        <input id="editPhone" type="text" class="profile-input">
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Blood Type</span>
+                        <strong id="donorBloodType">O+</strong>
+                        <select id="editBloodType" class="profile-input">
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Location</span>
+                        <strong id="donorLocation">Addis Ababa</strong>
+                        <input id="editLocation" type="text" class="profile-input">
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Donor Status</span>
+                        <strong class="available" id="donorStatus">Available</strong>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="profile-actions" id="profileActions">
+                <button class="save-profile-btn" id="saveProfileBtn">Save Changes</button>
+                <button class="cancel-profile-btn" id="cancelProfileBtn">Cancel</button>
+            </div>
+        </section>
+
+        <!-- Overview Cards -->
+        <section class="dashboard-cards">
+
+            <div class="dashboard-card">
+                <div class="card-icon">🩸</div>
+                <div>
+                    <h3>Blood Type</h3>
+                    <p id="cardBloodType">O+</p>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <div class="card-icon">❤️</div>
+                <div>
+                    <h3>Total Donations</h3>
+                    <p id="totalDonations">5</p>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">📅</div>
+                <div>
+                    <h3>Last Donation</h3>
+                    <p id="lastDonation">June 20, 2026</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Donation Status -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2>Donation Status</h2>
+            </div>
+
+            <div class="status-card">
+                <div class="status-icon">✓</div>
+                <div>
+                    <h3>You can donate</h3>
+                    <p>Your donation can help someone in need.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Donation History -->
+        <section class="dashboard-section" id="donations">
+            <div class="section-header">
+                <div>
+                    <h2>Donation History</h2>
+                    <p>Your previous blood donations</p>
+                </div>
+            </div>
+
+            <div id="donationList"></div>
+        </section>
+
+        <!-- Blood Requests -->
+        <section class="dashboard-section requests" id="requests">
+            <div class="section-header">
+                <div>
+                    <h2>Blood Requests</h2>
+                    <p>People who may need your blood type.</p>
+                </div>
+                <a href="#">View Requests</a>
+            </div>
+
+            <div class="request-card">
+                <div>
+                    <strong>Emergency Blood Request</strong>
+                    <p>Blood Type: O+</p>
+                    <small>Hospital Blood Bank</small>
+                </div>
+                <button class="respond-btn">Respond</button>
+            </div>
+        </section>
+
+        <section class="dashboard-section" id="notifications">
+            <div class="section-header">
+                <div>
+                    <h2>Notifications</h2>
+                    <p>Stay updated about donation requests.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="../src/js/donor.js"></script>
+
 </body>
+
 </html>

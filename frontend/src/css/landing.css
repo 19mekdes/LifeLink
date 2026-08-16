@@ -1,5 +1,5 @@
 /* =========================================
-   LifeLink Landing Page
+   LifeLink — Landing Page
    ========================================= */
 
 * {
@@ -14,8 +14,8 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    color: #241b1b;
-    background: #fffaf8;
+    background: #fffdfc;
+    color: #292323;
     line-height: 1.6;
 }
 
@@ -29,92 +29,88 @@ a {
    ========================================= */
 
 .navbar {
-    height: 78px;
-    padding: 0 7%;
+    min-height: 72px;
+    padding: 0 6%;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    background: rgba(255, 250, 248, 0.96);
-    border-bottom: 1px solid #f0e3df;
+    background: #fffdfc;
+    border-bottom: 1px solid #eee4e1;
 
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 100;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
 
-    font-size: 24px;
+    color: #b82038;
+    font-size: 22px;
     font-weight: 800;
-    color: #b91c32;
 }
 
 .logo-icon {
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+    background: #b82038;
     color: white;
-    background: #c8233d;
 
-    border-radius: 12px;
+    border-radius: 8px;
 
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .nav-links {
     display: flex;
-    gap: 34px;
+    gap: 28px;
 }
 
 .nav-links a {
+    color: #665d5d;
     font-size: 14px;
     font-weight: 600;
-    color: #5f5555;
-
-    transition: 0.3s;
 }
 
 .nav-links a:hover {
-    color: #c8233d;
+    color: #b82038;
 }
 
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
 }
 
 .login-btn {
-    padding: 10px 18px;
+    padding: 9px 15px;
+    color: #554d4d;
+    font-size: 14px;
     font-weight: 600;
-    color: #5f5555;
 }
 
 .register-btn {
-    padding: 11px 20px;
+    padding: 10px 16px;
 
+    background: #b82038;
     color: white;
-    background: #c8233d;
 
-    border-radius: 9px;
+    border-radius: 7px;
 
     font-size: 14px;
     font-weight: 700;
-
-    transition: 0.3s;
 }
 
 .register-btn:hover {
-    background: #a71931;
-    transform: translateY(-2px);
+    background: #991b30;
 }
 
 
@@ -123,22 +119,15 @@ a {
    ========================================= */
 
 .hero {
-    min-height: 650px;
+    min-height: 590px;
+    padding: 75px 8% 80px;
 
-    padding: 90px 7%;
-
-    display: flex;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
     align-items: center;
-    justify-content: space-between;
-    gap: 70px;
+    gap: 60px;
 
-    background:
-        radial-gradient(
-            circle at 85% 30%,
-            rgba(200, 35, 61, 0.12),
-            transparent 30%
-        ),
-        #fffaf8;
+    background: #fffdfc;
 }
 
 .hero-content {
@@ -148,84 +137,74 @@ a {
 .hero-badge {
     display: inline-block;
 
-    padding: 7px 14px;
+    margin-bottom: 18px;
+    padding: 5px 11px;
 
-    background: #fdebed;
-    color: #b91c32;
+    color: #a91d34;
+    background: #f9e9eb;
 
-    border-radius: 30px;
+    border-left: 3px solid #b82038;
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
+}
+
+.hero h1 {
+    max-width: 600px;
+
+    font-size: clamp(48px, 6vw, 70px);
+    line-height: 1.02;
+    letter-spacing: -2.5px;
 
     margin-bottom: 22px;
 }
 
-.hero h1 {
-    font-size: clamp(48px, 6vw, 76px);
-    line-height: 1.04;
-    letter-spacing: -3px;
-
-    margin-bottom: 25px;
-}
-
 .hero h1 span {
-    display: block;
-    color: #c8233d;
+    color: #b82038;
 }
 
 .hero-content > p {
-    max-width: 560px;
+    max-width: 520px;
 
-    color: #6e6363;
+    color: #716868;
+    font-size: 17px;
 
-    font-size: 18px;
-    line-height: 1.8;
-
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .hero-buttons {
     display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .primary-btn,
 .secondary-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    padding: 12px 19px;
 
-    padding: 14px 24px;
+    border-radius: 7px;
 
-    border-radius: 10px;
-
+    font-size: 14px;
     font-weight: 700;
-
-    transition: 0.3s;
 }
 
 .primary-btn {
-    background: #c8233d;
+    background: #b82038;
     color: white;
 }
 
 .primary-btn:hover {
-    background: #a71931;
-    transform: translateY(-3px);
+    background: #991b30;
 }
 
 .secondary-btn {
-    background: white;
-    color: #a71931;
-
-    border: 1px solid #e9d7d4;
+    border: 1px solid #d9ceca;
+    background: transparent;
+    color: #4f4646;
 }
 
 .secondary-btn:hover {
-    border-color: #c8233d;
-    transform: translateY(-3px);
+    border-color: #b82038;
+    color: #b82038;
 }
 
 
@@ -234,118 +213,104 @@ a {
    ========================================= */
 
 .hero-card {
-    width: 350px;
-    min-height: 390px;
+    width: 100%;
+    max-width: 330px;
 
-    padding: 45px 35px;
+    justify-self: center;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 35px 30px;
 
-    text-align: center;
+    background: #f8efed;
 
-    background: white;
+    border: 1px solid #eadbd7;
+    border-radius: 18px;
 
-    border: 1px solid #f0dfdb;
-    border-radius: 30px;
-
-    box-shadow:
-        0 25px 60px rgba(96, 38, 38, 0.12);
+    text-align: left;
 
     position: relative;
 }
 
+/* Small decorative line */
 .hero-card::before {
     content: "";
 
     position: absolute;
 
-    width: 220px;
-    height: 220px;
+    width: 45px;
+    height: 4px;
 
-    background: #fff0f1;
+    top: 22px;
+    left: 30px;
 
-    border-radius: 50%;
-
-    z-index: 0;
+    background: #b82038;
 }
 
 .blood-drop {
-    width: 125px;
-    height: 125px;
+    width: 75px;
+    height: 75px;
+
+    margin: 15px 0 25px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: #c8233d;
+    background: #b82038;
     color: white;
 
     border-radius: 50%;
 
-    font-size: 45px;
-
-    box-shadow:
-        0 15px 35px rgba(200, 35, 61, 0.3);
-
-    position: relative;
-    z-index: 1;
-
-    margin-bottom: 35px;
-}
-
-.hero-card h3,
-.hero-card p {
-    position: relative;
-    z-index: 1;
+    font-size: 28px;
 }
 
 .hero-card h3 {
-    font-size: 22px;
-    margin-bottom: 10px;
+    font-size: 21px;
+    margin-bottom: 8px;
 }
 
 .hero-card p {
-    color: #746868;
+    color: #6e6464;
+    font-size: 14px;
 }
 
 
 /* =========================================
-   SECTION COMMON
+   SECTION HEADINGS
    ========================================= */
 
 section {
-    padding: 100px 7%;
+    padding: 85px 8%;
 }
-
 .section-heading {
-    max-width: 700px;
-    margin: 0 auto 55px;
-    text-align: center;
+    max-width: 760px;
+    margin-bottom: 45px;
 }
 
 .section-heading > span {
-    color: #c8233d;
+    color: #b82038;
 
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1.7px;
 }
 
 .section-heading h2 {
-    font-size: 42px;
-    line-height: 1.2;
+    max-width: 650px;
 
-    margin: 12px 0 18px;
+    margin: 8px 0 14px;
+
+    font-size: 38px;
+    line-height: 1.2;
 }
 
 .section-heading h2 strong {
-    color: #c8233d;
+    color: #b82038;
 }
 
 .section-heading p {
-    color: #716767;
+    max-width: 650px;
+
+    color: #706767;
     font-size: 16px;
 }
 
@@ -355,11 +320,11 @@ section {
    ========================================= */
 
 .about {
-    background: white;
+    background: #f7f3f1;
 }
 
 .about .section-heading {
-    max-width: 850px;
+    margin: 0;
 }
 
 
@@ -368,64 +333,53 @@ section {
    ========================================= */
 
 .how-it-works {
-    background: #fff7f5;
+    background: #fffdfc;
 }
 
 .steps {
     max-width: 1100px;
 
-    margin: auto;
-
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 
-    gap: 25px;
+    gap: 0;
+
+    border-top: 1px solid #ddd2ce;
+    border-bottom: 1px solid #ddd2ce;
 }
 
 .step-card {
-    padding: 35px;
+    padding: 30px 28px;
 
-    background: white;
+    border-right: 1px solid #ddd2ce;
+}
 
-    border: 1px solid #f0e0dc;
-    border-radius: 18px;
-
-    transition: 0.3s;
+.step-card:last-child {
+    border-right: none;
 }
 
 .step-card:hover {
-    transform: translateY(-8px);
-
-    box-shadow:
-        0 18px 40px rgba(88, 40, 40, 0.1);
+    background: #faf5f3;
 }
 
 .step-number {
-    width: 48px;
-    height: 48px;
+    margin-bottom: 24px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 25px;
-
-    background: #fdebed;
-    color: #c8233d;
-
-    border-radius: 12px;
+    color: #b82038;
 
     font-size: 13px;
     font-weight: 800;
 }
 
 .step-card h3 {
-    font-size: 21px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+
+    font-size: 20px;
 }
 
 .step-card p {
-    color: #746868;
+    color: #716767;
+    font-size: 14px;
 }
 
 
@@ -434,47 +388,42 @@ section {
    ========================================= */
 
 .cta {
-    margin: 60px 7%;
-    padding: 75px 30px;
+    margin: 30px 8% 75px;
+    padding: 55px 45px;
 
-    text-align: center;
-
-    background: #c8233d;
+    background: #302526;
     color: white;
 
-    border-radius: 28px;
+    border-radius: 14px;
 
-    box-shadow:
-        0 20px 45px rgba(200, 35, 61, 0.2);
+    text-align: left;
 }
 
 .cta h2 {
-    max-width: 700px;
+    max-width: 600px;
 
-    margin: auto;
-
-    font-size: 42px;
+    font-size: 35px;
     line-height: 1.2;
 }
 
 .cta h2 span {
-    display: block;
-    color: #ffd9dd;
+    color: #e98796;
 }
 
 .cta p {
-    margin: 18px 0 28px;
+    margin: 14px 0 23px;
 
-    color: #ffe9eb;
+    color: #cfc3c3;
 }
 
 .cta .primary-btn {
-    background: white;
-    color: #b91c32;
+    display: inline-block;
+
+    background: #b82038;
 }
 
 .cta .primary-btn:hover {
-    background: #fff1f2;
+    background: #d02a45;
 }
 
 
@@ -483,30 +432,26 @@ section {
    ========================================= */
 
 footer {
-    padding: 45px 7%;
+    padding: 38px 8%;
 
-    background: #211919;
+    background: #211b1c;
     color: white;
-
-    text-align: center;
 }
 
 .footer-logo {
-    font-size: 23px;
+    color: #f2c3c9;
+    font-size: 21px;
     font-weight: 800;
-    color: #ffccd1;
-
-    margin-bottom: 8px;
 }
 
 footer p {
-    color: #b9aaaa;
-    font-size: 14px;
+    color: #a99c9c;
+    font-size: 13px;
 }
 
 footer .copyright {
-    margin-top: 20px;
-    font-size: 12px;
+    margin-top: 14px;
+    font-size: 11px;
 }
 
 
@@ -521,32 +466,27 @@ footer .copyright {
     }
 
     .hero {
-        padding-top: 70px;
-        padding-bottom: 70px;
-
-        flex-direction: column;
-        text-align: center;
+        grid-template-columns: 1fr;
+        padding-top: 60px;
     }
 
-    .hero-content > p {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .hero-buttons {
-        justify-content: center;
+    .hero-card {
+        justify-self: start;
     }
 
     .steps {
         grid-template-columns: 1fr;
-        max-width: 550px;
     }
 
-    .hero-card {
-        width: min(100%, 350px);
+    .step-card {
+        border-right: none;
+        border-bottom: 1px solid #ddd2ce;
+    }
+
+    .step-card:last-child {
+        border-bottom: none;
     }
 }
-
 
 @media (max-width: 550px) {
 
@@ -554,37 +494,37 @@ footer .copyright {
         padding: 0 5%;
     }
 
-    .nav-actions .login-btn {
+    .login-btn {
         display: none;
     }
 
-    .register-btn {
-        padding: 9px 13px;
-    }
-
-    section {
-        padding: 70px 5%;
-    }
     .hero {
-        padding-left: 5%;
-        padding-right: 5%;
+        padding: 55px 5%;
     }
 
     .hero h1 {
-        font-size: 48px;
-        letter-spacing: -2px;
+        font-size: 47px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    section {
+        padding: 65px 5%;
     }
 
     .section-heading h2 {
-        font-size: 32px;
+        font-size: 31px;
     }
 
     .cta {
-        margin-left: 5%;
-        margin-right: 5%;
+        margin: 20px 5% 55px;
+        padding: 40px 28px;
     }
 
     .cta h2 {
-        font-size: 32px;
+        font-size: 30px;
     }
 }

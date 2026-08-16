@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
+import { sendEmail, welcomeEmail } from '../services/emailService.js';
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -183,6 +184,8 @@ export const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'Invalid email or password.');
   }
 
+  
+
   // Update last login
   await prisma.user.update({
     where: { id: user.id },
@@ -255,6 +258,11 @@ export const logout = asyncHandler(async (req, res) => {
   });
 });
 
+await sendEmail({
+  to: user.email,
+  subject: welcomeEmail(user.name, user.email).subject,
+  html: welcomeEmail(user.name, user.email).html,
+});
 /**
  * Get dashboard URL based on role
  */

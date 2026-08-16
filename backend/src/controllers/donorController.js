@@ -1,5 +1,3 @@
-// backend/src/controllers/donorController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';

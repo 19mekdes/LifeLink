@@ -1,5 +1,3 @@
-// backend/src/middleware/auth.js
-
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 

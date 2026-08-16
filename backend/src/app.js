@@ -1,3 +1,5 @@
+// backend/src/app.js
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -14,7 +16,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Frontend directory (sibling of backend/)
+// Frontend directory
 const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
 
 const app = express();
@@ -70,12 +72,14 @@ app.get('/api/health', (req, res) => {
 // Import routes
 import authRoutes from './routes/authRoutes.js';
 import hospitalRoutes from './routes/hospitalRoutes.js';
-import donorRoutes from './routes/donorRoutes.js';  // ✅ ADD THIS LINE
+import donorRoutes from './routes/donorRoutes.js';
+import donationRoutes from './routes/donationRoutes.js';  // ✅ ADD THIS
 
 // Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hospitals', hospitalRoutes);
-app.use('/api/donors', donorRoutes);  // ✅ ADD THIS LINE
+app.use('/api/donors', donorRoutes);
+app.use('/api/v1/donations', donationRoutes);  // ✅ ADD THIS
 
 // Other routes (to be added later)
 // app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));
@@ -92,10 +96,7 @@ app.get('/', (req, res) => {
 });
 
 // ============ ERROR HANDLING ============
-// 404 handler - must be after all routes
 app.use(notFoundHandler);
-
-// Global error handler - must be last
 app.use(errorHandler);
 
 export default app;

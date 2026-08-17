@@ -1,8 +1,12 @@
+// backend/src/controllers/authController.js
+
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
+// ✅ Import email service
+import { sendEmail, welcomeEmail } from '../services/emailService.js';
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -131,6 +135,20 @@ export const register = asyncHandler(async (req, res) => {
       bloodBank: true
     }
   });
+
+  // ✅ Send welcome email (don't block registration if email fails)
+  try {
+    const emailTemplate = welcomeEmail(user.name, user.email);
+    await sendEmail({
+      to: user.email,
+      subject: emailTemplate.subject,
+      html: emailTemplate.html,
+    });
+    console.log(`✅ Welcome email sent to ${user.email}`);
+  } catch (emailError) {
+    console.error(`❌ Failed to send welcome email to ${user.email}:`, emailError.message);
+    // Don't fail registration if email fails
+  }
 
   // Remove password from response
   const { password: _, ...userWithoutPassword } = user;

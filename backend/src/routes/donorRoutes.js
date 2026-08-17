@@ -1,8 +1,5 @@
-// backend/src/routes/donorRoutes.js
-
 import express from 'express';
 import { body } from 'express-validator';
-// ✅ CORRECT: Import from auth.js with correct function names
 import { authenticate, authorize } from '../middleware/auth.js';
 import {
   getProfile,

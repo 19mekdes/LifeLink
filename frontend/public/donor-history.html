@@ -10,38 +10,74 @@
 <body>
 
 <aside class="sidebar">
-    <div class="logo"><span>♥️</span> LifeLink</div>
+
+    <div class="logo">
+        <span>♥️</span> LifeLink
+    </div>
 
     <nav>
-        <a href="donor_dashboard.html">Dashboard</a>
-        <a href="donor_profile.html">My Profile</a>
-        <a href="donor_history.html" class="active">Donation History</a>
-        <a href="donor_requests.html">Blood Requests</a>
+
+        <a href="index.html">
+             Home
+        </a>
+
+        <a href="donor-dashboard.html">
+             Dashboard
+        </a>
+
+        <a href="donor-profile.html">
+             My Profile
+        </a>
+
+        <a href="donor-history.html">
+            Donation History
+        </a>
+
+        <a href="donor-requests.html">
+            Blood Requests
+        </a>
+
+        <a href="donor-notifications.html">
+            🔔 Notifications
+        </a>
+
     </nav>
 
-    <a href="login.html" class="logout">Logout</a>
+    <a href="login.html" class="logout">
+        🚪 Logout
+    </a>
+
 </aside>
 
 <main class="main-content">
 
     <header class="topbar">
+
+    <div class="topbar-left">
+
         <div>
             <h1>Donation History</h1>
-            <p>A record of your blood donations.</p>
+<p>View your previous blood donations.</p>
         </div>
 
-        <div class="topbar-actions">
-            <a href="donor_notifications.html" class="notification-btn">
-                🔔
-                <span id="notificationCount">0</span>
-            </a>
+    </div>
 
-            <div class="profile">
-                <div class="profile-icon" id="profileInitial">D</div>
-                <span id="topbarName">Donor</span>
-            </div>
+    <div class="profile">
+
+        <div
+            class="profile-icon"
+            id="profileInitial"
+        >
+            D
         </div>
-    </header>
+
+        <span id="topbarName">
+            Donor
+        </span>
+
+    </div>
+
+</header>
 
     <section class="dashboard-cards">
 
@@ -88,7 +124,8 @@
 
 </main>
 
+<script src="../src/js/api.js"></script>
+<script src="../src/js/donor-common.js"></script>
 <script src="../src/js/donor-history.js"></script>
-
 </body>
 </html>

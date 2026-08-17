@@ -1,198 +1,402 @@
-console.log("Donor JS is working!")
+console.log("Donor JS is working!");
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    const defaultDonor = {
-        name: "Kalkidan Donor",
-        email: "donor@lifelink.com",
-        phone: "+251 900 000 000",
-        bloodType: "O+",
-        location: "Addis Ababa",
-        status: "Available"
-    };
+    // ==========================================
+    // BASIC ELEMENT HELPERS
+    // ==========================================
 
-    let donor = JSON.parse(localStorage.getItem("lifelinkDonor")) || defaultDonor;
+    const $ = (id) => document.getElementById(id);
 
-    const $ = id => document.getElementById(id);
 
-    const donorName = $("donorName");
-    const donorEmail = $("donorEmail");
-    const donorPhone = $("donorPhone");
-    const donorBloodType = $("donorBloodType");
-    const donorLocation = $("donorLocation");
-    const donorStatus = $("donorStatus");
+    // ==========================================
+    // DASHBOARD ELEMENTS
+    // ==========================================
+
+    const dashboardDonorName = $("dashboardDonorName");
+    const topbarName = $("topbarName");
+
     const profileInitial = $("profileInitial");
+    const dashboardProfileInitial = $("dashboardProfileInitial");
 
-    function displayProfile() {
-        if (donorName) donorName.textContent = donor.name;
-        if (donorEmail) donorEmail.textContent = donor.email;
-        if (donorPhone) donorPhone.textContent = donor.phone;
-        if (donorBloodType) donorBloodType.textContent = donor.bloodType;
-        if (donorLocation) donorLocation.textContent = donor.location;
-        if (donorStatus) donorStatus.textContent = donor.status;
-        if (profileInitial) profileInitial.textContent = donor.name.charAt(0).toUpperCase();
+    const totalDonations = $("totalDonations");
+    const totalRequests = $("totalRequests");
+    const lastDonation = $("lastDonation");
 
-        const cardBloodType = $("cardBloodType");
-        if (cardBloodType) cardBloodType.textContent = donor.bloodType;
+    const dashboardBloodType = $("dashboardBloodType");
+    const dashboardLocation = $("dashboardLocation");
+    const dashboardAvailability = $("dashboardAvailability");
+
+    const donationStatus = $("donationStatus");
+    const donationStatusMessage = $("donationStatusMessage");
+
+    const notificationCount = $("notificationCount");
+    const topNotificationCount = $("topNotificationCount");
+
+    const recentActivity = $("recentActivity");
+    const notificationPreview = $("notificationPreview");
+
+
+    // ==========================================
+    // DISPLAY DONOR INFORMATION
+    // ==========================================
+
+    function displayDonorInfo(donor) {
+
+        if (!donor) return;
+
+
+        // Name
+
+        const name =
+            donor.name ||
+            donor.fullName ||
+            "Donor";
+
+        if (dashboardDonorName) {
+            dashboardDonorName.textContent = name;
+        }
+
+        if (topbarName) {
+            topbarName.textContent = name;
+        }
+
+
+        // Initial
+
+        const initial =
+            name.charAt(0).toUpperCase();
+
+        if (profileInitial) {
+            profileInitial.textContent = initial;
+        }
+
+        if (dashboardProfileInitial) {
+            dashboardProfileInitial.textContent = initial;
+        }
+
+
+        // Blood type
+
+        if (dashboardBloodType) {
+            dashboardBloodType.textContent =
+                donor.bloodType || "Not available";
+        }
+
+
+        // Location
+
+        if (dashboardLocation) {
+            dashboardLocation.textContent =
+                donor.location || "Not available";
+        }
+
+
+        // Availability
+
+        const availability =
+            donor.availability ||
+            donor.status ||
+            "Not available";
+
+        if (dashboardAvailability) {
+            dashboardAvailability.textContent =
+                availability;
+        }
+
+
+        // Donation status
+
+        if (donationStatus) {
+            donationStatus.textContent =
+                availability === "Available"
+                    ? "Available to Donate"
+                    : availability;
+        }
+
+        if (donationStatusMessage) {
+
+            if (availability === "Available") {
+
+                donationStatusMessage.textContent =
+                    "Your donation can help someone in need.";
+
+            } else {
+
+                donationStatusMessage.textContent =
+                    "Your current availability status is shown above.";
+
+            }
+        }
     }
 
-    displayProfile();
+
+    // ==========================================
+    // LOAD DASHBOARD
+    // ==========================================
+
+    async function loadDashboardData() {
+
+        try {
+
+            const data =
+                await apiRequest("/api/donors/dashboard");
+
+            console.log("Dashboard data:", data);
+
+            /*
+             * We are intentionally not guessing the backend
+             * response structure yet.
+             *
+             * Once your backend teammate starts the server,
+             * we'll inspect the actual response and map it here.
+             */
+
+            const donor =
+                data.donor ||
+                data.profile ||
+                data;
+
+            displayDonorInfo(donor);
 
 
-    // Sidebar navigation
-    document.querySelectorAll(".sidebar nav a").forEach(link => {
-        link.addEventListener("click", event => {
-            const targetId = link.getAttribute("href");
+            // Recent activity
 
-            if (targetId === "#") {
-                event.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            } else if (targetId?.startsWith("#")) {
-                event.preventDefault();
+            if (recentActivity) {
 
-                const target = document.querySelector(targetId);
+                if (data.recentActivity) {
 
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
+                    recentActivity.innerHTML = `
+                        <p>
+                            ${data.recentActivity}
+                        </p>
+                    `;
+
+                } else {
+
+                    recentActivity.innerHTML = `
+                        <p>
+                            No recent activity available.
+                        </p>
+                    `;
                 }
             }
 
-            document.querySelectorAll(".sidebar nav a")
-                .forEach(item => item.classList.remove("active"));
 
-            link.classList.add("active");
-        });
-    });
+        } catch (error) {
 
-
-    // Edit profile
-    const editProfileBtn = $("editProfileBtn");
-    const saveProfileBtn = $("saveProfileBtn");
-    const cancelProfileBtn = $("cancelProfileBtn");
-    const profileActions = $("profileActions");
-
-    const editName = $("editName");
-    const editPhone = $("editPhone");
-    const editLocation = $("editLocation");
-    const editBloodType = $("editBloodType");
-
-    const profileInputs = document.querySelectorAll(".profile-input");
-
-    function exitEditMode() {
-        profileInputs.forEach(input => input.style.display = "none");
-        profileActions.style.display = "none";
-        editProfileBtn.style.display = "block";
-    }
-
-    editProfileBtn?.addEventListener("click", () => {
-        editName.value = donor.name;
-        editPhone.value = donor.phone;
-        editLocation.value = donor.location;
-        editBloodType.value = donor.bloodType;
-
-        profileInputs.forEach(input => input.style.display = "block");
-        profileActions.style.display = "flex";
-        editProfileBtn.style.display = "none";
-    });
-
-    saveProfileBtn?.addEventListener("click", () => {
-        const name = editName.value.trim();
-        const phone = editPhone.value.trim();
-        const location = editLocation.value.trim();
-
-        if (!name || !phone || !location) {
-            alert("Please fill in all required fields.");
-            return;
-        }
-
-        donor.name = name;
-        donor.phone = phone;
-        donor.location = location;
-        donor.bloodType = editBloodType.value;
-
-        localStorage.setItem("lifelinkDonor", JSON.stringify(donor));
-
-        displayProfile();
-        exitEditMode();
-
-        alert("Profile updated successfully.");
-    });
-
-    cancelProfileBtn?.addEventListener("click", exitEditMode);
-    // Donation history
-    const donations = [
-        {
-            location: "City Blood Bank",
-            date: "June 20, 2026",
-            status: "Completed"
-        },
-        {
-            location: "Red Cross Center",
-            date: "March 15, 2026",
-            status: "Completed"
-        }
-    ];
-
-    const donationList = $("donationList");
-    const totalDonations = $("totalDonations");
-    const lastDonation = $("lastDonation");
-
-    if (donationList) {
-        if (!donations.length) {
-            donationList.innerHTML = "<p>No donation history available.</p>";
-        } else {
-            donations.forEach(donation => {
-                const item = document.createElement("div");
-                item.className = "donation-item";
-
-                item.innerHTML =
-                    "<div>" +
-                    "<strong>" + donation.location + "</strong>" +
-                    "<p>" + donation.date + "</p>" +
-                    "</div>" +
-                    "<span class='completed'>" +
-                    donation.status +
-                    "</span>";
-
-                donationList.appendChild(item);
-            });
-        }
-    }
-
-    if (totalDonations) totalDonations.textContent = donations.length;
-    if (lastDonation && donations.length) {
-        lastDonation.textContent = donations[0].date;
-    }
-
-
-    // Blood request
-    const respondButton = document.querySelector(".respond-btn");
-
-    respondButton?.addEventListener("click", () => {
-        if (respondButton.disabled) return;
-
-        const confirmation = confirm(
-            "Would you like to respond to this blood request?"
-        );
-
-        if (confirmation) {
-            respondButton.textContent = "Response Sent";
-            respondButton.disabled = true;
-
-            alert(
-                "Thank you for responding. The blood bank has been notified."
+            console.error(
+                "Failed to load dashboard:",
+                error
             );
+
         }
-    });
+    }
 
 
-    // Logout
-    document.querySelector(".logout")?.addEventListener("click", event => {
-        if (!confirm("Are you sure you want to logout?")) {
-            event.preventDefault();
+    // ==========================================
+    // LOAD DONOR STATISTICS
+    // ==========================================
+
+    async function loadDonorStats() {
+
+        try {
+
+            const stats =
+                await apiRequest("/api/donors/stats");
+
+            console.log("Donor stats:", stats);
+
+
+            /*
+             * Again, we don't guess the exact field names.
+             * We'll map them after seeing the real backend
+             * response.
+             */
+
+
+            if (totalDonations) {
+
+                totalDonations.textContent =
+                    stats.totalDonations ??
+                    stats.donations ??
+                    0;
+            }
+
+
+            if (totalRequests) {
+
+                totalRequests.textContent =
+                    stats.totalRequests ??
+                    stats.requests ??
+                    0;
+            }
+
+
+            if (lastDonation) {
+
+                lastDonation.textContent =
+                    stats.lastDonation ??
+                    "No donations yet";
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load donor stats:",
+                error
+            );
+
         }
-    });
+    }
+
+
+    // ==========================================
+    // LOAD NOTIFICATION COUNT
+    // ==========================================
+
+    async function loadNotificationCount() {
+
+        try {
+
+            const notifications =
+                await apiRequest(
+                    "/api/donors/notifications"
+                );
+
+            console.log(
+                "Notifications:",
+                notifications
+            );
+
+
+            /*
+             * This is intentionally flexible until we see
+             * the backend response structure.
+             */
+
+            const list =
+                Array.isArray(notifications)
+                    ? notifications
+                    : notifications.notifications || [];
+
+
+            const unreadCount =
+                list.filter(
+                    notification =>
+                        !notification.read &&
+                        !notification.isRead
+                ).length;
+
+
+            if (notificationCount) {
+                notificationCount.textContent =
+                    unreadCount;
+            }
+
+            if (topNotificationCount) {
+                topNotificationCount.textContent =
+                    unreadCount;
+            }
+
+
+            // Notification preview
+
+            if (notificationPreview) {
+
+                if (!list.length) {
+
+                    notificationPreview.innerHTML = `
+                        <p>
+                            No new notifications.
+                        </p>
+                    `;
+
+                } else {
+
+                    const latest =
+                        list.slice(0, 3);
+
+                    notificationPreview.innerHTML =
+                        latest.map(notification => {
+
+                            return `
+                                <div class="notification-item">
+                                    <strong>
+                                        ${notification.title || "Notification"}
+                                    </strong>
+
+                                    <p>
+                                        ${notification.message || ""}
+                                    </p>
+                                </div>
+                            `;
+
+                        }).join("");
+                }
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load notifications:",
+                error
+            );
+
+        }
+    }
+
+
+    // ==========================================
+    // SIDEBAR NAVIGATION
+    // ==========================================
+
+    document
+        .querySelectorAll(".sidebar nav a")
+        .forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                document
+                    .querySelectorAll(".sidebar nav a")
+                    .forEach(item => {
+                        item.classList.remove("active");
+                    });
+
+                link.classList.add("active");
+            });
+
+        });
+
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+
+    document
+        .querySelector(".logout")
+        ?.addEventListener("click", event => {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to logout?"
+                );
+
+            if (!confirmed) {
+                event.preventDefault();
+            }
+
+        });
+
+
+    // ==========================================
+    // START DASHBOARD
+    // ==========================================
+
+    loadDashboardData();
+    loadDonorStats();
+    loadNotificationCount();
 
 });

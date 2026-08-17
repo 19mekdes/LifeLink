@@ -10,38 +10,63 @@
 <body>
 
 <aside class="sidebar">
-    <div class="logo"><span>♥️</span> LifeLink</div>
+
+    <div class="logo">
+        <span>♥️</span> LifeLink
+    </div>
 
     <nav>
-        <a href="donor_dashboard.html">Dashboard</a>
-        <a href="donor_profile.html">My Profile</a>
-        <a href="donor_history.html">Donation History</a>
-        <a href="donor_requests.html" class="active">Blood Requests</a>
+
+        <a href="index.html">
+             Home
+        </a>
+
+        <a href="donor-dashboard.html">
+             Dashboard
+        </a>
+
+        <a href="donor-profile.html">
+             My Profile
+        </a>
+
+        <a href="donor-history.html">
+             Donation History
+        </a>
+
+        <a href="donor-requests.html">
+             Blood Requests
+        </a>
+
+        <a href="donor-notifications.html">
+            🔔 Notifications
+        </a>
+
     </nav>
 
-    <a href="login.html" class="logout">Logout</a>
+    <a href="login.html" class="logout">
+        🚪 Logout
+    </a>
+
 </aside>
 
 <main class="main-content">
 
-    <header class="topbar">
+  <header class="topbar">
+
+    <div class="topbar-left">
         <div>
             <h1>Blood Requests</h1>
             <p>Help someone who needs your blood type.</p>
         </div>
+    </div>
 
-        <div class="topbar-actions">
-            <a href="donor_notifications.html" class="notification-btn">
-                🔔
-                <span id="notificationCount">0</span>
-            </a>
+    <!-- common profile -->
+    <div class="profile">
+        <div class="profile-icon" id="profileInitial">D</div>
+        <span id="topbarName">Donor</span>
+    </div>
 
-            <div class="profile">
-                <div class="profile-icon" id="profileInitial">D</div>
-                <span id="topbarName">Donor</span>
-            </div>
-        </div>
-    </header>
+</header>
 
     <section class="dashboard-section">
 
@@ -60,7 +85,9 @@
 
 </main>
 
-<script src="../src/js/donor-requests.js"></script>
+<script src="../src/js/api.js"></script>
+<script src="../src/js/donor-common.js"></script>
+<script src="../src/js/donor-request.js"></script>
 
 </body>
 </html>

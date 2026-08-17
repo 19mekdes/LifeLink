@@ -10,41 +10,81 @@
 <body>
 
 <aside class="sidebar">
-    <div class="logo"><span>♥️</span> LifeLink</div>
+
+    <div class="logo">
+        <span>♥️</span> LifeLink
+    </div>
 
     <nav>
-        <a href="donor_dashboard.html">Dashboard</a>
-        <a href="donor_profile.html">My Profile</a>
-        <a href="donor_history.html">Donation History</a>
-        <a href="donor_requests.html">Blood Requests</a>
-        <a href="donor_notifications.html" class="active">Notifications</a>
+
+        <a href="index.html">
+             Home
+        </a>
+
+        <a href="donor-dashboard.html">
+             Dashboard
+        </a>
+
+        <a href="donor-profile.html">
+            My Profile
+        </a>
+
+        <a href="donor-history.html">
+         Donation History
+        </a>
+
+        <a href="donor-requests.html">
+             Blood Requests
+        </a>
+
+        <a href="donor-notifications.html">
+            🔔 Notifications
+        </a>
+
     </nav>
 
-    <a href="login.html" class="logout">Logout</a>
+    <a href="login.html" class="logout">
+        🚪 Logout
+    </a>
+
 </aside>
 
 <main class="main-content">
+<header class="topbar">
 
-    <header class="topbar">
+    <div class="topbar-left">
+
         <div>
-            <h1>Notifications</h1>
-            <p>Stay updated about your donor activity.</p>
+            <h1>Blood Requests</h1>
+            <p>Help someone who needs your blood type.</p>
         </div>
 
-        <div class="topbar-actions">
-            <div class="profile">
-                <div class="profile-icon" id="profileInitial">D</div>
-                <span id="topbarName">Donor</span>
-            </div>
+    </div>
+
+
+    <div class="profile">
+
+        <div
+            class="profile-icon"
+            id="profileInitial"
+        >
+            D
         </div>
-    </header>
+
+        <span id="topbarName">
+            Donor
+        </span>
+
+    </div>
+
+</header>
 
     <section class="dashboard-section">
 
         <div class="section-header">
             <div>
-                <h2>Your Notifications</h2>
-                <p>Recent updates and blood requests.</p>
+                <h1>Notifications</h1>
+<p>Stay updated about donation requests.</p>
             </div>
 
             <button class="edit-profile-btn" id="markAllRead">
@@ -60,7 +100,8 @@
 
 </main>
 
+<script src="../src/js/api.js"></script>
+<script src="../src/js/donor-common.js"></script>
 <script src="../src/js/donor-notifications.js"></script>
-
 </body>
 </html>

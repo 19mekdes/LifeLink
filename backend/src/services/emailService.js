@@ -1,5 +1,3 @@
-// backend/src/services/emailService.js
-
 import nodemailer from 'nodemailer';
 
 const EMAIL_HOST = process.env.EMAIL_HOST;

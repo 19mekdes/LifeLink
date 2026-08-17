@@ -1,18 +1,12 @@
-// backend/src/controllers/bloodRequestController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
-// ✅ Import email service
 import { sendEmail, emergencyRequestEmail, requestStatusUpdateEmail } from '../services/emailService.js';
 
 const prisma = new PrismaClient();
 
 // ============ HELPER FUNCTIONS ============
 
-/**
- * Find matching donors for a request
- */
 const findMatchingDonors = async (request) => {
   try {
     const donors = await prisma.donorProfile.findMany({
@@ -49,9 +43,7 @@ const findMatchingDonors = async (request) => {
   }
 };
 
-/**
- * Create notifications for matching donors
- */
+
 const createDonorNotifications = async (donors, request) => {
   try {
     await prisma.$transaction(
@@ -76,10 +68,6 @@ const createDonorNotifications = async (donors, request) => {
 
 // ============ CREATE BLOOD REQUEST ============
 
-/**
- * Create a blood request
- * POST /api/hospitals/requests
- */
 export const createRequest = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -167,7 +155,7 @@ export const createRequest = asyncHandler(async (req, res) => {
     }
   });
 
-  // ✅ Send email notification to blood bank
+  //  Send email notification to blood bank
   if (bloodBank && bloodBank.user?.email) {
     try {
       const subject = `📋 New Blood Request: ${bloodType} from ${hospital.hospitalName}`;
@@ -224,7 +212,7 @@ export const createRequest = asyncHandler(async (req, res) => {
     }
   }
 
-  // ✅ For CRITICAL_EMERGENCY or URGENT, notify matching donors
+  //  For CRITICAL_EMERGENCY or URGENT, notify matching donors
   if (urgency === 'CRITICAL_EMERGENCY' || urgency === 'URGENT') {
     const matchingDonors = await findMatchingDonors(request);
     
@@ -249,7 +237,7 @@ export const createRequest = asyncHandler(async (req, res) => {
     }
   }
 
-  // ✅ Create notification for blood bank
+  //  Create notification for blood bank
   if (bloodBank) {
     await prisma.notification.create({
       data: {
@@ -282,10 +270,6 @@ export const createRequest = asyncHandler(async (req, res) => {
 
 // ============ GET REQUESTS ============
 
-/**
- * Get hospital blood requests
- * GET /api/hospitals/requests
- */
 export const getRequests = asyncHandler(async (req, res) => {
   const { status, urgency, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -380,10 +364,6 @@ export const getRequests = asyncHandler(async (req, res) => {
 
 // ============ GET REQUEST BY ID ============
 
-/**
- * Get request by ID
- * GET /api/hospitals/requests/:id
- */
 export const getRequestById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -468,10 +448,7 @@ export const getRequestById = asyncHandler(async (req, res) => {
 
 // ============ CANCEL REQUEST ============
 
-/**
- * Cancel a blood request
- * PUT /api/hospitals/requests/:id/cancel
- */
+
 export const cancelRequest = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { notes } = req.body;
@@ -593,10 +570,6 @@ export const cancelRequest = asyncHandler(async (req, res) => {
 
 // ============ UPDATE REQUEST STATUS ============
 
-/**
- * Update request status (for Blood Bank)
- * PUT /api/hospitals/requests/:id/status
- */
 export const updateRequestStatus = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status, notes } = req.body;
@@ -675,10 +648,6 @@ export const updateRequestStatus = asyncHandler(async (req, res) => {
 
 // ============ RESPOND TO REQUEST (DONOR) ============
 
-/**
- * Donor responds to a blood request
- * POST /api/donors/requests/:id/respond
- */
 export const respondToRequest = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { response, message } = req.body;
@@ -824,10 +793,6 @@ export const respondToRequest = asyncHandler(async (req, res) => {
 
 // ============ GET DONATIONS ============
 
-/**
- * Get hospital donations
- * GET /api/hospitals/donations
- */
 export const getDonations = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -891,10 +856,6 @@ export const getDonations = asyncHandler(async (req, res) => {
 
 // ============ GET STATISTICS ============
 
-/**
- * Get hospital statistics
- * GET /api/hospitals/stats
- */
 export const getStats = asyncHandler(async (req, res) => {
   const hospital = await prisma.hospital.findUnique({
     where: { userId: req.user.id }

@@ -10,6 +10,8 @@ import { fileURLToPath } from 'url';
 
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
+
+
 // Load environment variables
 dotenv.config();
 
@@ -73,13 +75,16 @@ app.get('/api/health', (req, res) => {
 import authRoutes from './routes/authRoutes.js';
 import hospitalRoutes from './routes/hospitalRoutes.js';
 import donorRoutes from './routes/donorRoutes.js';
-import donationRoutes from './routes/donationRoutes.js';  // ✅ ADD THIS
+import donationRoutes from './routes/donationRoutes.js';
+import bloodBankRoutes from './routes/bloodBankRoutes.js';
+  // ✅ ADD THIS
 
 // Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/donors', donorRoutes);
-app.use('/api/v1/donations', donationRoutes);  // ✅ ADD THIS
+app.use('/api/v1/donations', donationRoutes); 
+app.use('/api/blood-banks', bloodBankRoutes); // ✅ ADD THIS
 
 // Other routes (to be added later)
 // app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));

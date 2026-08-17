@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | Notifications</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo"><span>♥️</span> LifeLink</div>
+
+    <nav>
+        <a href="donor_dashboard.html">Dashboard</a>
+        <a href="donor_profile.html">My Profile</a>
+        <a href="donor_history.html">Donation History</a>
+        <a href="donor_requests.html">Blood Requests</a>
+        <a href="donor_notifications.html" class="active">Notifications</a>
+    </nav>
+
+    <a href="login.html" class="logout">Logout</a>
+</aside>
+
+<main class="main-content">
+
+    <header class="topbar">
+        <div>
+            <h1>Notifications</h1>
+            <p>Stay updated about your donor activity.</p>
+        </div>
+
+        <div class="topbar-actions">
+            <div class="profile">
+                <div class="profile-icon" id="profileInitial">D</div>
+                <span id="topbarName">Donor</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Your Notifications</h2>
+                <p>Recent updates and blood requests.</p>
+            </div>
+
+            <button class="edit-profile-btn" id="markAllRead">
+                Mark All Read
+            </button>
+        </div>
+
+        <div id="notificationList">
+            <p>Loading notifications...</p>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../src/js/donor-notifications.js"></script>
+
+</body>
+</html>

@@ -408,3 +408,28 @@ a {
         width: 100%;
     }
 }
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.notification-btn {
+    position: relative;
+    font-size: 21px;
+    color: #7b1e2b;
+}
+
+.notification-btn span {
+    position: absolute;
+    top: -7px;
+    right: -8px;
+    min-width: 17px;
+    height: 17px;
+    padding: 2px 4px;
+    border-radius: 50%;
+    background: #b82038;
+    color: white;
+    font-size: 10px;
+    text-align: center;
+}

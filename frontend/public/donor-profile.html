@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | My Profile</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo"><span>♥️</span> LifeLink</div>
+
+    <nav>
+        <a href="donor_dashboard.html">Dashboard</a>
+        <a href="donor_profile.html" class="active">My Profile</a>
+        <a href="donor_history.html">Donation History</a>
+        <a href="donor_requests.html">Blood Requests</a>
+    </nav>
+
+    <a href="login.html" class="logout">Logout</a>
+</aside>
+
+<main class="main-content">
+
+    <header class="topbar">
+        <div>
+            <h1>My Profile</h1>
+            <p>Manage your donor information.</p>
+        </div>
+
+        <div class="topbar-actions">
+            <a href="donor_notifications.html" class="notification-btn">
+                🔔
+                <span id="notificationCount">0</span>
+            </a>
+
+            <div class="profile">
+                <div class="profile-icon" id="profileInitial">D</div>
+                <span id="topbarName">Donor</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="profile-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Personal Information</h2>
+                <p>Keep your donor information up to date.</p>
+            </div>
+
+            <button class="edit-profile-btn" id="editProfileBtn">
+                Edit Profile
+            </button>
+        </div>
+
+        <div class="profile-content">
+
+            <div class="large-profile-icon" id="largeProfileInitial">
+                D
+            </div>
+
+            <div class="profile-details">
+
+                <div class="profile-field">
+                    <span>Full Name</span>
+                    <strong id="donorName">Loading...</strong>
+                    <input id="editName" class="profile-input" type="text">
+                </div>
+
+                <div class="profile-field">
+                    <span>Email</span>
+                    <strong id="donorEmail">Loading...</strong>
+                </div>
+
+                <div class="profile-field">
+                    <span>Phone</span>
+                    <strong id="donorPhone">Loading...</strong>
+                    <input id="editPhone" class="profile-input" type="text">
+                </div>
+
+                <div class="profile-field">
+                    <span>Blood Type</span>
+                    <strong id="donorBloodType">Loading...</strong>
+
+                    <select id="editBloodType" class="profile-input">
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+
+                <div class="profile-field">
+                    <span>Location</span>
+                    <strong id="donorLocation">Loading...</strong>
+                    <input id="editLocation" class="profile-input" type="text">
+                </div>
+
+                <div class="profile-field">
+                    <span>Availability</span>
+                    <strong class="available" id="donorStatus">
+                        Loading...
+                    </strong>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="profile-actions" id="profileActions">
+            <button class="save-profile-btn" id="saveProfileBtn">
+                Save Changes
+            </button>
+
+            <button class="cancel-profile-btn" id="cancelProfileBtn">
+                Cancel
+            </button>
+        </div>
+
+    </section>
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Donor Availability</h2>
+                <p>Let blood banks know if you are available to donate.</p>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <div class="status-icon">✓</div>
+
+            <div>
+                <h3 id="availabilityText">Available</h3>
+                <p>Your availability can be updated when needed.</p>
+            </div>
+
+            <button class="respond-btn" id="availabilityBtn">
+                Update Status
+            </button>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../src/js/donor-profile.js"></script>
+
+</body>
+</html>

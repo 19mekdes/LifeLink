@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | Blood Requests</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo"><span>♥️</span> LifeLink</div>
+
+    <nav>
+        <a href="donor_dashboard.html">Dashboard</a>
+        <a href="donor_profile.html">My Profile</a>
+        <a href="donor_history.html">Donation History</a>
+        <a href="donor_requests.html" class="active">Blood Requests</a>
+    </nav>
+
+    <a href="login.html" class="logout">Logout</a>
+</aside>
+
+<main class="main-content">
+
+    <header class="topbar">
+        <div>
+            <h1>Blood Requests</h1>
+            <p>Help someone who needs your blood type.</p>
+        </div>
+
+        <div class="topbar-actions">
+            <a href="donor_notifications.html" class="notification-btn">
+                🔔
+                <span id="notificationCount">0</span>
+            </a>
+
+            <div class="profile">
+                <div class="profile-icon" id="profileInitial">D</div>
+                <span id="topbarName">Donor</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Available Requests</h2>
+                <p>These requests may match your blood type.</p>
+            </div>
+        </div>
+
+        <div id="requestList">
+            <p>Loading blood requests...</p>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../src/js/donor-requests.js"></script>
+
+</body>
+</html>

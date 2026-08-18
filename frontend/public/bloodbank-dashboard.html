@@ -1,11 +1,2250 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>LifeLink - Blood Bank Dashboard</title>
+  <style>
+    :root {
+      --primary-red: #e63946;
+      --dark-red: #b91c1c;
+      --light-red: #fee2e2;
+      --bg-light: #f8f9fa;
+      --bg-white: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --border-color: #e5e7eb;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --transition: all 0.2s ease;
+      --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-sans);
+    }
+
+    body {
+      background: var(--bg-light);
+      color: var(--text-main);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 280px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 16px;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px 24px 12px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-red);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-red);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-section {
+      margin-bottom: 8px;
+    }
+
+    .nav-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 16px 12px 8px 12px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      text-decoration: none;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 14px;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      background: #f3f4f6;
+      color: var(--text-main);
+    }
+
+    .nav-links a.active {
+      background: var(--light-red);
+      color: var(--primary-red);
+      font-weight: 600;
+    }
+
+    .nav-links a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--primary-red);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--primary-red);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    .sidebar-footer {
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    .bank-status-card {
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .bank-status-card .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .bank-status-card .value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      text-decoration: none;
+      color: var(--danger);
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background: var(--danger-light);
+    }
+
+    /* MAIN */
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .top-header {
+      background: var(--bg-white);
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .header-title h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+
+    .header-title p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .header-btn:hover {
+      background: var(--bg-light);
+      color: var(--text-main);
+    }
+
+    .header-btn .dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: var(--primary-red);
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 12px 6px 6px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .user-profile-badge:hover {
+      border-color: var(--primary-red);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary-red);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .user-info {
+      line-height: 1.2;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .user-role {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .dashboard-container {
+      padding: 28px 32px;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    /* PAGES */
+    .page-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .page-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* METRICS */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--bg-white);
+      padding: 22px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--border-color);
+    }
+
+    .metric-card.highlight::before {
+      background: var(--primary-red);
+    }
+
+    .metric-card.success::before {
+      background: var(--success);
+    }
+
+    .metric-card.warning::before {
+      background: var(--warning);
+    }
+
+    .metric-card.info::before {
+      background: var(--info);
+    }
+
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .metric-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .metric-icon.red {
+      background: var(--light-red);
+    }
+
+    .metric-icon.green {
+      background: var(--success-light);
+    }
+
+    .metric-icon.yellow {
+      background: var(--warning-light);
+    }
+
+    .metric-icon.blue {
+      background: var(--info-light);
+    }
+
+    .metric-trend {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .metric-trend.up {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .metric-trend.down {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .metric-sub {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    /* SECTIONS */
+    .section-box {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: var(--transition);
+    }
+
+    .section-box:hover {
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-header h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--primary-red);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--dark-red);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: var(--bg-light);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border-color);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    /* TABLES */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f9fafb;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody tr {
+      transition: var(--transition);
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .badge.emergency {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .badge.emergency::before {
+      background: var(--danger);
+    }
+
+    .badge.urgent {
+      background: var(--warning-light);
+      color: #b45309;
+    }
+
+    .badge.urgent::before {
+      background: var(--warning);
+    }
+
+    .badge.completed {
+      background: var(--success-light);
+      color: #047857;
+    }
+
+    .badge.completed::before {
+      background: var(--success);
+    }
+
+    .badge.pending {
+      background: #fef9c3;
+      color: #a16207;
+    }
+
+    .badge.pending::before {
+      background: var(--warning);
+    }
+
+    .badge.approved {
+      background: var(--info-light);
+      color: #1d4ed8;
+    }
+
+    .badge.approved::before {
+      background: var(--info);
+    }
+
+    .badge.low {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .badge.low::before {
+      background: var(--danger);
+    }
+
+    .badge.adequate {
+      background: var(--success-light);
+      color: #047857;
+    }
+
+    .badge.adequate::before {
+      background: var(--success);
+    }
+
+    /* INVENTORY GRID */
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .blood-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blood-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .blood-card.critical {
+      border-color: var(--danger);
+      background: #fffafa;
+    }
+
+    .blood-card.critical::after {
+      content: '!';
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .blood-type {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary-red);
+      margin-bottom: 4px;
+    }
+
+    .blood-units {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .blood-bar {
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .blood-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    .blood-bar-fill.high {
+      background: var(--success);
+    }
+
+    .blood-bar-fill.medium {
+      background: var(--warning);
+    }
+
+    .blood-bar-fill.low {
+      background: var(--danger);
+    }
+
+    .blood-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .blood-actions .btn {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+
+    /* PROFILE & FORMS */
+    .profile-details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .profile-field {
+      padding: 16px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .profile-field label {
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .profile-field span {
+      font-size: 15px;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 14px;
+      width: 100%;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      transition: var(--transition);
+      background: var(--bg-white);
+      color: var(--text-main);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+    }
+
+    /* NOTIFICATIONS */
+    .notification-list {
+      list-style: none;
+    }
+
+    .notification-item {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      transition: var(--transition);
+      border-radius: var(--radius-sm);
+    }
+
+    .notification-item:hover {
+      background: var(--bg-light);
+    }
+
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+
+    .notification-content {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      flex: 1;
+    }
+
+    .notification-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .notification-icon.critical {
+      background: var(--danger-light);
+    }
+
+    .notification-icon.info {
+      background: var(--info-light);
+    }
+
+    .notification-icon.success {
+      background: var(--success-light);
+    }
+
+    .notification-text {
+      font-size: 14px;
+      color: var(--text-main);
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .notification-meta {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .notification-time {
+      font-size: 12px;
+      color: var(--text-light);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    /* OUTREACH */
+    .outreach-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .outreach-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: var(--transition);
+    }
+
+    .outreach-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .outreach-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .outreach-blood {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary-red);
+    }
+
+    .outreach-need {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .donor-match-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .donor-match-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+    }
+
+    .donor-match-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .donor-avatar-sm {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary-red);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .donor-match-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .donor-match-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .donor-reliability {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    /* ANALYTICS */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+    }
+
+    .chart-placeholder {
+      height: 260px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      border: 1px dashed var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      gap: 12px;
+    }
+
+    .chart-placeholder .icon {
+      font-size: 40px;
+      opacity: 0.4;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: modalSlide 0.25s ease;
+    }
+
+    @keyframes modalSlide {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      background: var(--bg-light);
+      color: var(--text-main);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-state h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .empty-state p {
+      font-size: 14px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 240px;
+      }
+
+      .dashboard-container {
+        padding: 20px;
+      }
+
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 60px;
+        overflow: hidden;
+        padding: 12px;
+      }
+
+      .sidebar.open {
+        max-height: none;
+      }
+
+      .main-content {
+        height: calc(100vh - 60px);
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+  </style>
+  <base target="_blank">
 </head>
+
 <body>
-  
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="logo-area">
+        <div class="logo-icon">🩸</div>
+        <div>
+          <div class="logo-text">LifeLink</div>
+          <div class="logo-sub">Blood Bank Portal</div>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <ul class="nav-links">
+          <li><a class="nav-item active" data-page="dashboard">📊 Dashboard</a></li>
+          <li><a class="nav-item" data-page="inventory">🩸 Blood Inventory</a></li>
+          <li><a class="nav-item" data-page="requests">🏥 Hospital Requests</a></li>
+          <li><a class="nav-item" data-page="outreach">👥 Donor Outreach</a></li>
+          <li><a class="nav-item" data-page="donations">📥 Donation Records</a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Insights</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" data-page="analytics">📈 Analytics</a></li>
+          <li><a class="nav-item" data-page="notifications">🔔 Notifications <span class="nav-badge"
+                id="notif-badge">3</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" data-page="profile">🏥 Bank Profile</a></li>
+          <li><a class="nav-item" data-page="settings">⚙️ Settings</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="bank-status-card">
+        <div class="label">System Status</div>
+        <div class="value" style="color: var(--success);">● Online</div>
+      </div>
+      <a class="logout-btn" onclick="app.logout()">🚪 Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="top-header">
+      <div class="header-title">
+        <h1 id="page-title">Dashboard</h1>
+        <p>Welcome back, <span id="bank-name-header"></span> — here's what's happening today.</p>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" onclick="app.navigate('notifications')" title="Notifications">
+          🔔
+          <span class="dot" id="header-notif-dot"></span>
+        </button>
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="avatar-initials">AB</div>
+          <div class="user-info">
+            <div class="user-name" id="user-name">Admin</div>
+            <div class="user-role">Blood Bank Manager</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+
+      <!-- 1. DASHBOARD -->
+      <section id="page-dashboard" class="page-content active">
+        <div class="metrics-grid">
+          <div class="metric-card highlight">
+            <div class="metric-header">
+              <div class="metric-icon red">🩸</div>
+              <span class="metric-trend up">+5%</span>
+            </div>
+            <div class="metric-label">Total Units in Stock</div>
+            <div class="metric-value" id="stat-total-stock">—</div>
+            <div class="metric-sub">Across all blood types</div>
+          </div>
+          <div class="metric-card warning">
+            <div class="metric-header">
+              <div class="metric-icon yellow">🏥</div>
+              <span class="metric-trend down">+2</span>
+            </div>
+            <div class="metric-label">Active Requests</div>
+            <div class="metric-value" id="stat-active-requests">—</div>
+            <div class="metric-sub">Awaiting dispatch</div>
+          </div>
+          <div class="metric-card success">
+            <div class="metric-header">
+              <div class="metric-icon green">✅</div>
+              <span class="metric-trend up">+12%</span>
+            </div>
+            <div class="metric-label">Fulfilled Today</div>
+            <div class="metric-value" id="stat-fulfilled-today">—</div>
+            <div class="metric-sub">Units dispatched</div>
+          </div>
+          <div class="metric-card info">
+            <div class="metric-header">
+              <div class="metric-icon blue">⚠️</div>
+              <span class="metric-trend down">Critical</span>
+            </div>
+            <div class="metric-label">Critical Groups</div>
+            <div class="metric-value" id="stat-low-stock">—</div>
+            <div class="metric-sub">Below safety threshold</div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🩸 Current Stock Overview</h2>
+            <button class="btn btn-secondary btn-sm" onclick="app.navigate('inventory')">View All</button>
+          </div>
+          <div class="inventory-grid" id="dash-inventory-summary"></div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🏥 Pending Hospital Requests</h2>
+            <button class="btn btn-primary btn-sm" onclick="app.navigate('requests')">Manage Requests</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital</th>
+                  <th>Blood Type</th>
+                  <th>Units</th>
+                  <th>Urgency</th>
+                  <th>Requested</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="dash-requests-table"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2>📥 Recent Donations</h2>
+            <button class="btn btn-secondary btn-sm" onclick="app.navigate('donations')">View All</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Donor</th>
+                  <th>Blood Group</th>
+                  <th>Units</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="dash-donations-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. INVENTORY -->
+      <section id="page-inventory" class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🩸 Complete Blood Stock Details</h2>
+            <div class="section-actions">
+              <button class="btn btn-secondary btn-sm" onclick="app.exportInventory()">📥 Export</button>
+              <button class="btn btn-primary" onclick="app.openModal('updateStockModal')">+ Update Stock</button>
+            </div>
+          </div>
+          <div class="inventory-grid" id="inventory-grid-body"></div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2>📋 Inventory Log</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Blood Type</th>
+                  <th>Action</th>
+                  <th>Units</th>
+                  <th>Reason</th>
+                  <th>Operator</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-log-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. HOSPITAL REQUESTS -->
+      <section id="page-requests" class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🏥 All Hospital Dispatch Requests</h2>
+            <div class="section-actions">
+              <select
+                style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 13px;"
+                id="request-filter" onchange="app.renderRequests()">
+                <option value="all">All Requests</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="completed">Completed</option>
+                <option value="emergency">Emergency Only</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Request ID</th>
+                  <th>Hospital</th>
+                  <th>Blood Type</th>
+                  <th>Units</th>
+                  <th>Urgency</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="all-requests-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. DONOR OUTREACH -->
+      <section id="page-outreach" class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>👥 Smart Donor Matching</h2>
+            <p style="color: var(--text-muted); font-size: 13px;">Automatically find and request donors based on blood
+              type, location, and availability.</p>
+          </div>
+          <div class="outreach-grid" id="outreach-grid-body"></div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2>📨 Sent Outreach Requests</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Donor</th>
+                  <th>Blood Type</th>
+                  <th>Requested On</th>
+                  <th>Status</th>
+                  <th>Response</th>
+                </tr>
+              </thead>
+              <tbody id="outreach-log-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. DONATION RECORDS -->
+      <section id="page-donations" class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>📥 Donor Collection Logs</h2>
+            <div class="section-actions">
+              <button class="btn btn-secondary btn-sm">📥 Export CSV</button>
+              <button class="btn btn-primary">+ Record Donation</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Donor ID</th>
+                  <th>Donor Name</th>
+                  <th>Blood Group</th>
+                  <th>Units</th>
+                  <th>Collection Date</th>
+                  <th>Expiry Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="donations-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. ANALYTICS -->
+      <section id="page-analytics" class="page-content">
+        <div class="metrics-grid">
+          <div class="metric-card highlight">
+            <div class="metric-header">
+              <div class="metric-icon red">❤️</div>
+            </div>
+            <div class="metric-label">Lives Supported</div>
+            <div class="metric-value">1,247</div>
+            <div class="metric-sub">Since platform launch</div>
+          </div>
+          <div class="metric-card success">
+            <div class="metric-header">
+              <div class="metric-icon green">🩸</div>
+            </div>
+            <div class="metric-label">Total Donations</div>
+            <div class="metric-value">3,842</div>
+            <div class="metric-sub">Units collected</div>
+          </div>
+          <div class="metric-card info">
+            <div class="metric-header">
+              <div class="metric-icon blue">👥</div>
+            </div>
+            <div class="metric-label">Active Donors</div>
+            <div class="metric-value">856</div>
+            <div class="metric-sub">Registered & eligible</div>
+          </div>
+          <div class="metric-card warning">
+            <div class="metric-header">
+              <div class="metric-icon yellow">🏥</div>
+            </div>
+            <div class="metric-label">Partner Hospitals</div>
+            <div class="metric-value">24</div>
+            <div class="metric-sub">Connected facilities</div>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="section-box">
+            <div class="section-header">
+              <h2>📊 Blood Type Distribution</h2>
+            </div>
+            <div class="chart-placeholder">
+              <div class="icon">📊</div>
+              <span>Chart.js or Recharts integration ready</span>
+              <span style="font-size: 12px;">Connect to /api/analytics/distribution</span>
+            </div>
+          </div>
+          <div class="section-box">
+            <div class="section-header">
+              <h2>📈 Monthly Donation Trend</h2>
+            </div>
+            <div class="chart-placeholder">
+              <div class="icon">📈</div>
+              <span>Chart.js or Recharts integration ready</span>
+              <span style="font-size: 12px;">Connect to /api/analytics/trends</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2>📋 Monthly Summary</h2>
+          </div>
+          <div class="stat-row"><span class="stat-label">Total Requests Received</span><span
+              class="stat-value">142</span></div>
+          <div class="stat-row"><span class="stat-label">Requests Fulfilled</span><span class="stat-value">138
+              (97.2%)</span></div>
+          <div class="stat-row"><span class="stat-label">Average Response Time</span><span class="stat-value">18
+              minutes</span></div>
+          <div class="stat-row"><span class="stat-label">Emergency Requests</span><span class="stat-value">23</span>
+          </div>
+          <div class="stat-row"><span class="stat-label">Donor Outreach Success Rate</span><span
+              class="stat-value">74%</span></div>
+        </div>
+      </section>
+
+      <!-- 7. NOTIFICATIONS -->
+      <section id="page-notifications" class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🔔 Alerts & System Messages</h2>
+            <button class="btn btn-secondary btn-sm" onclick="app.markAllRead()">Mark All Read</button>
+          </div>
+          <ul class="notification-list" id="notifications-list"></ul>
+        </div>
+      </section>
+
+      <!-- 8. BANK PROFILE -->
+      <section id="page-profile" class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🏥 Blood Bank Facility Details</h2>
+            <button class="btn btn-primary btn-sm" onclick="app.openModal('editProfileModal')">✏️ Edit Profile</button>
+          </div>
+          <div class="profile-details-grid">
+            <div class="profile-field"><label>Facility Name</label><span id="prof-bank-name">—</span></div>
+            <div class="profile-field"><label>License ID</label><span id="prof-license">—</span></div>
+            <div class="profile-field"><label>Contact Person</label><span id="prof-contact">—</span></div>
+            <div class="profile-field"><label>Phone Number</label><span id="prof-phone">—</span></div>
+            <div class="profile-field"><label>Email Address</label><span id="prof-email">—</span></div>
+            <div class="profile-field"><label>City / Location</label><span id="prof-location">—</span></div>
+            <div class="profile-field"><label>Operating Hours</label><span>24/7 Emergency Services</span></div>
+            <div class="profile-field"><label>Facility Type</label><span>Regional Blood Transfusion Center</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. SETTINGS -->
+      <section id="page-settings" class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>⚙️ Blood Bank Preferences</h2>
+          </div>
+          <form id="settings-form" class="form-grid">
+            <div>
+              <div class="form-group">
+                <label>Low-Stock Warning Threshold (Units)</label>
+                <input type="number" id="setting-low-stock" value="10" min="1">
+              </div>
+              <div class="form-group">
+                <label>Critical-Stock Emergency Threshold (Units)</label>
+                <input type="number" id="setting-critical-stock" value="5" min="1">
+              </div>
+              <div class="form-group">
+                <label>Default Expiry Alert (Days Before)</label>
+                <input type="number" id="setting-expiry-alert" value="7" min="1">
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label>Notification Mode</label>
+                <select id="setting-notif-mode">
+                  <option value="both">SMS & Email Alerts</option>
+                  <option value="email">Email Only</option>
+                  <option value="sms">SMS Only</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Emergency Auto-Notify Donors</label>
+                <select id="setting-auto-notify">
+                  <option value="enabled">Enabled</option>
+                  <option value="disabled">Disabled</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Dashboard Refresh Interval (Seconds)</label>
+                <input type="number" id="setting-refresh" value="30" min="5">
+              </div>
+            </div>
+          </form>
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+            <button type="button" class="btn btn-primary" onclick="app.saveSettings()">💾 Save Settings</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODALS -->
+  <div class="modal-overlay" id="updateStockModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🩸 Update Blood Stock</h3>
+        <button class="modal-close" onclick="app.closeModal('updateStockModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Blood Type</label>
+          <select id="modal-blood-type">
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+            <option>O+</option>
+            <option>O-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Action</label>
+          <select id="modal-action">
+            <option value="add">Add Units (Donation)</option>
+            <option value="remove">Remove Units (Dispatch)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Units</label>
+          <input type="number" id="modal-units" value="1" min="1">
+        </div>
+        <div class="form-group">
+          <label>Reason / Notes</label>
+          <textarea id="modal-notes" rows="3" placeholder="e.g., Emergency dispatch to Tikur Anbessa"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="app.closeModal('updateStockModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="app.submitStockUpdate()">Update Stock</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✏️ Edit Bank Profile</h3>
+        <button class="modal-close" onclick="app.closeModal('editProfileModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Facility Name</label><input type="text" id="edit-name"
+              value="Addis Central Blood Bank"></div>
+          <div class="form-group"><label>License ID</label><input type="text" id="edit-license" value="BB-ETH-2026-091">
+          </div>
+          <div class="form-group"><label>Contact Person</label><input type="text" id="edit-contact"
+              value="Dr. Selamawit Tadesse"></div>
+          <div class="form-group"><label>Phone</label><input type="text" id="edit-phone" value="+251 115 511 223"></div>
+          <div class="form-group"><label>Email</label><input type="email" id="edit-email"
+              value="info@addisbloodbank.gov.et"></div>
+          <div class="form-group"><label>City</label><input type="text" id="edit-city" value="Addis Ababa"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="app.closeModal('editProfileModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="app.saveProfile()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    /* ===========================================
+       DATA SERVICE LAYER
+       Replace fetch() calls when Node.js/Express
+       backend is ready.
+       =========================================== */
+    const API = {
+      baseUrl: 'http://localhost:5000/api',
+
+      async getProfile() {
+        // TODO: fetch(`${this.baseUrl}/blood-bank/profile`).then(r => r.json())
+        return Promise.resolve(MOCK_DATA.profile);
+      },
+      async getInventory() {
+        // TODO: fetch(`${this.baseUrl}/blood-bank/inventory`).then(r => r.json())
+        return Promise.resolve(MOCK_DATA.inventory);
+      },
+      async getRequests() {
+        // TODO: fetch(`${this.baseUrl}/blood-bank/requests`).then(r => r.json())
+        return Promise.resolve(MOCK_DATA.requests);
+      },
+      async getDonations() {
+        // TODO: fetch(`${this.baseUrl}/blood-bank/donations`).then(r => r.json())
+        return Promise.resolve(MOCK_DATA.donations);
+      },
+      async getNotifications() {
+        // TODO: fetch(`${this.baseUrl}/blood-bank/notifications`).then(r => r.json())
+        return Promise.resolve(MOCK_DATA.notifications);
+      },
+      async getOutreach() {
+        // TODO: fetch(`${this.baseUrl}/blood-bank/outreach`).then(r => r.json())
+        return Promise.resolve(MOCK_DATA.outreach);
+      },
+      async getInventoryLog() {
+        return Promise.resolve(MOCK_DATA.inventoryLog);
+      },
+      async updateStock(payload) {
+        // TODO: POST /blood-bank/stock/update
+        console.log('API: POST /blood-bank/stock/update', payload);
+        return Promise.resolve({ success: true, message: 'Stock updated' });
+      },
+      async approveRequest(requestId) {
+        // TODO: POST /blood-bank/request/approve/${requestId}
+        console.log('API: POST /blood-bank/request/approve/' + requestId);
+        return Promise.resolve({ success: true });
+      },
+      async sendOutreach(payload) {
+        // TODO: POST /blood-bank/outreach/send
+        console.log('API: POST /blood-bank/outreach/send', payload);
+        return Promise.resolve({ success: true });
+      },
+      async saveSettings(payload) {
+        // TODO: PUT /blood-bank/settings
+        console.log('API: PUT /blood-bank/settings', payload);
+        return Promise.resolve({ success: true });
+      },
+      async updateProfile(payload) {
+        // TODO: PUT /blood-bank/profile
+        console.log('API: PUT /blood-bank/profile', payload);
+        return Promise.resolve({ success: true });
+      }
+    };
+
+    /* ===========================================
+       MOCK DATA
+       =========================================== */
+    const MOCK_DATA = {
+      profile: {
+        name: "Addis Central Blood Bank",
+        license: "BB-ETH-2026-091",
+        contactPerson: "Dr. Selamawit Tadesse",
+        phone: "+251 115 511 223",
+        email: "info@addisbloodbank.gov.et",
+        address: "Kirkos Sub-city, Addis Ababa",
+        city: "Addis Ababa",
+        avatar: "ST"
+      },
+      inventory: [
+        { type: "A+", units: 24, capacity: 50, low: false, critical: false },
+        { type: "A-", units: 5, capacity: 20, low: true, critical: false },
+        { type: "B+", units: 18, capacity: 40, low: false, critical: false },
+        { type: "B-", units: 4, capacity: 15, low: true, critical: true },
+        { type: "AB+", units: 12, capacity: 25, low: false, critical: false },
+        { type: "AB-", units: 2, capacity: 10, low: true, critical: true },
+        { type: "O+", units: 45, capacity: 60, low: false, critical: false },
+        { type: "O-", units: 6, capacity: 20, low: true, critical: false }
+      ],
+      requests: [
+        { id: "REQ-2026-001", hospital: "Tikur Anbessa Hospital", bloodType: "O-", units: 3, urgency: "Emergency", date: "Aug 16, 2026", status: "Pending", requestedAt: "2 hours ago" },
+        { id: "REQ-2026-002", hospital: "Zewditu Memorial Hospital", bloodType: "A+", units: 2, urgency: "High", date: "Aug 16, 2026", status: "Pending", requestedAt: "3 hours ago" },
+        { id: "REQ-2026-003", hospital: "St. Paul's Hospital", bloodType: "B+", units: 5, urgency: "Normal", date: "Aug 15, 2026", status: "Completed", requestedAt: "1 day ago" },
+        { id: "REQ-2026-004", hospital: "Yekatit 12 Hospital", bloodType: "AB-", units: 2, urgency: "Emergency", date: "Aug 15, 2026", status: "Approved", requestedAt: "1 day ago" },
+        { id: "REQ-2026-005", hospital: "Menelik II Hospital", bloodType: "O+", units: 4, urgency: "Normal", date: "Aug 14, 2026", status: "Completed", requestedAt: "2 days ago" }
+      ],
+      donations: [
+        { id: "DON-001", donor: "Abebe Kebede", bloodType: "O+", units: 1, date: "Aug 16, 2026", expiry: "Sep 15, 2026", status: "Available" },
+        { id: "DON-002", donor: "Marta Haile", bloodType: "A+", units: 1, date: "Aug 15, 2026", expiry: "Sep 14, 2026", status: "Available" },
+        { id: "DON-003", donor: "Yonas Alemu", bloodType: "B+", units: 1, date: "Aug 15, 2026", expiry: "Sep 14, 2026", status: "Available" },
+        { id: "DON-004", donor: "Tigist Bekele", bloodType: "O-", units: 1, date: "Aug 14, 2026", expiry: "Sep 13, 2026", status: "Dispatched" },
+        { id: "DON-005", donor: "Dawit Mekonnen", bloodType: "A-", units: 1, date: "Aug 13, 2026", expiry: "Sep 12, 2026", status: "Available" }
+      ],
+      notifications: [
+        { id: 1, type: "critical", message: "CRITICAL: B- stock dropped below emergency threshold (4 units).", time: "30 mins ago", read: false },
+        { id: 2, type: "critical", message: "CRITICAL: AB- stock is critically low (2 units). Immediate donor outreach recommended.", time: "45 mins ago", read: false },
+        { id: 3, type: "info", message: "Emergency blood request submitted by Tikur Anbessa Hospital for O-.", time: "2 hours ago", read: false },
+        { id: 4, type: "success", message: "New donation batch verified: O+ stock increased by 3 units.", time: "4 hours ago", read: true },
+        { id: 5, type: "info", message: "Scheduled maintenance: System will undergo maintenance tonight at 02:00 AM.", time: "6 hours ago", read: true },
+        { id: 6, type: "success", message: "Dispatch completed: 5 units of B+ sent to St. Paul's Hospital.", time: "1 day ago", read: true }
+      ],
+      outreach: [
+        {
+          bloodType: "B-",
+          need: "4 units needed urgently",
+          critical: true,
+          donors: [
+            { name: "Dawit Mekonnen", location: "2.3 km away", reliability: 95, bloodType: "B-" },
+            { name: "Hiwot Girma", location: "4.1 km away", reliability: 88, bloodType: "B-" },
+            { name: "Solomon Tesfaye", location: "5.8 km away", reliability: 92, bloodType: "B-" }
+          ]
+        },
+        {
+          bloodType: "AB-",
+          need: "2 units needed critically",
+          critical: true,
+          donors: [
+            { name: "Frehiwot Abebe", location: "1.8 km away", reliability: 90, bloodType: "AB-" },
+            { name: "Bereket Wolde", location: "3.5 km away", reliability: 85, bloodType: "AB-" }
+          ]
+        },
+        {
+          bloodType: "A-",
+          need: "5 units below threshold",
+          critical: false,
+          donors: [
+            { name: "Mekdes Wale", location: "3.2 km away", reliability: 94, bloodType: "A-" },
+            { name: "Kasim Muhdin", location: "6.0 km away", reliability: 87, bloodType: "A-" }
+          ]
+        }
+      ],
+      outreachLog: [
+        { donor: "Dawit Mekonnen", bloodType: "B-", date: "Aug 16, 2026", status: "Sent", response: "Awaiting" },
+        { donor: "Frehiwot Abebe", bloodType: "AB-", date: "Aug 16, 2026", status: "Sent", response: "Accepted" },
+        { donor: "Mekdes Wale", bloodType: "A-", date: "Aug 15, 2026", status: "Sent", response: "Declined" },
+        { donor: "Hiwot Girma", bloodType: "B-", date: "Aug 15, 2026", status: "Sent", response: "Accepted" }
+      ],
+      inventoryLog: [
+        { date: "Aug 16, 2026 09:30", type: "O+", action: "Added", units: 3, reason: "Donation collection", operator: "Nurse Alemu" },
+        { date: "Aug 16, 2026 08:15", type: "B+", action: "Removed", units: 5, reason: "Dispatch to St. Paul's", operator: "Dr. Tadesse" },
+        { date: "Aug 15, 2026 16:45", type: "A+", action: "Added", units: 2, reason: "Donation collection", operator: "Nurse Bekele" },
+        { date: "Aug 15, 2026 14:20", type: "O-", action: "Removed", units: 2, reason: "Emergency dispatch", operator: "Dr. Tadesse" },
+        { date: "Aug 15, 2026 10:00", type: "AB+", action: "Added", units: 1, reason: "Donation collection", operator: "Nurse Alemu" }
+      ]
+    };
+
+    /* ===========================================
+       APPLICATION CONTROLLER
+       =========================================== */
+    const app = {
+      data: { ...MOCK_DATA },
+
+      init() {
+        this.bindNavigation();
+        this.renderAll();
+      },
+
+      bindNavigation() {
+        document.querySelectorAll('.nav-item').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.page-content').forEach(s => s.classList.remove('active'));
+            btn.classList.add('active');
+            const page = btn.getAttribute('data-page');
+            document.getElementById(`page-${page}`).classList.add('active');
+            const title = btn.innerText.replace(/[\d🔔]/g, '').trim();
+            document.getElementById('page-title').innerText = title;
+          });
+        });
+      },
+
+      navigate(page) {
+        const btn = document.querySelector(`.nav-item[data-page="${page}"]`);
+        if (btn) btn.click();
+      },
+
+      renderAll() {
+        this.renderProfile();
+        this.renderMetrics();
+        this.renderInventory();
+        this.renderRequests();
+        this.renderDonations();
+        this.renderNotifications();
+        this.renderOutreach();
+        this.renderInventoryLog();
+        this.updateNotifBadge();
+      },
+
+      renderProfile() {
+        const p = this.data.profile;
+        document.getElementById('bank-name-header').innerText = p.name;
+        document.getElementById('avatar-initials').innerText = p.avatar;
+        document.getElementById('user-name').innerText = p.contactPerson;
+        document.getElementById('prof-bank-name').innerText = p.name;
+        document.getElementById('prof-license').innerText = p.license;
+        document.getElementById('prof-contact').innerText = p.contactPerson;
+        document.getElementById('prof-phone').innerText = p.phone;
+        document.getElementById('prof-email').innerText = p.email;
+        document.getElementById('prof-location').innerText = `${p.address}, ${p.city}`;
+      },
+
+      renderMetrics() {
+        const total = this.data.inventory.reduce((s, i) => s + i.units, 0);
+        const critical = this.data.inventory.filter(i => i.critical).length;
+        const pending = this.data.requests.filter(r => r.status === 'Pending').length;
+        document.getElementById('stat-total-stock').innerText = `${total} Units`;
+        document.getElementById('stat-active-requests').innerText = pending;
+        document.getElementById('stat-fulfilled-today').innerText = '12 Units';
+        document.getElementById('stat-low-stock').innerText = `${critical} Groups`;
+      },
+
+      renderInventory() {
+        const renderCard = (item) => {
+          const pct = Math.min((item.units / item.capacity) * 100, 100);
+          const barClass = item.critical ? 'low' : item.low ? 'medium' : 'high';
+          const cardClass = item.critical ? 'critical' : '';
+          return `
+            <div class="blood-card ${cardClass}">
+              <div class="blood-type">${item.type}</div>
+              <div class="blood-units">${item.units} / ${item.capacity} Units</div>
+              <div class="blood-bar"><div class="blood-bar-fill ${barClass}" style="width:${pct}%"></div></div>
+              <div class="blood-actions">
+                <button class="btn btn-primary btn-sm" onclick="app.quickAdd('${item.type}')">+</button>
+                <button class="btn btn-secondary btn-sm" onclick="app.quickRemove('${item.type}')">−</button>
+              </div>
+            </div>`;
+        };
+        document.getElementById('dash-inventory-summary').innerHTML = this.data.inventory.map(renderCard).join('');
+        document.getElementById('inventory-grid-body').innerHTML = this.data.inventory.map(renderCard).join('');
+      },
+
+      renderRequests() {
+        const filter = document.getElementById('request-filter')?.value || 'all';
+        let reqs = this.data.requests;
+        if (filter === 'pending') reqs = reqs.filter(r => r.status === 'Pending');
+        if (filter === 'approved') reqs = reqs.filter(r => r.status === 'Approved');
+        if (filter === 'completed') reqs = reqs.filter(r => r.status === 'Completed');
+        if (filter === 'emergency') reqs = reqs.filter(r => r.urgency === 'Emergency');
+
+        const row = (req) => `
+          <tr>
+            <td><strong>${req.id}</strong></td>
+            <td>${req.hospital}</td>
+            <td><strong>${req.bloodType}</strong></td>
+            <td>${req.units} Units</td>
+            <td><span class="badge ${req.urgency === 'Emergency' ? 'emergency' : req.urgency === 'High' ? 'urgent' : 'pending'}">${req.urgency}</span></td>
+            <td>${req.date}</td>
+            <td><span class="badge ${req.status === 'Completed' ? 'completed' : req.status === 'Approved' ? 'approved' : 'pending'}">${req.status}</span></td>
+            <td>${req.status === 'Pending' ? `<button class="btn btn-success btn-sm" onclick="app.approveRequest('${req.id}')">Approve</button>` : '<span style="color:var(--text-light); font-size:12px;">—</span>'}</td>
+          </tr>`;
+
+        document.getElementById('all-requests-table').innerHTML = reqs.map(row).join('');
+        document.getElementById('dash-requests-table').innerHTML = this.data.requests
+          .filter(r => r.status === 'Pending')
+          .map(req => `
+            <tr>
+              <td>${req.hospital}</td>
+              <td><strong>${req.bloodType}</strong></td>
+              <td>${req.units} Units</td>
+              <td><span class="badge ${req.urgency === 'Emergency' ? 'emergency' : 'urgent'}">${req.urgency}</span></td>
+              <td>${req.requestedAt}</td>
+              <td><button class="btn btn-success btn-sm" onclick="app.approveRequest('${req.id}')">Dispatch</button></td>
+            </tr>`).join('');
+      },
+
+      renderDonations() {
+        document.getElementById('donations-table').innerHTML = this.data.donations.map(d => `
+          <tr>
+            <td>${d.id}</td>
+            <td>${d.donor}</td>
+            <td><strong>${d.bloodType}</strong></td>
+            <td>${d.units}</td>
+            <td>${d.date}</td>
+            <td>${d.expiry}</td>
+            <td><span class="badge ${d.status === 'Available' ? 'completed' : 'approved'}">${d.status}</span></td>
+            <td><button class="btn btn-secondary btn-sm">View</button></td>
+          </tr>`).join('');
+
+        document.getElementById('dash-donations-table').innerHTML = this.data.donations.slice(0, 3).map(d => `
+          <tr>
+            <td>${d.donor}</td>
+            <td><strong>${d.bloodType}</strong></td>
+            <td>${d.units} Unit</td>
+            <td>${d.date}</td>
+            <td><span class="badge ${d.status === 'Available' ? 'completed' : 'approved'}">${d.status}</span></td>
+          </tr>`).join('');
+      },
+
+      renderNotifications() {
+        const unread = this.data.notifications.filter(n => !n.read).length;
+        document.getElementById('notifications-list').innerHTML = this.data.notifications.map(n => `
+          <li class="notification-item" style="${n.read ? '' : 'background: #fffafa; border-left: 3px solid var(--primary-red);'}">
+            <div class="notification-content">
+              <div class="notification-icon ${n.type}">${n.type === 'critical' ? '⚠️' : n.type === 'success' ? '✅' : 'ℹ️'}</div>
+              <div>
+                <div class="notification-text">${n.message}</div>
+                <div class="notification-meta">${n.read ? 'Read' : 'Unread'} • Blood Bank System</div>
+              </div>
+            </div>
+            <div class="notification-time">${n.time}</div>
+          </li>`).join('');
+      },
+
+      updateNotifBadge() {
+        const unread = this.data.notifications.filter(n => !n.read).length;
+        document.getElementById('notif-badge').innerText = unread;
+        document.getElementById('notif-badge').style.display = unread > 0 ? 'inline-flex' : 'none';
+        document.getElementById('header-notif-dot').style.display = unread > 0 ? 'block' : 'none';
+      },
+
+      markAllRead() {
+        this.data.notifications.forEach(n => n.read = true);
+        this.renderNotifications();
+        this.updateNotifBadge();
+      },
+
+      renderOutreach() {
+        document.getElementById('outreach-grid-body').innerHTML = this.data.outreach.map(o => `
+          <div class="outreach-card">
+            <div class="outreach-header">
+              <div class="outreach-blood">${o.bloodType}</div>
+              <span class="badge ${o.critical ? 'emergency' : 'urgent'}">${o.critical ? 'CRITICAL' : 'LOW STOCK'}</span>
+            </div>
+            <div class="outreach-need">${o.need}</div>
+            <div class="donor-match-list">
+              ${o.donors.map(d => `
+                <div class="donor-match-item">
+                  <div class="donor-match-info">
+                    <div class="donor-avatar-sm">${d.name.split(' ').map(x => x[0]).join('')}</div>
+                    <div>
+                      <div class="donor-match-name">${d.name}</div>
+                      <div class="donor-match-meta">${d.location} • ${d.bloodType}</div>
+                    </div>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="donor-reliability">${d.reliability}%</span>
+                    <button class="btn btn-primary btn-sm" onclick="app.requestDonor('${d.name}', '${o.bloodType}')">Request</button>
+                  </div>
+                </div>`).join('')}
+            </div>
+          </div>`).join('');
+
+        document.getElementById('outreach-log-table').innerHTML = this.data.outreachLog.map(o => `
+          <tr>
+            <td>${o.donor}</td>
+            <td><strong>${o.bloodType}</strong></td>
+            <td>${o.date}</td>
+            <td><span class="badge ${o.status === 'Sent' ? 'approved' : 'completed'}">${o.status}</span></td>
+            <td><span class="badge ${o.response === 'Accepted' ? 'completed' : o.response === 'Declined' ? 'emergency' : 'pending'}">${o.response}</span></td>
+          </tr>`).join('');
+      },
+
+      renderInventoryLog() {
+        document.getElementById('inventory-log-table').innerHTML = this.data.inventoryLog.map(l => `
+          <tr>
+            <td>${l.date}</td>
+            <td><strong>${l.type}</strong></td>
+            <td><span class="badge ${l.action === 'Added' ? 'completed' : 'emergency'}">${l.action}</span></td>
+            <td>${l.units}</td>
+            <td>${l.reason}</td>
+            <td>${l.operator}</td>
+          </tr>`).join('');
+      },
+
+      /* ACTIONS */
+      async approveRequest(id) {
+        await API.approveRequest(id);
+        const req = this.data.requests.find(r => r.id === id);
+        if (req) req.status = 'Approved';
+        this.renderAll();
+        alert(`Request ${id} approved. Dispatch initiated.`);
+      },
+
+      async requestDonor(name, bloodType) {
+        await API.sendOutreach({ donor: name, bloodType });
+        this.data.outreachLog.unshift({ donor: name, bloodType, date: 'Just now', status: 'Sent', response: 'Awaiting' });
+        this.renderOutreach();
+        alert(`Donor request sent to ${name} (${bloodType})`);
+      },
+
+      quickAdd(type) {
+        document.getElementById('modal-blood-type').value = type;
+        document.getElementById('modal-action').value = 'add';
+        this.openModal('updateStockModal');
+      },
+
+      quickRemove(type) {
+        document.getElementById('modal-blood-type').value = type;
+        document.getElementById('modal-action').value = 'remove';
+        this.openModal('updateStockModal');
+      },
+
+      async submitStockUpdate() {
+        const type = document.getElementById('modal-blood-type').value;
+        const action = document.getElementById('modal-action').value;
+        const units = parseInt(document.getElementById('modal-units').value);
+        const notes = document.getElementById('modal-notes').value;
+
+        await API.updateStock({ type, action, units, notes });
+
+        const item = this.data.inventory.find(i => i.type === type);
+        if (item) {
+          if (action === 'add') item.units += units;
+          else item.units = Math.max(0, item.units - units);
+          item.low = item.units <= 10;
+          item.critical = item.units <= 5;
+        }
+
+        this.data.inventoryLog.unshift({
+          date: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+          type, action: action === 'add' ? 'Added' : 'Removed', units,
+          reason: notes || 'Manual adjustment', operator: this.data.profile.contactPerson
+        });
+
+        this.closeModal('updateStockModal');
+        this.renderAll();
+        alert(`Stock updated: ${action === 'add' ? 'Added' : 'Removed'} ${units} units of ${type}`);
+      },
+
+      async saveSettings() {
+        const payload = {
+          lowStockThreshold: document.getElementById('setting-low-stock').value,
+          criticalStockThreshold: document.getElementById('setting-critical-stock').value,
+          expiryAlertDays: document.getElementById('setting-expiry-alert').value,
+          notificationMode: document.getElementById('setting-notif-mode').value,
+          autoNotify: document.getElementById('setting-auto-notify').value,
+          refreshInterval: document.getElementById('setting-refresh').value
+        };
+        await API.saveSettings(payload);
+        alert('Settings saved successfully!');
+      },
+
+      async saveProfile() {
+        const payload = {
+          name: document.getElementById('edit-name').value,
+          license: document.getElementById('edit-license').value,
+          contactPerson: document.getElementById('edit-contact').value,
+          phone: document.getElementById('edit-phone').value,
+          email: document.getElementById('edit-email').value,
+          city: document.getElementById('edit-city').value
+        };
+        await API.updateProfile(payload);
+        Object.assign(this.data.profile, payload);
+        this.renderProfile();
+        this.closeModal('editProfileModal');
+        alert('Profile updated successfully!');
+      },
+
+      openModal(id) { document.getElementById(id).classList.add('active'); },
+      closeModal(id) { document.getElementById(id).classList.remove('active'); },
+
+      exportInventory() {
+        const csv = 'Blood Type,Units,Capacity,Status\\n' + this.data.inventory.map(i => `${i.type},${i.units},${i.capacity},${i.critical ? 'Critical' : i.low ? 'Low' : 'Adequate'}`).join('\\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'inventory_export.csv'; a.click();
+        URL.revokeObjectURL(url);
+      },
+
+      logout() {
+        if (confirm('Are you sure you want to logout?')) {
+          alert('Logging out of Blood Bank portal...');
+          // TODO: window.location.href = '/login';
+        }
+      }
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => app.init());
+  </script>
 </body>
+
 </html>

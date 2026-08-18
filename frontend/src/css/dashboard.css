@@ -1,4 +1,11 @@
-/* LifeLink Dashboard - Common Styles */
+/* =========================================================
+   LifeLink Dashboard - Common Styles
+========================================================= */
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
 
 * {
     margin: 0;
@@ -16,30 +23,56 @@ a {
     text-decoration: none;
 }
 
-/* Sidebar */
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
+
     width: 230px;
     height: 100vh;
+
     padding: 28px 18px;
+
     background: #7b1e2b;
     color: white;
+
     display: flex;
     flex-direction: column;
+
+    z-index: 2000;
+
+    transition: width 0.25s ease;
 }
 
+
+/* LifeLink logo */
+
 .logo {
+    display: flex;
+    align-items: center;
+
     font-size: 23px;
     font-weight: bold;
+
     margin-bottom: 40px;
+
+    color: white;
+    text-decoration: none;
+
+    cursor: pointer;
 }
 
 .logo span {
     margin-right: 7px;
 }
+
+
+/* Sidebar navigation */
 
 .sidebar nav {
     display: flex;
@@ -49,33 +82,91 @@ a {
 
 .sidebar nav a,
 .logout {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
     padding: 12px 14px;
+
     color: white;
+
     border-radius: 7px;
+
+    transition: background 0.2s ease;
 }
 
 .sidebar nav a:hover,
 .sidebar nav a.active,
-.logout {
+.logout:hover {
     background: rgba(255, 255, 255, 0.12);
 }
+
+
+/* Sidebar icons */
+
+.sidebar-icon {
+    width: 25px;
+    min-width: 25px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    text-align: center;
+}
+
+
+/* Sidebar text */
+
+.sidebar-text {
+    white-space: nowrap;
+}
+
+
+/* Logout */
 
 .logout {
     margin-top: auto;
 }
 
-/* Main Content */
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
 
 .main-content {
     margin-left: 230px;
+
     padding: 32px 5%;
+
+    min-height: 100vh;
 }
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
 
 .topbar {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
+
+    gap: 25px;
+
     margin-bottom: 30px;
+
+    flex-wrap: wrap;
+}
+
+.topbar-left {
+    flex: 1;
+    min-width: 220px;
 }
 
 .topbar h1 {
@@ -88,380 +179,29 @@ a {
     color: #777;
 }
 
-.profile {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    font-weight: bold;
-}
 
-.profile-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #7b1e2b;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Dashboard Cards */
-
-.dashboard-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.dashboard-card,
-.dashboard-section,
-.profile-section {
-    background: white;
-    border: 1px solid #eee3df;
-    border-radius: 10px;
-}
-
-.dashboard-card {
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 9px;
-    background: #f9e5e8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 21px;
-}
-
-.dashboard-card h3 {
-    font-size: 13px;
-    color: #777;
-    margin-bottom: 5px;
-}
-
-.dashboard-card p {
-    font-size: 21px;
-    font-weight: bold;
-}
-
-/* Dashboard Sections */
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.dashboard-section,
-.profile-section {
-    padding: 22px;
-    margin-bottom: 22px;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
-}
-
-.section-header h2 {
-    font-size: 19px;
-}
-
-.section-header p {
-    margin-top: 4px;
-    font-size: 14px;
-}
-
-.section-header a {
-    color: #7b1e2b;
-    font-weight: bold;
-}
-
-/* Donation Status */
-
-.status-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 17px;
-    background: #f3f8f4;
-    border-left: 3px solid #3b8c58;
-    border-radius: 7px;
-}
-
-.status-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #3b8c58;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Donation History */
-
-.donation-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.donation-item p {
-    color: #888;
-    margin-top: 4px;
-    font-size: 13px;
-}
-
-.completed {
-    color: #3b8c58;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-/* Blood Requests */
-
-.request-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px;
-    background: #fff7f7;
-    border-left: 3px solid #7b1e2b;
-    border-radius: 7px;
-}
-
-.request-card p {
-    margin-top: 5px;
-    color: #666;
-}
-
-.request-card small {
-    display: block;
-    margin-top: 4px;
-    color: #999;
-}
-
-/* Profile */
-
-.profile-section {
-    margin-bottom: 30px;
-}
-
-.profile-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 30px;
-}
-.large-profile-icon {
-    width: 90px;
-    height: 90px;
-    min-width: 90px;
-    border-radius: 50%;
-    background: #7b1e2b;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 34px;
-    font-weight: bold;
-}
-
-.profile-details {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.profile-field {
-    padding: 14px;
-    background: #faf7f7;
-    border: 1px solid #eee6e3;
-    border-radius: 7px;
-}
-
-.profile-field span {
-    display: block;
-    color: #888;
-    font-size: 12px;
-    margin-bottom: 5px;
-}
-
-.profile-field strong {
-    font-size: 14px;
-}
-
-.available {
-    color: #3b8c58;
-}
-
-/* Buttons & Editing */
-
-.edit-profile-btn,
-.save-profile-btn,
-.cancel-profile-btn,
-.respond-btn {
-    border: none;
-    padding: 9px 15px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.edit-profile-btn,
-.save-profile-btn,
-.respond-btn {
-    background: #7b1e2b;
-    color: white;
-}
-
-.edit-profile-btn:hover,
-.save-profile-btn:hover,
-.respond-btn:hover {
-    background: #611722;
-}
-
-.cancel-profile-btn {
-    background: #eee;
-    color: #333;
-}
-
-.profile-input {
-    display: none;
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.profile-actions {
-    display: none;
-    margin-top: 18px;
-    gap: 8px;
-}
-
-/* Responsive */
-
-@media (max-width: 900px) {
-    .sidebar {
-        width: 200px;
-    }
-
-    .main-content {
-        margin-left: 200px;
-    }
-
-    .dashboard-cards,
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 700px) {
-    .sidebar {
-        position: static;
-        width: 100%;
-        height: auto;
-    }
-
-    .sidebar nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .logout {
-        margin-top: 15px;
-        width: max-content;
-    }
-
-    .main-content {
-        margin-left: 0;
-        padding: 20px;
-    }
-
-    .topbar {
-        align-items: flex-start;
-    }
-
-    .profile-content {
-        flex-direction: column;
-    }
-
-    .profile-details {
-        grid-template-columns: 1fr;
-        width: 100%;
-    }
-}
-.topbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.notification-btn {
-    position: relative;
-    font-size: 21px;
-    color: #7b1e2b;
-}
-
-.notification-btn span {
-    position: absolute;
-    top: -7px;
-    right: -8px;
-    min-width: 17px;
-    height: 17px;
-    padding: 2px 4px;
-    border-radius: 50%;
-    background: #b82038;
-    color: white;
-    font-size: 10px;
-    text-align: center;
-}
-/* =========================================
+/* =========================================================
    TOP NAVIGATION
-========================================= */
-
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
-    flex-wrap: wrap;
-}
-
-.topbar-left {
-    flex: 1;
-    min-width: 220px;
-}
+========================================================= */
 
 .top-navigation {
     display: flex;
+
     align-items: center;
+
     gap: 18px;
 }
 
 .top-navigation a {
     text-decoration: none;
+
     color: #555;
+
     font-size: 14px;
     font-weight: 500;
+
     padding: 8px 4px;
+
     transition: all 0.2s ease;
 }
 
@@ -471,24 +211,30 @@ a {
 
 .top-navigation a.active {
     color: #b91c1c;
+
     font-weight: 700;
+
     border-bottom: 2px solid #b91c1c;
 }
 
 
-/* =========================================
-   NOTIFICATION BUTTON
-========================================= */
+/* =========================================================
+   TOP NOTIFICATION
+========================================================= */
 
 .top-notification {
     position: relative;
+
     font-size: 20px !important;
+
     padding: 5px 8px !important;
+
     border-bottom: none !important;
 }
 
 .top-notification span {
     position: absolute;
+
     top: -5px;
     right: -5px;
 
@@ -498,6 +244,7 @@ a {
     padding: 1px 4px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -511,34 +258,673 @@ a {
 }
 
 
-/* =========================================
-   PROFILE
-========================================= */
+/* =========================================================
+   TOPBAR ACTIONS
+========================================================= */
 
-.topbar .profile {
+.topbar-actions {
     display: flex;
+
     align-items: center;
-    gap: 10px;
-    white-space: nowrap;
+
+    gap: 20px;
 }
 
-.profile-icon {
-    width: 38px;
-    height: 38px;
+.notification-btn {
+    position: relative;
+
+    font-size: 21px;
+
+    color: #7b1e2b;
+}
+
+.notification-btn span {
+    position: absolute;
+
+    top: -7px;
+    right: -8px;
+
+    min-width: 17px;
+    height: 17px;
+
+    padding: 2px 4px;
 
     border-radius: 50%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #b82038;
+    color: white;
 
-    font-weight: 700;
+    font-size: 10px;
+
+    text-align: center;
 }
 
 
-/* =========================================
-   RESPONSIVE NAVIGATION
-========================================= */
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-weight: bold;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #7b1e2b;
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   PROFILE MENU
+========================================================= */
+
+.profile-menu {
+    position: relative;
+
+    display: inline-block;
+}
+
+
+/* Profile button */
+
+.profile-button {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: 6px 10px;
+
+    border-radius: 30px;
+
+    font-size: 14px;
+}
+
+.profile-button:hover {
+    background-color: #f5f5f5;
+}
+
+
+/* Profile avatar */
+
+.profile-avatar {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background-color: #d62828;
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+
+    font-size: 14px;
+}
+
+.profile-avatar.large {
+    width: 48px;
+    height: 48px;
+
+    font-size: 15px;
+}
+
+
+/* Profile name */
+
+.profile-name {
+    font-weight: 600;
+
+    color: #333;
+}
+
+.profile-arrow {
+    font-size: 18px;
+
+    color: #666;
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+.profile-dropdown {
+    position: absolute;
+
+    top: 55px;
+    right: 0;
+
+    width: 240px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.15);
+
+    padding: 10px 0;
+
+    display: none;
+
+    z-index: 3000;
+}
+
+.profile-dropdown.show {
+    display: block;
+}
+
+
+/* Dropdown header */
+
+.profile-dropdown-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 16px;
+}
+
+.profile-dropdown-header strong {
+    display: block;
+
+    color: #333;
+
+    margin-bottom: 4px;
+}
+
+.profile-dropdown-header small {
+    color: #777;
+}
+
+
+/* Dropdown links */
+
+.profile-dropdown a {
+    display: block;
+
+    padding: 11px 18px;
+
+    text-decoration: none;
+
+    color: #333;
+
+    font-size: 14px;
+}
+
+.profile-dropdown a:hover {
+    background-color: #f5f5f5;
+}
+
+
+/* Divider */
+
+.dropdown-divider {
+    height: 1px;
+
+    background-color: #eee;
+
+    margin: 6px 0;
+}
+
+
+/* Dropdown logout */
+
+.profile-dropdown .logout {
+    color: #d62828;
+}
+
+
+/* =========================================================
+   DASHBOARD CARDS
+========================================================= */
+
+.dashboard-cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 25px;
+}
+
+.dashboard-card,
+.dashboard-section,
+.profile-section {
+    background: white;
+
+    border: 1px solid #eee3df;
+
+    border-radius: 10px;
+}
+
+.dashboard-card {
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 9px;
+
+    background: #f9e5e8;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 21px;
+}
+
+.dashboard-card h3 {
+    font-size: 13px;
+
+    color: #777;
+
+    margin-bottom: 5px;
+}
+
+.dashboard-card p {
+    font-size: 21px;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   DASHBOARD SECTIONS
+========================================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+}
+
+.dashboard-section,
+.profile-section {
+    padding: 22px;
+
+    margin-bottom: 22px;
+}
+
+.section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+}
+
+.section-header h2 {
+    font-size: 19px;
+}
+
+.section-header p {
+    margin-top: 4px;
+
+    font-size: 14px;
+}
+
+.section-header a {
+    color: #7b1e2b;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   DONATION STATUS
+========================================================= */
+
+.status-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 17px;
+
+    background: #f3f8f4;
+
+    border-left: 3px solid #3b8c58;
+
+    border-radius: 7px;
+}
+
+.status-icon {
+    width: 38px;
+    height: 38px;
+
+    min-width: 38px;
+
+    border-radius: 50%;
+
+    background: #3b8c58;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   DONATION HISTORY
+========================================================= */
+
+.donation-item {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+.donation-item p {
+    color: #888;
+
+    margin-top: 4px;
+
+    font-size: 13px;
+}
+
+.completed {
+    color: #3b8c58;
+
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   BLOOD REQUESTS
+========================================================= */
+
+.request-card {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px;
+
+    background: #fff7f7;
+
+    border-left: 3px solid #7b1e2b;
+
+    border-radius: 7px;
+}
+
+.request-card p {
+    margin-top: 5px;
+
+    color: #666;
+}
+
+.request-card small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #999;
+}
+
+
+/* =========================================================
+   PROFILE SECTION
+========================================================= */
+
+.profile-section {
+    margin-bottom: 30px;
+}
+
+.profile-content {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 30px;
+}
+
+.large-profile-icon {
+    width: 90px;
+    height: 90px;
+
+    min-width: 90px;
+
+    border-radius: 50%;
+
+    background: #7b1e2b;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 34px;
+
+    font-weight: bold;
+}
+
+.profile-details {
+    flex: 1;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+.profile-field {
+    padding: 14px;
+
+    background: #faf7f7;
+
+    border: 1px solid #eee6e3;
+
+    border-radius: 7px;
+}
+
+.profile-field span {
+    display: block;
+
+    color: #888;
+
+    font-size: 12px;
+
+    margin-bottom: 5px;
+}
+
+.profile-field strong {
+    font-size: 14px;
+}
+
+.available {
+    color: #3b8c58;
+}
+
+
+/* =========================================================
+   BUTTONS & EDITING
+========================================================= */
+
+.edit-profile-btn,
+.save-profile-btn,
+.cancel-profile-btn,
+.respond-btn {
+    border: none;
+
+    padding: 9px 15px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+.edit-profile-btn,
+.save-profile-btn,
+.respond-btn {
+    background: #7b1e2b;
+
+    color: white;
+}
+
+.edit-profile-btn:hover,
+.save-profile-btn:hover,
+.respond-btn:hover {
+    background: #611722;
+}
+
+.cancel-profile-btn {
+    background: #eee;
+
+    color: #333;
+}
+
+.profile-input {
+    display: none;
+
+    width: 100%;
+
+    padding: 8px;
+
+    margin-top: 4px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+}
+
+.profile-actions {
+    display: none;
+
+    margin-top: 18px;
+
+    gap: 8px;
+}
+
+
+/* =========================================================
+   SIDEBAR TOGGLE
+========================================================= */
+
+/*
+   Hidden on desktop.
+   Appears only on small screens.
+*/
+
+.sidebar-toggle {
+    display: none;
+
+    position: absolute;
+
+    top: 15px;
+    left: 14px;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #d62828;
+
+    cursor: pointer;
+
+    z-index: 2100;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+
+/* Three lines */
+
+.sidebar-toggle span {
+    display: block;
+
+    width: 22px;
+    height: 3px;
+
+    margin: 3px 0;
+
+    background: white;
+
+    border-radius: 3px;
+}
+
+
+/* =========================================================
+   RESPONSIVE TOP NAVIGATION
+========================================================= */
 
 @media (max-width: 1000px) {
 
@@ -548,10 +934,15 @@ a {
 
     .top-navigation {
         order: 3;
+
         width: 100%;
+
         justify-content: center;
+
         flex-wrap: wrap;
+
         gap: 12px;
+
         padding-top: 10px;
     }
 }
@@ -561,13 +952,213 @@ a {
 
     .top-navigation {
         justify-content: flex-start;
+
         overflow-x: auto;
+
         flex-wrap: nowrap;
+
         padding-bottom: 8px;
     }
 
     .top-navigation a {
         white-space: nowrap;
     }
+}
 
+
+/* =========================================================
+   DESKTOP / TABLET RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .dashboard-cards,
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   SMALL SCREEN SIDEBAR
+========================================================= */
+
+@media (max-width: 768px) {
+
+    /* -----------------------------------------
+       FIXED COLLAPSED SIDEBAR
+    ----------------------------------------- */
+
+    .sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        width: 70px;
+        height: 100vh;
+
+        padding: 70px 8px 20px;
+
+        overflow: hidden;
+
+        z-index: 2000;
+
+        transition: width 0.25s ease;
+
+        box-shadow:
+            2px 0 8px rgba(0, 0, 0, 0.08);
+    }
+
+
+    /* -----------------------------------------
+       SHOW HAMBURGER
+    ----------------------------------------- */
+
+    .sidebar-toggle {
+        display: flex;
+    }
+
+
+    /* -----------------------------------------
+       COLLAPSED SIDEBAR
+    ----------------------------------------- */
+
+    .sidebar-text {
+        display: none;
+    }
+
+    .sidebar .logo {
+        justify-content: center;
+
+        padding: 0;
+
+        margin-bottom: 30px;
+    }
+
+    .sidebar nav a,
+    .sidebar .logout {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 14px 5px;
+    }
+
+    .sidebar-icon {
+        font-size: 20px;
+    }
+
+
+    /* -----------------------------------------
+       EXPANDED SIDEBAR
+    ----------------------------------------- */
+
+    .sidebar.open {
+        width: 230px;
+
+        box-shadow:
+            5px 0 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .sidebar.open .sidebar-text {
+        display: inline;
+    }
+
+    .sidebar.open .logo {
+        justify-content: flex-start;
+
+        padding-left: 10px;
+    }
+
+    .sidebar.open nav a,
+    .sidebar.open .logout {
+        justify-content: flex-start;
+
+        padding: 12px 14px;
+    }
+
+
+    /* -----------------------------------------
+       MAIN CONTENT
+
+       Always leaves 70px for the collapsed
+       sidebar.
+
+       When sidebar opens, the content does
+       NOT move. The sidebar covers it.
+    ----------------------------------------- */
+
+    .main-content {
+        margin-left: 70px;
+
+        padding: 25px 20px;
+
+        min-height: 100vh;
+    }
+
+
+    .sidebar.open ~ .main-content {
+        margin-left: 70px;
+    }
+
+
+    /* -----------------------------------------
+       PROFILE RESPONSIVE
+    ----------------------------------------- */
+
+    .profile-content {
+        flex-direction: column;
+    }
+
+    .profile-details {
+        grid-template-columns: 1fr;
+
+        width: 100%;
+    }
+
+
+    /* -----------------------------------------
+       TOPBAR
+    ----------------------------------------- */
+
+    .topbar {
+        align-items: flex-start;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .main-content {
+        padding: 20px 15px;
+    }
+
+    .topbar h1 {
+        font-size: 23px;
+    }
+
+    .dashboard-section,
+    .profile-section {
+        padding: 17px;
+    }
+
+    .status-card {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .section-header {
+        align-items: flex-start;
+
+        gap: 12px;
+
+        flex-wrap: wrap;
+    }
 }

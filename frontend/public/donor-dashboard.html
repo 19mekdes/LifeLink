@@ -14,42 +14,60 @@
 
     <!-- ================= SIDEBAR ================= -->
 
-   <aside class="sidebar">
+<aside class="sidebar" id="sidebar">
 
-    <div class="logo">
-        <span>♥️</span> LifeLink
-    </div>
+    <!-- Sidebar toggle -->
+    <button
+        class="sidebar-toggle"
+        id="sidebarToggle"
+        type="button"
+        aria-label="Toggle sidebar"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <span>♥</span>
+        <span class="sidebar-text">LifeLink</span>
+    </a>
+
+    <!-- Navigation -->
     <nav>
 
-        <a href="index.html">
-             Home
-        </a>
-
         <a href="donor-dashboard.html">
-             Dashboard
+            <span class="sidebar-icon">▦</span>
+            <span class="sidebar-text">Dashboard</span>
         </a>
 
         <a href="donor-profile.html">
-             My Profile
+            <span class="sidebar-icon">○</span>
+            <span class="sidebar-text">My Profile</span>
         </a>
 
         <a href="donor-history.html">
-             Donation History
+            <span class="sidebar-icon">◷</span>
+            <span class="sidebar-text">Donation History</span>
         </a>
 
         <a href="donor-requests.html">
-             Blood Requests
+            <span class="sidebar-icon">+</span>
+            <span class="sidebar-text">Blood Requests</span>
         </a>
 
         <a href="donor-notifications.html">
-             🔔Notifications
+            <span class="sidebar-icon">•</span>
+            <span class="sidebar-text">Notifications</span>
         </a>
 
     </nav>
 
+    <!-- Logout -->
     <a href="login.html" class="logout">
-        🚪 Logout
+        <span class="sidebar-icon">←</span>
+        <span class="sidebar-text">Logout</span>
     </a>
 
 </aside>
@@ -75,19 +93,46 @@
 
     <div class="profile">
 
-        <div
-            class="profile-icon"
-            id="profileInitial"
-        >
-            D
-        </div>
-
-        <span id="topbarName">
-            Donor
-        </span>
+        
 
     </div>
+<div class="profile-menu">
+    <button class="profile-button" id="profileButton">
+        <span class="profile-avatar">KH</span>
+        <span class="profile-name">Kalkidan</span>
+        <span class="profile-arrow">⌄</span>
+    </button>
 
+    <div class="profile-dropdown" id="profileDropdown">
+        <div class="profile-dropdown-header">
+            <div class="profile-avatar large">KH</div>
+            <div>
+                <strong>Kalkidan Habtamu</strong>
+                <small>Donor</small>
+            </div>
+        </div>
+
+        <div class="dropdown-divider"></div>
+
+        <a href="donor-profile.html">
+            👤 My Profile
+        </a>
+
+        <a href="donor-notifications.html">
+            🔔 Notifications
+        </a>
+
+        <a href="#">
+            ⚙️ Account Settings
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <a href="#" id="logoutButton" class="logout">
+            🚪 Logout
+        </a>
+    </div>
+</div>
 </header>
 
         <!-- ================= STATISTICS ================= -->

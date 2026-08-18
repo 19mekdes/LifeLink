@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | Donation History</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <span>♥️</span> LifeLink
+    </div>
+
+    <nav>
+
+        <a href="index.html">
+             Home
+        </a>
+
+        <a href="donor-dashboard.html">
+             Dashboard
+        </a>
+
+        <a href="donor-profile.html">
+             My Profile
+        </a>
+
+        <a href="donor-history.html">
+            Donation History
+        </a>
+
+        <a href="donor-requests.html">
+            Blood Requests
+        </a>
+
+        <a href="donor-notifications.html">
+            🔔 Notifications
+        </a>
+
+    </nav>
+
+    <a href="login.html" class="logout">
+        🚪 Logout
+    </a>
+
+</aside>
+
+<main class="main-content">
+
+    <header class="topbar">
+
+    <div class="topbar-left">
+
+        <div>
+            <h1>Donation History</h1>
+<p>View your previous blood donations.</p>
+        </div>
+
+    </div>
+
+    <div class="profile">
+
+        <div
+            class="profile-icon"
+            id="profileInitial"
+        >
+            D
+        </div>
+
+        <span id="topbarName">
+            Donor
+        </span>
+
+    </div>
+
+</header>
+
+    <section class="dashboard-cards">
+
+        <div class="dashboard-card">
+            <div class="card-icon">❤️</div>
+            <div>
+                <h3>Total Donations</h3>
+                <p id="totalDonations">0</p>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-icon">🩸</div>
+            <div>
+                <h3>Blood Type</h3>
+                <p id="bloodType">--</p>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-icon">📅</div>
+            <div>
+                <h3>Last Donation</h3>
+                <p id="lastDonation">--</p>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Your Donations</h2>
+                <p>Every donation you make can help save a life.</p>
+            </div>
+        </div>
+
+        <div id="donationList">
+            <p>Loading donation history...</p>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../src/js/api.js"></script>
+<script src="../src/js/donor-common.js"></script>
+<script src="../src/js/donor-history.js"></script>
+</body>
+</html>

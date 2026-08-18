@@ -1,5 +1,3 @@
-// backend/src/routes/notificationRoutes.js
-
 import express from 'express';
 import { body, param, query } from 'express-validator';
 import { authenticate } from '../middleware/auth.js';

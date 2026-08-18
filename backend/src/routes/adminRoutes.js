@@ -1,5 +1,3 @@
-// backend/src/routes/adminRoutes.js
-
 import express from 'express';
 import { body } from 'express-validator';
 import { authenticate } from '../middleware/auth.js';

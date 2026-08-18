@@ -1,14 +1,10 @@
-// backend/src/controllers/inventoryController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
 
 const prisma = new PrismaClient();
 
-/**
- * Helper function to serialize BigInt values
- */
+
 const serializeData = (data) => {
   return JSON.parse(
     JSON.stringify(data, (key, value) => {
@@ -21,10 +17,6 @@ const serializeData = (data) => {
 };
 
 // ============ GET ALL INVENTORY ============
-/**
- * Get all inventory items for a blood bank
- * GET /api/inventory
- */
 export const getAllInventory = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
@@ -67,10 +59,7 @@ export const getAllInventory = asyncHandler(async (req, res) => {
 });
 
 // ============ GET INVENTORY BY BLOOD TYPE ============
-/**
- * Get inventory item by blood type
- * GET /api/inventory/:bloodType
- */
+
 export const getInventoryByBloodType = asyncHandler(async (req, res) => {
   const { bloodType } = req.params;
 
@@ -102,10 +91,6 @@ export const getInventoryByBloodType = asyncHandler(async (req, res) => {
 });
 
 // ============ CREATE OR UPDATE INVENTORY ============
-/**
- * Create or update inventory item
- * POST /api/inventory
- */
 export const upsertInventory = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -164,10 +149,7 @@ export const upsertInventory = asyncHandler(async (req, res) => {
 });
 
 // ============ UPDATE INVENTORY UNITS ============
-/**
- * Update inventory units
- * PATCH /api/inventory/:bloodType
- */
+
 export const updateInventoryUnits = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -242,10 +224,7 @@ export const updateInventoryUnits = asyncHandler(async (req, res) => {
 });
 
 // ============ DELETE INVENTORY ============
-/**
- * Delete inventory item
- * DELETE /api/inventory/:bloodType
- */
+
 export const deleteInventory = asyncHandler(async (req, res) => {
   const { bloodType } = req.params;
 
@@ -297,10 +276,7 @@ export const deleteInventory = asyncHandler(async (req, res) => {
 });
 
 // ============ GET LOW STOCK ITEMS ============
-/**
- * Get low stock inventory items
- * GET /api/inventory/low-stock
- */
+
 export const getLowStockItems = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
@@ -328,10 +304,7 @@ export const getLowStockItems = asyncHandler(async (req, res) => {
 });
 
 // ============ GET EXPIRING ITEMS ============
-/**
- * Get expiring inventory items (within 30 days)
- * GET /api/inventory/expiring
- */
+
 export const getExpiringItems = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
@@ -366,10 +339,6 @@ export const getExpiringItems = asyncHandler(async (req, res) => {
 });
 
 // ============ GET INVENTORY STATISTICS ============
-/**
- * Get inventory statistics
- * GET /api/inventory/stats
- */
 export const getInventoryStats = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
@@ -417,10 +386,7 @@ export const getInventoryStats = asyncHandler(async (req, res) => {
 });
 
 // ============ BULK UPDATE INVENTORY ============
-/**
- * Bulk update inventory
- * POST /api/inventory/bulk
- */
+
 export const bulkUpdateInventory = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

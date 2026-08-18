@@ -1,14 +1,10 @@
-// backend/src/controllers/notificationController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
 
 const prisma = new PrismaClient();
 
-/**
- * Helper function to serialize BigInt values
- */
+
 const serializeData = (data) => {
   return JSON.parse(
     JSON.stringify(data, (key, value) => {
@@ -21,10 +17,6 @@ const serializeData = (data) => {
 };
 
 // ============ GET ALL NOTIFICATIONS ============
-/**
- * Get all notifications for the current user
- * GET /api/notifications
- */
 export const getNotifications = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, isRead, type } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -99,10 +91,6 @@ export const getNotifications = asyncHandler(async (req, res) => {
 });
 
 // ============ GET NOTIFICATION BY ID ============
-/**
- * Get notification by ID
- * GET /api/notifications/:id
- */
 export const getNotificationById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -152,10 +140,6 @@ export const getNotificationById = asyncHandler(async (req, res) => {
 });
 
 // ============ MARK NOTIFICATION AS READ ============
-/**
- * Mark a single notification as read
- * PUT /api/notifications/:id/read
- */
 export const markAsRead = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -182,10 +166,7 @@ export const markAsRead = asyncHandler(async (req, res) => {
 });
 
 // ============ MARK ALL NOTIFICATIONS AS READ ============
-/**
- * Mark all notifications as read
- * PUT /api/notifications/read-all
- */
+
 export const markAllAsRead = asyncHandler(async (req, res) => {
   const result = await prisma.notification.updateMany({
     where: {
@@ -208,10 +189,6 @@ export const markAllAsRead = asyncHandler(async (req, res) => {
 });
 
 // ============ MARK NOTIFICATION AS UNREAD ============
-/**
- * Mark a notification as unread
- * PUT /api/notifications/:id/unread
- */
 export const markAsUnread = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -238,10 +215,7 @@ export const markAsUnread = asyncHandler(async (req, res) => {
 });
 
 // ============ DELETE NOTIFICATION ============
-/**
- * Delete a notification
- * DELETE /api/notifications/:id
- */
+
 export const deleteNotification = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -267,10 +241,6 @@ export const deleteNotification = asyncHandler(async (req, res) => {
 });
 
 // ============ DELETE ALL READ NOTIFICATIONS ============
-/**
- * Delete all read notifications
- * DELETE /api/notifications/read
- */
 export const deleteReadNotifications = asyncHandler(async (req, res) => {
   const result = await prisma.notification.deleteMany({
     where: {
@@ -289,10 +259,6 @@ export const deleteReadNotifications = asyncHandler(async (req, res) => {
 });
 
 // ============ CREATE NOTIFICATION ============
-/**
- * Create a new notification (Admin/System only)
- * POST /api/notifications
- */
 export const createNotification = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -339,10 +305,6 @@ export const createNotification = asyncHandler(async (req, res) => {
 });
 
 // ============ GET NOTIFICATION STATS ============
-/**
- * Get notification statistics for the current user
- * GET /api/notifications/stats
- */
 export const getNotificationStats = asyncHandler(async (req, res) => {
   const [total, unread, read] = await Promise.all([
     prisma.notification.count({
@@ -386,10 +348,6 @@ export const getNotificationStats = asyncHandler(async (req, res) => {
 });
 
 // ============ GET UNREAD COUNT ============
-/**
- * Get unread notification count
- * GET /api/notifications/unread-count
- */
 export const getUnreadCount = asyncHandler(async (req, res) => {
   const count = await prisma.notification.count({
     where: {
@@ -405,10 +363,6 @@ export const getUnreadCount = asyncHandler(async (req, res) => {
 });
 
 // ============ BULK DELETE NOTIFICATIONS ============
-/**
- * Bulk delete notifications by IDs
- * DELETE /api/notifications/bulk
- */
 export const bulkDeleteNotifications = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -438,10 +392,6 @@ export const bulkDeleteNotifications = asyncHandler(async (req, res) => {
 });
 
 // ============ SEND SYSTEM NOTIFICATION ============
-/**
- * Send a system-wide notification (Admin only)
- * POST /api/notifications/system
- */
 export const sendSystemNotification = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

@@ -1,5 +1,3 @@
-// backend/src/app.js
-
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -10,9 +8,6 @@ import { fileURLToPath } from 'url';
 
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
-
-
-// Load environment variables
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -80,7 +75,9 @@ import bloodBankRoutes from './routes/bloodBankRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
-  // ✅ ADD THIS
+import auditRoutes from './routes/auditRoutes.js';
+
+  
 
 // Register routes
 app.use('/api/auth', authRoutes);
@@ -91,7 +88,9 @@ app.use('/api/blood-banks', bloodBankRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/notifications', notificationRoutes);
-// ✅ ADD THIS
+app.use('/api/audit', auditRoutes);
+
+
 
 // Other routes (to be added later)
 // app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));

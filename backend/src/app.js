@@ -79,6 +79,7 @@ import donationRoutes from './routes/donationRoutes.js';
 import bloodBankRoutes from './routes/bloodBankRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
   // ✅ ADD THIS
 
 // Register routes
@@ -89,6 +90,7 @@ app.use('/api/v1/donations', donationRoutes);
 app.use('/api/blood-banks', bloodBankRoutes); 
 app.use('/api/admin', adminRoutes);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/notifications', notificationRoutes);
 // ✅ ADD THIS
 
 // Other routes (to be added later)

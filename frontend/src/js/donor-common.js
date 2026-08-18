@@ -4,16 +4,9 @@ console.log("Donor common JS is working!");
 document.addEventListener("DOMContentLoaded", () => {
 
 
-    // =====================================================
-    // HELPER
-    // =====================================================
-
-    const $ = (id) => document.getElementById(id);
-
-
-    // =====================================================
-    // PROFILE / USER INFORMATION
-    // =====================================================
+    /* =====================================================
+       GET SAVED DONOR
+    ===================================================== */
 
     function getSavedDonor() {
 
@@ -38,6 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    /* =====================================================
+       DISPLAY DONOR HEADER
+    ===================================================== */
+
     function displayDonorHeader() {
 
         const donor = getSavedDonor();
@@ -56,19 +53,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         const topbarName =
-            $("topbarName");
+            document.getElementById("topbarName");
 
         const profileInitial =
-            $("profileInitial");
+            document.getElementById("profileInitial");
 
         const dashboardProfileInitial =
-            $("dashboardProfileInitial");
+            document.getElementById(
+                "dashboardProfileInitial"
+            );
 
 
         if (topbarName) {
 
             topbarName.textContent =
                 name;
+
         }
 
 
@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             profileInitial.textContent =
                 initial;
+
         }
 
 
@@ -83,126 +84,71 @@ document.addEventListener("DOMContentLoaded", () => {
 
             dashboardProfileInitial.textContent =
                 initial;
+
         }
-    }
-
-
-    // =====================================================
-    // PROFILE DROPDOWN
-    // =====================================================
-
-    function setupProfileDropdown() {
-
-        const profileButton =
-            $("profileButton");
-
-        const profileDropdown =
-            $("profileDropdown");
-
-        const logoutButton =
-            $("logoutButton");
 
 
         /*
-         * Some donor pages may not have the
-         * profile dropdown.
-         *
-         * If it doesn't exist, simply stop.
+         * Update profile menu if it exists.
          */
 
-        if (
-            !profileButton ||
-            !profileDropdown
-        ) {
-            return;
-        }
-
-
-        // Open / close dropdown
-
-        profileButton.addEventListener(
-            "click",
-            function (event) {
-
-                event.stopPropagation();
-
-                profileDropdown.classList.toggle(
-                    "show"
-                );
-
-            }
-        );
-
-
-        // Close dropdown when clicking outside
-
-        document.addEventListener(
-            "click",
-            function (event) {
-
-                if (
-                    !profileButton.contains(
-                        event.target
-                    ) &&
-                    !profileDropdown.contains(
-                        event.target
-                    )
-                ) {
-
-                    profileDropdown.classList.remove(
-                        "show"
-                    );
-                }
-
-            }
-        );
-
-
-        // Logout inside profile dropdown
-
-        if (logoutButton) {
-
-            logoutButton.addEventListener(
-                "click",
-                function (event) {
-
-                    event.preventDefault();
-
-
-                    localStorage.removeItem(
-                        "lifelinkDonor"
-                    );
-
-
-                    window.location.href =
-                        "login.html";
-
-                }
+        const profileNames =
+            document.querySelectorAll(
+                ".profile-name"
             );
-        }
+
+
+        profileNames.forEach(element => {
+
+            element.textContent = name;
+
+        });
+
+
+        const profileAvatars =
+            document.querySelectorAll(
+                ".profile-avatar"
+            );
+
+
+        profileAvatars.forEach(element => {
+
+            if (
+                element.classList.contains("large")
+            ) {
+
+                element.textContent =
+                    initial;
+
+            } else {
+
+                element.textContent =
+                    initial;
+
+            }
+
+        });
 
     }
 
 
-    // =====================================================
-    // NOTIFICATION COUNT
-    // =====================================================
+    /* =====================================================
+       NOTIFICATION COUNT
+    ===================================================== */
 
     async function loadNotificationCount() {
 
-        /*
-         * apiRequest is provided by api.js.
-         */
-
-        if (
-            typeof apiRequest !==
-            "function"
-        ) {
-            return;
-        }
-
-
         try {
+
+            if (
+                typeof apiRequest !==
+                "function"
+            ) {
+
+                return;
+
+            }
+
 
             const data =
                 await apiRequest(
@@ -213,7 +159,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const notifications =
                 Array.isArray(data)
                     ? data
-                    : data.notifications || [];
+                    : (
+                        data &&
+                        Array.isArray(
+                            data.notifications
+                        )
+                            ? data.notifications
+                            : []
+                    );
 
 
             const unread =
@@ -230,14 +183,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
-            counters.forEach(
-                counter => {
+            counters.forEach(counter => {
 
-                    counter.textContent =
-                        unread;
+                counter.textContent =
+                    unread;
 
-                }
-            );
+            });
 
 
         } catch (error) {
@@ -248,66 +199,13 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
         }
-    }
-
-
-    // =====================================================
-    // SIDEBAR TOGGLE
-    // =====================================================
-
-    function setupSidebar() {
-
-        const sidebar =
-            $("sidebar");
-
-        const sidebarToggle =
-            $("sidebarToggle");
-
-
-        /*
-         * Every donor page should have these.
-         *
-         * If one is missing, don't crash
-         * the rest of the common JavaScript.
-         */
-
-        if (
-            !sidebar ||
-            !sidebarToggle
-        ) {
-
-            console.warn(
-                "Sidebar or sidebar toggle was not found."
-            );
-
-            return;
-        }
-
-
-        // Toggle sidebar
-
-        sidebarToggle.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-
-                sidebar.classList.toggle(
-                    "open"
-                );
-
-            }
-        );
 
     }
 
 
-    // =====================================================
-    // SIDEBAR ACTIVE LINK
-    // =====================================================
+    /* =====================================================
+       ACTIVE SIDEBAR LINK
+    ===================================================== */
 
     function setActiveNavigation() {
 
@@ -321,87 +219,100 @@ document.addEventListener("DOMContentLoaded", () => {
             .querySelectorAll(
                 ".sidebar nav a, .top-navigation a"
             )
-            .forEach(
-                link => {
+            .forEach(link => {
 
-                    const href =
-                        link.getAttribute(
-                            "href"
-                        );
+                const href =
+                    link.getAttribute("href");
 
 
-                    if (!href) {
-                        return;
-                    }
+                if (!href) return;
 
 
-                    const linkPage =
-                        href
-                            .split("/")
-                            .pop();
+                const linkPage =
+                    href.split("/")
+                        .pop();
 
 
-                    if (
-                        linkPage ===
-                        currentPage
-                    ) {
+                if (
+                    linkPage === currentPage
+                ) {
 
-                        link.classList.add(
-                            "active"
-                        );
+                    link.classList.add(
+                        "active"
+                    );
 
-                    } else {
+                } else {
 
-                        link.classList.remove(
-                            "active"
-                        );
-
-                    }
+                    link.classList.remove(
+                        "active"
+                    );
 
                 }
-            );
+
+            });
 
     }
 
 
-    // =====================================================
-    // SIDEBAR LOGOUT
-    // =====================================================
+    /* =====================================================
+       PROFILE DROPDOWN
+    ===================================================== */
 
-    function setupLogout() {
+    function setupProfileDropdown() {
 
-        const logout =
-            document.querySelector(
-                ".sidebar .logout"
+        const profileButton =
+            document.getElementById(
+                "profileButton"
+            );
+
+        const profileDropdown =
+            document.getElementById(
+                "profileDropdown"
             );
 
 
-        if (!logout) {
+        if (
+            !profileButton ||
+            !profileDropdown
+        ) {
+
             return;
+
         }
 
 
-        logout.addEventListener(
+        profileButton.addEventListener(
             "click",
-            function (event) {
+            event => {
 
-                const confirmed =
-                    confirm(
-                        "Are you sure you want to logout?"
+                event.stopPropagation();
+
+                profileDropdown.classList.toggle(
+                    "show"
+                );
+
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    !profileButton.contains(
+                        event.target
+                    ) &&
+                    !profileDropdown.contains(
+                        event.target
+                    )
+                ) {
+
+                    profileDropdown.classList.remove(
+                        "show"
                     );
 
-
-                if (!confirmed) {
-
-                    event.preventDefault();
-
-                    return;
                 }
-
-
-                localStorage.removeItem(
-                    "lifelinkDonor"
-                );
 
             }
         );
@@ -409,20 +320,244 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // =====================================================
-    // START COMMON FEATURES
-    // =====================================================
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    function setupLogout() {
+
+        /*
+         * Sidebar logout
+         */
+
+        const sidebarLogout =
+            document.querySelector(
+                ".sidebar .logout"
+            );
+
+
+        if (sidebarLogout) {
+
+            sidebarLogout.addEventListener(
+                "click",
+                event => {
+
+                    const confirmed =
+                        confirm(
+                            "Are you sure you want to logout?"
+                        );
+
+
+                    if (!confirmed) {
+
+                        event.preventDefault();
+
+                        return;
+
+                    }
+
+
+                    localStorage.removeItem(
+                        "lifelinkDonor"
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Profile dropdown logout
+         */
+
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+
+        if (logoutButton) {
+
+            logoutButton.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+
+                    localStorage.removeItem(
+                        "lifelinkDonor"
+                    );
+
+
+                    window.location.href =
+                        "login.html";
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
+
+    function setupSidebar() {
+
+        const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+        const sidebarToggle =
+            document.getElementById(
+                "sidebarToggle"
+            );
+
+
+        if (
+            !sidebar ||
+            !sidebarToggle
+        ) {
+
+            console.warn(
+                "Sidebar elements were not found."
+            );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------------
+           INITIAL STATE
+        ------------------------------------------------ */
+
+        if (window.innerWidth > 768) {
+
+            /*
+             * Desktop starts expanded.
+             */
+
+            sidebar.classList.add(
+                "open"
+            );
+
+        } else {
+
+            /*
+             * Mobile starts collapsed.
+             */
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+        }
+
+
+        /* -----------------------------------------------
+           TOGGLE
+        ------------------------------------------------ */
+
+        sidebarToggle.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                sidebar.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+
+        /* -----------------------------------------------
+           RESIZE
+        ------------------------------------------------ */
+
+        let previousWidth =
+            window.innerWidth;
+
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                const currentWidth =
+                    window.innerWidth;
+
+
+                /*
+                 * Only change the state when
+                 * crossing the desktop/mobile
+                 * breakpoint.
+                 */
+
+                const crossedBreakpoint =
+                    (
+                        previousWidth > 768 &&
+                        currentWidth <= 768
+                    ) ||
+                    (
+                        previousWidth <= 768 &&
+                        currentWidth > 768
+                    );
+
+
+                if (crossedBreakpoint) {
+
+                    if (
+                        currentWidth > 768
+                    ) {
+
+                        sidebar.classList.add(
+                            "open"
+                        );
+
+                    } else {
+
+                        sidebar.classList.remove(
+                            "open"
+                        );
+
+                    }
+
+                }
+
+
+                previousWidth =
+                    currentWidth;
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       START COMMON FEATURES
+    ===================================================== */
 
     displayDonorHeader();
 
-    setupProfileDropdown();
-
     loadNotificationCount();
-
-    setupSidebar();
 
     setActiveNavigation();
 
+    setupProfileDropdown();
+
     setupLogout();
+
+    setupSidebar();
 
 });

@@ -1,16 +1,19 @@
 /* =========================================================
-   LifeLink Dashboard - Common Styles
+   LIFELINK DONOR DASHBOARD - COMMON STYLES
 ========================================================= */
 
-
 /* =========================================================
-   GLOBAL
+   RESET
 ========================================================= */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -36,7 +39,7 @@ a {
     width: 230px;
     height: 100vh;
 
-    padding: 28px 18px;
+    padding: 75px 18px 25px;
 
     background: #7b1e2b;
     color: white;
@@ -44,13 +47,67 @@ a {
     display: flex;
     flex-direction: column;
 
+    overflow: hidden;
+
     z-index: 2000;
 
     transition: width 0.25s ease;
 }
 
 
-/* LifeLink logo */
+/* =========================================================
+   SIDEBAR TOGGLE
+========================================================= */
+
+.sidebar-toggle {
+    display: flex;
+
+    position: absolute;
+
+    top: 15px;
+    left: 14px;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    z-index: 2100;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+.sidebar-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-toggle span {
+    display: block;
+
+    width: 22px;
+    height: 3px;
+
+    margin: 3px 0;
+
+    background: white;
+
+    border-radius: 3px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
 
 .logo {
     display: flex;
@@ -59,24 +116,28 @@ a {
     font-size: 23px;
     font-weight: bold;
 
+    color: white;
+
     margin-bottom: 40px;
 
-    color: white;
-    text-decoration: none;
+    white-space: nowrap;
 
-    cursor: pointer;
+    transition: all 0.25s ease;
 }
 
-.logo span {
+.logo span:first-child {
     margin-right: 7px;
 }
 
 
-/* Sidebar navigation */
+/* =========================================================
+   SIDEBAR NAVIGATION
+========================================================= */
 
 .sidebar nav {
     display: flex;
     flex-direction: column;
+
     gap: 5px;
 }
 
@@ -85,7 +146,7 @@ a {
     display: flex;
     align-items: center;
 
-    gap: 12px;
+    gap: 15px;
 
     padding: 12px 14px;
 
@@ -93,7 +154,11 @@ a {
 
     border-radius: 7px;
 
-    transition: background 0.2s ease;
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        padding 0.25s ease;
 }
 
 .sidebar nav a:hover,
@@ -103,34 +168,79 @@ a {
 }
 
 
-/* Sidebar icons */
+/* =========================================================
+   SIDEBAR ICONS
+========================================================= */
 
 .sidebar-icon {
-    width: 25px;
     min-width: 25px;
+
+    font-size: 20px;
+
+    text-align: center;
 
     display: inline-flex;
 
     align-items: center;
     justify-content: center;
-
-    font-size: 20px;
-
-    text-align: center;
 }
 
 
-/* Sidebar text */
+/* =========================================================
+   SIDEBAR TEXT
+========================================================= */
 
 .sidebar-text {
     white-space: nowrap;
 }
 
 
-/* Logout */
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 .logout {
     margin-top: auto;
+}
+
+
+/* =========================================================
+   DESKTOP SIDEBAR - COLLAPSED
+========================================================= */
+
+@media (min-width: 769px) {
+
+    .sidebar:not(.open) {
+        width: 70px;
+    }
+
+    .sidebar:not(.open) .sidebar-text {
+        display: none;
+    }
+
+    .sidebar:not(.open) .logo {
+        justify-content: center;
+    }
+
+    .sidebar:not(.open) .logo span:first-child {
+        margin-right: 0;
+    }
+
+    .sidebar:not(.open) nav a,
+    .sidebar:not(.open) .logout {
+        justify-content: center;
+
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .sidebar.open {
+        width: 230px;
+    }
+
+    .sidebar.open .sidebar-text {
+        display: inline;
+    }
 }
 
 
@@ -144,6 +254,23 @@ a {
     padding: 32px 5%;
 
     min-height: 100vh;
+
+    transition:
+        margin-left 0.25s ease;
+}
+
+
+/* Desktop content follows sidebar */
+
+@media (min-width: 769px) {
+
+    .sidebar:not(.open)~.main-content {
+        margin-left: 70px;
+    }
+
+    .sidebar.open~.main-content {
+        margin-left: 230px;
+    }
 }
 
 
@@ -166,167 +293,19 @@ a {
 
 .topbar-left {
     flex: 1;
+
     min-width: 220px;
 }
 
 .topbar h1 {
     font-size: 28px;
+
     margin-bottom: 5px;
 }
 
 .topbar p,
 .section-header p {
     color: #777;
-}
-
-
-/* =========================================================
-   TOP NAVIGATION
-========================================================= */
-
-.top-navigation {
-    display: flex;
-
-    align-items: center;
-
-    gap: 18px;
-}
-
-.top-navigation a {
-    text-decoration: none;
-
-    color: #555;
-
-    font-size: 14px;
-    font-weight: 500;
-
-    padding: 8px 4px;
-
-    transition: all 0.2s ease;
-}
-
-.top-navigation a:hover {
-    color: #b91c1c;
-}
-
-.top-navigation a.active {
-    color: #b91c1c;
-
-    font-weight: 700;
-
-    border-bottom: 2px solid #b91c1c;
-}
-
-
-/* =========================================================
-   TOP NOTIFICATION
-========================================================= */
-
-.top-notification {
-    position: relative;
-
-    font-size: 20px !important;
-
-    padding: 5px 8px !important;
-
-    border-bottom: none !important;
-}
-
-.top-notification span {
-    position: absolute;
-
-    top: -5px;
-    right: -5px;
-
-    min-width: 17px;
-    height: 17px;
-
-    padding: 1px 4px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #b91c1c;
-    color: white;
-
-    font-size: 10px;
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   TOPBAR ACTIONS
-========================================================= */
-
-.topbar-actions {
-    display: flex;
-
-    align-items: center;
-
-    gap: 20px;
-}
-
-.notification-btn {
-    position: relative;
-
-    font-size: 21px;
-
-    color: #7b1e2b;
-}
-
-.notification-btn span {
-    position: absolute;
-
-    top: -7px;
-    right: -8px;
-
-    min-width: 17px;
-    height: 17px;
-
-    padding: 2px 4px;
-
-    border-radius: 50%;
-
-    background: #b82038;
-    color: white;
-
-    font-size: 10px;
-
-    text-align: center;
-}
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profile {
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    font-weight: bold;
-}
-
-.profile-icon {
-    width: 40px;
-    height: 40px;
-
-    border-radius: 50%;
-
-    background: #7b1e2b;
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
 }
 
 
@@ -339,9 +318,6 @@ a {
 
     display: inline-block;
 }
-
-
-/* Profile button */
 
 .profile-button {
     display: flex;
@@ -364,11 +340,11 @@ a {
 }
 
 .profile-button:hover {
-    background-color: #f5f5f5;
+    background: #f5f5f5;
 }
 
 
-/* Profile avatar */
+/* Avatar */
 
 .profile-avatar {
     width: 42px;
@@ -376,7 +352,8 @@ a {
 
     border-radius: 50%;
 
-    background-color: #d62828;
+    background: #7b1e2b;
+
     color: white;
 
     display: flex;
@@ -395,9 +372,6 @@ a {
 
     font-size: 15px;
 }
-
-
-/* Profile name */
 
 .profile-name {
     font-weight: 600;
@@ -442,9 +416,6 @@ a {
     display: block;
 }
 
-
-/* Dropdown header */
-
 .profile-dropdown-header {
     display: flex;
 
@@ -467,15 +438,10 @@ a {
     color: #777;
 }
 
-
-/* Dropdown links */
-
 .profile-dropdown a {
     display: block;
 
     padding: 11px 18px;
-
-    text-decoration: none;
 
     color: #333;
 
@@ -483,25 +449,21 @@ a {
 }
 
 .profile-dropdown a:hover {
-    background-color: #f5f5f5;
+    background: #f5f5f5;
 }
-
-
-/* Divider */
 
 .dropdown-divider {
     height: 1px;
 
-    background-color: #eee;
+    background: #eee;
 
     margin: 6px 0;
 }
 
-
-/* Dropdown logout */
-
 .profile-dropdown .logout {
-    color: #d62828;
+    color: #7b1e2b;
+
+    margin-top: 0;
 }
 
 
@@ -595,7 +557,6 @@ a {
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     margin-bottom: 18px;
@@ -638,11 +599,13 @@ a {
     border-radius: 7px;
 }
 
+.status-card>div:nth-child(2) {
+    flex: 1;
+}
+
 .status-icon {
     width: 38px;
     height: 38px;
-
-    min-width: 38px;
 
     border-radius: 50%;
 
@@ -726,7 +689,7 @@ a {
 
 
 /* =========================================================
-   PROFILE SECTION
+   PROFILE
 ========================================================= */
 
 .profile-section {
@@ -804,7 +767,7 @@ a {
 
 
 /* =========================================================
-   BUTTONS & EDITING
+   BUTTONS
 ========================================================= */
 
 .edit-profile-btn,
@@ -842,6 +805,11 @@ a {
     color: #333;
 }
 
+
+/* =========================================================
+   PROFILE EDITING
+========================================================= */
+
 .profile-input {
     display: none;
 
@@ -868,62 +836,177 @@ a {
 
 
 /* =========================================================
-   SIDEBAR TOGGLE
+   NOTIFICATIONS
 ========================================================= */
 
-/*
-   Hidden on desktop.
-   Appears only on small screens.
-*/
-
-.sidebar-toggle {
-    display: none;
-
-    position: absolute;
-
-    top: 15px;
-    left: 14px;
-
-    width: 42px;
-    height: 42px;
-
-    padding: 0;
-
-    border: none;
-
-    border-radius: 7px;
-
-    background: #d62828;
-
-    cursor: pointer;
-
-    z-index: 2100;
+.topbar-actions {
+    display: flex;
 
     align-items: center;
-    justify-content: center;
 
-    flex-direction: column;
+    gap: 20px;
 }
 
+.notification-btn {
+    position: relative;
 
-/* Three lines */
+    font-size: 21px;
 
-.sidebar-toggle span {
-    display: block;
+    color: #7b1e2b;
+}
 
-    width: 22px;
-    height: 3px;
+.notification-btn span {
+    position: absolute;
 
-    margin: 3px 0;
+    top: -7px;
+    right: -8px;
 
-    background: white;
+    min-width: 17px;
+    height: 17px;
 
-    border-radius: 3px;
+    padding: 2px 4px;
+
+    border-radius: 50%;
+
+    background: #b82038;
+
+    color: white;
+
+    font-size: 10px;
+
+    text-align: center;
 }
 
 
 /* =========================================================
-   RESPONSIVE TOP NAVIGATION
+   QUICK ACTIONS
+========================================================= */
+
+.quick-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+.quick-actions a {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 15px;
+
+    border: 1px solid #eee3df;
+
+    border-radius: 8px;
+
+    color: #333;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.quick-actions a:hover {
+    background: #fff7f7;
+
+    border-color: #7b1e2b;
+
+    color: #7b1e2b;
+}
+
+.quick-action-icon {
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+========================================================= */
+
+.top-navigation {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+}
+
+.top-navigation a {
+    color: #555;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    padding: 8px 4px;
+
+    transition: all 0.2s ease;
+}
+
+.top-navigation a:hover {
+    color: #7b1e2b;
+}
+
+.top-navigation a.active {
+    color: #7b1e2b;
+
+    font-weight: 700;
+
+    border-bottom:
+        2px solid #7b1e2b;
+}
+
+
+/* =========================================================
+   TOP NOTIFICATION
+========================================================= */
+
+.top-notification {
+    position: relative;
+
+    font-size: 20px !important;
+
+    padding: 5px 8px !important;
+
+    border-bottom: none !important;
+}
+
+.top-notification span {
+    position: absolute;
+
+    top: -5px;
+    right: -5px;
+
+    min-width: 17px;
+    height: 17px;
+
+    padding: 1px 4px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #7b1e2b;
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MEDIUM SCREENS
 ========================================================= */
 
 @media (max-width: 1000px) {
@@ -945,122 +1028,72 @@ a {
 
         padding-top: 10px;
     }
-}
-
-
-@media (max-width: 600px) {
-
-    .top-navigation {
-        justify-content: flex-start;
-
-        overflow-x: auto;
-
-        flex-wrap: nowrap;
-
-        padding-bottom: 8px;
-    }
-
-    .top-navigation a {
-        white-space: nowrap;
-    }
-}
-
-
-/* =========================================================
-   DESKTOP / TABLET RESPONSIVE
-========================================================= */
-
-@media (max-width: 900px) {
 
     .dashboard-cards,
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+
 }
 
 
 /* =========================================================
-   SMALL SCREEN SIDEBAR
+   MOBILE SIDEBAR
 ========================================================= */
 
 @media (max-width: 768px) {
 
-    /* -----------------------------------------
-       FIXED COLLAPSED SIDEBAR
-    ----------------------------------------- */
-
     .sidebar {
-        position: fixed;
-
-        top: 0;
-        left: 0;
-
         width: 70px;
+
         height: 100vh;
 
-        padding: 70px 8px 20px;
+        padding:
+            75px 10px 20px;
 
         overflow: hidden;
 
         z-index: 2000;
 
-        transition: width 0.25s ease;
-
-        box-shadow:
-            2px 0 8px rgba(0, 0, 0, 0.08);
+        transition:
+            width 0.25s ease;
     }
 
 
-    /* -----------------------------------------
-       SHOW HAMBURGER
-    ----------------------------------------- */
+    /* Collapsed */
 
-    .sidebar-toggle {
-        display: flex;
+    .sidebar:not(.open) {
+        width: 70px;
     }
 
-
-    /* -----------------------------------------
-       COLLAPSED SIDEBAR
-    ----------------------------------------- */
-
-    .sidebar-text {
+    .sidebar:not(.open) .sidebar-text {
         display: none;
     }
 
-    .sidebar .logo {
+    .sidebar:not(.open) .logo {
+        justify-content: center;
+    }
+
+    .sidebar:not(.open) .logo span:first-child {
+        margin-right: 0;
+    }
+
+    .sidebar:not(.open) nav a,
+    .sidebar:not(.open) .logout {
         justify-content: center;
 
-        padding: 0;
-
-        margin-bottom: 30px;
-    }
-
-    .sidebar nav a,
-    .sidebar .logout {
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        padding: 14px 5px;
-    }
-
-    .sidebar-icon {
-        font-size: 20px;
+        padding:
+            14px 0;
     }
 
 
-    /* -----------------------------------------
-       EXPANDED SIDEBAR
-    ----------------------------------------- */
+    /* Expanded */
 
     .sidebar.open {
-        width: 230px;
+        width: 250px;
 
         box-shadow:
-            5px 0 20px rgba(0, 0, 0, 0.18);
+            5px 0 20px rgba(0, 0, 0, 0.15);
     }
 
     .sidebar.open .sidebar-text {
@@ -1069,45 +1102,38 @@ a {
 
     .sidebar.open .logo {
         justify-content: flex-start;
+    }
 
-        padding-left: 10px;
+    .sidebar.open .logo span:first-child {
+        margin-right: 7px;
     }
 
     .sidebar.open nav a,
     .sidebar.open .logout {
         justify-content: flex-start;
 
-        padding: 12px 14px;
+        padding:
+            12px 14px;
     }
 
 
-    /* -----------------------------------------
-       MAIN CONTENT
-
-       Always leaves 70px for the collapsed
-       sidebar.
-
-       When sidebar opens, the content does
-       NOT move. The sidebar covers it.
-    ----------------------------------------- */
+    /* Main content */
 
     .main-content {
         margin-left: 70px;
 
-        padding: 25px 20px;
+        padding:
+            25px 20px;
 
-        min-height: 100vh;
+        transition: none;
     }
 
-
-    .sidebar.open ~ .main-content {
+    .sidebar.open~.main-content {
         margin-left: 70px;
     }
 
 
-    /* -----------------------------------------
-       PROFILE RESPONSIVE
-    ----------------------------------------- */
+    /* Profile */
 
     .profile-content {
         flex-direction: column;
@@ -1120,28 +1146,51 @@ a {
     }
 
 
-    /* -----------------------------------------
-       TOPBAR
-    ----------------------------------------- */
+    /* Dashboard */
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Quick actions */
+
+    .quick-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    /* Top bar */
 
     .topbar {
         align-items: flex-start;
     }
+
 }
 
 
 /* =========================================================
-   VERY SMALL SCREENS
+   SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 480px) {
-
-    .main-content {
-        padding: 20px 15px;
-    }
+@media (max-width: 600px) {
 
     .topbar h1 {
-        font-size: 23px;
+        font-size: 24px;
+    }
+
+    .profile-name {
+        display: none;
+    }
+
+    .profile-dropdown {
+        right: 0;
+
+        width: 220px;
     }
 
     .dashboard-section,
@@ -1149,16 +1198,43 @@ a {
         padding: 17px;
     }
 
-    .status-card {
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
-
     .section-header {
         align-items: flex-start;
 
         gap: 12px;
+    }
+
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .status-card {
+        align-items: flex-start;
 
         flex-wrap: wrap;
     }
+
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .main-content {
+        padding:
+            20px 15px;
+    }
+
+    .profile-avatar {
+        width: 38px;
+        height: 38px;
+    }
+
+    .topbar h1 {
+        font-size: 22px;
+    }
+
 }

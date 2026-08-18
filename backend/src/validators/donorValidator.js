@@ -1,5 +1,3 @@
-// backend/src/validators/donorValidator.js
-
 import { body } from 'express-validator';
 
 /**

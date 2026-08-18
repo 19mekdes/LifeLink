@@ -77,6 +77,8 @@ import hospitalRoutes from './routes/hospitalRoutes.js';
 import donorRoutes from './routes/donorRoutes.js';
 import donationRoutes from './routes/donationRoutes.js';
 import bloodBankRoutes from './routes/bloodBankRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
   // ✅ ADD THIS
 
 // Register routes
@@ -84,7 +86,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/donors', donorRoutes);
 app.use('/api/v1/donations', donationRoutes); 
-app.use('/api/blood-banks', bloodBankRoutes); // ✅ ADD THIS
+app.use('/api/blood-banks', bloodBankRoutes); 
+app.use('/api/admin', adminRoutes);
+app.use('/api/inventory', inventoryRoutes);
+// ✅ ADD THIS
 
 // Other routes (to be added later)
 // app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));

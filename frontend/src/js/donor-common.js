@@ -321,86 +321,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       LOGOUT
-    ===================================================== */
+   LOGOUT
+===================================================== */
 
-    function setupLogout() {
+function setupLogout() {
 
-        /*
-         * Sidebar logout
-         */
+    const logoutButton =
+        document.getElementById("logoutButton");
 
-        const sidebarLogout =
-            document.querySelector(
-                ".sidebar .logout"
-            );
-
-
-        if (sidebarLogout) {
-
-            sidebarLogout.addEventListener(
-                "click",
-                event => {
-
-                    const confirmed =
-                        confirm(
-                            "Are you sure you want to logout?"
-                        );
-
-
-                    if (!confirmed) {
-
-                        event.preventDefault();
-
-                        return;
-
-                    }
-
-
-                    localStorage.removeItem(
-                        "lifelinkDonor"
-                    );
-
-                }
-            );
-
-        }
-
-
-        /*
-         * Profile dropdown logout
-         */
-
-        const logoutButton =
-            document.getElementById(
-                "logoutButton"
-            );
-
-
-        if (logoutButton) {
-
-            logoutButton.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-
-
-                    localStorage.removeItem(
-                        "lifelinkDonor"
-                    );
-
-
-                    window.location.href =
-                        "login.html";
-
-                }
-            );
-
-        }
-
+    if (!logoutButton) {
+        return;
     }
 
+    logoutButton.addEventListener("click", event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const confirmed =
+            confirm("Are you sure you want to logout?");
+
+        if (!confirmed) {
+            return;
+        }
+
+        // Remove donor authentication data
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("lifelinkDonor");
+
+        // Go to login page
+        window.location.href = "login.html";
+
+    });
+
+}
 
     /* =====================================================
        SIDEBAR

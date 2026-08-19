@@ -202,7 +202,19 @@ export const login = asyncHandler(async (req, res) => {
     JWT_SECRET,
     { expiresIn: JWT_EXPIRE }
   );
+  
+  // Send welcome email
+try {
+  const emailContent = welcomeEmail(user.name, user.email);
 
+  await sendEmail({
+    to: user.email,
+    subject: emailContent.subject,
+    html: emailContent.html
+  });
+} catch (emailError) {
+  console.error('Welcome email failed:', emailError.message);
+}
   // Remove password from response
   const { password: _, ...userWithoutPassword } = user;
 
@@ -258,11 +270,6 @@ export const logout = asyncHandler(async (req, res) => {
   });
 });
 
-await sendEmail({
-  to: user.email,
-  subject: welcomeEmail(user.name, user.email).subject,
-  html: welcomeEmail(user.name, user.email).html,
-});
 /**
  * Get dashboard URL based on role
  */

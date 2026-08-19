@@ -370,27 +370,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-
-    // ==========================================
-    // LOGOUT
-    // ==========================================
-
-    document
-        .querySelector(".logout")
-        ?.addEventListener("click", event => {
-
-            const confirmed =
-                confirm(
-                    "Are you sure you want to logout?"
-                );
-
-            if (!confirmed) {
-                event.preventDefault();
-            }
-
-        });
-
-
     // ==========================================
     // START DASHBOARD
     // ==========================================
@@ -400,39 +379,3 @@ document.addEventListener("DOMContentLoaded", () => {
     loadNotificationCount();
 
 });
-const profileButton = document.getElementById("profileButton");
-const profileDropdown = document.getElementById("profileDropdown");
-const logoutButton = document.getElementById("logoutButton");
-
-// Open / close profile dropdown
-profileButton.addEventListener("click", function (event) {
-    event.stopPropagation();
-    profileDropdown.classList.toggle("show");
-});
-
-// Close dropdown when clicking outside
-document.addEventListener("click", function (event) {
-    if (!profileButton.contains(event.target) &&
-        !profileDropdown.contains(event.target)) {
-        profileDropdown.classList.remove("show");
-    }
-});
-
-// Logout
-logoutButton.addEventListener("click", function (event) {
-    event.preventDefault();
-
-    // Remove donor login information
-    localStorage.removeItem("lifelinkDonor");
-
-    // Go to login page
-    window.location.href = "login.html";
-});
-const sidebarToggle = document.getElementById("sidebarToggle");
-const sidebar = document.getElementById("sidebar");
-
-if (sidebarToggle && sidebar) {
-    sidebarToggle.addEventListener("click", function () {
-        sidebar.classList.toggle("open");
-    });
-}

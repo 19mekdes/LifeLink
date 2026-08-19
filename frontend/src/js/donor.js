@@ -370,27 +370,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-
-    // ==========================================
-    // LOGOUT
-    // ==========================================
-
-    document
-        .querySelector(".logout")
-        ?.addEventListener("click", event => {
-
-            const confirmed =
-                confirm(
-                    "Are you sure you want to logout?"
-                );
-
-            if (!confirmed) {
-                event.preventDefault();
-            }
-
-        });
-
-
     // ==========================================
     // START DASHBOARD
     // ==========================================

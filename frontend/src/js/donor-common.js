@@ -1,10 +1,12 @@
 console.log("Donor common JS is working!");
 
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ==========================================
-    // PROFILE / USER INFORMATION
-    // ==========================================
+
+    /* =====================================================
+       GET SAVED DONOR
+    ===================================================== */
 
     function getSavedDonor() {
 
@@ -29,11 +31,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    /* =====================================================
+       DISPLAY DONOR HEADER
+    ===================================================== */
+
     function displayDonorHeader() {
 
         const donor = getSavedDonor();
 
         if (!donor) return;
+
 
         const name =
             donor.name ||
@@ -58,29 +65,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         if (topbarName) {
-            topbarName.textContent = name;
+
+            topbarName.textContent =
+                name;
+
         }
 
 
         if (profileInitial) {
-            profileInitial.textContent = initial;
+
+            profileInitial.textContent =
+                initial;
+
         }
 
 
         if (dashboardProfileInitial) {
+
             dashboardProfileInitial.textContent =
                 initial;
+
         }
+
+
+        /*
+         * Update profile menu if it exists.
+         */
+
+        const profileNames =
+            document.querySelectorAll(
+                ".profile-name"
+            );
+
+
+        profileNames.forEach(element => {
+
+            element.textContent = name;
+
+        });
+
+
+        const profileAvatars =
+            document.querySelectorAll(
+                ".profile-avatar"
+            );
+
+
+        profileAvatars.forEach(element => {
+
+            if (
+                element.classList.contains("large")
+            ) {
+
+                element.textContent =
+                    initial;
+
+            } else {
+
+                element.textContent =
+                    initial;
+
+            }
+
+        });
+
     }
 
 
-    // ==========================================
-    // NOTIFICATION COUNT
-    // ==========================================
+    /* =====================================================
+       NOTIFICATION COUNT
+    ===================================================== */
 
     async function loadNotificationCount() {
 
         try {
+
+            if (
+                typeof apiRequest !==
+                "function"
+            ) {
+
+                return;
+
+            }
+
 
             const data =
                 await apiRequest(
@@ -91,7 +159,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const notifications =
                 Array.isArray(data)
                     ? data
-                    : data.notifications || [];
+                    : (
+                        data &&
+                        Array.isArray(
+                            data.notifications
+                        )
+                            ? data.notifications
+                            : []
+                    );
 
 
             const unread =
@@ -122,13 +197,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Could not load notification count:",
                 error
             );
+
         }
+
     }
 
 
-    // ==========================================
-    // SIDEBAR ACTIVE LINK
-    // ==========================================
+    /* =====================================================
+       ACTIVE SIDEBAR LINK
+    ===================================================== */
 
     function setActiveNavigation() {
 
@@ -146,6 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const href =
                     link.getAttribute("href");
+
 
                 if (!href) return;
 
@@ -168,54 +246,262 @@ document.addEventListener("DOMContentLoaded", () => {
                     link.classList.remove(
                         "active"
                     );
+
                 }
 
             });
+
     }
 
 
-    // ==========================================
-    // LOGOUT
-    // ==========================================
+    /* =====================================================
+       PROFILE DROPDOWN
+    ===================================================== */
 
-    function setupLogout() {
+    function setupProfileDropdown() {
 
-        document
-            .querySelector(".logout")
-            ?.addEventListener(
-                "click",
-                event => {
+        const profileButton =
+            document.getElementById(
+                "profileButton"
+            );
 
-                    const confirmed =
-                        confirm(
-                            "Are you sure you want to logout?"
-                        );
-
-
-                    if (!confirmed) {
-
-                        event.preventDefault();
-
-                        return;
-                    }
+        const profileDropdown =
+            document.getElementById(
+                "profileDropdown"
+            );
 
 
-                    // Remove temporary donor data
+        if (
+            !profileButton ||
+            !profileDropdown
+        ) {
 
-                    localStorage.removeItem(
-                        "lifelinkDonor"
+            return;
+
+        }
+
+
+        profileButton.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                profileDropdown.classList.toggle(
+                    "show"
+                );
+
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    !profileButton.contains(
+                        event.target
+                    ) &&
+                    !profileDropdown.contains(
+                        event.target
+                    )
+                ) {
+
+                    profileDropdown.classList.remove(
+                        "show"
                     );
 
-                    // If your backend later stores a JWT,
-                    // we'll remove that token here too.
                 }
-            );
+
+            }
+        );
+
     }
 
 
-    // ==========================================
-    // START COMMON FEATURES
-    // ==========================================
+    /* =====================================================
+   LOGOUT
+===================================================== */
+
+function setupLogout() {
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    if (!logoutButton) {
+        return;
+    }
+
+    logoutButton.addEventListener("click", event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const confirmed =
+            confirm("Are you sure you want to logout?");
+
+        if (!confirmed) {
+            return;
+        }
+
+        // Remove donor authentication data
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("lifelinkDonor");
+
+        // Go to login page
+        window.location.href = "login.html";
+
+    });
+
+}
+
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
+
+    function setupSidebar() {
+
+        const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+        const sidebarToggle =
+            document.getElementById(
+                "sidebarToggle"
+            );
+
+
+        if (
+            !sidebar ||
+            !sidebarToggle
+        ) {
+
+            console.warn(
+                "Sidebar elements were not found."
+            );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------------
+           INITIAL STATE
+        ------------------------------------------------ */
+
+        if (window.innerWidth > 768) {
+
+            /*
+             * Desktop starts expanded.
+             */
+
+            sidebar.classList.add(
+                "open"
+            );
+
+        } else {
+
+            /*
+             * Mobile starts collapsed.
+             */
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+        }
+
+
+        /* -----------------------------------------------
+           TOGGLE
+        ------------------------------------------------ */
+
+        sidebarToggle.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                sidebar.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+
+        /* -----------------------------------------------
+           RESIZE
+        ------------------------------------------------ */
+
+        let previousWidth =
+            window.innerWidth;
+
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                const currentWidth =
+                    window.innerWidth;
+
+
+                /*
+                 * Only change the state when
+                 * crossing the desktop/mobile
+                 * breakpoint.
+                 */
+
+                const crossedBreakpoint =
+                    (
+                        previousWidth > 768 &&
+                        currentWidth <= 768
+                    ) ||
+                    (
+                        previousWidth <= 768 &&
+                        currentWidth > 768
+                    );
+
+
+                if (crossedBreakpoint) {
+
+                    if (
+                        currentWidth > 768
+                    ) {
+
+                        sidebar.classList.add(
+                            "open"
+                        );
+
+                    } else {
+
+                        sidebar.classList.remove(
+                            "open"
+                        );
+
+                    }
+
+                }
+
+
+                previousWidth =
+                    currentWidth;
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       START COMMON FEATURES
+    ===================================================== */
 
     displayDonorHeader();
 
@@ -223,6 +509,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setActiveNavigation();
 
+    setupProfileDropdown();
+
     setupLogout();
+
+    setupSidebar();
 
 });

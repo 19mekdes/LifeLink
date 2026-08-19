@@ -262,7 +262,7 @@ class MatchingService {
       }
     }
 
-    // Check availability status
+  
     if (donor.availabilityStatus !== 'AVAILABLE') {
       result.eligible = false;
       result.reasons.push(`Donor is currently ${donor.availabilityStatus.toLowerCase()}`);

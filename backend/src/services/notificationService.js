@@ -1,13 +1,5 @@
-// backend/src/services/notificationService.js
-
 import { PrismaClient } from '@prisma/client';
-
 const prisma = new PrismaClient();
-
-/**
- * Notification Service
- * Handles all notification-related business logic
- */
 class NotificationService {
   /**
    * Create a notification for a single user
@@ -488,5 +480,5 @@ class NotificationService {
   }
 }
 
-// Export singleton instance
+
 export default new NotificationService();

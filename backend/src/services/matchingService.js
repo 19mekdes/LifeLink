@@ -1,13 +1,5 @@
-// backend/src/services/matchingService.js
-
 import { PrismaClient } from '@prisma/client';
-
 const prisma = new PrismaClient();
-
-/**
- * Matching Service
- * Handles all donor matching and compatibility logic
- */
 class MatchingService {
   /**
    * Find matching donors for a blood request
@@ -31,7 +23,6 @@ class MatchingService {
         where.isVerified = true;
       }
 
-      // Donors must be eligible (90-day rule)
       const donors = await prisma.donorProfile.findMany({
         where: {
           ...where,
@@ -96,10 +87,9 @@ class MatchingService {
       score += 20;
     }
 
-    // Reliability score (20 points - scaled)
+  
     score += (donor.reliabilityScore / 100) * 20;
 
-    // Last donation date (15 points)
     if (!donor.lastDonationDate) {
       score += 15;
     } else {

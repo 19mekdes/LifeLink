@@ -1,5 +1,3 @@
-// backend/src/controllers/adminController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
@@ -7,9 +5,6 @@ import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-/**
- * Helper function to convert BigInt to Number
- */
 const serializeData = (data) => {
   return JSON.parse(
     JSON.stringify(data, (key, value) => {
@@ -328,7 +323,7 @@ export const getHospitals = asyncHandler(async (req, res) => {
   });
 });
 
-// ✅ FIXED: verifyHospital function
+//  verifyHospital function
 export const verifyHospital = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status, notes } = req.body;
@@ -450,7 +445,7 @@ export const getBloodBanks = asyncHandler(async (req, res) => {
   });
 });
 
-// ✅ FIXED: verifyBloodBank function
+//  verifyBloodBank function
 export const verifyBloodBank = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status, notes } = req.body;
@@ -571,7 +566,7 @@ export const getDonors = asyncHandler(async (req, res) => {
   });
 });
 
-// ✅ FIXED: verifyDonor function
+//  verifyDonor function
 export const verifyDonor = asyncHandler(async (req, res) => {
   const { id } = req.params;
 

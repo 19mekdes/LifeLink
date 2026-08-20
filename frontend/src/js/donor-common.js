@@ -138,69 +138,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadNotificationCount() {
 
-        try {
+    try {
 
-            if (
-                typeof apiRequest !==
-                "function"
-            ) {
+        const data =
+            await api.get("/donors/notifications");
 
-                return;
+        console.log(
+            "Notification response:",
+            data
+        );
 
-            }
+        const notifications =
+            data?.data?.notifications || [];
 
+        const unread =
+            data?.data?.unreadCount || 0;
 
-            const data =
-                await apiRequest(
-                    "/api/donors/notifications"
-                );
-
-
-            const notifications =
-                Array.isArray(data)
-                    ? data
-                    : (
-                        data &&
-                        Array.isArray(
-                            data.notifications
-                        )
-                            ? data.notifications
-                            : []
-                    );
-
-
-            const unread =
-                notifications.filter(
-                    notification =>
-                        !notification.read &&
-                        !notification.isRead
-                ).length;
-
-
-            const counters =
-                document.querySelectorAll(
-                    "#notificationCount, #topNotificationCount"
-                );
-
-
-            counters.forEach(counter => {
-
-                counter.textContent =
-                    unread;
-
-            });
-
-
-        } catch (error) {
-
-            console.error(
-                "Could not load notification count:",
-                error
+        const counters =
+            document.querySelectorAll(
+                "#notificationCount, #topNotificationCount"
             );
 
-        }
+        counters.forEach(counter => {
+            counter.textContent = unread;
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Could not load notification count:",
+            error
+        );
 
     }
+
+}
 
 
     /* =====================================================
@@ -324,38 +296,38 @@ document.addEventListener("DOMContentLoaded", () => {
    LOGOUT
 ===================================================== */
 
-function setupLogout() {
+    function setupLogout() {
 
-    const logoutButton =
-        document.getElementById("logoutButton");
+        const logoutButton =
+            document.getElementById("logoutButton");
 
-    if (!logoutButton) {
-        return;
-    }
-
-    logoutButton.addEventListener("click", event => {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        const confirmed =
-            confirm("Are you sure you want to logout?");
-
-        if (!confirmed) {
+        if (!logoutButton) {
             return;
         }
 
-        // Remove donor authentication data
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("lifelinkDonor");
+        logoutButton.addEventListener("click", event => {
 
-        // Go to login page
-        window.location.href = "login.html";
+            event.preventDefault();
+            event.stopPropagation();
 
-    });
+            const confirmed =
+                confirm("Are you sure you want to logout?");
 
-}
+            if (!confirmed) {
+                return;
+            }
+
+            // Remove donor authentication data
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("lifelinkDonor");
+
+            // Go to login page
+            window.location.href = "login.html";
+
+        });
+
+    }
 
     /* =====================================================
        SIDEBAR

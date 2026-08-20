@@ -18,20 +18,25 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const data =
-                await apiRequest(
-                    "/api/donors/requests"
-                );
+                await api.get("/donors/requests");
 
             console.log(
-                "Blood requests:",
+                "Blood requests response:",
                 data
             );
 
 
+            // Backend response:
+            // {
+            //     success: true,
+            //     data: {
+            //         requests: [],
+            //         pagination: {}
+            //     }
+            // }
+
             const requests =
-                Array.isArray(data)
-                    ? data
-                    : data.requests || [];
+                data?.data?.requests || [];
 
 
             if (!requestList) return;
@@ -53,9 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 requests.map(request => {
 
                     const id =
-                        request.id ||
-                        request.requestId ||
-                        request._id;
+                        request.id;
 
 
                     const bloodType =
@@ -64,8 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                     const hospital =
-                        request.hospital ||
-                        request.hospitalName ||
+                        request.hospital?.user?.name ||
+                        request.hospital?.name ||
                         "Hospital";
 
 
@@ -76,13 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const urgency =
                         request.urgency ||
-                        request.priority ||
                         "Normal";
 
 
                     const status =
                         request.status ||
-                        "Pending";
+                        "PENDING";
+
+
+                    const userResponse =
+                        request.userResponse;
 
 
                     return `
@@ -92,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                 <strong>
                                     ${request.title ||
-                                    "Blood Request"}
+                        "Blood Request"}
                                 </strong>
 
                                 <p>
@@ -103,9 +109,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <small>
                                     ${hospital}
                                     ${location !==
-                                    "Location unavailable"
-                                        ? " • " + location
-                                        : ""}
+                            "Location unavailable"
+                            ? " • " + location
+                            : ""
+                        }
                                 </small>
 
                                 <small>
@@ -123,26 +130,24 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </span>
 
 
-                                ${
-                                    status.toLowerCase() ===
-                                    "pending"
+                                ${userResponse
 
-                                    ? `
+                            ? `
+                                        <button
+                                            class="respond-btn"
+                                            disabled>
+                                            ${userResponse}
+                                        </button>
+                                    `
+
+                            : `
                                         <button
                                             class="respond-btn"
                                             data-request-id="${id}">
                                             Respond
                                         </button>
-                                      `
-
-                                    : `
-                                        <button
-                                            class="respond-btn"
-                                            disabled>
-                                            ${status}
-                                        </button>
-                                      `
-                                }
+                                    `
+                        }
 
                             </div>
 
@@ -152,10 +157,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }).join("");
 
 
-            // Add response button listeners
+            // ==========================================
+            // RESPONSE BUTTONS
+            // ==========================================
 
             document
-                .querySelectorAll(".respond-btn")
+                .querySelectorAll(
+                    ".respond-btn[data-request-id]"
+                )
                 .forEach(button => {
 
                     button.addEventListener(
@@ -191,8 +200,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         Unable to load blood requests.
                     </p>
                 `;
+
             }
+
         }
+
     }
 
 
@@ -233,14 +245,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const result =
-                await apiRequest(
-                    `/api/donors/requests/${requestId}/respond`,
+                await api.post(
+                    `/donors/requests/${requestId}/respond`,
                     {
-                        method: "POST",
-
-                        body: JSON.stringify({
-                            response: "accepted"
-                        })
+                        response: "ACCEPTED"
                     }
                 );
 
@@ -252,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             button.textContent =
-                "Response Sent";
+                "ACCEPTED";
 
 
             alert(
@@ -277,7 +285,9 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(
                 "Unable to respond to this request. Please try again."
             );
+
         }
+
     }
 
 
@@ -290,29 +300,40 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const data =
-                await apiRequest(
-                    "/api/donors/notifications"
+                await api.get(
+                    "/donors/notifications"
                 );
 
 
-            const notifications =
-                Array.isArray(data)
-                    ? data
-                    : data.notifications || [];
+            console.log(
+                "Request page notification response:",
+                data
+            );
 
 
             const unread =
-                notifications.filter(
-                    notification =>
-                        !notification.read &&
-                        !notification.isRead
-                ).length;
+                data?.data?.unreadCount || 0;
 
 
             if (notificationCount) {
 
                 notificationCount.textContent =
                     unread;
+
+            }
+
+
+            const topNotificationCount =
+                document.getElementById(
+                    "topNotificationCount"
+                );
+
+
+            if (topNotificationCount) {
+
+                topNotificationCount.textContent =
+                    unread;
+
             }
 
 
@@ -322,7 +343,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Failed to load notifications:",
                 error
             );
+
         }
+
     }
 
 
@@ -331,6 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
 
     loadRequests();
+
     loadNotificationCount();
 
 });

@@ -1,80 +1,30 @@
+import api from '../../src/js/api/api.js';
+
 /**
  * hospital-dashboard.js
  * ------------------------------------------------------------------
  * Controller for the Hospital Dashboard single-page app.
- *
- * Responsibilities:
- *   1. Sidebar navigation between the 6 pages (SPA).
- *   2. Loading data from the API service (hospitalApi) and rendering it.
- *   3. Handling forms, tabs, switches, and logout.
-*/
+ * Connected to LifeLink Backend REST API via ApiClient (api).
+ */
 (function () {
   'use strict';
 
   // ------------------------------------------------------------------
-  // API LAYER
+  // AUTH GUARD
   // ------------------------------------------------------------------
-  // TODO: Replace THIS local `api` object with the real hospitalApi
-  // from src/js/api/hospitalApi.js once the module is wired up, e.g.:
-  //
-  //   import { hospitalApi as api } from '../src/js/api/hospitalApi.js';
-  //
-  // For now, this mirrors the same interface so the UI contract is clear.
-  // Each method returns a Promise. The real backend will replace these.
-  // ------------------------------------------------------------------
-  const api = {
-    getHospitalProfile() {
-      // TODO: return hospitalApi.getHospitalProfile();
-      console.warn('hospitalApi.getHospitalProfile() is not connected yet.');
-      return Promise.reject(new Error('getHospitalProfile not connected'));
-    },
-    getDashboardStats() {
-      console.warn('hospitalApi.getDashboardStats() is not connected yet.');
-      return Promise.reject(new Error('getDashboardStats not connected'));
-    },
-    getStatusOverview() {
-      console.warn('hospitalApi.getStatusOverview() is not connected yet.');
-      return Promise.reject(new Error('getStatusOverview not connected'));
-    },
-    getRecentRequests() {
-      console.warn('hospitalApi.getRecentRequests() is not connected yet.');
-      return Promise.reject(new Error('getRecentRequests not connected'));
-    },
-    getUrgentRequests() {
-      console.warn('hospitalApi.getUrgentRequests() is not connected yet.');
-      return Promise.reject(new Error('getUrgentRequests not connected'));
-    },
-    getMyRequests(status) {
-      console.warn('hospitalApi.getMyRequests() is not connected yet.');
-      return Promise.reject(new Error('getMyRequests not connected'));
-    },
-    getResponses(status) {
-      console.warn('hospitalApi.getResponses() is not connected yet.');
-      return Promise.reject(new Error('getResponses not connected'));
-    },
-    createRequest(data) {
-      console.warn('hospitalApi.createRequest() is not connected yet.');
-      return Promise.reject(new Error('createRequest not connected'));
-    },
-    updateProfile(data) {
-      console.warn('hospitalApi.updateProfile() is not connected yet.');
-      return Promise.reject(new Error('updateProfile not connected'));
-    },
-    updateSettings(data) {
-      console.warn('hospitalApi.updateSettings() is not connected yet.');
-      return Promise.reject(new Error('updateSettings not connected'));
-    },
-    logout() {
-      console.warn('hospitalApi.logout() is not connected yet.');
-      // TODO: when real logout is connected, clear auth token then redirect.
-      // For now, just redirect to the login page as a placeholder.
-      window.location.href = 'login.html';
-      return Promise.resolve();
-    },
-  };
+  if (!api.isAuthenticated()) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const currentUser = api.getUser();
+  if (currentUser && currentUser.role && currentUser.role !== 'HOSPITAL') {
+    window.location.href = api.getDashboardUrl(currentUser.role);
+    return;
+  }
 
   // ------------------------------------------------------------------
-  // DOM HELPERS
+  // DOM HELPERS & TOAST
   // ------------------------------------------------------------------
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
@@ -89,9 +39,20 @@
     });
     children.forEach((c) => {
       if (typeof c === 'string') node.appendChild(document.createTextNode(c));
-      else node.appendChild(c);
+      else if (c) node.appendChild(c);
     });
     return node;
+  };
+
+  const showToast = (message, type = 'info') => {
+    const container = $('#toast-container') || document.body;
+    const toast = el('div', { class: `toast ${type}`, text: message });
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
   };
 
   const loadingRow = (colspan, message) => {
@@ -99,38 +60,6 @@
     const td = el('td', { colspan, class: 'loading-hint', text: message });
     tr.appendChild(td);
     return tr;
-  };
-
-  const badgeFor = (status) => {
-    const map = {
-      active: 'active',
-      progress: 'progress',
-      'in progress': 'progress',
-      completed: 'completed',
-      cancelled: 'cancelled',
-      new: 'new',
-      contacted: 'contacted',
-      confirmed: 'confirmed',
-      declined: 'declined',
-    };
-    const key = String(status || '').toLowerCase();
-    const cls = map[key] || 'active';
-    const label = String(status || '—');
-    return el('span', { class: `badge ${cls}`, text: label });
-  };
-
-  const urgencyFor = (urgency) => {
-    const key = String(urgency || '').toLowerCase();
-    const cls =
-      key === 'emergency' ? 'emergency' : key === 'high' ? 'high' : 'medium';
-    return el('span', { class: `urgency ${cls}`, text: urgency || '—' });
-  };
-
-  const formatDate = (iso) => {
-    if (!iso) return '—';
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return iso;
-    return d.toLocaleString();
   };
 
   const emptyRow = (colspan, message) => {
@@ -141,7 +70,187 @@
   };
 
   // ------------------------------------------------------------------
-  // NAVIGATION
+  // ENUM CONVERTERS & FORMATTERS
+  // ------------------------------------------------------------------
+  const UI_TO_DB_BLOOD = {
+    'O+': 'O_POS',
+    'O-': 'O_NEG',
+    'A+': 'A_POS',
+    'A-': 'A_NEG',
+    'B+': 'B_POS',
+    'B-': 'B_NEG',
+    'AB+': 'AB_POS',
+    'AB-': 'AB_NEG',
+  };
+
+  const DB_TO_UI_BLOOD = {
+    'O_POS': 'O+',
+    'O_NEG': 'O-',
+    'A_POS': 'A+',
+    'A_NEG': 'A-',
+    'B_POS': 'B+',
+    'B_NEG': 'B-',
+    'AB_POS': 'AB+',
+    'AB_NEG': 'AB-',
+  };
+
+  const UI_TO_DB_URGENCY = {
+    'Emergency': 'CRITICAL_EMERGENCY',
+    'High': 'URGENT',
+    'Medium': 'NORMAL',
+  };
+
+  const DB_TO_UI_URGENCY = {
+    'CRITICAL_EMERGENCY': 'Emergency',
+    'URGENT': 'High',
+    'NORMAL': 'Normal',
+  };
+
+  const formatBloodType = (val) => DB_TO_UI_BLOOD[val] || val || '—';
+  const formatUrgency = (val) => DB_TO_UI_URGENCY[val] || val || '—';
+
+  const formatDate = (iso) => {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const badgeFor = (status) => {
+    const s = String(status || '').toUpperCase();
+    let cls = 'active';
+    let label = status || '—';
+
+    if (s === 'PENDING') {
+      cls = 'pending';
+      label = 'Pending';
+    } else if (s === 'APPROVED' || s === 'PROCESSING') {
+      cls = 'approved';
+      label = 'In Progress';
+    } else if (s === 'FULFILLED') {
+      cls = 'fulfilled';
+      label = 'Fulfilled';
+    } else if (s === 'CANCELLED') {
+      cls = 'cancelled';
+      label = 'Cancelled';
+    } else if (s === 'REJECTED') {
+      cls = 'rejected';
+      label = 'Rejected';
+    } else if (s === 'ACCEPTED') {
+      cls = 'accepted';
+      label = 'Accepted';
+    } else if (s === 'DECLINED') {
+      cls = 'declined';
+      label = 'Declined';
+    }
+
+    return el('span', { class: `badge ${cls}`, text: label });
+  };
+
+  // ------------------------------------------------------------------
+  // REAL API CALLS
+  // ------------------------------------------------------------------
+  let cachedProfile = null;
+
+  async function fetchHospitalProfile() {
+    const res = await api.get('/hospitals/profile');
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to load hospital profile');
+    }
+    cachedProfile = res.data;
+    return res.data;
+  }
+
+  async function fetchDashboardStats() {
+    const res = await api.get('/hospitals/dashboard');
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to load dashboard data');
+    }
+    return res.data;
+  }
+
+  async function fetchMyRequests(statusFilter = '') {
+    const params = {};
+    if (statusFilter === 'active') params.status = 'PENDING';
+    else if (statusFilter === 'inProgress') params.status = 'APPROVED';
+    else if (statusFilter === 'completed') params.status = 'FULFILLED';
+    else if (statusFilter === 'cancelled') params.status = 'CANCELLED';
+
+    const res = await api.get('/hospitals/requests', params);
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to load requests');
+    }
+    return res.data.requests || [];
+  }
+
+  async function fetchDonationsApi() {
+    const res = await api.get('/hospitals/donations');
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to load donations history');
+    }
+    return res.data?.donations || [];
+  }
+
+  async function fetchHospitalStatsApi() {
+    const res = await api.get('/hospitals/stats');
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to load hospital statistics');
+    }
+    return res.data || {};
+  }
+
+  async function createBloodRequestApi(data) {
+    const res = await api.post('/hospitals/requests', data);
+    if (!res.success) {
+      const errDetail = res.errors ? res.errors.map(e => e.msg).join(', ') : res.message;
+      throw new Error(errDetail || 'Failed to create blood request');
+    }
+    return res.data;
+  }
+
+  async function updateProfileApi(data) {
+    const res = await api.put('/hospitals/profile', data);
+    if (!res.success) {
+      const errDetail = res.errors ? res.errors.map(e => e.msg).join(', ') : res.message;
+      throw new Error(errDetail || 'Failed to update profile');
+    }
+    return res.data;
+  }
+
+  async function cancelRequestApi(id) {
+    const res = await api.put(`/hospitals/requests/${id}/cancel`, { notes: 'Cancelled by hospital' });
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to cancel request');
+    }
+    return res.data;
+  }
+
+  // ------------------------------------------------------------------
+  // MOBILE SIDEBAR HAMBURGER NAVIGATION
+  // ------------------------------------------------------------------
+  const hamburgerBtn = $('#hamburger-btn');
+  const sidebar = $('#sidebar');
+  const sidebarOverlay = $('#sidebar-overlay');
+
+  function toggleSidebar() {
+    if (sidebar) sidebar.classList.toggle('open');
+    if (sidebarOverlay) sidebarOverlay.classList.toggle('open');
+  }
+
+  function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('open');
+  }
+
+  hamburgerBtn?.addEventListener('click', toggleSidebar);
+  sidebarOverlay?.addEventListener('click', closeSidebar);
+
+  // Topbar hospital account navigation to profile
+  const topbarAccount = $('#topbar-hospital-account');
+  topbarAccount?.addEventListener('click', () => showPage('profile'));
+
+  // ------------------------------------------------------------------
+  // NAVIGATION & PAGE ROUTING
   // ------------------------------------------------------------------
   const pages = [
     'dashboard',
@@ -155,40 +264,32 @@
   function showPage(pageId) {
     if (!pages.includes(pageId)) return;
 
-    // Update nav active states
     $$('.nav-item').forEach((btn) => {
-      btn.classList.remove('active');
-      if (btn.dataset.page === pageId) btn.classList.add('active');
+      btn.classList.toggle('active', btn.dataset.page === pageId);
     });
 
-    // Show/hide pages
     $$('.page').forEach((p) => {
       p.classList.toggle('active-page', p.id === pageId);
     });
 
-    // Load the page's data when it becomes visible
+    closeSidebar();
     loadPageData(pageId);
-
     window.scrollTo(0, 0);
   }
 
-  // Wire up sidebar buttons
   $$('.nav-item').forEach((btn) => {
     btn.addEventListener('click', () => showPage(btn.dataset.page));
   });
 
-  // Wire up any element that wants to navigate to another page
   $$('[data-page-target]').forEach((btn) => {
     btn.addEventListener('click', () => showPage(btn.dataset.pageTarget));
   });
 
-  // ------------------------------------------------------------------
-  // PAGE DATA LOADING
-  // ------------------------------------------------------------------
   function safeLoad(fn, onError) {
     return fn().catch((err) => {
       console.error(err);
       if (onError) onError(err);
+      else showToast(err.message || 'An error occurred', 'error');
     });
   }
 
@@ -215,161 +316,227 @@
   }
 
   // ------------------------------------------------------------------
-  // DASHBOARD
+  // DASHBOARD PAGE
   // ------------------------------------------------------------------
   function loadDashboard() {
-    // Hospital profile (topbar + welcome)
-    safeLoad(api.getHospitalProfile, () => {
-      // keep default "Hospital" text when not connected
-    }).then((profile) => {
+    // 1. Profile header update
+    safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
-      $('#hospital-name').textContent = profile.name || 'Hospital';
-      $('#welcome-hospital-name').textContent = profile.name || 'Hospital';
-      if (profile.name) {
-        $('#hospital-avatar').textContent = profile.name.charAt(0).toUpperCase();
+      const hospitalName = profile.hospitalName || profile.user?.name || 'Hospital';
+      $('#hospital-name').textContent = hospitalName;
+      $('#welcome-hospital-name').textContent = hospitalName;
+      $('#hospital-avatar').textContent = hospitalName.charAt(0).toUpperCase();
+
+      // Default location in create request form if empty
+      const locInput = $('#location');
+      if (locInput && !locInput.value) {
+        locInput.value = profile.city || profile.address || '';
       }
     });
 
-    // Stat cards
-    safeLoad(api.getDashboardStats).then((stats) => {
-      if (!stats) return;
-      $('#stat-total-requests').textContent = stats.totalRequests ?? '—';
-      $('#stat-active-requests').textContent = stats.activeRequests ?? '—';
-      $('#stat-total-responses').textContent = stats.totalResponses ?? '—';
-      $('#stat-completed-donations').textContent =
-        stats.completedDonations ?? '—';
-    });
+    // 2. Dashboard Stats & Lists
+    safeLoad(fetchDashboardStats).then((data) => {
+      if (!data) return;
+      const stats = data.stats || {};
+      const recentRequests = data.recentRequests || [];
 
-    // Status overview (donut + legend)
-   safeLoad(api.getStatusOverview).then((overview) => {
-  if (!overview) return;
+      // Stat cards
+      $('#stat-total-requests').textContent = stats.totalRequests ?? 0;
+      $('#stat-active-requests').textContent = stats.activeRequests ?? 0;
+      $('#stat-total-responses').textContent = stats.approvedRequests ?? 0;
+      $('#stat-completed-donations').textContent = stats.totalDonations ?? 0;
 
-  const total =
-    (overview.active?.count || 0) +
-    (overview.inProgress?.count || 0) +
-    (overview.completed?.count || 0);
+      // Status Overview breakdown
+      const active = stats.pendingRequests || 0;
+      const inProgress = stats.approvedRequests || 0;
+      const completed = stats.fulfilledRequests || 0;
+      const total = active + inProgress + completed;
 
-  $('#status-total').textContent = total;
+      $('#status-total').textContent = total;
 
-  $('#status-active').textContent =
-    `${overview.active?.count ?? 0} (${overview.active?.percentage ?? 0}%)`;
+      const activePct = total ? Math.round((active / total) * 100) : 0;
+      const inProgressPct = total ? Math.round((inProgress / total) * 100) : 0;
+      const completedPct = total ? Math.round((completed / total) * 100) : 0;
 
-  $('#status-inProgress').textContent =
-    `${overview.inProgress?.count ?? 0} (${overview.inProgress?.percentage ?? 0}%)`;
+      $('#status-active').textContent = `${active} (${activePct}%)`;
+      $('#status-inProgress').textContent = `${inProgress} (${inProgressPct}%)`;
+      $('#status-completed').textContent = `${completed} (${completedPct}%)`;
 
-  $('#status-completed').textContent =
-    `${overview.completed?.count ?? 0} (${overview.completed?.percentage ?? 0}%)`;
+      const chart = $('.donut-chart');
+      if (chart) {
+        if (total > 0) {
+          const actDeg = (active / total) * 100;
+          const progDeg = actDeg + (inProgress / total) * 100;
+          chart.style.background = `conic-gradient(
+            #d71920 0% ${actDeg}%,
+            #f59e0b ${actDeg}% ${progDeg}%,
+            #16a34a ${progDeg}% 100%
+          )`;
+        } else {
+          chart.style.background = '#e5e7eb';
+        }
+      }
 
-  // Updating the donut chart
-  if (total === 0) return;
-
-  const activePct =
-    ((overview.active?.count || 0) / total) * 100;
-
-  const inProgressPct =
-    activePct +
-    ((overview.inProgress?.count || 0) / total) * 100;
-
-  const chart = $('.donut-chart');
-
-  chart.style.background = `
-    conic-gradient(
-      #d71920 0% ${activePct}%,
-      #f59e0b ${activePct}% ${inProgressPct}%,
-      #16a34a ${inProgressPct}% 100%
-    )
-  `;
-});
-
-    // Recent requests
-    safeLoad(api.getRecentRequests).then((requests) => {
+      // Recent Requests List
       const list = $('#recent-requests-list');
-      if (!list) return;
-      list.innerHTML = '';
-      if (!requests || requests.length === 0) {
-        list.appendChild(el('p', { class: 'loading-hint', text: 'No recent requests.' }));
-        return;
+      if (list) {
+        list.innerHTML = '';
+        if (recentRequests.length === 0) {
+          list.appendChild(el('p', { class: 'loading-hint', text: 'No recent requests.' }));
+        } else {
+          recentRequests.forEach((r) => {
+            const row = el('div', { class: 'request-row' }, [
+              el('span', { class: 'blood', text: formatBloodType(r.bloodType) }),
+              el('span', { text: `${r.unitsRequired ?? '—'} Units • ${formatUrgency(r.urgency)}` }),
+              el('span', { text: r.location || '—' }),
+              el('span', { text: formatDate(r.createdAt) }),
+              badgeFor(r.status)
+            ]);
+            list.appendChild(row);
+          });
+        }
       }
-      requests.forEach((r) => {
-        const row = el('div', { class: 'request-row' }, [
-          el('span', { class: 'blood', text: r.bloodType || '—' }),
-          el(
-            'span',
-            { text: `${r.units ?? '—'} Units • ${r.urgency || '—'}` }
-          ),
-          el('span', { text: r.hospital || '—' }),
-          el('span', { text: formatDate(r.createdAt) }),
-          badgeFor(r.status),
-        ]);
-        list.appendChild(row);
-      });
-    });
 
-    // Urgent requests
-    safeLoad(api.getUrgentRequests).then((requests) => {
+      // Urgent Requests Table
+      const urgentRequests = recentRequests.filter(
+        (r) => r.urgency === 'URGENT' || r.urgency === 'CRITICAL_EMERGENCY'
+      );
       const tbody = $('#urgent-requests-body');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      if (!requests || requests.length === 0) {
-        tbody.appendChild(emptyRow(7, 'No urgent requests right now.'));
-        return;
+      if (tbody) {
+        tbody.innerHTML = '';
+        if (urgentRequests.length === 0) {
+          tbody.appendChild(emptyRow(7, 'No urgent requests right now.'));
+        } else {
+          urgentRequests.forEach((r) => {
+            const tr = el('tr');
+            tr.appendChild(el('td', { text: formatBloodType(r.bloodType) }));
+            tr.appendChild(el('td', { text: `${r.unitsRequired || '—'} Units` }));
+            tr.appendChild(el('td', { text: formatUrgency(r.urgency) }));
+            tr.appendChild(el('td', { text: cachedProfile?.hospitalName || 'My Hospital' }));
+            tr.appendChild(el('td', { text: r.location || '—' }));
+            tr.appendChild(el('td', { text: formatDate(r.createdAt) }));
+            
+            const actTd = el('td');
+            if (['PENDING', 'APPROVED'].includes(r.status)) {
+              const cancelBtn = el('button', { class: 'btn-danger btn-sm', text: 'Cancel' });
+              cancelBtn.addEventListener('click', () => handleCancelRequest(r.id));
+              actTd.appendChild(cancelBtn);
+            } else {
+              actTd.appendChild(el('span', { text: '—' }));
+            }
+            tr.appendChild(actTd);
+
+            tbody.appendChild(tr);
+          });
+        }
       }
-      requests.forEach((r) => {
-        const tr = el('tr', {}, [
-          el('td', { text: r.bloodType || '—' }),
-          el('td', { text: `${r.units || '—'} Units` }),
-          el('td').appendChild(urgencyFor(r.urgency)),
-          el('td', { text: r.hospital || '—' }),
-          el('td', { text: r.location || '—' }),
-          el('td', { text: formatDate(r.postedOn) }),
-          el('td').appendChild(
-            el('button', { class: 'view-btn', text: 'View' })
-          ),
-        ]);
-        // Wire up the View button (TODO: open a detail modal)
-        const viewBtn = tr.querySelector('.view-btn');
-        viewBtn.addEventListener('click', () => {
-          // TODO: Open a request detail view/modal for this request id.
-          console.log('View request:', r);
-          alert(`Viewing request details for ${r.bloodType || 'request'}. TODO: open detail view.`);
-        });
-        tbody.appendChild(tr);
-      });
     });
   }
 
   // ------------------------------------------------------------------
-  // MY REQUESTS
+  // MY REQUESTS PAGE
   // ------------------------------------------------------------------
-  function loadMyRequests(status) {
+  let cachedMyRequests = [];
+  let currentMyRequestsTab = '';
+
+  function renderMyRequestsTable() {
     const tbody = $('#my-requests-body');
     if (!tbody) return;
-    tbody.innerHTML = '';
-    tbody.appendChild(loadingRow(7, 'Loading requests...'));
 
-    safeLoad(() => api.getMyRequests(status)).then((requests) => {
-      tbody.innerHTML = '';
-      if (!requests || requests.length === 0) {
-        tbody.appendChild(emptyRow(7, 'No requests found.'));
-        return;
-      }
-      requests.forEach((r) => {
-        const tr = el('tr', {}, [
-          el('td', { text: r.bloodType || '—' }),
-          el('td', { text: `${r.units || '—'} Units` }),
-          el('td', { text: r.urgency || '—' }),
-          el('td', { text: r.hospital || '—' }),
-          el('td', { text: r.location || '—' }),
-          el('td').appendChild(badgeFor(r.status)),
-          el('td', { text: formatDate(r.postedOn) }),
-        ]);
-        tbody.appendChild(tr);
+    const query = ($('#my-requests-search')?.value || '').trim().toLowerCase();
+
+    let filtered = cachedMyRequests;
+
+    if (currentMyRequestsTab === 'active') {
+      filtered = filtered.filter(r => r.status === 'PENDING');
+    } else if (currentMyRequestsTab === 'inProgress') {
+      filtered = filtered.filter(r => r.status === 'APPROVED' || r.status === 'PROCESSING');
+    } else if (currentMyRequestsTab === 'completed') {
+      filtered = filtered.filter(r => r.status === 'FULFILLED');
+    } else if (currentMyRequestsTab === 'cancelled') {
+      filtered = filtered.filter(r => r.status === 'CANCELLED');
+    }
+
+    if (query) {
+      filtered = filtered.filter(r => {
+        const bloodUI = formatBloodType(r.bloodType).toLowerCase();
+        const bloodDB = String(r.bloodType || '').toLowerCase();
+        const urgencyUI = formatUrgency(r.urgency).toLowerCase();
+        const urgencyDB = String(r.urgency || '').toLowerCase();
+        const location = String(r.location || '').toLowerCase();
+        const description = String(r.description || '').toLowerCase();
+        const patientInfo = String(r.patientInfo || '').toLowerCase();
+
+        return bloodUI.includes(query) ||
+               bloodDB.includes(query) ||
+               urgencyUI.includes(query) ||
+               urgencyDB.includes(query) ||
+               location.includes(query) ||
+               description.includes(query) ||
+               patientInfo.includes(query);
       });
+    }
+
+    tbody.innerHTML = '';
+    if (filtered.length === 0) {
+      tbody.appendChild(emptyRow(7, 'No matching requests found.'));
+      return;
+    }
+
+    filtered.forEach((r) => {
+      const actTd = el('td');
+      if (['PENDING', 'APPROVED'].includes(r.status)) {
+        const cancelBtn = el('button', { class: 'btn-danger btn-sm', text: 'Cancel' });
+        cancelBtn.addEventListener('click', () => handleCancelRequest(r.id));
+        actTd.appendChild(cancelBtn);
+      } else {
+        actTd.appendChild(el('span', { text: '—' }));
+      }
+
+      const tr = el('tr', {}, [
+        el('td', { text: formatBloodType(r.bloodType) }),
+        el('td', { text: `${r.unitsRequired || '—'} Units` }),
+        el('td', { text: formatUrgency(r.urgency) }),
+        el('td', { text: r.location || '—' }),
+        el('td').appendChild(badgeFor(r.status)),
+        el('td', { text: formatDate(r.createdAt) }),
+        actTd
+      ]);
+
+      tbody.appendChild(tr);
     });
   }
 
-  // My Requests tabs
-  $('#my-requests-tabs').addEventListener('click', (e) => {
+  function loadMyRequests(filter) {
+    currentMyRequestsTab = filter;
+    const tbody = $('#my-requests-body');
+    if (!tbody) return;
+
+    if (cachedMyRequests.length === 0) {
+      tbody.innerHTML = '';
+      tbody.appendChild(loadingRow(7, 'Loading requests...'));
+    }
+
+    safeLoad(() => fetchMyRequests('')).then((requests) => {
+      cachedMyRequests = requests || [];
+      renderMyRequestsTable();
+    });
+  }
+
+  $('#my-requests-search')?.addEventListener('input', renderMyRequestsTable);
+
+  function handleCancelRequest(requestId) {
+    if (!confirm('Are you sure you want to cancel this blood request?')) return;
+    safeLoad(() => cancelRequestApi(requestId)).then(() => {
+      showToast('Blood request cancelled successfully.', 'success');
+      cachedMyRequests = [];
+      loadMyRequests(currentMyRequestsTab);
+      loadDashboard();
+    });
+  }
+
+  // Wire filter tabs for My Requests
+  $('#my-requests-tabs')?.addEventListener('click', (e) => {
     const tab = e.target.closest('.tab');
     if (!tab) return;
     $$('#my-requests-tabs .tab').forEach((t) => t.classList.remove('active'));
@@ -378,51 +545,136 @@
   });
 
   // ------------------------------------------------------------------
-  // RESPONSES
+  // RESPONSES & DONATIONS PAGE
   // ------------------------------------------------------------------
-  function loadResponses(status) {
+  let cachedResponses = [];
+  let currentResponsesTab = '';
+
+  function renderResponsesTable() {
     const tbody = $('#responses-body');
     if (!tbody) return;
-    tbody.innerHTML = '';
-    tbody.appendChild(loadingRow(6, 'Loading responses...'));
 
-    safeLoad(() => api.getResponses(status)).then((responses) => {
+    const query = ($('#responses-search')?.value || '').trim().toLowerCase();
+
+    let filtered = cachedResponses;
+
+    if (currentResponsesTab === 'new') filtered = cachedResponses.filter(r => r.status === 'ACCEPTED');
+    else if (currentResponsesTab === 'declined') filtered = cachedResponses.filter(r => r.status === 'DECLINED');
+    else if (currentResponsesTab === 'confirmed') filtered = cachedResponses.filter(r => r.status === 'CONFIRMED');
+
+    if (query) {
+      filtered = filtered.filter(r => {
+        const donorName = String(r.donorName || '').toLowerCase();
+        const donorEmail = String(r.donorEmail || '').toLowerCase();
+        const donorPhone = String(r.donorPhone || '').toLowerCase();
+        const status = String(r.status || '').toLowerCase();
+        const bloodType = String(r.bloodType || '').toLowerCase();
+
+        return donorName.includes(query) ||
+               donorEmail.includes(query) ||
+               donorPhone.includes(query) ||
+               status.includes(query) ||
+               bloodType.includes(query);
+      });
+    }
+
+    tbody.innerHTML = '';
+    if (filtered.length === 0) {
+      tbody.appendChild(emptyRow(5, 'No matching responses recorded.'));
+      return;
+    }
+
+    filtered.forEach((r) => {
+      const donorCell = el('div', {}, [
+        el('strong', { text: r.donorName }),
+        el('div', { text: `📞 ${r.donorPhone}`, style: 'font-size: 12px; color: #4b5563;' }),
+        el('div', { text: `✉ ${r.donorEmail}`, style: 'font-size: 11px; color: #6b7280;' })
+      ]);
+
+      const tr = el('tr', {}, [
+        el('td').appendChild(donorCell),
+        el('td', { text: r.bloodType }),
+        el('td', { text: r.request }),
+        el('td', { text: formatDate(r.respondedOn) }),
+        el('td').appendChild(badgeFor(r.status))
+      ]);
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  function loadResponses(filterTab) {
+    currentResponsesTab = filterTab;
+    const tbody = $('#responses-body');
+    if (!tbody) return;
+
+    if (cachedResponses.length === 0) {
       tbody.innerHTML = '';
-      if (!responses || responses.length === 0) {
-        tbody.appendChild(emptyRow(6, 'No responses found.'));
+      tbody.appendChild(loadingRow(5, 'Loading responses...'));
+    }
+
+    safeLoad(() => fetchMyRequests('')).then((requests) => {
+      const allResponses = [];
+      (requests || []).forEach((reqItem) => {
+        if (reqItem.donorResponses && Array.isArray(reqItem.donorResponses)) {
+          reqItem.donorResponses.forEach((resp) => {
+            allResponses.push({
+              donorName: resp.donor?.user?.name || 'Anonymous Donor',
+              donorPhone: resp.donor?.user?.phone || 'N/A',
+              donorEmail: resp.donor?.user?.email || 'N/A',
+              bloodType: formatBloodType(reqItem.bloodType),
+              request: `${reqItem.unitsRequired} units (${formatUrgency(reqItem.urgency)})`,
+              respondedOn: resp.respondedAt || resp.createdAt,
+              status: resp.response || 'ACCEPTED',
+            });
+          });
+        }
+      });
+      cachedResponses = allResponses;
+      renderResponsesTable();
+    });
+
+    loadCompletedDonations();
+  }
+
+  $('#responses-search')?.addEventListener('input', renderResponsesTable);
+
+  function loadCompletedDonations() {
+    const tbody = $('#donations-body');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    tbody.appendChild(loadingRow(6, 'Loading completed donations...'));
+
+    safeLoad(fetchDonationsApi).then((donations) => {
+      tbody.innerHTML = '';
+      if (!donations || donations.length === 0) {
+        tbody.appendChild(emptyRow(6, 'No completed donations recorded yet.'));
         return;
       }
-      responses.forEach((r) => {
-        const actions = el('td');
-        const callBtn = el('button', { class: 'view-btn', text: '☎' });
-        const msgBtn = el('button', { class: 'view-btn', text: '💬', style: 'margin-left:6px' });
-        // TODO: wire these to real contact actions (call / message donor)
-        callBtn.addEventListener('click', () => {
-          console.log('Call donor:', r);
-          alert(`Calling ${r.donorName || 'donor'}... TODO: connect calling.`);
-        });
-        msgBtn.addEventListener('click', () => {
-          console.log('Message donor:', r);
-          alert(`Messaging ${r.donorName || 'donor'}... TODO: connect messaging.`);
-        });
-        actions.appendChild(callBtn);
-        actions.appendChild(msgBtn);
+
+      donations.forEach((d) => {
+        const donorCell = el('div', {}, [
+          el('strong', { text: d.donor?.user?.name || 'Donor' }),
+          el('div', { text: `📞 ${d.donor?.user?.phone || 'N/A'}`, style: 'font-size: 12px; color: #4b5563;' }),
+          el('div', { text: `✉ ${d.donor?.user?.email || 'N/A'}`, style: 'font-size: 11px; color: #6b7280;' })
+        ]);
 
         const tr = el('tr', {}, [
-          el('td', { text: r.donorName || '—' }),
-          el('td', { text: r.bloodType || '—' }),
-          el('td', { text: r.request || '—' }),
-          el('td', { text: formatDate(r.respondedOn) }),
-          el('td').appendChild(badgeFor(r.status)),
-          actions,
+          el('td').appendChild(donorCell),
+          el('td', { text: formatBloodType(d.bloodType) }),
+          el('td', { text: `${d.units || 1} Units` }),
+          el('td', { text: formatDate(d.donationDate || d.createdAt) }),
+          el('td', { text: d.bloodBank?.user?.name || 'Blood Bank' }),
+          el('td').appendChild(badgeFor(d.status || 'COMPLETED'))
         ]);
+
         tbody.appendChild(tr);
       });
     });
   }
 
-  // Responses tabs
-  $('#responses-tabs').addEventListener('click', (e) => {
+  $('#responses-tabs')?.addEventListener('click', (e) => {
     const tab = e.target.closest('.tab');
     if (!tab) return;
     $$('#responses-tabs .tab').forEach((t) => t.classList.remove('active'));
@@ -431,23 +683,25 @@
   });
 
   // ------------------------------------------------------------------
-  // PROFILE
+  // PROFILE PAGE
   // ------------------------------------------------------------------
   function loadProfile() {
-    safeLoad(api.getHospitalProfile).then((profile) => {
+    safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
-      $('#profile-name').textContent = profile.name || '—';
-      $('#profile-type').textContent = profile.type || '—';
+      $('#profile-name').textContent = profile.hospitalName || profile.user?.name || '—';
+      $('#profile-type').textContent = profile.hospitalType || 'Hospital';
       $('#profile-license').textContent = profile.licenseNumber || '—';
-      $('#profile-established').textContent = profile.establishedYear || '—';
-      $('#profile-phone').textContent = profile.phone || '—';
-      $('#profile-email').textContent = profile.email || '—';
+      $('#profile-established').textContent = profile.createdAt ? new Date(profile.createdAt).getFullYear() : '—';
+      $('#profile-phone').textContent = profile.phone || profile.user?.phone || '—';
+      $('#profile-emergency').textContent = profile.emergencyContact || '—';
+      $('#profile-email').textContent = profile.user?.email || '—';
       $('#profile-address').textContent = profile.address || '—';
+      $('#profile-city').textContent = profile.city || '—';
+      $('#profile-state-country').textContent = `${profile.state || ''}, ${profile.country || ''}`.trim().replace(/^,|,$/g, '') || '—';
 
-      // Verification status
       const vStatus = $('#verification-status');
       if (vStatus) {
-        const verified = profile.verificationStatus === 'verified';
+        const verified = profile.verificationStatus === 'VERIFIED';
         vStatus.innerHTML = '';
         vStatus.appendChild(
           el('strong', {
@@ -457,51 +711,173 @@
         vStatus.appendChild(
           el('p', {
             text: verified
-              ? 'Your hospital has been verified by the administration.'
-              : 'Your hospital verification is pending. Please wait for the administration to review.',
+              ? 'Your hospital profile has been verified by the LifeLink administration.'
+              : 'Your hospital verification is pending. Admin review required.',
           })
         );
         vStatus.appendChild(
           el('small', {
-            text: profile.verifiedOn ? `Verified on: ${formatDate(profile.verifiedOn)}` : '—',
+            text: profile.verifiedAt ? `Verified on: ${formatDate(profile.verifiedAt)}` : 'Status: ' + (profile.verificationStatus || 'PENDING'),
           })
         );
       }
     });
 
-    // Stats on profile page
-    safeLoad(api.getDashboardStats).then((stats) => {
-      if (!stats) return;
+    safeLoad(fetchDashboardStats).then((data) => {
+      if (!data) return;
+      const stats = data.stats || {};
       $('#profile-stat-total-requests').textContent = stats.totalRequests ?? '—';
-      $('#profile-stat-total-responses').textContent = stats.totalResponses ?? '—';
-      $('#profile-stat-completed-donations').textContent =
-        stats.completedDonations ?? '—';
+      $('#profile-stat-total-responses').textContent = stats.approvedRequests ?? '—';
+      $('#profile-stat-completed-donations').textContent = stats.totalDonations ?? '—';
+
+      // Fulfillment Rate calculated from stats
+      const total = stats.totalRequests || 0;
+      const fulfilled = stats.fulfilledRequests || 0;
+      if (total > 0) {
+        const rate = Math.round((fulfilled / total) * 100);
+        $('#profile-stat-fulfillment-rate').textContent = `${rate}% (${fulfilled}/${total})`;
+      } else {
+        $('#profile-stat-fulfillment-rate').textContent = '0% (0/0)';
+      }
+    });
+
+    // Average Response Time calculated from hospital request history
+    safeLoad(() => fetchMyRequests('')).then((requests) => {
+      if (!requests || requests.length === 0) {
+        $('#profile-stat-avg-response').textContent = 'N/A';
+        return;
+      }
+
+      let totalDiffSec = 0;
+      let approvedCount = 0;
+
+      requests.forEach((r) => {
+        let approvedTime = r.approvedAt;
+        if (!approvedTime && Array.isArray(r.statusHistory)) {
+          const appEntry = r.statusHistory.find((s) => s.status === 'APPROVED');
+          if (appEntry && appEntry.timestamp) approvedTime = appEntry.timestamp;
+        }
+
+        if (approvedTime && r.createdAt) {
+          const tCreated = new Date(r.createdAt).getTime();
+          const tApproved = new Date(approvedTime).getTime();
+          if (!isNaN(tCreated) && !isNaN(tApproved) && tApproved >= tCreated) {
+            totalDiffSec += (tApproved - tCreated) / 1000;
+            approvedCount++;
+          }
+        }
+      });
+
+      if (approvedCount > 0) {
+        const avgSec = totalDiffSec / approvedCount;
+        if (avgSec < 60) {
+          $('#profile-stat-avg-response').textContent = `${Math.round(avgSec)} secs`;
+        } else if (avgSec < 3600) {
+          $('#profile-stat-avg-response').textContent = `${Math.round(avgSec / 60)} mins`;
+        } else {
+          $('#profile-stat-avg-response').textContent = `${(avgSec / 3600).toFixed(1)} hrs`;
+        }
+      } else {
+        $('#profile-stat-avg-response').textContent = 'N/A';
+      }
+    });
+
+    // Also attempt backend stats endpoint if available
+    fetchHospitalStatsApi().then((statsData) => {
+      if (!statsData) return;
+      const fulfillment = statsData.fulfillmentRate;
+      if (fulfillment && fulfillment.total > 0) {
+        const rate = Math.round((fulfillment.fulfilled / fulfillment.total) * 100);
+        $('#profile-stat-fulfillment-rate').textContent = `${rate}% (${fulfillment.fulfilled}/${fulfillment.total})`;
+      }
+
+      const avgSec = statsData.avgResponseTime;
+      if (avgSec && avgSec > 0) {
+        if (avgSec < 60) {
+          $('#profile-stat-avg-response').textContent = `${Math.round(avgSec)} secs`;
+        } else if (avgSec < 3600) {
+          $('#profile-stat-avg-response').textContent = `${Math.round(avgSec / 60)} mins`;
+        } else {
+          $('#profile-stat-avg-response').textContent = `${(avgSec / 3600).toFixed(1)} hrs`;
+        }
+      }
+    }).catch(() => {
+      // Suppress error if raw query stats API endpoint fails on backend
     });
   }
 
-  // Edit Profile button (TODO: build an edit form/modal)
-  $('#edit-profile-btn').addEventListener('click', () => {
-    console.log('Edit Profile clicked');
-    // TODO: Open an edit profile modal/form populated with the current
-    // profile data, then call api.updateProfile(data) on submit.
-    alert('Edit Profile: TODO - build the edit form/modal and call api.updateProfile().');
+  // ------------------------------------------------------------------
+  // EDIT PROFILE MODAL
+  // ------------------------------------------------------------------
+  const profileModal = $('#edit-profile-modal');
+  
+  function openEditProfileModal() {
+    if (!profileModal) return;
+    if (cachedProfile) {
+      $('#edit-hospital-name').value = cachedProfile.hospitalName || '';
+      $('#edit-phone').value = cachedProfile.phone || '';
+      $('#edit-emergency-contact').value = cachedProfile.emergencyContact || '';
+      $('#edit-address').value = cachedProfile.address || '';
+      $('#edit-city').value = cachedProfile.city || '';
+    }
+    profileModal.style.display = 'flex';
+  }
+
+  function closeEditProfileModal() {
+    if (profileModal) profileModal.style.display = 'none';
+  }
+
+  $('#edit-profile-btn')?.addEventListener('click', openEditProfileModal);
+  $('#close-profile-modal')?.addEventListener('click', closeEditProfileModal);
+  $('#cancel-profile-modal')?.addEventListener('click', closeEditProfileModal);
+
+  $('#edit-profile-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = {
+      hospitalName: $('#edit-hospital-name').value,
+      phone: $('#edit-phone').value,
+      emergencyContact: $('#edit-emergency-contact').value,
+      address: $('#edit-address').value,
+      city: $('#edit-city').value,
+    };
+
+    safeLoad(() => updateProfileApi(data)).then(() => {
+      showToast('Profile updated successfully!', 'success');
+      closeEditProfileModal();
+      loadProfile();
+      loadDashboard();
+    });
   });
 
   // ------------------------------------------------------------------
-  // SETTINGS
+  // SETTINGS PAGE
   // ------------------------------------------------------------------
   function loadSettings() {
-    safeLoad(api.getHospitalProfile).then((profile) => {
+    safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
-      $('#settings-name').textContent = profile.name || '—';
-      $('#settings-email').textContent = profile.email || '—';
+      $('#settings-name').textContent = profile.hospitalName || '—';
+      $('#settings-email').textContent = profile.user?.email || '—';
       $('#settings-phone').textContent = profile.phone || '—';
-      $('#settings-contact').textContent = profile.contactPerson || '—';
+      $('#settings-contact').textContent = profile.emergencyContact || profile.user?.name || '—';
     });
+
+    // Load saved notification preferences from localStorage
+    const savedPrefs = localStorage.getItem('hospital_notification_prefs');
+    if (savedPrefs) {
+      try {
+        const prefs = JSON.parse(savedPrefs);
+        $$('#settings-notifications .switch input').forEach((input) => {
+          if (prefs[input.dataset.pref] !== undefined) {
+            input.checked = prefs[input.dataset.pref];
+          }
+        });
+      } catch (err) {
+        console.error('Error parsing notification prefs:', err);
+      }
+    }
   }
 
-  // Settings tabs
-  $('#settings-tabs').addEventListener('click', (e) => {
+  $('#settings-tabs')?.addEventListener('click', (e) => {
     const tab = e.target.closest('.tab');
     if (!tab) return;
     $$('#settings-tabs .tab').forEach((t) => t.classList.remove('active'));
@@ -520,101 +896,77 @@
     });
   });
 
-  // Update Information button
-  $('#update-info-btn').addEventListener('click', () => {
-    console.log('Update Information clicked');
-    // TODO: Open the settings account edit form, then call
-    // api.updateSettings({ account: {...} }) on save.
-    alert('Update Information: TODO - build the edit form and call api.updateSettings().');
-  });
+  $('#update-info-btn')?.addEventListener('click', openEditProfileModal);
 
-  // Save notification preferences
-  $('#save-prefs-btn').addEventListener('click', () => {
+  $('#save-prefs-btn')?.addEventListener('click', () => {
     const prefs = {};
     $$('#settings-notifications .switch input').forEach((input) => {
       prefs[input.dataset.pref] = input.checked;
     });
-    console.log('Saving notification preferences:', prefs);
-    // TODO: call api.updateSettings({ notifications: prefs }) and show a toast.
-    safeLoad(() => api.updateSettings({ notifications: prefs })).then(() => {
-      // TODO: show a success toast/notification.
-      console.log('Preferences saved (placeholder).');
-    });
+    localStorage.setItem('hospital_notification_prefs', JSON.stringify(prefs));
+    showToast('Notification preferences saved.', 'success');
   });
 
-  // Password change form
-  $('#password-form').addEventListener('submit', (e) => {
+  $('#password-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const currentPassword = $('#current-password').value;
     const newPassword = $('#new-password').value;
     const confirmPassword = $('#confirm-password').value;
 
     if (newPassword !== confirmPassword) {
-      alert('Passwords do not match.');
+      showToast('New passwords do not match.', 'error');
       return;
     }
 
-    // TODO: call api.updateSettings({ password: { currentPassword, newPassword } })
-    console.log('Password change requested (placeholder).');
-    safeLoad(() =>
-      api.updateSettings({ password: { currentPassword, newPassword } })
-    ).then(() => {
-      // TODO: show a success toast/notification.
-      $('#password-form').reset();
-      console.log('Password updated (placeholder).');
-    });
+    showToast('Password change API is not supported in current backend version.', 'info');
+    $('#password-form').reset();
   });
 
   // ------------------------------------------------------------------
   // CREATE REQUEST FORM
   // ------------------------------------------------------------------
-  $('#blood-request-form').addEventListener('submit', (e) => {
+  $('#blood-request-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const data = {
-      bloodType: $('#blood-type').value,
-      units: Number($('#units').value),
-      urgency: $('#urgency').value,
-      location: $('#location').value,
-      description: $('#description').value,
-    };
+    const rawBlood = $('#blood-type').value;
+    const rawUrgency = $('#urgency').value;
+    const units = parseInt($('#units').value, 10);
+    const location = $('#location').value;
+    const description = $('#description').value;
 
-    // Basic validation
-    if (!data.bloodType || !data.units || !data.urgency || !data.location) {
-      alert('Please fill in all required fields.');
+    if (!rawBlood || !rawUrgency || isNaN(units) || units < 1 || !location) {
+      showToast('Please fill in all required fields accurately.', 'error');
       return;
     }
 
-    console.log('Creating blood request:', data);
-    // TODO: call api.createRequest(data), then on success navigate to
-    // My Requests and show a toast.
-    safeLoad(() => api.createRequest(data)).then(() => {
-      // TODO: show a success toast/notification.
+    const payload = {
+      bloodType: UI_TO_DB_BLOOD[rawBlood] || rawBlood,
+      unitsRequired: units,
+      urgency: UI_TO_DB_URGENCY[rawUrgency] || rawUrgency,
+      location: location,
+      description: description || undefined,
+      contactInformation: cachedProfile?.phone || undefined,
+    };
+
+    safeLoad(() => createBloodRequestApi(payload)).then(() => {
+      showToast('Blood request created successfully!', 'success');
       $('#blood-request-form').reset();
       showPage('my-requests');
-      console.log('Request created (placeholder).');
     });
   });
 
   // ------------------------------------------------------------------
   // LOGOUT
   // ------------------------------------------------------------------
-  $('#logout-btn').addEventListener('click', () => {
-    console.log('Logout clicked');
-    // TODO: call api.logout() then redirect to login.
-    safeLoad(api.logout);
+  $('#logout-btn')?.addEventListener('click', () => {
+    api.logout();
   });
 
   // ------------------------------------------------------------------
   // INIT
   // ------------------------------------------------------------------
-  document.addEventListener('DOMContentLoaded', () => {
-    // Load the initial (dashboard) page data.
-    loadPageData('dashboard');
-  });
-
-  // If the script is loaded after DOM is ready, init immediately.
-  if (document.readyState !== 'loading') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => loadPageData('dashboard'));
+  } else {
     loadPageData('dashboard');
   }
 })();

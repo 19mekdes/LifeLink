@@ -71,18 +71,17 @@ app.get('/api/health', (req, res) => {
 
 // Import routes
 import authRoutes from './routes/authRoutes.js';
-import hospitalRoutes from './routes/hospitalRoutes.js';
-import donorRoutes from './routes/donorRoutes.js';  // ✅ ADD THIS LINE
+import hospitalRoutes from './user/hospital/hospitalRoutes.js';
+import donorRoutes from './user/donor/donorRoutes.js';
+import bloodBankRoutes from './user/bloodbank/bloodBankRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 // Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hospitals', hospitalRoutes);
-app.use('/api/donors', donorRoutes);  // ✅ ADD THIS LINE
-
-// Other routes (to be added later)
-// app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));
-// app.use('/api/blood-requests', require('./routes/bloodRequestRoutes'));
-// app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/donors', donorRoutes);
+app.use('/api/blood-banks', bloodBankRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ============ STATIC FRONTEND ============
 app.use(express.static(path.join(FRONTEND_DIR, 'public')));

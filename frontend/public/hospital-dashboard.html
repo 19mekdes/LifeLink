@@ -14,7 +14,7 @@
   <div class="app">
 
     <!-- ================= SIDEBAR ================= -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
 
 <div class="logo">
         <span class="logo-icon" aria-hidden="true">
@@ -69,6 +69,9 @@
 
     </aside>
 
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 
     <!-- ================= MAIN AREA ================= -->
     <main class="main">
@@ -76,9 +79,15 @@
       <!-- TOP BAR -->
       <header class="topbar">
 
-        <div></div>
+        <div class="topbar-left">
+          <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
 
-        <div class="hospital-account">
+        <div class="hospital-account" id="topbar-hospital-account" title="View Profile">
 
           <div class="hospital-avatar" id="hospital-avatar">H</div>
 
@@ -357,6 +366,13 @@
 
           <div class="card table-card">
 
+            <div class="table-toolbar">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="my-requests-search" placeholder="Search requests by blood type, urgency, or location..." />
+              </div>
+            </div>
+
             <div class="tabs" id="my-requests-tabs">
 
               <button class="tab active" data-filter="">All</button>
@@ -376,10 +392,10 @@
                     <th>Blood Type</th>
                     <th>Units</th>
                     <th>Urgency</th>
-                    <th>Hospital</th>
                     <th>Location</th>
                     <th>Status</th>
                     <th>Posted On</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
 
@@ -410,6 +426,13 @@
 
           <div class="card table-card">
 
+            <div class="table-toolbar">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="responses-search" placeholder="Search responses by donor name, status, or blood type..." />
+              </div>
+            </div>
+
             <div class="tabs" id="responses-tabs">
 
               <button class="tab active" data-filter="">All</button>
@@ -431,14 +454,13 @@
                     <th>Request</th>
                     <th>Responded On</th>
                     <th>Status</th>
-                    <th>Actions</th>
                   </tr>
                 </thead>
 
                 <!-- Rows rendered by JS from hospitalApi.getResponses() -->
                 <tbody id="responses-body">
                   <tr>
-                    <td colspan="6" class="loading-hint">Loading responses...</td>
+                    <td colspan="5" class="loading-hint">Loading responses...</td>
                   </tr>
                 </tbody>
 
@@ -446,6 +468,32 @@
 
             </div>
 
+          </div>
+
+          <!-- COMPLETED DONATIONS HISTORY CARD -->
+          <div class="card table-card" style="margin-top: 25px;">
+            <div class="card-header">
+              <h2>Completed Donations History</h2>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Blood Type</th>
+                    <th>Units</th>
+                    <th>Donation Date</th>
+                    <th>Blood Bank</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="donations-body">
+                  <tr>
+                    <td colspan="6" class="loading-hint">Loading completed donations...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>
@@ -496,6 +544,11 @@
                 </div>
 
                 <div>
+                  <span>Emergency Contact Phone</span>
+                  <strong id="profile-emergency">—</strong>
+                </div>
+
+                <div>
                   <span>Email Address</span>
                   <strong id="profile-email">—</strong>
                 </div>
@@ -503,6 +556,16 @@
                 <div>
                   <span>Address</span>
                   <strong id="profile-address">—</strong>
+                </div>
+
+                <div>
+                  <span>City</span>
+                  <strong id="profile-city">—</strong>
+                </div>
+
+                <div>
+                  <span>State & Country</span>
+                  <strong id="profile-state-country">—</strong>
                 </div>
 
               </div>
@@ -530,7 +593,7 @@
 
                 <h2>Statistics</h2>
 
-                <!-- Populated by JS from hospitalApi.getDashboardStats() -->
+                <!-- Populated by JS from hospitalApi.getDashboardStats() & getStats() -->
                 <div class="profile-stat">
                   <span>Total Requests</span>
                   <strong id="profile-stat-total-requests">—</strong>
@@ -544,6 +607,16 @@
                 <div class="profile-stat">
                   <span>Completed Donations</span>
                   <strong id="profile-stat-completed-donations">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Fulfillment Rate</span>
+                  <strong id="profile-stat-fulfillment-rate">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Avg Response Time</span>
+                  <strong id="profile-stat-avg-response">—</strong>
                 </div>
 
               </div>
@@ -738,20 +811,54 @@
           </div>
 
         </div>
-        
-        
-            
 
       </section>
-
 
     </main>
 
   </div>
 
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
 
-  <!-- API service layer (placeholder) + dashboard controller -->
-  <script src="js/hospital-dashboard.js"></script>
+  <!-- Edit Profile Modal -->
+  <div class="modal-backdrop" id="edit-profile-modal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Edit Hospital Profile</h2>
+        <button class="close-btn" id="close-profile-modal">&times;</button>
+      </div>
+      <form id="edit-profile-form">
+        <div class="form-group">
+          <label for="edit-hospital-name">Hospital Name</label>
+          <input type="text" id="edit-hospital-name" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-phone">Phone Number</label>
+          <input type="text" id="edit-phone" placeholder="e.g. +251911111111" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-emergency-contact">Emergency Contact Phone</label>
+          <input type="text" id="edit-emergency-contact" placeholder="e.g. +251911111111" />
+        </div>
+        <div class="form-group">
+          <label for="edit-address">Address</label>
+          <input type="text" id="edit-address" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-city">City</label>
+          <input type="text" id="edit-city" required />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="secondary-btn" id="cancel-profile-modal">Cancel</button>
+          <button type="submit" class="primary-btn">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- API service layer + dashboard controller module -->
+  <script type="module" src="js/hospital-dashboard.js"></script>
 
 </body>
 </html>

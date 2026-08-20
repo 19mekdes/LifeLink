@@ -8,6 +8,7 @@ import {
   updateInventory,
   getRequests,
   approveRequest,
+   deleteInventoryItem,
   rejectRequest,
   recordDonation
 } from '../controllers/bloodBankController.js';
@@ -70,7 +71,12 @@ router.put('/requests/:id/approve', [
 router.put('/requests/:id/reject', [
   body('reason').optional().isString().withMessage('Reason must be a string')
 ], rejectRequest);
-
+/**
+ * @route   DELETE /api/blood-banks/inventory/:bloodType
+ * @desc    Delete an inventory item
+ * @access  Private (Blood Bank)
+ */
+router.delete('/inventory/:bloodType', deleteInventoryItem);
 // ============ DONATIONS ============
 /**
  * @route   POST /api/blood-banks/donations

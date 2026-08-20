@@ -266,6 +266,7 @@ a {
     align-items: flex-start;
     gap: 30px;
 }
+
 .large-profile-icon {
     width: 90px;
     height: 90px;
@@ -408,6 +409,7 @@ a {
         width: 100%;
     }
 }
+
 .topbar-actions {
     display: flex;
     align-items: center;
@@ -433,6 +435,7 @@ a {
     font-size: 10px;
     text-align: center;
 }
+
 /* =========================================
    TOP NAVIGATION
 ========================================= */

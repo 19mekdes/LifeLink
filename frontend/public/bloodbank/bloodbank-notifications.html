@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeLink - Notifications</title>
+  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+
+  <base target="_blank">
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="logo-area">
+        <div class="logo-icon">🩸</div>
+        <div class="logo-text">LifeLink</div>
+        <button class="sidebar-close" id="sidebar-close">&times;</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" href="../bloodbank-dashboard.html"><span class="nav-icon">📊</span><span
+                class="nav-label">Dashboard</span></a></li>
+          <li><a class="nav-item" href="bloodbank-inventory.html"><span class="nav-icon">🩸</span><span
+                class="nav-label">Blood Inventory</span></a></li>
+          <li><a class="nav-item" href="bloodbank-requests.html"><span class="nav-icon">🏥</span><span
+                class="nav-label">Hospital Requests</span></a></li>
+          <li><a class="nav-item" href="bloodbank-outreach.html"><span class="nav-icon">👥</span><span
+                class="nav-label">Donor Outreach</span></a></li>
+          <li><a class="nav-item" href="bloodbank-donations.html"><span class="nav-icon">📥</span><span
+                class="nav-label">Donation Records</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Insights</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" href="bloodbank-analytics.html"><span class="nav-icon">📈</span><span
+                class="nav-label">Analytics</span></a></li>
+          <li><a class="nav-item active" href="bloodbank-notifications.html"><span class="nav-icon">🔔</span><span
+                class="nav-label">Notifications</span> <span class="nav-badge" id="notif-badge">0</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" href="bloodbank-profile.html"><span class="nav-icon">🏥</span><span
+                class="nav-label">Bank Profile</span></a></li>
+          <li><a class="nav-item" href="bloodbank-settings.html"><span class="nav-icon">⚙️</span><span
+                class="nav-label">Settings</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <span class="status-dot online" id="sidebar-status-dot"></span>
+        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="top-header">
+      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <div class="header-title">
+        <h1 id="page-title">Notifications</h1>
+        <p>Alerts & system messages.</p>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" id="notif-header-btn" title="Notifications"
+          onclick="window.location.href='bloodbank-notifications.html'">
+          🔔
+          <span class="dot" id="header-notif-dot"></span>
+        </button>
+        <div class="user-profile-wrap" id="user-profile-wrap">
+          <div class="user-profile-badge" id="user-profile-toggle">
+            <div class="user-avatar" id="avatar-initials">--</div>
+            <div class="user-info">
+              <div class="user-name" id="user-name">—</div>
+              <div class="user-role">Blood Bank Manager</div>
+            </div>
+          </div>
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+            <div class="user-dropdown-role">Blood Bank Manager</div>
+            <a class="user-dropdown-item" href="bloodbank-profile.html">🏥 Bank Profile</a>
+            <a class="user-dropdown-item" href="bloodbank-settings.html">⚙️ Settings</a>
+            <a class="user-dropdown-item danger" id="dropdown-logout-btn">🚪 Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <section class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🔔 Alerts & System Messages</h2>
+            <button class="btn btn-secondary btn-sm" id="mark-all-read-btn">Mark All Read</button>
+          </div>
+          <ul class="notification-list" id="notifications-list"></ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============ TOAST CONTAINER ============ -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+  <script type="module">
+    import api from '../../src/js/api/api.js';
+    import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
+
+    const shell = initShell();
+    if (shell) {
+      const { notifications } = await loadCommonData(api, shell.paintProfile);
+      let notifData = notifications;
+
+      function renderNotifications() {
+        document.getElementById('notifications-list').innerHTML = notifData.map((n) => `
+          <li class="notification-item" style="${n.isRead ? '' : 'background: #fffafa; border-left: 3px solid var(--primary);'}">
+            <div class="notification-content">
+              <div class="notification-icon ${(n.type || '').toLowerCase()}">${n.type === 'EMERGENCY' ? '⚠️' : '🔔'}</div>
+              <div>
+                <div class="notification-text">${n.title ? `<strong>${n.title}</strong><br>` : ''}${n.message}</div>
+                <div class="notification-meta">${n.isRead ? 'Read' : 'Unread'} • Blood Bank System</div>
+              </div>
+            </div>
+            <div class="notification-time">${new Date(n.createdAt).toLocaleString()}</div>
+          </li>`).join('') ||
+          '<li class="empty-state"><div class="icon">🔔</div><h4>No notifications</h4></li>';
+      }
+      renderNotifications();
+
+      document.getElementById('mark-all-read-btn')?.addEventListener('click', async () => {
+        try {
+          const res = await api.put('/notifications/read-all', {});
+          if (!res.success) throw new Error(res.message);
+        } catch (err) {
+          console.warn('markAllRead endpoint failed, updating UI only:', err.message);
+        }
+        notifData = notifData.map((n) => ({ ...n, isRead: true }));
+        renderNotifications();
+        const badge = document.getElementById('notif-badge');
+        if (badge) badge.style.display = 'none';
+        const dot = document.getElementById('header-notif-dot');
+        if (dot) dot.style.display = 'none';
+      });
+    }
+  </script>
+</body>
+
+</html>

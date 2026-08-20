@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeLink - Hospital Requests</title>
+  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+
+  <base target="_blank">
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="logo-area">
+        <div class="logo-icon">🩸</div>
+        <div class="logo-text">LifeLink</div>
+        <button class="sidebar-close" id="sidebar-close">&times;</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span
+                class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon">🩸</span><span
+                class="nav-label">Blood Inventory</span></a></li>
+          <li><a class="nav-item active" target="_self" href="bloodbank-requests.html"><span
+                class="nav-icon">🏥</span><span class="nav-label">Hospital Requests</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon">👥</span><span
+                class="nav-label">Donor Outreach</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon">📥</span><span
+                class="nav-label">Donation Records</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Insights</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon">📈</span><span
+                class="nav-label">Analytics</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-notifications.html"><span
+                class="nav-icon">🔔</span><span class="nav-label">Notifications</span> <span class="nav-badge"
+                id="notif-badge">0</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon">🏥</span><span
+                class="nav-label">Bank Profile</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon">⚙️</span><span
+                class="nav-label">Settings</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <span class="status-dot online" id="sidebar-status-dot"></span>
+        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="top-header">
+      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <div class="header-title">
+        <h1 id="page-title">Hospital Requests</h1>
+        <p>Review and respond to dispatch requests.</p>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" id="notif-header-btn" title="Notifications"
+          onclick="window.location.href='bloodbank-notifications.html'">
+          🔔
+          <span class="dot" id="header-notif-dot"></span>
+        </button>
+        <div class="user-profile-wrap" id="user-profile-wrap">
+          <div class="user-profile-badge" id="user-profile-toggle">
+            <div class="user-avatar" id="avatar-initials">--</div>
+            <div class="user-info">
+              <div class="user-name" id="user-name">—</div>
+              <div class="user-role">Blood Bank Manager</div>
+            </div>
+          </div>
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+            <div class="user-dropdown-role">Blood Bank Manager</div>
+            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self">🏥 Bank Profile</a>
+            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self">⚙️ Settings</a>
+            <a class="user-dropdown-item danger" id="dropdown-logout-btn">🚪 Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <section class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🏥 All Hospital Dispatch Requests</h2>
+            <div class="section-actions">
+              <select
+                style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 13px;"
+                id="request-filter">
+                <option value="all">All Requests</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="completed">Fulfilled</option>
+                <option value="emergency">Emergency Only</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Request ID</th>
+                  <th>Hospital</th>
+                  <th>Blood Type</th>
+                  <th>Units</th>
+                  <th>Urgency</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="all-requests-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============ TOAST CONTAINER ============ -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+  <script type="module">
+    import api from '../../src/js/api/api.js';
+    import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
+
+    const shell = initShell();
+    if (shell) {
+      await loadCommonData(api, shell.paintProfile);
+
+      let requestsData = [];
+
+      function renderRequests() {
+        const filter = document.getElementById('request-filter')?.value || 'all';
+        let reqs = requestsData;
+        if (filter === 'pending') reqs = reqs.filter((r) => r.status === 'PENDING');
+        if (filter === 'approved') reqs = reqs.filter((r) => r.status === 'APPROVED');
+        if (filter === 'completed') reqs = reqs.filter((r) => r.status === 'FULFILLED');
+        if (filter === 'emergency') reqs = reqs.filter((r) => r.urgency === 'CRITICAL_EMERGENCY');
+
+        const hospitalName = (req) => req.hospital?.hospitalName || req.hospital?.user?.name || '—';
+        const urgencyBadge = (u) => u === 'CRITICAL_EMERGENCY' ? 'emergency' : u === 'URGENT' ? 'urgent' : 'pending';
+        const statusBadge = (s) => s === 'FULFILLED' ? 'completed' : s === 'APPROVED' || s === 'PROCESSING' ? 'approved' : s === 'REJECTED' ? 'emergency' : 'pending';
+
+        const row = (req) => `<tr>
+            <td><strong>${req.id.slice(0, 8)}</strong></td>
+            <td>${hospitalName(req)}</td>
+            <td><strong>${req.bloodType}</strong></td>
+            <td>${req.unitsRequired} Units</td>
+            <td><span class="badge ${urgencyBadge(req.urgency)}">${req.urgency}</span></td>
+            <td>${new Date(req.createdAt).toLocaleDateString()}</td>
+            <td><span class="badge ${statusBadge(req.status)}">${req.status}</span></td>
+            <td>${req.status === 'PENDING' ? `<button class="btn btn-success btn-sm" data-approve="${req.id}">Approve</button> <button class="btn btn-danger btn-sm" data-reject="${req.id}">Reject</button>` : '<span style="color:var(--text-light); font-size:12px;">—</span>'}</td>
+          </tr>`;
+
+        document.getElementById('all-requests-table').innerHTML = reqs.map(row).join('') ||
+          '<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">No requests found</td></tr>';
+
+        document.querySelectorAll('[data-approve]').forEach((btn) => {
+          btn.addEventListener('click', () => approveRequest(btn.dataset.approve));
+        });
+        document.querySelectorAll('[data-reject]').forEach((btn) => {
+          btn.addEventListener('click', () => rejectRequest(btn.dataset.reject));
+        });
+      }
+
+      async function approveRequest(id) {
+        try {
+          const res = await api.put(`/blood-banks/requests/${id}/approve`, {});
+          if (!res.success) throw new Error(res.message);
+          showToast('Request approved. Dispatch initiated.');
+          await loadRequests();
+        } catch (err) {
+          showToast(err.message || 'Failed to approve request', 'error');
+        }
+      }
+
+      async function rejectRequest(id) {
+        const reason = prompt('Reason for rejection (optional):') || '';
+        try {
+          const res = await api.put(`/blood-banks/requests/${id}/reject`, { reason });
+          if (!res.success) throw new Error(res.message);
+          showToast('Request rejected.');
+          await loadRequests();
+        } catch (err) {
+          showToast(err.message || 'Failed to reject request', 'error');
+        }
+      }
+
+      async function loadRequests() {
+        const res = await api.get('/blood-banks/requests');
+        requestsData = res.success ? (res.data.requests || []) : [];
+        renderRequests();
+      }
+
+      document.getElementById('request-filter')?.addEventListener('change', renderRequests);
+      loadRequests();
+    }
+  </script>
+</body>
+
+</html>

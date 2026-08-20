@@ -14,151 +14,258 @@
 
     <!-- ================= SIDEBAR ================= -->
 
-   <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
 
-    <div class="logo">
-        <span>♥️</span> LifeLink
-    </div>
+        <!-- Hamburger -->
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
-    <nav>
-
-        <a href="index.html">
-             Home
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+            <span>♥</span>
+            <span class="sidebar-text">LifeLink</span>
         </a>
 
-        <a href="donor-dashboard.html">
-             Dashboard
-        </a>
+        <!-- Navigation -->
+        <nav>
 
-        <a href="donor-profile.html">
-             My Profile
-        </a>
+            <a href="donor-dashboard.html" class="active">
+                <span class="sidebar-icon">▦</span>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
 
-        <a href="donor-history.html">
-             Donation History
-        </a>
+            <a href="donor-profile.html">
+                <span class="sidebar-icon">○</span>
+                <span class="sidebar-text">My Profile</span>
+            </a>
+            <a href="donor-requests.html">
+                <span class="sidebar-icon">□</span>
+                <span class="sidebar-text">Blood Requests</span>
+            </a>
 
-        <a href="donor-requests.html">
-             Blood Requests
-        </a>
+            <a href="donor-history.html">
+                <span class="sidebar-icon">◷</span>
+                <span class="sidebar-text">Donation History</span>
+            </a>
 
-        <a href="donor-notifications.html">
-             🔔Notifications
-        </a>
+            <a href="donor-notifications.html">
+                <span class="sidebar-icon">♧</span>
+                <span class="sidebar-text">Notifications</span>
+                <span class="notification-count">3</span>
+            </a>
 
-    </nav>
+        </nav>
 
-    <a href="login.html" class="logout">
-        🚪 Logout
-    </a>
+        <!-- Logout -->
+            <a href="login.html" class="logout" id="logoutButton">
+                <span class="sidebar-icon">←</span>
+                <span class="sidebar-text">Logout</span>
+            </a>
 
-</aside>
+    </aside>
+
 
     <!-- ================= MAIN CONTENT ================= -->
 
     <main class="main-content">
 
-
         <!-- ================= TOP BAR ================= -->
 
-       <header class="topbar">
+        <header class="topbar">
 
-    <div class="topbar-left">
+            <!-- Search -->
+            <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input
+                    type="text"
+                    placeholder="Search something..."
+                    aria-label="Search"
+                >
+            </div>
 
-        <div>
-            <h1>Welcome, Donor 👋</h1>
-<p>Thank you for helping save lives.</p>
-        </div>
+            <!-- Top actions -->
+            <div class="topbar-actions">
 
-    </div>
+                <a href="donor-notifications.html" class="top-action notification-btn">
+                    ♧
+                    <span>3</span>
+                </a>
+
+                <a href="#" class="top-action">
+                    ✉
+                </a>
+
+                <!-- Profile -->
+                <div class="profile-menu">
+
+                    <button class="profile-button" id="profileButton">
+
+                        <span class="profile-avatar" id="profileInitial">KH</span>
+
+                        <span class="profile-info">
+                                <strong id="topbarName">Hi, Kalkidan</strong>
+                                <small>Donor</small>
+                        </span>
+
+                        <span class="profile-arrow">⌄</span>
+
+                    </button>
 
 
-    <div class="profile">
+                    <div class="profile-dropdown" id="profileDropdown">
 
-        <div
-            class="profile-icon"
-            id="profileInitial"
-        >
-            D
-        </div>
+                        <div class="profile-dropdown-header">
 
-        <span id="topbarName">
-            Donor
-        </span>
+                            <div class="profile-avatar large" id="dashboardProfileInitial">
+                                KH
+                            </div>
 
-    </div>
+                            <div>
+                                <strong>Kalkidan Habtamu</strong>
+                                <small>Donor</small>
+                            </div>
 
-</header>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a href="donor-profile.html">
+                            👤 My Profile
+                        </a>
+
+                        <a href="donor-notifications.html">
+                            🔔 Notifications
+                        </a>
+
+                        <a href="#">
+                            ⚙️ Account Settings
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a href="#" id="dropdownLogoutButton" class="logout">
+                            🚪 Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD INTRO ================= -->
+
+        <section class="dashboard-intro">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome back! You can save a life today.</p>
+            </div>
+
+        </section>
+
 
         <!-- ================= STATISTICS ================= -->
 
         <section class="dashboard-cards">
 
+            <!-- Blood Type -->
+            <div class="dashboard-card blood-card">
 
-            <!-- Total Donations -->
+                <div class="card-content">
 
-            <div class="dashboard-card">
+                    <h3>Blood Type</h3>
+
+                    <p id="dashboardBloodType">
+                        Loading...
+                    </p>
+
+                </div>
 
                 <div class="card-icon">
                     🩸
                 </div>
 
-                <div>
+            </div>
 
-                    <h3>
-                        Total Donations
-                    </h3>
+
+            <!-- Donations -->
+            <div class="dashboard-card">
+
+                <div class="card-content">
+
+                    <h3>Donations</h3>
 
                     <p id="totalDonations">
                         0
                     </p>
 
+                    <small>Total Donations</small>
+
+                    <!-- Kept so existing JS can still update it -->
+                    <span id="lastDonation" class="hidden-data">
+                        No donations yet
+                    </span>
+
+                </div>
+
+                <div class="card-icon green">
+                    🏥
                 </div>
 
             </div>
 
 
-            <!-- Blood Requests -->
-
+            <!-- Next Eligible -->
             <div class="dashboard-card">
 
-                <div class="card-icon">
-                    ❤️
-                </div>
+                <div class="card-content">
 
-                <div>
+                    <h3>Next Eligible</h3>
 
-                    <h3>
-                        Blood Requests
-                    </h3>
-
-                    <p id="totalRequests">
-                        0
+                    <p id="nextEligible">
+                        Not available
                     </p>
 
+                    <small>Eligible Date</small>
+
                 </div>
 
-            </div>
-
-
-            <!-- Last Donation -->
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">
+                <div class="card-icon orange">
                     📅
                 </div>
 
-                <div>
+            </div>
 
-                    <h3>
-                        Last Donation
-                    </h3>
 
-                    <p id="lastDonation">
-                        No donations yet
+            <!-- Lives Impacted -->
+            <div class="dashboard-card">
+
+                <div class="card-content">
+
+                    <h3>Lives Impacted</h3>
+
+                    <p id="livesImpacted">
+                        0
                     </p>
 
+                    <small>People Saved</small>
+
+                </div>
+
+                <div class="card-icon red">
+                    ❤️
                 </div>
 
             </div>
@@ -166,79 +273,258 @@
         </section>
 
 
+        <!-- ================= MAIN DASHBOARD GRID ================= -->
 
-        <!-- ================= DONOR SUMMARY ================= -->
+        <section class="dashboard-main-grid">
 
-        <section class="dashboard-section">
 
-            <div class="section-header">
+            <!-- ================= AVAILABLE REQUESTS ================= -->
 
-                <div>
+            <div class="dashboard-section requests-section">
 
-                    <h2>
-                        Donor Summary
-                    </h2>
+                <div class="section-header">
 
-                    <p>
-                        Your current donor information.
-                    </p>
+                    <div>
+                        <h2>Available Blood Requests</h2>
+                    </div>
+
+                    <a href="donor-requests.html">
+                        View All
+                    </a>
 
                 </div>
 
-                <a href="donor-profile.html">
-                    View Profile →
-                </a>
 
-            </div>
+                <div class="requests-list">
 
+                    <!-- Request 1 -->
+                    <div class="request-card">
 
-            <div class="profile-content">
+                        <div class="request-icon urgent-icon">
+                            🩸
+                        </div>
 
-                <div class="large-profile-icon"
-                     id="dashboardProfileInitial">
-                    D
-                </div>
+                        <div class="request-info">
 
+                            <div class="request-title">
+                                <strong>O- Blood Needed</strong>
+                                <span>3 Units</span>
+                            </div>
 
-                <div class="profile-details">
+                            <div class="request-location">
+                                <strong>Black Lion Hospital</strong>
+                                <span> | Addis Ababa</span>
+                            </div>
 
+                        </div>
 
-                    <div class="profile-field">
+                        <div class="request-meta">
 
-                        <span>
-                            Blood Type
-                        </span>
+                            <span class="distance">
+                                2.4 km away
+                            </span>
 
-                        <strong id="dashboardBloodType">
-                            Loading...
-                        </strong>
+                            <span class="urgency urgent">
+                                URGENT
+                            </span>
+
+                        </div>
+
+                        <a href="donor-requests.html" class="view-details">
+                            View Details
+                        </a>
 
                     </div>
 
 
-                    <div class="profile-field">
+                    <!-- Request 2 -->
+                    <div class="request-card">
 
-                        <span>
-                            Location
-                        </span>
+                        <div class="request-icon medium-icon">
+                            🩸
+                        </div>
 
-                        <strong id="dashboardLocation">
-                            Loading...
-                        </strong>
+                        <div class="request-info">
+
+                            <div class="request-title">
+                                <strong>A+ Blood Needed</strong>
+                                <span>2 Units</span>
+                            </div>
+
+                            <div class="request-location">
+                                <strong>Tikur Anbessa Hospital</strong>
+                                <span> | Addis Ababa</span>
+                            </div>
+
+                        </div>
+
+                        <div class="request-meta">
+
+                            <span class="distance">
+                                3.7 km away
+                            </span>
+
+                            <span class="urgency medium">
+                                MEDIUM
+                            </span>
+
+                        </div>
+
+                        <a href="donor-requests.html" class="view-details">
+                            View Details
+                        </a>
 
                     </div>
 
 
-                    <div class="profile-field">
+                    <!-- Request 3 -->
+                    <div class="request-card">
 
-                        <span>
-                            Availability
-                        </span>
+                        <div class="request-icon low-icon">
+                            🩸
+                        </div>
 
-                        <strong class="available"
-                                id="dashboardAvailability">
-                            Loading...
-                        </strong>
+                        <div class="request-info">
+
+                            <div class="request-title">
+                                <strong>B+ Blood Needed</strong>
+                                <span>1 Unit</span>
+                            </div>
+
+                            <div class="request-location">
+                                <strong>St. Paul Hospital</strong>
+                                <span> | Addis Ababa</span>
+                            </div>
+
+                        </div>
+
+                        <div class="request-meta">
+
+                            <span class="distance">
+                                5.1 km away
+                            </span>
+
+                            <span class="urgency low">
+                                LOW
+                            </span>
+
+                        </div>
+
+                        <a href="donor-requests.html" class="view-details">
+                            View Details
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= RIGHT COLUMN ================= -->
+
+            <div class="dashboard-right-column">
+
+
+                <!-- ================= DONATION SUMMARY ================= -->
+
+                <div class="dashboard-section donation-summary">
+
+                    <div class="section-header">
+                        <h2>Donation Summary</h2>
+                    </div>
+
+                    <div class="donut-container">
+
+                        <div class="donut-chart">
+
+                            <div class="donut-center">
+                                <strong id="donationTotal">
+                                    0
+                                </strong>
+                                <span>Total</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="donation-years">
+
+                        <div>
+                            <span class="year-dot current"></span>
+                            <strong>2026</strong>
+                            <span id="currentYearDonations">0</span>
+                        </div>
+
+                        <div>
+                            <span class="year-dot previous"></span>
+                            <strong>2025</strong>
+                            <span id="previousYearDonations">0</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= TOP BLOOD TYPES ================= -->
+
+                <div class="dashboard-section blood-types-section">
+
+                    <div class="section-header">
+                        <h2>Top Blood Types Needed</h2>
+                    </div>
+
+
+                    <div class="blood-type-row">
+
+                        <strong>O-</strong>
+
+                        <div class="progress-bar">
+                            <span style="width: 85%;"></span>
+                        </div>
+
+                        <small>12 Requests</small>
+
+                    </div>
+
+
+                    <div class="blood-type-row">
+
+                        <strong>A+</strong>
+
+                        <div class="progress-bar">
+                            <span style="width: 65%;"></span>
+                        </div>
+
+                        <small>8 Requests</small>
+
+                    </div>
+
+
+                    <div class="blood-type-row">
+
+                        <strong>B+</strong>
+
+                        <div class="progress-bar">
+                            <span style="width: 50%;"></span>
+                        </div>
+
+                        <small>6 Requests</small>
+
+                    </div>
+
+
+                    <div class="blood-type-row">
+
+                        <strong>AB-</strong>
+
+                        <div class="progress-bar">
+                            <span style="width: 35%;"></span>
+                        </div>
+
+                        <small>4 Requests</small>
 
                     </div>
 
@@ -249,207 +535,40 @@
         </section>
 
 
+        <!-- ================= EXISTING DATA HOOKS ================= -->
 
-        <!-- ================= DONATION STATUS ================= -->
+        <!--
+            These are kept so existing donor.js functionality
+            does not lose its expected elements.
+        -->
 
-        <section class="dashboard-section">
+        <div class="existing-data-hooks">
 
-            <div class="section-header">
+            <span id="totalRequests">0</span>
 
-                <div>
+            <span id="dashboardLocation">
+                Loading...
+            </span>
 
-                    <h2>
-                        Donation Status
-                    </h2>
+            <span id="dashboardAvailability">
+                Loading...
+            </span>
 
-                    <p>
-                        Your current ability to donate.
-                    </p>
+            <span id="donationStatus">
+                Available to Donate
+            </span>
 
-                </div>
+            <span id="donationStatusMessage">
+                Your donation status will appear here.
+            </span>
 
-            </div>
+            <div id="recentActivity"></div>
 
+            <div id="notificationPreview"></div>
 
-            <div class="status-card">
-
-                <div class="status-icon">
-                    ✓
-                </div>
-
-
-                <div>
-
-                    <h3 id="donationStatus">
-                        Available to Donate
-                    </h3>
-
-                    <p id="donationStatusMessage">
-                        Your donation status will appear here.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= RECENT ACTIVITY ================= -->
-
-        <section class="dashboard-section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <h2>
-                        Recent Activity
-                    </h2>
-
-                    <p>
-                        A quick look at your latest donor activity.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div id="recentActivity">
-
-                <p>
-                    Loading recent activity...
-                </p>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= NOTIFICATION SUMMARY ================= -->
-
-        <section class="dashboard-section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <h2>
-                        Notifications
-                    </h2>
-
-                    <p>
-                        Stay updated about your donor account.
-                    </p>
-
-                </div>
-
-
-                <a href="donor-notifications.html">
-                    View All →
-                </a>
-
-            </div>
-
-
-            <div id="notificationPreview">
-
-                <p>
-                    No new notifications.
-                </p>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= QUICK ACTIONS ================= -->
-
-        <section class="dashboard-section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <h2>
-                        Quick Actions
-                    </h2>
-
-                    <p>
-                        Manage your donor account.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="quick-actions">
-
-
-                <a href="donor-profile.html">
-
-                    <span class="quick-action-icon">
-                        👤
-                    </span>
-
-                    <span>
-                        My Profile
-                    </span>
-
-                </a>
-
-
-                <a href="donor-requests.html">
-
-                    <span class="quick-action-icon">
-                        🩸
-                    </span>
-
-                    <span>
-                        Blood Requests
-                    </span>
-
-                </a>
-
-
-                <a href="donor-history.html">
-
-                    <span class="quick-action-icon">
-                        📋
-                    </span>
-
-                    <span>
-                        Donation History
-                    </span>
-
-                </a>
-
-
-                <a href="donor-notifications.html">
-
-                    <span class="quick-action-icon">
-                        🔔
-                    </span>
-
-                    <span>
-                        Notifications
-                    </span>
-
-                </a>
-
-
-            </div>
-
-        </section>
-
+        </div>
 
     </main>
-
 
 
     <!-- ================= JAVASCRIPT ================= -->
@@ -457,8 +576,6 @@
     <script src="../src/js/api.js"></script>
     <script src="../src/js/donor-common.js"></script>
     <script src="../src/js/donor.js"></script>
-
-    
 
 </body>
 

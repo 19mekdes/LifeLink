@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-
 const EMAIL_HOST = process.env.EMAIL_HOST;
 const EMAIL_PORT = parseInt(process.env.EMAIL_PORT);
 const EMAIL_USER = process.env.EMAIL_USER;
@@ -7,7 +6,6 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-// Create transporter
 const transporter = nodemailer.createTransport({
   host: EMAIL_HOST,
   port: EMAIL_PORT,
@@ -41,10 +39,6 @@ export const sendEmail = async ({ to, subject, html, text }) => {
 };
 
 // ============ EMAIL TEMPLATES ============
-
-/**
- * 1. Welcome Email - Sent on registration
- */
 export const welcomeEmail = (name, email) => {
   return {
     subject: 'Welcome to LifeLink! 🩸',
@@ -95,9 +89,9 @@ export const welcomeEmail = (name, email) => {
  * 2. Emergency Blood Request - Sent to matching donors
  */
 export const emergencyRequestEmail = (donorName, request) => {
-  const urgencyEmoji = request.urgency === 'CRITICAL_EMERGENCY' ? '🚨' : 
-                       request.urgency === 'URGENT' ? '⚠️' : 'ℹ️';
-  
+  const urgencyEmoji = request.urgency === 'CRITICAL_EMERGENCY' ? '🚨' :
+    request.urgency === 'URGENT' ? '⚠️' : 'ℹ️';
+
   return {
     subject: `${urgencyEmoji} Emergency Blood Request: ${request.bloodType} Needed!`,
     html: `
@@ -202,9 +196,7 @@ export const donationConfirmationEmail = (donorName, donation) => {
   };
 };
 
-/**
- * 4. Request Status Update - Sent to hospital
- */
+
 export const requestStatusUpdateEmail = (hospitalName, request) => {
   const statusMessages = {
     'APPROVED': '✅ Your blood request has been APPROVED! We are processing it now.',
@@ -258,12 +250,10 @@ export const requestStatusUpdateEmail = (hospitalName, request) => {
   };
 };
 
-/**
- * 5. Password Reset - Sent when user requests password reset
- */
+
 export const passwordResetEmail = (name, resetToken) => {
   const resetLink = `${FRONTEND_URL}/reset-password.html?token=${resetToken}`;
-  
+
   return {
     subject: '🔐 Password Reset Request',
     html: `

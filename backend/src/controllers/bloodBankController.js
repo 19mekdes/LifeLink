@@ -7,9 +7,6 @@ import { sendEmail, emergencyRequestEmail } from '../services/emailService.js';
 
 const prisma = new PrismaClient();
 
-/**
- * Helper function to convert BigInt to Number
- */
 const convertBigInt = (value) => {
   if (typeof value === 'bigint') {
     return Number(value);
@@ -17,9 +14,6 @@ const convertBigInt = (value) => {
   return value;
 };
 
-/**
- * Helper function to recursively convert BigInt in objects
- */
 const serializeData = (data) => {
   return JSON.parse(
     JSON.stringify(data, (key, value) => {
@@ -30,6 +24,189 @@ const serializeData = (data) => {
     })
   );
 };
+
+// ============ GET BLOOD BANK PROFILE ============
+/**
+ * Get blood bank profile
+ * GET /api/blood-banks/profile
+ */
+export const getProfile = asyncHandler(async (req, res) => {
+  const bloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          createdAt: true
+        }
+      },
+      _count: {
+        select: {
+          inventory: true,
+          bloodRequests: true,
+          donations: true
+        }
+      }
+    }
+  });
+
+  if (!bloodBank) {
+    throw new ApiError(404, 'Blood Bank profile not found');
+  }
+
+  res.json({
+    success: true,
+    data: serializeData(bloodBank)
+  });
+});
+
+// ============ UPDATE BLOOD BANK PROFILE ============
+/**
+ * Update blood bank profile
+ * PUT /api/blood-banks/profile
+ */
+export const updateProfile = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ApiError(400, 'Validation Error', errors.array());
+  }
+
+  const { 
+    bankName, 
+    address, 
+    city, 
+    state, 
+    country, 
+    phone, 
+    emergencyContact 
+  } = req.body;
+
+  // Check if blood bank exists
+  const existingBloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id }
+  });
+
+  if (!existingBloodBank) {
+    throw new ApiError(404, 'Blood Bank profile not found');
+  }
+
+  // Update blood bank
+  const bloodBank = await prisma.bloodBank.update({
+    where: { userId: req.user.id },
+    data: {
+      bankName: bankName || existingBloodBank.bankName,
+      address: address || existingBloodBank.address,
+      city: city || existingBloodBank.city,
+      state: state || existingBloodBank.state,
+      country: country || existingBloodBank.country,
+      phone: phone || existingBloodBank.phone,
+      emergencyContact: emergencyContact || existingBloodBank.emergencyContact
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          phone: true
+        }
+      }
+    }
+  });
+
+  // Update user name if provided
+  if (req.body.name) {
+    await prisma.user.update({
+      where: { id: req.user.id },
+      data: { name: req.body.name }
+    });
+  }
+
+  // Log action
+  await prisma.auditLog.create({
+    data: {
+      userId: req.user.id,
+      action: 'UPDATE_BLOOD_BANK_PROFILE',
+      entity: 'BloodBank',
+      entityId: bloodBank.id,
+      changes: { bankName, address, city, phone }
+    }
+  });
+
+  res.json({
+    success: true,
+    data: serializeData(bloodBank),
+    message: 'Blood Bank profile updated successfully'
+  });
+});
+
+// ============ GET BLOOD BANK STATISTICS ============
+/**
+ * Get blood bank statistics
+ * GET /api/blood-banks/stats
+ */
+export const getStats = asyncHandler(async (req, res) => {
+  const bloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id }
+  });
+
+  if (!bloodBank) {
+    throw new ApiError(404, 'Blood Bank not found');
+  }
+
+  const [
+    totalInventory,
+    totalRequests,
+    pendingRequests,
+    fulfilledRequests,
+    totalDonations,
+    totalUnits
+  ] = await Promise.all([
+    prisma.inventoryItem.count({
+      where: { bloodBankId: bloodBank.id }
+    }),
+    prisma.bloodRequest.count({
+      where: { bloodBankId: bloodBank.id }
+    }),
+    prisma.bloodRequest.count({
+      where: {
+        bloodBankId: bloodBank.id,
+        status: 'PENDING'
+      }
+    }),
+    prisma.bloodRequest.count({
+      where: {
+        bloodBankId: bloodBank.id,
+        status: 'FULFILLED'
+      }
+    }),
+    prisma.donation.count({
+      where: { bloodBankId: bloodBank.id }
+    }),
+    prisma.inventoryItem.aggregate({
+      where: { bloodBankId: bloodBank.id },
+      _sum: { unitsAvailable: true }
+    })
+  ]);
+
+  const totalUnitsAvailable = totalUnits._sum.unitsAvailable 
+    ? Number(totalUnits._sum.unitsAvailable) 
+    : 0;
+
+  res.json({
+    success: true,
+    data: serializeData({
+      totalInventory,
+      totalRequests,
+      pendingRequests,
+      fulfilledRequests,
+      totalDonations,
+      totalUnits: totalUnitsAvailable
+    })
+  });
+});
 
 // ============ GET BLOOD BANK DASHBOARD ============
 export const getDashboard = asyncHandler(async (req, res) => {

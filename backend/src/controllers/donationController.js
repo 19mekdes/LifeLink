@@ -1,9 +1,6 @@
-// backend/src/controllers/donationController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
-// ✅ Import email service
 import { sendEmail, donationConfirmationEmail, emergencyRequestEmail } from '../services/emailService.js';
 
 const prisma = new PrismaClient();

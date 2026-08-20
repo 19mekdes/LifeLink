@@ -42,9 +42,6 @@ export const idValidation = [
     .withMessage('Invalid ID format')
 ];
 
-/**
- * Common validation rules for pagination
- */
 export const paginationValidation = [
   query('page')
     .optional()
@@ -70,9 +67,6 @@ export const paginationValidation = [
     .withMessage('Sort order must be asc or desc')
 ];
 
-/**
- * Common validation rules for search
- */
 export const searchValidation = [
   query('search')
     .optional()

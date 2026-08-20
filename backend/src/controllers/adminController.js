@@ -1,5 +1,3 @@
-// backend/src/controllers/adminController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
@@ -7,11 +5,18 @@ import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
+const serializeData = (data) => {
+  return JSON.parse(
+    JSON.stringify(data, (key, value) => {
+      if (typeof value === 'bigint') {
+        return Number(value);
+      }
+      return value;
+    })
+  );
+};
+
 // ============ DASHBOARD STATISTICS ============
-/**
- * Get admin dashboard statistics
- * GET /api/admin/dashboard
- */
 export const getDashboardStats = asyncHandler(async (req, res) => {
   const [
     totalUsers,
@@ -37,7 +42,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     prisma.notification.count()
   ]);
 
-  // Get monthly registration trends
   const monthlyRegistrations = await prisma.$queryRaw`
     SELECT 
       DATE_TRUNC('month', "createdAt") as month,
@@ -51,17 +55,15 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     ORDER BY month DESC
   `;
 
-  // Get blood type distribution
   const bloodTypeDistribution = await prisma.$queryRaw`
     SELECT 
-      blood_type,
+      "bloodType" as blood_type,
       COUNT(*) as count
     FROM "DonorProfile"
-    GROUP BY blood_type
+    GROUP BY "bloodType"
     ORDER BY count DESC
   `;
 
-  // Get recent activity
   const recentActivity = await prisma.auditLog.findMany({
     include: {
       user: {
@@ -76,7 +78,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     take: 10
   });
 
-  // Get request trends
   const requestTrends = await prisma.$queryRaw`
     SELECT 
       DATE_TRUNC('month', "createdAt") as month,
@@ -102,23 +103,19 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       totalDonations,
       totalNotifications
     },
-    monthlyRegistrations,
-    bloodTypeDistribution,
+    monthlyRegistrations: serializeData(monthlyRegistrations),
+    bloodTypeDistribution: serializeData(bloodTypeDistribution),
     recentActivity,
-    requestTrends
+    requestTrends: serializeData(requestTrends)
   };
 
   res.json({
     success: true,
-    data: responseData
+    data: serializeData(responseData)
   });
 });
 
 // ============ USER MANAGEMENT ============
-/**
- * Get all users with filters
- * GET /api/admin/users
- */
 export const getUsers = asyncHandler(async (req, res) => {
   const { role, search, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -147,30 +144,27 @@ export const getUsers = asyncHandler(async (req, res) => {
     prisma.user.count({ where })
   ]);
 
-  // Remove passwords
   const sanitizedUsers = users.map(user => {
     const { password, ...rest } = user;
     return rest;
   });
 
+  const responseData = {
+    users: sanitizedUsers,
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      pages: Math.ceil(total / parseInt(limit))
+    }
+  };
+
   res.json({
     success: true,
-    data: {
-      users: sanitizedUsers,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / parseInt(limit))
-      }
-    }
+    data: serializeData(responseData)
   });
 });
 
-/**
- * Get user by ID
- * GET /api/admin/users/:id
- */
 export const getUserById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -191,14 +185,10 @@ export const getUserById = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    data: userWithoutPassword
+    data: serializeData(userWithoutPassword)
   });
 });
 
-/**
- * Update user
- * PUT /api/admin/users/:id
- */
 export const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { name, phone, role, isActive } = req.body;
@@ -226,7 +216,6 @@ export const updateUser = asyncHandler(async (req, res) => {
     }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -241,15 +230,11 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    data: userWithoutPassword,
+    data: serializeData(userWithoutPassword),
     message: 'User updated successfully'
   });
 });
 
-/**
- * Delete user
- * DELETE /api/admin/users/:id
- */
 export const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -265,7 +250,6 @@ export const deleteUser = asyncHandler(async (req, res) => {
     where: { id }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -282,10 +266,6 @@ export const deleteUser = asyncHandler(async (req, res) => {
 });
 
 // ============ HOSPITAL MANAGEMENT ============
-/**
- * Get all hospitals with filters
- * GET /api/admin/hospitals
- */
 export const getHospitals = asyncHandler(async (req, res) => {
   const { status, search, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -327,33 +307,34 @@ export const getHospitals = asyncHandler(async (req, res) => {
     prisma.hospital.count({ where })
   ]);
 
+  const responseData = {
+    hospitals,
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      pages: Math.ceil(total / parseInt(limit))
+    }
+  };
+
   res.json({
     success: true,
-    data: {
-      hospitals,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / parseInt(limit))
-      }
-    }
+    data: serializeData(responseData)
   });
 });
 
-/**
- * Verify hospital
- * PUT /api/admin/hospitals/:id/verify
- */
+//  verifyHospital function
 export const verifyHospital = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status, notes } = req.body;
 
+  // Check if hospital exists
   const hospital = await prisma.hospital.findUnique({
     where: { id },
     include: {
       user: {
         select: {
+          id: true,
           name: true,
           email: true
         }
@@ -365,6 +346,7 @@ export const verifyHospital = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Hospital not found');
   }
 
+  // Update hospital verification status
   const updatedHospital = await prisma.hospital.update({
     where: { id },
     data: {
@@ -389,22 +371,22 @@ export const verifyHospital = asyncHandler(async (req, res) => {
       action: 'VERIFY_HOSPITAL',
       entity: 'Hospital',
       entityId: hospital.id,
-      changes: { status, notes }
+      changes: { 
+        status, 
+        notes: notes || null,
+        hospitalName: hospital.user?.name || 'Unknown'
+      }
     }
   });
 
   res.json({
     success: true,
-    data: updatedHospital,
-    message: `Hospital ${status.toLowerCase()} successfully`
+    data: serializeData(updatedHospital),
+    message: `Hospital ${hospital.user?.name || 'Unknown'} ${status.toLowerCase()} successfully`
   });
 });
 
 // ============ BLOOD BANK MANAGEMENT ============
-/**
- * Get all blood banks
- * GET /api/admin/blood-banks
- */
 export const getBloodBanks = asyncHandler(async (req, res) => {
   const { status, search, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -447,33 +429,34 @@ export const getBloodBanks = asyncHandler(async (req, res) => {
     prisma.bloodBank.count({ where })
   ]);
 
+  const responseData = {
+    bloodBanks,
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      pages: Math.ceil(total / parseInt(limit))
+    }
+  };
+
   res.json({
     success: true,
-    data: {
-      bloodBanks,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / parseInt(limit))
-      }
-    }
+    data: serializeData(responseData)
   });
 });
 
-/**
- * Verify blood bank
- * PUT /api/admin/blood-banks/:id/verify
- */
+//  verifyBloodBank function
 export const verifyBloodBank = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status, notes } = req.body;
 
+  // Check if blood bank exists
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { id },
     include: {
       user: {
         select: {
+          id: true,
           name: true,
           email: true
         }
@@ -485,12 +468,21 @@ export const verifyBloodBank = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Blood bank not found');
   }
 
+  // Update blood bank verification status
   const updatedBloodBank = await prisma.bloodBank.update({
     where: { id },
     data: {
       verificationStatus: status,
       verifiedBy: req.user.id,
       verifiedAt: new Date()
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true
+        }
+      }
     }
   });
 
@@ -501,22 +493,22 @@ export const verifyBloodBank = asyncHandler(async (req, res) => {
       action: 'VERIFY_BLOOD_BANK',
       entity: 'BloodBank',
       entityId: bloodBank.id,
-      changes: { status, notes }
+      changes: { 
+        status, 
+        notes: notes || null,
+        bankName: bloodBank.user?.name || 'Unknown'
+      }
     }
   });
 
   res.json({
     success: true,
-    data: updatedBloodBank,
-    message: `Blood bank ${status.toLowerCase()} successfully`
+    data: serializeData(updatedBloodBank),
+    message: `Blood bank ${bloodBank.user?.name || 'Unknown'} ${status.toLowerCase()} successfully`
   });
 });
 
 // ============ DONOR MANAGEMENT ============
-/**
- * Get all donors
- * GET /api/admin/donors
- */
 export const getDonors = asyncHandler(async (req, res) => {
   const { bloodType, verified, search, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -558,27 +550,44 @@ export const getDonors = asyncHandler(async (req, res) => {
     prisma.donorProfile.count({ where })
   ]);
 
+  const responseData = {
+    donors,
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      pages: Math.ceil(total / parseInt(limit))
+    }
+  };
+
   res.json({
     success: true,
-    data: {
-      donors,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / parseInt(limit))
-      }
-    }
+    data: serializeData(responseData)
   });
 });
 
-/**
- * Verify donor
- * PUT /api/admin/donors/:id/verify
- */
+//  verifyDonor function
 export const verifyDonor = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
+  // Check if donor exists
+  const existingDonor = await prisma.donorProfile.findUnique({
+    where: { id },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true
+        }
+      }
+    }
+  });
+
+  if (!existingDonor) {
+    throw new ApiError(404, 'Donor not found');
+  }
+
+  // Update donor verification status
   const donor = await prisma.donorProfile.update({
     where: { id },
     data: { isVerified: true },
@@ -598,22 +607,23 @@ export const verifyDonor = asyncHandler(async (req, res) => {
       userId: req.user.id,
       action: 'VERIFY_DONOR',
       entity: 'DonorProfile',
-      entityId: donor.id
+      entityId: donor.id,
+      changes: { 
+        isVerified: true,
+        donorName: donor.user?.name || 'Unknown',
+        donorEmail: donor.user?.email || 'Unknown'
+      }
     }
   });
 
   res.json({
     success: true,
     data: donor,
-    message: 'Donor verified successfully'
+    message: `Donor ${donor.user?.name || 'Unknown'} verified successfully`
   });
 });
 
 // ============ SYSTEM MANAGEMENT ============
-/**
- * Get audit logs
- * GET /api/admin/audit-logs
- */
 export const getAuditLogs = asyncHandler(async (req, res) => {
   const { entity, action, page = 1, limit = 20 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -641,24 +651,22 @@ export const getAuditLogs = asyncHandler(async (req, res) => {
     prisma.auditLog.count({ where })
   ]);
 
+  const responseData = {
+    logs,
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      pages: Math.ceil(total / parseInt(limit))
+    }
+  };
+
   res.json({
     success: true,
-    data: {
-      logs,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / parseInt(limit))
-      }
-    }
+    data: serializeData(responseData)
   });
 });
 
-/**
- * Get system statistics
- * GET /api/admin/stats
- */
 export const getSystemStats = asyncHandler(async (req, res) => {
   const [
     totalUsers,
@@ -689,24 +697,21 @@ export const getSystemStats = asyncHandler(async (req, res) => {
   const rate = fulfillmentRate[0] || { total: 0, fulfilled: 0 };
   const ratePercentage = rate.total > 0 ? (rate.fulfilled / rate.total) * 100 : 0;
 
+  const responseData = {
+    totalUsers,
+    activeUsers,
+    totalDonations,
+    totalRequests,
+    fulfillmentRate: Math.round(ratePercentage),
+    avgResponseTime: Math.round(avgResponseTime[0]?.avg_seconds || 0)
+  };
+
   res.json({
     success: true,
-    data: {
-      totalUsers,
-      activeUsers,
-      totalDonations,
-      totalRequests,
-      fulfillmentRate: Math.round(ratePercentage),
-      avgResponseTime: Math.round(avgResponseTime[0]?.avg_seconds || 0)
-    }
+    data: serializeData(responseData)
   });
 });
 
-// ============ CREATE ADMIN USER ============
-/**
- * Create admin user (Super Admin only)
- * POST /api/admin/admins
- */
 export const createAdmin = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -715,12 +720,10 @@ export const createAdmin = asyncHandler(async (req, res) => {
 
   const { name, email, password, phone, role, permissions } = req.body;
 
-  // Only SUPER_ADMIN can create other admins
   if (req.user.role !== 'SUPER_ADMIN') {
     throw new ApiError(403, 'Only SUPER_ADMIN can create admin users');
   }
 
-  // Check if user exists
   const existingUser = await prisma.user.findUnique({
     where: { email }
   });
@@ -729,10 +732,8 @@ export const createAdmin = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'User already exists with this email');
   }
 
-  // Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Create admin user
   const user = await prisma.user.create({
     data: {
       name,
@@ -753,7 +754,6 @@ export const createAdmin = asyncHandler(async (req, res) => {
     }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -768,16 +768,11 @@ export const createAdmin = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     success: true,
-    data: userWithoutPassword,
+    data: serializeData(userWithoutPassword),
     message: 'Admin created successfully'
   });
 });
 
-// ============ EXPORT DATA ============
-/**
- * Export data
- * GET /api/admin/export
- */
 export const exportData = asyncHandler(async (req, res) => {
   const { type } = req.query;
 
@@ -855,10 +850,10 @@ export const exportData = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    data: {
+    data: serializeData({
       type,
       count: data.length,
       data
-    }
+    })
   });
 });

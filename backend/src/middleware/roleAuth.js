@@ -2,12 +2,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-/**
- * Role-based Authorization Middleware
- * 
- * This file provides middleware functions to check user roles and permissions.
- * It works together with the authentication middleware (auth.js) which sets req.user.
- */
 
 /**
  * Check if user has one of the allowed roles

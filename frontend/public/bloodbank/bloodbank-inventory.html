@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeLink - Blood Inventory</title>
+  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+
+  <base target="_blank">
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="logo-area">
+        <div class="logo-icon">🩸</div>
+        <div class="logo-text">LifeLink</div>
+        <button class="sidebar-close" id="sidebar-close">&times;</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" href="../bloodbank-dashboard.html" target="_self"><span
+                class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
+          <li><a class="nav-item active" href="bloodbank-inventory.html" target="_self"><span
+                class="nav-icon">🩸</span><span class="nav-label">Blood Inventory</span></a></li>
+          <li><a class="nav-item" href="bloodbank-requests.html" target="_self"><span class="nav-icon">🏥</span><span
+                class="nav-label">Hospital Requests</span></a></li>
+          <li><a class="nav-item" href="bloodbank-outreach.html" target="_self"><span class="nav-icon">👥</span><span
+                class="nav-label">Donor Outreach</span></a></li>
+          <li><a class="nav-item" href="bloodbank-donations.html" target="_self"><span class="nav-icon">📥</span><span
+                class="nav-label">Donation Records</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Insights</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" href="bloodbank-analytics.html" target="_self"><span class="nav-icon">📈</span><span
+                class="nav-label">Analytics</span></a></li>
+          <li><a class="nav-item" href="bloodbank-notifications.html" target="_self"><span
+                class="nav-icon">🔔</span><span class="nav-label" target="_self">Notifications</span> <span
+                class="nav-badge" id="notif-badge">0</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <ul class="nav-links">
+          <li><a class="nav-item" href="bloodbank-profile.html" target="_self"><span class="nav-icon">🏥</span><span
+                class="nav-label">Bank Profile</span></a></li>
+          <li><a class="nav-item" href="bloodbank-settings.html" target="_self"><span class="nav-icon">⚙️</span><span
+                class="nav-label">Settings</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <span class="status-dot online" id="sidebar-status-dot"></span>
+        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="top-header">
+      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <div class="header-title">
+        <h1 id="page-title">Blood Inventory</h1>
+        <p>Manage your complete blood stock.</p>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" id="notif-header-btn" title="Notifications"
+          onclick="window.location.href='bloodbank-notifications.html'">
+          🔔
+          <span class="dot" id="header-notif-dot"></span>
+        </button>
+        <div class="user-profile-wrap" id="user-profile-wrap">
+          <div class="user-profile-badge" id="user-profile-toggle">
+            <div class="user-avatar" id="avatar-initials">--</div>
+            <div class="user-info">
+              <div class="user-name" id="user-name">—</div>
+              <div class="user-role">Blood Bank Manager</div>
+            </div>
+          </div>
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+            <div class="user-dropdown-role">Blood Bank Manager</div>
+            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self">🏥 Bank Profile</a>
+            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self">⚙️ Settings</a>
+            <a class="user-dropdown-item danger" id="dropdown-logout-btn" target="_self">🚪 Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <section class="page-content">
+        <div class="section-box">
+          <div class="section-header">
+            <h2>🩸 Complete Blood Stock Details</h2>
+            <div class="section-actions">
+              <button class="btn btn-secondary btn-sm" id="export-inventory-btn">📥 Export</button>
+              <button class="btn btn-primary" id="open-update-stock-btn">Add Stock</button>
+            </div>
+          </div>
+          <div class="inventory-grid" id="inventory-grid-body"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============ ADD / UPDATE STOCK MODAL ============ -->
+  <div class="modal-overlay" id="updateStockModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🩸 Add Blood Stock</h3>
+        <button class="modal-close" data-close-modal="updateStockModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>Blood Type</label>
+          <select id="modal-blood-type">
+            <option value="A_POS">A+</option>
+            <option value="A_NEG">A-</option>
+            <option value="B_POS">B+</option>
+            <option value="B_NEG">B-</option>
+            <option value="AB_POS">AB+</option>
+            <option value="AB_NEG">AB-</option>
+            <option value="O_POS">O+</option>
+            <option value="O_NEG">O-</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Action</label>
+          <select id="modal-action">
+            <option value="add">Add Units (Donation)</option>
+            <option value="remove">Remove Units (Dispatch)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Units</label><input type="number" id="modal-units" value="1" min="1"></div>
+        <div class="form-group"><label>Minimum Stock Level (optional)</label><input type="number" id="modal-min-level"
+            min="0" placeholder="Leave blank to keep current"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal="updateStockModal">Cancel</button>
+        <button class="btn btn-primary" id="submit-stock-update-btn">
+          <span id="submit-btn-text">Add Stock</span>
+          <span id="submit-btn-spinner" class="spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DELETE CONFIRMATION MODAL ============ -->
+  <div class="modal-overlay" id="deleteConfirmModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h3>🗑️ Remove Blood Type</h3>
+        <button class="modal-close" data-close-modal="deleteConfirmModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-text">
+          Are you sure you want to remove <strong id="delete-confirm-type">this blood type</strong>
+          from your inventory? This action cannot be undone.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal="deleteConfirmModal">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete-btn">
+          <span id="delete-btn-text">Remove</span>
+          <span id="delete-btn-spinner" class="spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TOAST CONTAINER ============ -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+  <script type="module">
+    import api from '../../src/js/api/api.js';
+    import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
+
+    const shell = initShell();
+    if (shell) {
+
+      // ---------- Blood type display mapping ----------
+      const BLOOD_TYPE_TO_ENUM = {
+        'A+': 'A_POS', 'A-': 'A_NEG',
+        'B+': 'B_POS', 'B-': 'B_NEG',
+        'AB+': 'AB_POS', 'AB-': 'AB_NEG',
+        'O+': 'O_POS', 'O-': 'O_NEG',
+      };
+      const ENUM_TO_BLOOD_TYPE = Object.fromEntries(
+        Object.entries(BLOOD_TYPE_TO_ENUM).map(([display, enumVal]) => [enumVal, display])
+      );
+      const ALL_ENUM_TYPES = Object.values(BLOOD_TYPE_TO_ENUM);
+
+      let inventoryData = [];
+      let modalCurrentUnits = 0;
+      let currentModalMode = 'add'; // 'add' | 'update'
+      let pendingDeleteType = null; // enum value queued for deletion
+
+      // ---------- Element refs: Add/Update modal ----------
+      const modalEl = document.getElementById('updateStockModal');
+      const modalTitleEl = document.querySelector('#updateStockModal .modal-header h3');
+      const bloodTypeSelect = document.getElementById('modal-blood-type');
+      const actionSelect = document.getElementById('modal-action');
+      const unitsInput = document.getElementById('modal-units');
+      const minLevelInput = document.getElementById('modal-min-level');
+      const submitBtn = document.getElementById('submit-stock-update-btn');
+      const submitBtnText = document.getElementById('submit-btn-text');
+      const submitBtnSpinner = document.getElementById('submit-btn-spinner');
+
+      // ---------- Element refs: Delete confirmation modal ----------
+      const deleteModalEl = document.getElementById('deleteConfirmModal');
+      const deleteConfirmTypeEl = document.getElementById('delete-confirm-type');
+      const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+      const deleteBtnText = document.getElementById('delete-btn-text');
+      const deleteBtnSpinner = document.getElementById('delete-btn-spinner');
+
+      // ---------- Rendering ----------
+      function renderInventory() {
+        const renderCard = (item) => {
+          const displayType = ENUM_TO_BLOOD_TYPE[item.bloodType] || item.bloodType;
+          const capacity = Math.max(item.unitsAvailable, (item.minStockLevel || 5) * 5, 10);
+          const isCritical = item.unitsAvailable <= (item.minStockLevel || 0);
+          const isLow = item.unitsAvailable <= (item.minStockLevel || 0) * 2;
+          const pct = Math.min((item.unitsAvailable / capacity) * 100, 100);
+          const barClass = isCritical ? 'low' : isLow ? 'medium' : 'high';
+          const cardClass = isCritical ? 'critical' : '';
+          return `<div class="blood-card ${cardClass}">
+                  <div class="blood-type">${displayType}</div>
+                  <div class="blood-units">${item.unitsAvailable} Units</div>
+                  <div class="blood-bar"><div class="blood-bar-fill ${barClass}" style="width:${pct}%"></div></div>
+                  <div class="blood-actions">
+                    <button class="btn btn-primary btn-sm" data-quick-add="${item.bloodType}">+</button>
+                    <button class="btn btn-secondary btn-sm" data-quick-remove="${item.bloodType}">−</button>
+                    <button class="btn btn-danger btn-sm" data-delete="${item.bloodType}" title="Remove this blood type">🗑️</button>
+                  </div>
+                </div>`;
+        };
+
+        document.getElementById('inventory-grid-body').innerHTML =
+          inventoryData.map(renderCard).join('') ||
+          '<div class="empty-state"><div class="icon">🩸</div><h4>No inventory yet</h4></div>';
+
+        // Re-attach listeners every render, since the buttons are recreated each time
+        document.querySelectorAll('[data-quick-add]').forEach((btn) => {
+          btn.addEventListener('click', () => openStockModal(btn.dataset.quickAdd, 'add'));
+        });
+        document.querySelectorAll('[data-quick-remove]').forEach((btn) => {
+          btn.addEventListener('click', () => openStockModal(btn.dataset.quickRemove, 'remove'));
+        });
+        document.querySelectorAll('[data-delete]').forEach((btn) => {
+          btn.addEventListener('click', () => openDeleteModal(btn.dataset.delete));
+        });
+      }
+
+      function renderLoadingState() {
+        document.getElementById('inventory-grid-body').innerHTML = `
+          <div class="loading-state">
+            <div class="spinner-lg"></div>
+            <p>Loading inventory...</p>
+          </div>
+        `;
+      }
+
+      // ---------- Add/Update modal mode ----------
+      function syncModalMode(enumType) {
+        const existingItem = inventoryData.find((i) => i.bloodType === enumType);
+        currentModalMode = existingItem ? 'update' : 'add';
+        modalCurrentUnits = existingItem ? existingItem.unitsAvailable : 0;
+
+        modalTitleEl.textContent = currentModalMode === 'update'
+          ? '🩸 Update Blood Stock'
+          : '🩸 Add New Blood Stock';
+        submitBtnText.textContent = currentModalMode === 'update' ? 'Update Stock' : 'Add Stock';
+      }
+
+      function openStockModal(enumType, action) {
+        bloodTypeSelect.value = enumType;
+        actionSelect.value = action;
+        unitsInput.value = 1;
+        minLevelInput.value = '';
+        syncModalMode(enumType);
+        modalEl.classList.add('active');
+      }
+
+      bloodTypeSelect?.addEventListener('change', (e) => syncModalMode(e.target.value));
+
+      document.getElementById('open-update-stock-btn')?.addEventListener('click', () => {
+        const missing = ALL_ENUM_TYPES.find((t) => !inventoryData.some((i) => i.bloodType === t));
+        openStockModal(missing || ALL_ENUM_TYPES[0], 'add');
+      });
+
+      document.querySelectorAll('[data-close-modal]').forEach((el) => {
+        el.addEventListener('click', () => document.getElementById(el.dataset.closeModal).classList.remove('active'));
+      });
+
+      // ---------- Submit Add/Update (with loading/spinner state) ----------
+      function setSubmitLoading(loading) {
+        submitBtn.disabled = loading;
+        submitBtnSpinner.classList.toggle('active', loading);
+        submitBtnText.textContent = loading
+          ? (currentModalMode === 'update' ? 'Updating...' : 'Adding...')
+          : (currentModalMode === 'update' ? 'Update Stock' : 'Add Stock');
+      }
+
+      submitBtn?.addEventListener('click', async () => {
+        const bloodType = bloodTypeSelect.value;
+        const action = actionSelect.value;
+        const delta = parseInt(unitsInput.value) || 0;
+        const minLevelRaw = minLevelInput.value;
+        const unitsAvailable = action === 'add'
+          ? modalCurrentUnits + delta
+          : Math.max(0, modalCurrentUnits - delta);
+
+        const body = { bloodType, unitsAvailable };
+        if (minLevelRaw !== '') body.minStockLevel = parseInt(minLevelRaw);
+
+        setSubmitLoading(true);
+        try {
+          const res = await api.put('/blood-banks/inventory', body);
+          if (!res.success) throw new Error(res.message);
+          modalEl.classList.remove('active');
+          showToast(currentModalMode === 'update' ? 'Stock updated successfully.' : 'Stock added successfully.');
+          await refresh();
+        } catch (err) {
+          showToast(err.message || 'Failed to save stock', 'error');
+        } finally {
+          setSubmitLoading(false);
+        }
+      });
+
+      // ---------- Delete confirmation modal ----------
+      function openDeleteModal(enumType) {
+        pendingDeleteType = enumType;
+        deleteConfirmTypeEl.textContent = ENUM_TO_BLOOD_TYPE[enumType] || enumType;
+        deleteModalEl.classList.add('active');
+      }
+
+      function setDeleteLoading(loading) {
+        confirmDeleteBtn.disabled = loading;
+        deleteBtnSpinner.classList.toggle('active', loading);
+        deleteBtnText.textContent = loading ? 'Removing...' : 'Remove';
+      }
+
+      confirmDeleteBtn?.addEventListener('click', async () => {
+        if (!pendingDeleteType) return;
+        const displayType = ENUM_TO_BLOOD_TYPE[pendingDeleteType] || pendingDeleteType;
+
+        setDeleteLoading(true);
+        try {
+          const res = await api.delete(`/blood-banks/inventory/${pendingDeleteType}`);
+          if (!res.success) throw new Error(res.message);
+          deleteModalEl.classList.remove('active');
+          showToast(`${displayType} removed from inventory.`);
+          pendingDeleteType = null;
+          await refresh();
+        } catch (err) {
+          showToast(err.message || 'Failed to delete inventory item', 'error');
+        } finally {
+          setDeleteLoading(false);
+        }
+      });
+
+      // ---------- Export ----------
+      document.getElementById('export-inventory-btn')?.addEventListener('click', () => {
+        const csv = 'Blood Type,Units,Min Level\n' +
+          inventoryData.map((i) =>
+            `${ENUM_TO_BLOOD_TYPE[i.bloodType] || i.bloodType},${i.unitsAvailable},${i.minStockLevel}`
+          ).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'inventory_export.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // ---------- Initial load ----------
+      async function refresh() {
+        renderLoadingState();
+        try {
+          const { inventory } = await loadCommonData(api, shell.paintProfile);
+          inventoryData = inventory;
+          renderInventory();
+        } catch (err) {
+          document.getElementById('inventory-grid-body').innerHTML = `
+            <div class="empty-state">
+              <div class="icon">⚠️</div>
+              <h4>Failed to load inventory</h4>
+              <p>${err.message || 'Please try refreshing the page.'}</p>
+            </div>
+          `;
+        }
+      }
+      refresh();
+    }
+  </script>
+</body>
+
+</html>

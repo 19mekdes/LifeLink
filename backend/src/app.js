@@ -1,5 +1,3 @@
-// backend/src/app.js
-
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -10,7 +8,6 @@ import { fileURLToPath } from 'url';
 
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
-// Load environment variables
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +24,7 @@ app.use(helmet({
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       'script-src': ["'self'", "'unsafe-inline'"],
-      'connect-src': ["'self'", 'http://localhost:5000', 'http://127.0.0.1:5000']
+      'connect-src': ["'self'", 'http://localhost:5001', 'http://127.0.0.1:5001']
     }
   }
 }));
@@ -73,13 +70,27 @@ app.get('/api/health', (req, res) => {
 import authRoutes from './routes/authRoutes.js';
 import hospitalRoutes from './routes/hospitalRoutes.js';
 import donorRoutes from './routes/donorRoutes.js';
-import donationRoutes from './routes/donationRoutes.js';  // ✅ ADD THIS
+import donationRoutes from './routes/donationRoutes.js';
+import bloodBankRoutes from './routes/bloodBankRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import auditRoutes from './routes/auditRoutes.js';
+
+  
 
 // Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/donors', donorRoutes);
-app.use('/api/v1/donations', donationRoutes);  // ✅ ADD THIS
+app.use('/api/v1/donations', donationRoutes); 
+app.use('/api/blood-banks', bloodBankRoutes); 
+app.use('/api/admin', adminRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/audit', auditRoutes);
+
+
 
 // Other routes (to be added later)
 // app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));

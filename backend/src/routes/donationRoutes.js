@@ -1,5 +1,3 @@
-// backend/src/routes/donationRoutes.js
-
 import express from 'express';
 import { body } from 'express-validator';
 import { authenticate } from '../middleware/auth.js';
@@ -14,15 +12,8 @@ import {
 } from '../controllers/donationController.js';
 
 const router = express.Router();
-
-// ============================================
-// ALL ROUTES REQUIRE AUTHENTICATION
-// ============================================
 router.use(authenticate);
 
-// ============================================================================
-// Donation Queries & Records
-// ============================================================================
 
 /**
  * @route   GET /api/v1/donations
@@ -57,9 +48,7 @@ router.get(
   getDonationCertificate
 );
 
-// ============================================================================
-// Donation Lifecycle & Clinical Logging
-// ============================================================================
+
 
 /**
  * @route   POST /api/v1/donations

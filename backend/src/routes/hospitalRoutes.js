@@ -15,7 +15,6 @@ import {
 
 const router = express.Router();
 
-// All hospital routes require authentication and HOSPITAL role
 router.use(authenticate);
 router.use(authorize('HOSPITAL'));
 

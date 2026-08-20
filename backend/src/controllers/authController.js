@@ -9,7 +9,7 @@ import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
 import { sendEmail, welcomeEmail } from '../services/emailService.js';
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-151112';
 const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d';
 
 /**

@@ -3,9 +3,862 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+
+  <title>LifeLink - Hospital Dashboard</title>
+
+  <link rel="stylesheet" href="css/hospital-dashboard.css">
 </head>
+
 <body>
-  
+
+  <div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar">
+
+<div class="logo">
+        <span class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Blood droplet -->
+            <path d="M12 2C12 2 5 10 5 15a7 7 0 0 0 14 0C19 10 12 2 12 2Z" fill="#d71920"/>
+            <!-- White heart outline inside the droplet -->
+            <path d="M12 19.5C12 19.5 6.2 15 6.2 11.2C6.2 9.1 7.9 7.5 9.9 7.5C10.9 7.5 11.7 7.9 12 8.5C12.3 7.9 13.1 7.5 14.1 7.5C16.1 7.5 17.8 9.1 17.8 11.2C17.8 15 12 19.5 12 19.5Z" stroke="#ffffff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>LifeLink</span>
+      </div>
+
+      <nav class="sidebar-nav">
+
+        <button class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">▣</span>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item" data-page="create-request">
+          <span class="nav-icon">⊞</span>
+          <span>Create Request</span>
+        </button>
+
+        <button class="nav-item" data-page="my-requests">
+          <span class="nav-icon">▤</span>
+          <span>My Requests</span>
+        </button>
+
+        <button class="nav-item" data-page="responses">
+          <span class="nav-icon">♧</span>
+          <span>Responses</span>
+        </button>
+
+        <button class="nav-item" data-page="profile">
+          <span class="nav-icon">♙</span>
+          <span>Hospital Profile</span>
+        </button>
+
+        <button class="nav-item" data-page="settings">
+          <span class="nav-icon">⚙</span>
+          <span>Settings</span>
+        </button>
+
+      </nav>
+
+      <button class="logout-btn" id="logout-btn">
+        <span>↪</span>
+        <span>Logout</span>
+      </button>
+
+    </aside>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+
+    <!-- ================= MAIN AREA ================= -->
+    <main class="main">
+
+      <!-- TOP BAR -->
+      <header class="topbar">
+
+        <div class="topbar-left">
+          <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div class="hospital-account" id="topbar-hospital-account" title="View Profile">
+
+          <div class="hospital-avatar" id="hospital-avatar">H</div>
+
+          <div class="hospital-info">
+            <strong id="hospital-name">Hospital</strong>
+            <span>Hospital</span>
+          </div>
+
+          <button class="account-arrow" id="account-menu-btn">⌄</button>
+
+        </div>
+
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <section class="content">
+
+        <!-- DASHBOARD -->
+        <div class="page active-page" id="dashboard">
+
+          <div class="page-header">
+            <h1>Dashboard</h1>
+            <p>Welcome back, <span id="welcome-hospital-name">Hospital</span>!</p>
+          </div>
+
+          <!-- STAT CARDS (populated by JS) -->
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-icon red">♧</div>
+              <div>
+                <span>Total Requests</span>
+                <strong id="stat-total-requests">—</strong>
+                <small>All time</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon orange">▣</div>
+              <div>
+                <span>Active Requests</span>
+                <strong id="stat-active-requests">—</strong>
+                <small>Currently open</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon green">♧</div>
+              <div>
+                <span>Total Responses</span>
+                <strong id="stat-total-responses">—</strong>
+                <small>All time</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon blue">♙</div>
+              <div>
+                <span>Completed Donations</span>
+                <strong id="stat-completed-donations">—</strong>
+                <small>All time</small>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- DASHBOARD GRID -->
+          <div class="dashboard-grid">
+
+            <!-- REQUEST STATUS OVERVIEW -->
+            <div class="card status-card">
+
+              <div class="card-header">
+                <h2>Request Status Overview</h2>
+              </div>
+
+              <div class="status-content">
+
+                <div class="donut-chart">
+                  <div class="donut-center">
+                    <strong id="status-total">—</strong>
+                    <span>Total</span>
+                  </div>
+                </div>
+
+                <div class="status-legend">
+
+                  <div>
+                    <span class="legend-dot red-dot"></span>
+                    <span>Active</span>
+                    <strong id="status-active">—</strong>
+                  </div>
+
+                  <div>
+                    <span class="legend-dot orange-dot"></span>
+                    <span>In Progress</span>
+                    <strong id="status-inProgress">—</strong>
+                  </div>
+
+                  <div>
+                    <span class="legend-dot green-dot"></span>
+                    <span>Completed</span>
+                    <strong id="status-completed">—</strong>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- RECENT REQUESTS -->
+            <div class="card recent-card">
+
+              <div class="card-header">
+                <h2>Recent Requests</h2>
+                <button class="text-button" data-page-target="my-requests">View all</button>
+              </div>
+
+              <!-- Recent requests are rendered by JS from hospitalApi.getRecentRequests() -->
+              <div class="request-list" id="recent-requests-list">
+                <p class="loading-hint">Loading recent requests...</p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- URGENT REQUESTS -->
+          <div class="card table-card">
+
+            <div class="card-header">
+              <h2>Urgent Blood Requests Near You</h2>
+              <button class="text-button" data-page-target="responses">View all</button>
+            </div>
+
+            <div class="table-wrapper">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Blood Type</th>
+                    <th>Units Needed</th>
+                    <th>Urgency</th>
+                    <th>Hospital</th>
+                    <th>Location</th>
+                    <th>Posted On</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <!-- Rows rendered by JS from hospitalApi.getUrgentRequests() -->
+                <tbody id="urgent-requests-body">
+                  <tr>
+                    <td colspan="7" class="loading-hint">Loading urgent requests...</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+<!-- CREATE REQUEST -->
+        <div class="page" id="create-request">
+
+          <div class="page-header">
+            <h1>Create Request</h1>
+            <p>Create a new blood request.</p>
+          </div>
+
+          <div class="card form-card">
+
+            <h2>Blood Request Information</h2>
+
+            <form id="blood-request-form">
+
+              <div class="form-grid">
+
+                <div class="form-group">
+                  <label for="blood-type">Blood Type</label>
+
+                  <select id="blood-type" name="bloodType" required>
+                    <option value="">Select blood type</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="units">Units Needed</label>
+                  <input
+                    type="number"
+                    id="units"
+                    name="units"
+                    min="1"
+                    placeholder="Enter units"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="urgency">Urgency</label>
+
+                  <select id="urgency" name="urgency" required>
+                    <option value="">Select urgency</option>
+                    <option>Emergency</option>
+                    <option>High</option>
+                    <option>Medium</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="location">Location</label>
+
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Hospital location"
+                    required
+                  >
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <label for="description">Additional Information</label>
+
+                <textarea
+                  id="description"
+                  name="description"
+                  rows="5"
+                  placeholder="Provide additional information..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="primary-btn">
+                Create Request
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+
+        <!-- MY REQUESTS -->
+        <div class="page" id="my-requests">
+
+          <div class="page-header request-header">
+
+            <div>
+              <h1>My Requests</h1>
+              <p>Dashboard / My Requests</p>
+            </div>
+
+            <button class="primary-btn" data-page-target="create-request">
+              + Create New Request
+            </button>
+
+          </div>
+
+          <div class="card table-card">
+
+            <div class="table-toolbar">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="my-requests-search" placeholder="Search requests by blood type, urgency, or location..." />
+              </div>
+            </div>
+
+            <div class="tabs" id="my-requests-tabs">
+
+              <button class="tab active" data-filter="">All</button>
+              <button class="tab" data-filter="active">Active</button>
+              <button class="tab" data-filter="inProgress">In Progress</button>
+              <button class="tab" data-filter="completed">Completed</button>
+              <button class="tab" data-filter="cancelled">Cancelled</button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Blood Type</th>
+                    <th>Units</th>
+                    <th>Urgency</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Posted On</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <!-- Rows rendered by JS from hospitalApi.getMyRequests() -->
+                <tbody id="my-requests-body">
+                  <tr>
+                    <td colspan="7" class="loading-hint">Loading requests...</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+<!-- RESPONSES -->
+        <div class="page" id="responses">
+
+          <div class="page-header">
+
+            <h1>Responses</h1>
+            <p>Dashboard / Responses</p>
+
+          </div>
+
+          <div class="card table-card">
+
+            <div class="table-toolbar">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="responses-search" placeholder="Search responses by donor name, status, or blood type..." />
+              </div>
+            </div>
+
+            <div class="tabs" id="responses-tabs">
+
+              <button class="tab active" data-filter="">All</button>
+              <button class="tab" data-filter="new">New</button>
+              <button class="tab" data-filter="contacted">Contacted</button>
+              <button class="tab" data-filter="confirmed">Confirmed</button>
+              <button class="tab" data-filter="declined">Declined</button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Blood Type</th>
+                    <th>Request</th>
+                    <th>Responded On</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <!-- Rows rendered by JS from hospitalApi.getResponses() -->
+                <tbody id="responses-body">
+                  <tr>
+                    <td colspan="5" class="loading-hint">Loading responses...</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+          <!-- COMPLETED DONATIONS HISTORY CARD -->
+          <div class="card table-card" style="margin-top: 25px;">
+            <div class="card-header">
+              <h2>Completed Donations History</h2>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Blood Type</th>
+                    <th>Units</th>
+                    <th>Donation Date</th>
+                    <th>Blood Bank</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="donations-body">
+                  <tr>
+                    <td colspan="6" class="loading-hint">Loading completed donations...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- PROFILE -->
+        <div class="page" id="profile">
+
+          <div class="page-header">
+
+            <h1>Hospital Profile</h1>
+            <p>Dashboard / Hospital Profile</p>
+
+          </div>
+
+          <div class="profile-grid">
+
+            <div class="card">
+
+              <h2>Hospital Information</h2>
+
+              <!-- Values populated by JS from hospitalApi.getHospitalProfile() -->
+              <div class="profile-info" id="hospital-profile-info">
+
+                <div>
+                  <span>Hospital Name</span>
+                  <strong id="profile-name">—</strong>
+                </div>
+
+                <div>
+                  <span>Hospital Type</span>
+                  <strong id="profile-type">—</strong>
+                </div>
+
+                <div>
+                  <span>License Number</span>
+                  <strong id="profile-license">—</strong>
+                </div>
+
+                <div>
+                  <span>Established Year</span>
+                  <strong id="profile-established">—</strong>
+                </div>
+
+                <div>
+                  <span>Phone Number</span>
+                  <strong id="profile-phone">—</strong>
+                </div>
+
+                <div>
+                  <span>Emergency Contact Phone</span>
+                  <strong id="profile-emergency">—</strong>
+                </div>
+
+                <div>
+                  <span>Email Address</span>
+                  <strong id="profile-email">—</strong>
+                </div>
+
+                <div>
+                  <span>Address</span>
+                  <strong id="profile-address">—</strong>
+                </div>
+
+                <div>
+                  <span>City</span>
+                  <strong id="profile-city">—</strong>
+                </div>
+
+                <div>
+                  <span>State & Country</span>
+                  <strong id="profile-state-country">—</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <div class="card verification-card">
+
+                <h2>Verification Status</h2>
+
+                <!-- Populated by JS from hospital profile data -->
+                <div class="verified" id="verification-status">
+                  <strong>—</strong>
+                  <p>—</p>
+                  <small>—</small>
+                </div>
+
+              </div>
+
+
+              <div class="card">
+
+                <h2>Statistics</h2>
+
+                <!-- Populated by JS from hospitalApi.getDashboardStats() & getStats() -->
+                <div class="profile-stat">
+                  <span>Total Requests</span>
+                  <strong id="profile-stat-total-requests">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Total Responses</span>
+                  <strong id="profile-stat-total-responses">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Completed Donations</span>
+                  <strong id="profile-stat-completed-donations">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Fulfillment Rate</span>
+                  <strong id="profile-stat-fulfillment-rate">—</strong>
+                </div>
+
+                <div class="profile-stat">
+                  <span>Avg Response Time</span>
+                  <strong id="profile-stat-avg-response">—</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <button class="primary-btn profile-edit-btn" id="edit-profile-btn">
+            Edit Profile
+          </button>
+
+        </div>
+
+
+        <!-- SETTINGS -->
+        <div class="page" id="settings">
+
+          <div class="page-header">
+
+            <h1>Settings</h1>
+            <p>Dashboard / Settings</p>
+
+          </div>
+
+          <div class="card settings-card">
+
+            <div class="tabs" id="settings-tabs">
+              <button class="tab active" data-filter="account">Account Settings</button>
+              <button class="tab" data-filter="notifications">Notifications</button>
+              <button class="tab" data-filter="password">Password</button>
+              <button class="tab" data-filter="security">Security</button>
+            </div>
+
+            <!-- ACCOUNT SETTINGS -->
+            <div class="settings-section" id="settings-account">
+
+              <h2>Hospital Account Information</h2>
+
+              <!-- Values populated by JS from hospital profile data -->
+              <div class="settings-grid">
+
+                <div>
+                  <span>Hospital Name</span>
+                  <strong id="settings-name">—</strong>
+                </div>
+
+                <div>
+                  <span>Email Address</span>
+                  <strong id="settings-email">—</strong>
+                </div>
+
+                <div>
+                  <span>Phone Number</span>
+                  <strong id="settings-phone">—</strong>
+                </div>
+
+                <div>
+                  <span>Contact Person</span>
+                  <strong id="settings-contact">—</strong>
+                </div>
+
+              </div>
+
+              <button class="primary-btn" id="update-info-btn">
+                Update Information
+              </button>
+
+            </div>
+
+
+            <!-- NOTIFICATIONS -->
+            <div class="settings-section" id="settings-notifications">
+
+              <h2>Notification Preferences</h2>
+
+              <div class="setting-row">
+                <span>New blood request notifications</span>
+                <label class="switch">
+                  <input type="checkbox" data-pref="newRequest">
+                  <span></span>
+                </label>
+              </div>
+
+              <div class="setting-row">
+                <span>New donor responses</span>
+                <label class="switch">
+                  <input type="checkbox" data-pref="newResponses">
+                  <span></span>
+                </label>
+              </div>
+
+              <div class="setting-row">
+                <span>Request status updates</span>
+                <label class="switch">
+                  <input type="checkbox" data-pref="statusUpdates">
+                  <span></span>
+                </label>
+              </div>
+
+              <div class="setting-row">
+                <span>System announcements</span>
+                <label class="switch">
+                  <input type="checkbox" data-pref="announcements">
+                  <span></span>
+                </label>
+              </div>
+
+              <button class="primary-btn" id="save-prefs-btn">
+                Save Preferences
+              </button>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+            <div class="settings-section" id="settings-password">
+
+              <h2>Change Password</h2>
+
+              <form id="password-form" class="settings-form">
+
+                <div class="form-group">
+                  <label for="current-password">Current Password</label>
+                  <input
+                    type="password"
+                    id="current-password"
+                    name="currentPassword"
+                    placeholder="Enter current password"
+                    autocomplete="current-password"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="new-password">New Password</label>
+                  <input
+                    type="password"
+                    id="new-password"
+                    name="newPassword"
+                    placeholder="Enter new password"
+                    autocomplete="new-password"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="confirm-password">Confirm New Password</label>
+                  <input
+                    type="password"
+                    id="confirm-password"
+                    placeholder="Confirm new password"
+                    autocomplete="new-password"
+                    required
+                  >
+                </div>
+
+                <button type="submit" class="primary-btn">
+                  Update Password
+                </button>
+
+              </form>
+
+            </div>
+
+
+            <!-- SECURITY -->
+            <div class="settings-section" id="settings-security">
+
+              <h2>Security</h2>
+
+              <div class="setting-row">
+                <span>Two-factor authentication</span>
+                <label class="switch">
+                  <input type="checkbox" data-pref="twoFactor">
+                  <span></span>
+                </label>
+              </div>
+
+              <div class="setting-row">
+                <span>Login alerts via email</span>
+                <label class="switch">
+                  <input type="checkbox" data-pref="loginAlerts">
+                  <span></span>
+                </label>
+              </div>
+
+              <button class="primary-btn">Save Security Settings</button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal-backdrop" id="edit-profile-modal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Edit Hospital Profile</h2>
+        <button class="close-btn" id="close-profile-modal">&times;</button>
+      </div>
+      <form id="edit-profile-form">
+        <div class="form-group">
+          <label for="edit-hospital-name">Hospital Name</label>
+          <input type="text" id="edit-hospital-name" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-phone">Phone Number</label>
+          <input type="text" id="edit-phone" placeholder="e.g. +251911111111" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-emergency-contact">Emergency Contact Phone</label>
+          <input type="text" id="edit-emergency-contact" placeholder="e.g. +251911111111" />
+        </div>
+        <div class="form-group">
+          <label for="edit-address">Address</label>
+          <input type="text" id="edit-address" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-city">City</label>
+          <input type="text" id="edit-city" required />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="secondary-btn" id="cancel-profile-modal">Cancel</button>
+          <button type="submit" class="primary-btn">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- API service layer + dashboard controller module -->
+  <script type="module" src="js/hospital-dashboard.js"></script>
+
 </body>
 </html>

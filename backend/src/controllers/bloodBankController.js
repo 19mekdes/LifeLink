@@ -59,10 +59,7 @@ export const getProfile = asyncHandler(async (req, res) => {
 });
 
 // ============ UPDATE BLOOD BANK PROFILE ============
-/**
- * Update blood bank profile
- * PUT /api/blood-banks/profile
- */
+
 export const updateProfile = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -138,10 +135,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 });
 
 // ============ GET BLOOD BANK STATISTICS ============
-/**
- * Get blood bank statistics
- * GET /api/blood-banks/stats
- */
+
 export const getStats = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
@@ -460,6 +454,54 @@ export const updateInventory = asyncHandler(async (req, res) => {
   });
 });
 
+// ============ DELETE INVENTORY ITEM ============
+export const deleteInventoryItem = asyncHandler(async (req, res) => {
+  const { bloodType } = req.params;
+
+  const bloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id }
+  });
+
+  if (!bloodBank) {
+    throw new ApiError(404, 'Blood Bank not found');
+  }
+
+  const inventory = await prisma.inventoryItem.findUnique({
+    where: {
+      bloodBankId_bloodType: {
+        bloodBankId: bloodBank.id,
+        bloodType
+      }
+    }
+  });
+
+  if (!inventory) {
+    throw new ApiError(404, 'Inventory item not found');
+  }
+
+  if (inventory.unitsReserved > 0) {
+    throw new ApiError(400, 'Cannot delete: units are currently reserved for pending requests');
+  }
+
+  await prisma.inventoryItem.delete({
+    where: { id: inventory.id }
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      userId: req.user.id,
+      action: 'DELETE_INVENTORY',
+      entity: 'InventoryItem',
+      entityId: inventory.id,
+      changes: { bloodType, deletedUnits: inventory.unitsAvailable }
+    }
+  });
+
+  res.json({
+    success: true,
+    message: 'Inventory item deleted successfully'
+  });
+});
 // ============ GET BLOOD REQUESTS ============
 export const getRequests = asyncHandler(async (req, res) => {
   const { status, urgency, page = 1, limit = 10 } = req.query;

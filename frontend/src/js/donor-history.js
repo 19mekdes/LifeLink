@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const notificationCount =
         document.getElementById("notificationCount");
 
+    const bloodType =
+        document.getElementById("bloodType");
+
 
     // ==========================================
     // LOAD DONATION HISTORY
@@ -23,21 +26,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
+            // ==================================
+            // GET DONATION HISTORY
+            // ==================================
+
             const data =
                 await apiRequest(
-                    "/api/donors/donations"
+                    "/donors/donations"
                 );
 
             console.log(
-                "Donation history:",
+                "DONATION HISTORY API DATA:",
                 data
             );
 
 
             const donations =
-                Array.isArray(data)
-                    ? data
-                    : data.donations || [];
+                data?.data?.donations || [];
+
+            const stats =
+                data?.data?.stats || {};
 
 
             // ==================================
@@ -47,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (totalDonations) {
 
                 totalDonations.textContent =
-                    donations.length;
+                    stats.totalDonations ?? donations.length;
             }
 
 
@@ -55,19 +63,24 @@ document.addEventListener("DOMContentLoaded", () => {
             // LAST DONATION
             // ==================================
 
-            if (
-                lastDonation &&
-                donations.length
-            ) {
+            if (lastDonation) {
 
-                const latest =
-                    donations[0];
+                if (donations.length) {
 
-                lastDonation.textContent =
-                    latest.date ||
-                    latest.donationDate ||
-                    latest.createdAt ||
-                    "Not available";
+                    const latest =
+                        donations[0];
+
+                    lastDonation.textContent =
+                        latest.date ||
+                        latest.donationDate ||
+                        latest.createdAt ||
+                        "Not available";
+
+                } else {
+
+                    lastDonation.textContent = "--";
+
+                }
             }
 
 
@@ -81,38 +94,36 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!donations.length) {
 
                 donationList.innerHTML = `
-                    <p>
-                        No donation history available.
-                    </p>
-                `;
+                <p>
+                    No donation history available.
+                </p>
+            `;
 
-                return;
-            }
+            } else {
 
+                donationList.innerHTML =
+                    donations.map(donation => {
 
-            donationList.innerHTML =
-                donations.map(donation => {
-
-                    const location =
-                        donation.location ||
-                        donation.hospital ||
-                        donation.bloodBank ||
-                        "Location unavailable";
+                        const location =
+                            donation.location ||
+                            donation.hospital ||
+                            donation.bloodBank ||
+                            "Location unavailable";
 
 
-                    const date =
-                        donation.date ||
-                        donation.donationDate ||
-                        donation.createdAt ||
-                        "Date unavailable";
+                        const date =
+                            donation.date ||
+                            donation.donationDate ||
+                            donation.createdAt ||
+                            "Date unavailable";
 
 
-                    const status =
-                        donation.status ||
-                        "Completed";
+                        const status =
+                            donation.status ||
+                            "Completed";
 
 
-                    return `
+                        return `
                         <div class="donation-item">
 
                             <div>
@@ -134,7 +145,44 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                     `;
 
-                }).join("");
+                    }).join("");
+
+            }
+
+
+            // ==================================
+            // GET DONOR PROFILE
+            // ==================================
+
+            const profileResponse =
+                await apiRequest(
+                    "/donors/profile"
+                );
+
+            console.log(
+                "DONOR PROFILE FOR HISTORY:",
+                profileResponse
+            );
+            
+
+
+            const profile =
+                profileResponse?.data || {};
+            console.log("EXTRACTED PROFILE:", profile);
+            console.log("BLOOD TYPE:", profile.bloodType);
+
+            // ==================================
+            // BLOOD TYPE
+            // ==================================
+
+            if (bloodType) {
+
+                bloodType.textContent =
+                    profile.bloodType ||
+                    profile.blood_group ||
+                    profile.bloodGroup ||
+                    "--";
+            }
 
 
         } catch (error) {
@@ -148,11 +196,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (donationList) {
 
                 donationList.innerHTML = `
-                    <p>
-                        Unable to load donation history.
-                    </p>
-                `;
+                <p>
+                    Unable to load donation history.
+                </p>
+            `;
             }
+
         }
     }
 
@@ -167,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data =
                 await apiRequest(
-                    "/api/donors/notifications"
+                    "/donors/notifications"
                 );
 
 

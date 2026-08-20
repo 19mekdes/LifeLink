@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data =
                 await apiRequest(
-                    "/api/donors/notifications"
+                    "/donors/notifications"
                 );
 
             console.log(

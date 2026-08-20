@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data =
                 await api.get("/donors/requests");
 
+            console.log("BLOOD REQUESTS API DATA:", data);
             console.log(
                 "Blood requests response:",
                 data

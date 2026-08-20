@@ -148,4 +148,7 @@ const api = {
 
 window.apiRequest = apiRequest;
 window.api = api;
+
+export default api;
+
 console.log("API JS loaded successfully:", window.api);

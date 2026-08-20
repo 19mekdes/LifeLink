@@ -464,7 +464,56 @@ export const updateInventory = asyncHandler(async (req, res) => {
     message: 'Inventory updated successfully'
   });
 });
+//==========delete invertory =====
+// ============ DELETE INVENTORY ITEM ============
+export const deleteInventoryItem = asyncHandler(async (req, res) => {
+  const { bloodType } = req.params;
 
+  const bloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id }
+  });
+
+  if (!bloodBank) {
+    throw new ApiError(404, 'Blood Bank not found');
+  }
+
+  const inventory = await prisma.inventoryItem.findUnique({
+    where: {
+      bloodBankId_bloodType: {
+        bloodBankId: bloodBank.id,
+        bloodType
+      }
+    }
+  });
+
+  if (!inventory) {
+    throw new ApiError(404, 'Inventory item not found');
+  }
+
+  // Guard: don't delete if units are currently reserved against active requests
+  if (inventory.unitsReserved > 0) {
+    throw new ApiError(400, 'Cannot delete: units are currently reserved for pending requests');
+  }
+
+  await prisma.inventoryItem.delete({
+    where: { id: inventory.id }
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      userId: req.user.id,
+      action: 'DELETE_INVENTORY',
+      entity: 'InventoryItem',
+      entityId: inventory.id,
+      changes: { bloodType, deletedUnits: inventory.unitsAvailable }
+    }
+  });
+
+  res.json({
+    success: true,
+    message: 'Inventory item deleted successfully'
+  });
+});
 // ============ GET BLOOD REQUESTS ============
 export const getRequests = asyncHandler(async (req, res) => {
   const { status, urgency, page = 1, limit = 10 } = req.query;

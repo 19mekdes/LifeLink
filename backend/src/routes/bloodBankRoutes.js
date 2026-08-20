@@ -8,6 +8,7 @@ import {
   updateInventory,
   getRequests,
   approveRequest,
+   deleteInventoryItem,
   rejectRequest,
   recordDonation,
   getProfile,        
@@ -62,6 +63,30 @@ router.get('/requests', getRequests);
 router.put('/requests/:id/approve', approveRequest);
 router.put('/requests/:id/reject', rejectRequest);
 
+
+/**
+ * @route   PUT /api/blood-banks/requests/:id/approve
+ * @desc    Approve a blood request
+ * @access  Private (Blood Bank)
+ */
+router.put('/requests/:id/approve', [
+  body('notes').optional().isString().withMessage('Notes must be a string')
+], approveRequest);
+
+/**
+ * @route   PUT /api/blood-banks/requests/:id/reject
+ * @desc    Reject a blood request
+ * @access  Private (Blood Bank)
+ */
+router.put('/requests/:id/reject', [
+  body('reason').optional().isString().withMessage('Reason must be a string')
+], rejectRequest);
+/**
+ * @route   DELETE /api/blood-banks/inventory/:bloodType
+ * @desc    Delete an inventory item
+ * @access  Private (Blood Bank)
+ */
+router.delete('/inventory/:bloodType', deleteInventoryItem);
 // ============ DONATIONS ============
 router.post('/donations', recordDonation);
 

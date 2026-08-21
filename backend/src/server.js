@@ -2,6 +2,7 @@ import 'dotenv/config';
 import app from './app.js'; // or './index.js' depending on your app filename
 import prisma from './config/database.js';
 
+// LifeLink Server entry point
 const PORT = process.env.PORT || 5001;
 let server;
 

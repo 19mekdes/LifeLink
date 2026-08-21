@@ -2,12 +2,12 @@
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
-const BASE = 'http://localhost:5000/api';
+const BASE = 'http://localhost:5001/api';
 
 async function main() {
   console.log('Testing all LifeLink features & endpoints...\n');

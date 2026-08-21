@@ -16,12 +16,7 @@
   <link rel="stylesheet" href="../src/css/admin-dashboard.css">
   <!-- Chart.js CDN for Interactive Data Visualizations -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Mock / Fallback Datasets (Dev & Offline preview) -->
-  <script>
-    if (['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.port !== '' || window.ENV?.LOAD_MOCK_DATA !== false) {
-      document.write('<script src="../src/js/mock-data.js"><\/script>');
-    }
-  </script>
+
 </head>
 <body>
 
@@ -217,8 +212,7 @@
       <section class="page-header-section">
         <h1 class="page-title" id="page-title-heading">Dashboard</h1>
         <p class="page-subtitle" id="welcome-message">Welcome back to LifeLink Operations Center.</p>
-      </section>
-      <!-- ═══════════════════════════════════════════════ -->
+
       <!-- VIEW 1: DASHBOARD                               -->
       <!-- ═══════════════════════════════════════════════ -->
       <section id="view-dashboard" class="view-section active">
@@ -1071,8 +1065,8 @@
   <!-- ═══════════════════════════════════════════════════ -->
   <script>
     const API_BASE = window.ENV?.API_BASE || window.API_BASE || window.API_URL ||
-      (window.location.port === '5000' || window.location.port === '3000' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:5000/api'
+      (window.location.port === '5500' || window.location.port === '5001' || window.location.port === '3000' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:5001/api'
         : '/api');
     let adminToken = (typeof localStorage !== 'undefined' ? (localStorage.getItem('token') || localStorage.getItem('auth_token')) : null);
     let pendingActionFn = null;
@@ -1223,55 +1217,10 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  Offline State Tracker
+    //  Offline State Tracker (No-op helpers)
     // ─────────────────────────────────────────────────────────────────
-    const _offlineKeys = new Set();
-
-    function markOffline(key) {
-      _offlineKeys.add(key);
-      _updateOfflineBanner();
-    }
-
-    function markOnline(key) {
-      _offlineKeys.delete(key);
-      _updateOfflineBanner();
-    }
-
-    function _updateOfflineBanner() {
-      const banner = document.getElementById('offline-banner');
-      if (!banner) return;
-      if (_offlineKeys.size > 0) {
-        const detail = document.getElementById('offline-banner-detail');
-        if (detail) {
-          const sources = [..._offlineKeys].join(', ');
-          detail.textContent = `Offline sources: ${sources}. Numbers shown are demo/mock values.`;
-        }
-        banner.classList.add('visible');
-      } else {
-        banner.classList.remove('visible');
-      }
-    }
-
-    async function retryAllFailed() {
-      const btn = document.getElementById('offline-retry-btn');
-      if (btn) { btn.disabled = true; btn.textContent = 'Retrying…'; }
-      await Promise.allSettled([
-        fetchDashboardOverview(currentDashboardTimeframe),
-        fetchInventoryChartData(),
-        fetchRequestTypesChartData(currentDashboardTimeframe),
-        fetchSignupsChartData(),
-        fetchNotifications(),
-        loadUsersList(),
-        loadHospitalsList(),
-        loadBloodBanksList(),
-        loadDonorsList(),
-        loadRequestsList(),
-        loadDonationsList(),
-        loadAuditLogsList(),
-        loadAdminProfileInfo()
-      ]);
-      if (btn) { btn.disabled = false; btn.textContent = '↺ Retry'; }
-    }
+    function markOffline(key) {}
+    function markOnline(key) {}
 
     // ─────────────────────────────────────────────────────────────────
     //  Network request helper
@@ -2478,7 +2427,7 @@
       const status = document.getElementById('filter-don-status')?.value || '';
       const search = (document.getElementById('search-donations')?.value || '').toLowerCase();
 
-      const res = await apiFetch(`/donors/donations?page=${page}&limit=${paginationState.donations.limit}`);
+      const res = await apiFetch(`/admin/donations?page=${page}&limit=${paginationState.donations.limit}`);
       let list = donationsData;
       let total = donationsData.length;
 

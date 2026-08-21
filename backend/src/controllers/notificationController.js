@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../config/database.js';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
-
-const prisma = new PrismaClient();
 
 
 const serializeData = (data) => {

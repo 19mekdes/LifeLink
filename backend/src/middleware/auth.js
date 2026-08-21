@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../config/database.js';
 
-const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-151112';
 
 export const authenticate = async (req, res, next) => {
@@ -48,6 +47,7 @@ export const authenticate = async (req, res, next) => {
         message: 'Token expired'
       });
     }
+    console.error('Authenticate middleware error:', error);
     return res.status(500).json({
       success: false,
       message: 'Authentication error'

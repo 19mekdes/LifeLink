@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from '../config/database.js';
 class MatchingService {
   /**
    * Find matching donors for a blood request

@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from '../config/database.js';
 class NotificationService {
   /**
    * Create a notification for a single user

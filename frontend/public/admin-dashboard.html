@@ -16,12 +16,7 @@
   <link rel="stylesheet" href="../src/css/admin-dashboard.css">
   <!-- Chart.js CDN for Interactive Data Visualizations -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Mock / Fallback Datasets (Dev & Offline preview) -->
-  <script>
-    if (['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.port !== '' || window.ENV?.LOAD_MOCK_DATA !== false) {
-      document.write('<script src="../src/js/mock-data.js"><\/script>');
-    }
-  </script>
+
 </head>
 <body>
 
@@ -1107,32 +1102,27 @@
     let currentSignupsSeries = 'all';   // all | bloodBanks | hospitals | donors
 
     // ─────────────────────────────────────────────────────────────────
-    //  Default / Fallback Datasets (Loaded from mock-data.js in dev)
+    //  Default empty datasets (all data fetched from backend)
     // ─────────────────────────────────────────────────────────────────
-    const mockData = window.MockAdminData || {};
-    let defaultUsers = mockData.defaultUsers || [];
-    let defaultHospitals = mockData.defaultHospitals || [];
-    let defaultBloodBanks = mockData.defaultBloodBanks || [];
-    let defaultDonors = mockData.defaultDonors || [];
-    let defaultRequests = mockData.defaultRequests || [];
-    let defaultDonations = mockData.defaultDonations || [];
-    let defaultAuditLogs = mockData.defaultAuditLogs || [];
-    let defaultNotifications = mockData.defaultNotifications || [];
-    let defaultInventoryStats = mockData.defaultInventoryStats || {
+    let defaultUsers = [];
+    let defaultHospitals = [];
+    let defaultBloodBanks = [];
+    let defaultDonors = [];
+    let defaultRequests = [];
+    let defaultDonations = [];
+    let defaultAuditLogs = [];
+    let defaultNotifications = [];
+    let defaultInventoryStats = {
       categories: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
       series: []
     };
-    let defaultSignupsStats = mockData.defaultSignupsStats || {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    let defaultSignupsStats = {
+      labels: [],
       series: { bloodBanks: [], hospitals: [], donors: [] }
     };
-    let defaultRequestTypes = mockData.defaultRequestTypes || {
+    let defaultRequestTypes = {
       total: 0,
-      series: [
-        { key: 'CRITICAL_EMERGENCY', label: 'Critical Emergency', count: 0, percentage: 0, color: '#dc2626' },
-        { key: 'URGENT', label: 'Urgent', count: 0, percentage: 0, color: '#d97706' },
-        { key: 'NORMAL', label: 'Normal', count: 0, percentage: 0, color: '#2563eb' }
-      ]
+      series: []
     };
 
     // Active state cache
@@ -1451,27 +1441,12 @@
         if (res.data.recentAuditLogs) auditLogsData = res.data.recentAuditLogs;
       } else {
         markOffline('dashboard');
-        if (window.MockAdminData && typeof window.MockAdminData.filterMockDataByTimeframe === 'function') {
-          const filtered = window.MockAdminData.filterMockDataByTimeframe(timeframe);
-          _setText('stat-total-bloodbanks', filtered.bloodBanks.length);
-          _setText('stat-total-hospitals',  filtered.hospitals.length);
-          _setText('stat-total-donors',     filtered.donors.length);
-          _setText('stat-total-requests',   filtered.requests.length);
-          _setText('stat-completed-donations', filtered.donations.filter(d => d.status === 'COMPLETED').length);
-          const pendingHosp = filtered.hospitals.filter(h => h.verificationStatus === 'PENDING').length;
-          const pendingBB = filtered.bloodBanks.filter(b => b.verificationStatus === 'PENDING').length;
-          const unverifiedDnr = filtered.donors.filter(d => !d.isVerified).length;
-          _setText('stat-pending-verifications', pendingHosp + pendingBB + unverifiedDnr);
-          requestsData = filtered.requests;
-          auditLogsData = filtered.auditLogs;
-        } else {
-          _setText('stat-total-bloodbanks', bloodBanksData.length);
-          _setText('stat-total-hospitals',  hospitalsData.length);
-          _setText('stat-total-donors',     donorsData.length);
-          _setText('stat-total-requests',   requestsData.length);
-          _setText('stat-completed-donations', donationsData.filter(d => d.status === 'COMPLETED').length);
-          _setText('stat-pending-verifications', 3);
-        }
+        _setText('stat-total-bloodbanks', bloodBanksData.length);
+        _setText('stat-total-hospitals',  hospitalsData.length);
+        _setText('stat-total-donors',     donorsData.length);
+        _setText('stat-total-requests',   requestsData.length);
+        _setText('stat-completed-donations', donationsData.filter(d => d.status === 'COMPLETED').length);
+        _setText('stat-pending-verifications', 3);
       }
 
       renderCriticalAlertsBanner(criticalAlertsData, requestsData, inventoryStatsRaw);
@@ -1611,10 +1586,7 @@
         markOnline('blood-inventory');
         inventoryStatsRaw = res.data;
       } else {
-        markOffline('blood-inventory');
-        if (window.MockAdminData && typeof window.MockAdminData.getMockInventoryForTimeframe === 'function') {
-          inventoryStatsRaw = window.MockAdminData.getMockInventoryForTimeframe(timeframe);
-        }
+  
       }
       renderBloodInventoryChart();
       renderStatisticsSummaryTable();
@@ -1690,10 +1662,7 @@
         markOnline('request-types');
         requestTypesStatsRaw = res.data;
       } else {
-        markOffline('request-types');
-        if (window.MockAdminData && typeof window.MockAdminData.getMockRequestTypesForTimeframe === 'function') {
-          requestTypesStatsRaw = window.MockAdminData.getMockRequestTypesForTimeframe(timeframe);
-        }
+  
       }
       renderRequestTypesChart();
     }
@@ -1759,10 +1728,7 @@
         markOnline('signups');
         signupsStatsRaw = res.data;
       } else {
-        markOffline('signups');
-        if (window.MockAdminData && typeof window.MockAdminData.getMockSignupsForPeriod === 'function') {
-          signupsStatsRaw = window.MockAdminData.getMockSignupsForPeriod(currentSignupsPeriod);
-        }
+  
       }
       renderSignupsChart();
     }
@@ -2399,7 +2365,7 @@
       const urgency = document.getElementById('filter-req-urgency')?.value || '';
       const search  = (document.getElementById('search-requests')?.value || '').toLowerCase();
 
-      let q = `/hospitals/requests?page=${page}&limit=${paginationState.requests.limit}`;
+      let q = `/admin/requests?page=${page}&limit=${paginationState.requests.limit}`;
       if (status) q += `&status=${encodeURIComponent(status)}`;
       if (urgency) q += `&urgency=${encodeURIComponent(urgency)}`;
 
@@ -2478,7 +2444,7 @@
       const status = document.getElementById('filter-don-status')?.value || '';
       const search = (document.getElementById('search-donations')?.value || '').toLowerCase();
 
-      const res = await apiFetch(`/donors/donations?page=${page}&limit=${paginationState.donations.limit}`);
+      const res = await apiFetch(`/admin/donations?page=${page}&limit=${paginationState.donations.limit}`);
       let list = donationsData;
       let total = donationsData.length;
 
@@ -2699,11 +2665,7 @@
         summaryTotalsRaw = res.data;
         renderSummaryTotalsTable(res.data);
       } else {
-        markOffline('stats-summary-totals');
-        if (window.MockAdminData && typeof window.MockAdminData.getMockSummaryStats === 'function') {
-          summaryTotalsRaw = window.MockAdminData.getMockSummaryStats();
-          renderSummaryTotalsTable(summaryTotalsRaw);
-        }
+  
       }
     }
 
@@ -2745,10 +2707,7 @@
         markOnline('stats-fulfillment');
         fulfillmentStatsRaw = res.data;
       } else {
-        markOffline('stats-fulfillment');
-        if (window.MockAdminData && typeof window.MockAdminData.getMockFulfillmentForTimeframe === 'function') {
-          fulfillmentStatsRaw = window.MockAdminData.getMockFulfillmentForTimeframe(timeframe);
-        }
+  
       }
       renderFulfillmentStats(fulfillmentStatsRaw);
     }
@@ -2786,10 +2745,7 @@
         markOnline('stats-geographic');
         geographicStatsRaw = res.data;
       } else {
-        markOffline('stats-geographic');
-        if (window.MockAdminData && typeof window.MockAdminData.getMockGeographicStats === 'function') {
-          geographicStatsRaw = window.MockAdminData.getMockGeographicStats();
-        }
+  
       }
       renderGeographicStats(geographicStatsRaw);
     }

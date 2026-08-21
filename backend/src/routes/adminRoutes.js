@@ -20,7 +20,18 @@ import {
   exportData,
   getAdminProfile,
   updateAdminProfile,
-  changeAdminPassword
+  changeAdminPassword,
+  getRequestTypesStats,
+  getBloodInventoryStats,
+  getSignupsStats,
+  getSummaryStats,
+  getFulfillmentStats,
+  getGeographicStats,
+  getAdminNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+  getAdminRequests,
+  getAdminDonations
 } from '../controllers/adminController.js';
 
 const router = express.Router();
@@ -76,9 +87,26 @@ router.put('/blood-banks/:id/verify', [
 router.get('/donors', getDonors);
 router.put('/donors/:id/verify', verifyDonor);
 
+// ============ NOTIFICATIONS ============
+router.get('/notifications', getAdminNotifications);
+router.put('/notifications/:id/read', markNotificationRead);
+router.put('/notifications/read-all', markAllNotificationsRead);
+
+// ============ REQUESTS (admin view - all) ============
+router.get('/requests', getAdminRequests);
+
+// ============ DONATIONS (admin view - all) ============
+router.get('/donations', getAdminDonations);
+
 // ============ SYSTEM ============
 router.get('/audit-logs', getAuditLogs);
 router.get('/stats', getSystemStats);
+router.get('/stats/request-types', getRequestTypesStats);
+router.get('/stats/blood-inventory', getBloodInventoryStats);
+router.get('/stats/signups', getSignupsStats);
+router.get('/stats/summary', getSummaryStats);
+router.get('/stats/fulfillment', getFulfillmentStats);
+router.get('/stats/geographic', getGeographicStats);
 router.get('/export', exportData);
 
 export default router;

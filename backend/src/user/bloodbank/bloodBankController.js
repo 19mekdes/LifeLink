@@ -1,10 +1,8 @@
 // backend/src/user/bloodbank/bloodBankController.js
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../config/database.js';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../../middleware/errorHandler.js';
-
-const prisma = new PrismaClient();
 
 // ============ GET DASHBOARD STATS ============
 export const getDashboardStats = asyncHandler(async (req, res) => {
@@ -149,9 +147,167 @@ export const getInventory = asyncHandler(async (req, res) => {
   });
 });
 
+// ============ GET REQUESTS ============
+export const getRequests = asyncHandler(async (req, res) => {
+  const bloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id }
+  });
+
+  if (!bloodBank) {
+    throw new ApiError(404, 'Blood Bank profile not found');
+  }
+
+  const { status, urgency, page = 1, limit = 25 } = req.query;
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+
+  const where = { bloodBankId: bloodBank.id };
+  if (status) where.status = status;
+  if (urgency) where.urgency = urgency;
+
+  const [requests, total] = await Promise.all([
+    prisma.bloodRequest.findMany({
+      where,
+      include: {
+        hospital: {
+          include: {
+            user: {
+              select: { name: true, email: true, phone: true }
+            }
+          }
+        },
+        donorResponses: {
+          include: {
+            donor: {
+              include: {
+                user: {
+                  select: { name: true, email: true, phone: true }
+                }
+              }
+            }
+          }
+        },
+        donations: true,
+        _count: { select: { donorResponses: true, donations: true } }
+      },
+      skip,
+      take: parseInt(limit),
+      orderBy: [
+        { urgency: 'desc' },
+        { createdAt: 'desc' }
+      ]
+    }),
+    prisma.bloodRequest.count({ where })
+  ]);
+
+  res.json({
+    success: true,
+    data: {
+      requests,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / parseInt(limit))
+      }
+    }
+  });
+});
+
+// ============ APPROVE REQUEST ============
+export const approveRequest = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const bloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id }
+  });
+
+  if (!bloodBank) {
+    throw new ApiError(404, 'Blood Bank profile not found');
+  }
+
+  const request = await prisma.bloodRequest.findFirst({
+    where: { id, bloodBankId: bloodBank.id }
+  });
+
+  if (!request) {
+    throw new ApiError(404, 'Request not found');
+  }
+
+  if (request.status !== 'PENDING') {
+    throw new ApiError(400, `Cannot approve request with status: ${request.status}`);
+  }
+
+  const updated = await prisma.bloodRequest.update({
+    where: { id },
+    data: {
+      status: 'APPROVED',
+      approvedAt: new Date(),
+      statusHistory: {
+        push: {
+          status: 'APPROVED',
+          timestamp: new Date(),
+          notes: 'Approved by blood bank'
+        }
+      }
+    }
+  });
+
+  res.json({
+    success: true,
+    data: updated,
+    message: 'Request approved successfully'
+  });
+});
+
+// ============ REJECT REQUEST ============
+export const rejectRequest = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { reason } = req.body;
+
+  const bloodBank = await prisma.bloodBank.findUnique({
+    where: { userId: req.user.id }
+  });
+
+  if (!bloodBank) {
+    throw new ApiError(404, 'Blood Bank profile not found');
+  }
+
+  const request = await prisma.bloodRequest.findFirst({
+    where: { id, bloodBankId: bloodBank.id }
+  });
+
+  if (!request) {
+    throw new ApiError(404, 'Request not found');
+  }
+
+  const updated = await prisma.bloodRequest.update({
+    where: { id },
+    data: {
+      status: 'REJECTED',
+      reason: reason || 'Rejected by blood bank',
+      statusHistory: {
+        push: {
+          status: 'REJECTED',
+          timestamp: new Date(),
+          notes: reason || 'Rejected by blood bank'
+        }
+      }
+    }
+  });
+
+  res.json({
+    success: true,
+    data: updated,
+    message: 'Request rejected'
+  });
+});
+
 export default {
   getDashboardStats,
   getProfile,
   updateProfile,
-  getInventory
+  getInventory,
+  getRequests,
+  approveRequest,
+  rejectRequest
 };

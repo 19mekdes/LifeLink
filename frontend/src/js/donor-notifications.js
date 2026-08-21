@@ -1,3 +1,5 @@
+import api from './api/api.js';
+
 console.log("Donor Notifications JS is working!");
 
 document.addEventListener("DOMContentLoaded", () => {

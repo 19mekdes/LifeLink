@@ -68,8 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
             donor.fullName ||
             "Donor";
 
-        const initial =
-            name.charAt(0).toUpperCase();
+        const nameParts = name.trim().split(/\s+/);
+        let initial = nameParts[0]?.charAt(0)?.toUpperCase() || '';
+        if (nameParts.length > 1) {
+            initial += nameParts[nameParts.length - 1]?.charAt(0)?.toUpperCase() || '';
+        }
 
         // -------------------------
         // Name
@@ -89,6 +92,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (dashboardProfileInitial) {
             dashboardProfileInitial.textContent = initial;
+        }
+
+        // -------------------------
+        // Welcome Name
+        // -------------------------
+
+        const welcomeDonorName = $("welcomeDonorName");
+        if (welcomeDonorName) {
+            const firstName = name.split(" ")[0];
+            welcomeDonorName.textContent = firstName;
         }
 
         // -------------------------

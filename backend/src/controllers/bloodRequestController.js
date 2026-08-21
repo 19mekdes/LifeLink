@@ -1,9 +1,7 @@
-import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
 import { sendEmail, emergencyRequestEmail, requestStatusUpdateEmail } from '../services/emailService.js';
-
-const prisma = new PrismaClient();
+import prisma from '../config/database.js';
 
 // ============ HELPER FUNCTIONS ============
 

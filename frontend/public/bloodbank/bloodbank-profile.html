@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeLink - Bank Profile</title>
   <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard-additions.css">
 
   <base target="_blank">
 </head>
@@ -16,8 +15,10 @@
   <aside class="sidebar" id="sidebar">
     <div>
       <div class="logo-area">
-        <div class="logo-icon" data-icon="droplet"></div>
-        <div class="logo-text">LifeLink</div>
+        <a href="../index.html" target="_self" class="logo-link">
+          <div class="logo-icon" data-icon="droplet"></div>
+          <div class="logo-text">LifeLink</div>
+        </a>
         <button class="sidebar-close" id="sidebar-close">&times;</button>
       </div>
       <div class="nav-section">
@@ -103,19 +104,119 @@
     </header>
 
     <div class="dashboard-container">
-      <section class="page-content">
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="hospital" data-icon-size="17"></span> Blood Bank Facility Details</h2>
+      <!-- ====== PROFILE HEADER CARD ====== -->
+      <section class="page-content" style="margin-bottom: 0;">
+        <div class="section-box" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+          <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#16a34a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;" id="profile-avatar">--</div>
+          <div style="flex:1; min-width:200px;">
+            <h2 id="profile-header-name" style="margin:0 0 4px;">—</h2>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+              <span id="profile-verification-badge" style="display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;"></span>
+              <span style="color:#6b7280; font-size:13px;" id="profile-member-since">Member since —</span>
+            </div>
           </div>
-          <div class="profile-details-grid" id="profile-details-grid">
-            <div class="profile-field"><label>Facility Name</label><span id="prof-bank-name" class="skeleton" style="display:inline-block; width:140px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>License ID</label><span id="prof-license" class="skeleton" style="display:inline-block; width:100px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>Phone Number</label><span id="prof-phone" class="skeleton" style="display:inline-block; width:110px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>Email Address</label><span id="prof-email" class="skeleton" style="display:inline-block; width:160px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>City / Location</label><span id="prof-location" class="skeleton" style="display:inline-block; width:150px; height:14px;">&nbsp;</span></div>
+          <div>
+            <button id="edit-profile-btn" class="section-box" style="cursor:pointer; padding:8px 20px; border:2px solid #2563eb; color:#2563eb; background:#fff; border-radius:8px; font-weight:600; font-size:14px; display:inline-flex; align-items:center; gap:6px;">
+              <span data-icon="settings" data-icon-size="15"></span> Edit Profile
+            </button>
           </div>
         </div>
+      </section>
+
+      <!-- ====== VIEW MODE ====== -->
+      <section class="page-content" id="view-mode">
+        <div class="section-box">
+          <div class="section-header">
+            <h2><span data-icon="hospital" data-icon-size="17"></span> Facility Information</h2>
+          </div>
+          <div class="profile-details-grid">
+            <div class="profile-field"><label>Facility Name</label><span id="view-bank-name" class="skeleton" style="display:inline-block; width:140px; height:14px;">&nbsp;</span></div>
+            <div class="profile-field"><label>License Number</label><span id="view-license" class="skeleton" style="display:inline-block; width:100px; height:14px;">&nbsp;</span></div>
+            <div class="profile-field"><label>Phone Number</label><span id="view-phone" class="skeleton" style="display:inline-block; width:110px; height:14px;">&nbsp;</span></div>
+            <div class="profile-field"><label>Email Address</label><span id="view-email" class="skeleton" style="display:inline-block; width:160px; height:14px;">&nbsp;</span></div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2><span data-icon="trending" data-icon-size="17"></span> Location &amp; Contact</h2>
+          </div>
+          <div class="profile-details-grid">
+            <div class="profile-field"><label>Address</label><span id="view-address" class="skeleton" style="display:inline-block; width:200px; height:14px;">&nbsp;</span></div>
+            <div class="profile-field"><label>City</label><span id="view-city" class="skeleton" style="display:inline-block; width:120px; height:14px;">&nbsp;</span></div>
+            <div class="profile-field"><label>State / Region</label><span id="view-state" class="skeleton" style="display:inline-block; width:120px; height:14px;">&nbsp;</span></div>
+            <div class="profile-field"><label>Country</label><span id="view-country" class="skeleton" style="display:inline-block; width:100px; height:14px;">&nbsp;</span></div>
+            <div class="profile-field"><label>Emergency Contact</label><span id="view-emergency" class="skeleton" style="display:inline-block; width:130px; height:14px;">&nbsp;</span></div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">
+            <h2><span data-icon="dashboard" data-icon-size="17"></span> Account Details</h2>
+          </div>
+          <div class="profile-details-grid">
+            <div class="profile-field"><label>Verification Status</label><span id="view-status">—</span></div>
+            <div class="profile-field"><label>Account Active</label><span id="view-active">—</span></div>
+            <div class="profile-field"><label>Account Created</label><span id="view-created">—</span></div>
+            <div class="profile-field"><label>Last Updated</label><span id="view-updated">—</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== EDIT MODE (hidden by default) ====== -->
+      <section class="page-content" id="edit-mode" style="display:none;">
+        <form id="profile-form">
+          <div class="section-box">
+            <div class="section-header">
+              <h2><span data-icon="hospital" data-icon-size="17"></span> Facility Information</h2>
+            </div>
+            <div class="profile-details-grid">
+              <div class="profile-field">
+                <label for="edit-bankName">Facility Name</label>
+                <input type="text" id="edit-bankName" name="bankName" placeholder="Enter facility name" required>
+              </div>
+              <div class="profile-field">
+                <label for="edit-phone">Phone Number</label>
+                <input type="tel" id="edit-phone" name="phone" placeholder="Enter phone number">
+              </div>
+            </div>
+          </div>
+
+          <div class="section-box">
+            <div class="section-header">
+              <h2><span data-icon="trending" data-icon-size="17"></span> Location &amp; Contact</h2>
+            </div>
+            <div class="profile-details-grid">
+              <div class="profile-field" style="grid-column: 1 / -1;">
+                <label for="edit-address">Address</label>
+                <input type="text" id="edit-address" name="address" placeholder="Enter full address" required>
+              </div>
+              <div class="profile-field">
+                <label for="edit-city">City</label>
+                <input type="text" id="edit-city" name="city" placeholder="Enter city" required>
+              </div>
+              <div class="profile-field">
+                <label for="edit-state">State / Region</label>
+                <input type="text" id="edit-state" name="state" placeholder="Enter state or region">
+              </div>
+              <div class="profile-field">
+                <label for="edit-country">Country</label>
+                <input type="text" id="edit-country" name="country" placeholder="Enter country">
+              </div>
+              <div class="profile-field">
+                <label for="edit-emergencyContact">Emergency Contact</label>
+                <input type="text" id="edit-emergencyContact" name="emergencyContact" placeholder="Emergency contact phone">
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px; justify-content:flex-end; padding:16px 0;">
+            <button type="button" id="cancel-edit-btn" style="padding:10px 24px; border:1px solid #d1d5db; background:#fff; border-radius:8px; font-weight:500; cursor:pointer; font-size:14px;">Cancel</button>
+            <button type="submit" id="save-profile-btn" style="padding:10px 24px; border:none; background:#2563eb; color:#fff; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; gap:6px;">
+              <span data-icon="check" data-icon-size="15"></span> Save Changes
+            </button>
+          </div>
+        </form>
       </section>
     </div>
   </main>
@@ -123,37 +224,199 @@
   <!-- ============ TOAST CONTAINER ============ -->
   <div id="toastContainer" class="toast-container"></div>
 
-  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+  <!-- JAVASCRIPT -->
   <script type="module">
     import api from '../../src/js/api/api.js';
     import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
+    import { applyIcons } from '../../src/js/bloodbank-icons.js';
 
+    /* ---------- helpers ---------- */
     function clearSkeleton(el) {
+      if (!el) return;
       el.classList.remove('skeleton');
       el.style.display = '';
       el.style.width = '';
       el.style.height = '';
     }
 
+    function formatDate(dateStr) {
+      if (!dateStr) return '—';
+      return new Date(dateStr).toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    /* ---------- state ---------- */
+    let profileData = null;
+
+    /* ---------- render view mode ---------- */
+    function renderView(p) {
+      const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        clearSkeleton(el);
+        el.innerHTML = val;
+      };
+
+      // Header
+      const name = p.bankName || p.name || '—';
+      const initials = name.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || '--';
+      document.getElementById('profile-avatar').textContent = initials;
+      document.getElementById('profile-header-name').textContent = name;
+      document.getElementById('profile-member-since').textContent = `Member since ${formatDate(p.createdAt)}`;
+
+      // Verification badge
+      const badge = document.getElementById('profile-verification-badge');
+      const vStatus = p.verificationStatus || 'UNKNOWN';
+      const badgeColors = {
+        VERIFIED: { bg: '#dcfce7', color: '#166534', icon: '✓' },
+        PENDING: { bg: '#fef9c3', color: '#854d0e', icon: '⏳' },
+        REJECTED: { bg: '#fee2e2', color: '#991b1b', icon: '✗' }
+      };
+      const bc = badgeColors[vStatus] || { bg: '#f3f4f6', color: '#374151', icon: '?' };
+      badge.style.background = bc.bg;
+      badge.style.color = bc.color;
+      badge.textContent = `${bc.icon} ${vStatus}`;
+
+      // Facility info
+      set('view-bank-name', escapeHtml(p.bankName || '—'));
+      set('view-license', escapeHtml(p.licenseNumber || '—'));
+      set('view-phone', escapeHtml(p.phone || p.user?.phone || '—'));
+      set('view-email', escapeHtml(p.user?.email || '—'));
+
+      // Location
+      set('view-address', escapeHtml(p.address || '—'));
+      set('view-city', escapeHtml(p.city || '—'));
+      set('view-state', escapeHtml(p.state || '—'));
+      set('view-country', escapeHtml(p.country || '—'));
+      set('view-emergency', escapeHtml(p.emergencyContact || '—'));
+
+      // Account
+      set('view-status', `<span style="color:${bc.color};font-weight:600;">${vStatus}</span>`);
+      set('view-active', p.isActive !== false
+        ? '<span style="color:#16a34a;font-weight:600;">✓ Active</span>'
+        : '<span style="color:#dc2626;font-weight:600;">✗ Inactive</span>');
+      set('view-created', formatDate(p.createdAt));
+      set('view-updated', formatDate(p.updatedAt));
+    }
+
+    /* ---------- populate edit form ---------- */
+    function populateEditForm(p) {
+      if (!p) return;
+      const fields = ['bankName', 'phone', 'address', 'city', 'state', 'country', 'emergencyContact'];
+      fields.forEach(f => {
+        const el = document.getElementById(`edit-${f}`);
+        if (el) el.value = p[f] || '';
+      });
+    }
+
+    /* ---------- toggle edit/view ---------- */
+    function showViewMode() {
+      document.getElementById('view-mode').style.display = '';
+      document.getElementById('edit-mode').style.display = 'none';
+      document.getElementById('edit-profile-btn').style.display = '';
+    }
+
+    function showEditMode() {
+      document.getElementById('view-mode').style.display = 'none';
+      document.getElementById('edit-mode').style.display = '';
+      document.getElementById('edit-profile-btn').style.display = 'none';
+    }
+
+    /* ---------- init ---------- */
     const shell = initShell();
     if (shell) {
       try {
-        const { profile } = await loadCommonData(api, shell.paintProfile);
-        const fields = [
-          ['prof-bank-name', profile.bankName || profile.name || '—'],
-          ['prof-license', profile.licenseNumber || '—'],
-          ['prof-phone', profile.phone || profile.user?.phone || '—'],
-          ['prof-email', profile.user?.email || '—'],
-          ['prof-location', [profile.address, profile.city].filter(Boolean).join(', ') || '—'],
-        ];
-        fields.forEach(([id, value]) => {
-          const el = document.getElementById(id);
-          clearSkeleton(el);
-          el.innerText = value;
-        });
+        // Load sidebar header data + dedicated profile endpoint in parallel
+        const [common, profileRes] = await Promise.allSettled([
+          loadCommonData(api, shell.paintProfile),
+          api.get('/blood-banks/profile')
+        ]);
+
+        // Prefer the dedicated profile endpoint for full data
+        const dashboardProfile = common.status === 'fulfilled' ? common.value.profile : {};
+        const fullProfile = profileRes.status === 'fulfilled' && profileRes.value.success ? profileRes.value.data : {};
+
+        // Merge: dashboard profile has user data, profile endpoint has full fields
+        profileData = { ...dashboardProfile, ...fullProfile };
+
+        if (profileData && profileData.bankName) {
+          renderView(profileData);
+          shell.paintProfile(profileData);
+        } else {
+          showToast('Could not load profile data.', 'error');
+        }
+        applyIcons();
       } catch (err) {
+        console.error('Profile load error:', err);
         showToast('Failed to load profile details.', 'error');
       }
+
+      // Edit button
+      document.getElementById('edit-profile-btn')?.addEventListener('click', () => {
+        if (!profileData) return;
+        populateEditForm(profileData);
+        showEditMode();
+      });
+
+      // Cancel
+      document.getElementById('cancel-edit-btn')?.addEventListener('click', () => {
+        showViewMode();
+      });
+
+      // Save
+      document.getElementById('profile-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('save-profile-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<span>Saving…</span>';
+
+        try {
+          const formData = {
+            bankName: document.getElementById('edit-bankName').value.trim(),
+            phone: document.getElementById('edit-phone').value.trim(),
+            address: document.getElementById('edit-address').value.trim(),
+            city: document.getElementById('edit-city').value.trim(),
+            state: document.getElementById('edit-state').value.trim(),
+            country: document.getElementById('edit-country').value.trim(),
+            emergencyContact: document.getElementById('edit-emergencyContact').value.trim()
+          };
+
+          const res = await api.put('/blood-banks/profile', formData);
+
+          if (res.success) {
+            // Update local data (res.data is the updated blood bank object)
+            const updated = res.data || {};
+            profileData = { ...profileData, ...formData, ...updated };
+            renderView(profileData);
+            showViewMode();
+            shell.paintProfile(profileData);
+            showToast('Profile updated successfully!', 'success');
+          } else {
+            showToast(res.message || 'Failed to update profile.', 'error');
+          }
+        } catch (err) {
+          showToast(err.message || 'Failed to update profile.', 'error');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<span data-icon="check" data-icon-size="15"></span> Save Changes';
+          applyIcons();
+        }
+      });
+
+      // Keyboard shortcut: Escape to cancel edit
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.getElementById('edit-mode').style.display !== 'none') {
+          showViewMode();
+        }
+      });
     }
   </script>
 </body>

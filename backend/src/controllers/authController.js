@@ -2,13 +2,11 @@
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
 // ✅ Import email service
 import { sendEmail, welcomeEmail } from '../services/emailService.js';
-
-const prisma = new PrismaClient();
+import prisma from '../config/database.js';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-151112';
 const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d';
 

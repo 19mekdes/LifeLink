@@ -1,3 +1,5 @@
+import api from './api/api.js';
+
 console.log("Donor Request JS is working!");
 
 document.addEventListener("DOMContentLoaded", () => {

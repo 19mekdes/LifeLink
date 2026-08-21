@@ -171,6 +171,11 @@ document.querySelectorAll(".profile-name").forEach(element => {
 document.querySelectorAll(".profile-avatar").forEach(element => {
     element.textContent = initial;
 });
+
+const dashboardProfileName = document.getElementById("dashboardProfileName");
+if (dashboardProfileName) {
+    dashboardProfileName.textContent = name;
+}
     // ==========================================
     // AVAILABILITY SECTION
     // ==========================================

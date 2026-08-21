@@ -99,10 +99,10 @@
 
                     <button class="profile-button" id="profileButton">
 
-                        <span class="profile-avatar" id="profileInitial">KH</span>
+                        <span class="profile-avatar" id="profileInitial">...</span>
 
                         <span class="profile-info">
-                            <strong id="topbarName">Hi, Kalkidan</strong>
+                            <strong id="topbarName">Hi, User</strong>
                             <small>Donor</small>
                         </span>
 
@@ -116,11 +116,11 @@
                         <div class="profile-dropdown-header">
 
                             <div class="profile-avatar large" id="dashboardProfileInitial">
-                                KH
+                                ...
                             </div>
 
                             <div>
-                                <strong>Kalkidan Habtamu</strong>
+                                <strong id="dashboardProfileName">User</strong>
                                 <small>Donor</small>
                             </div>
 
@@ -161,7 +161,7 @@
 
             <div>
                 <h1>Dashboard</h1>
-                <p>Welcome back! You can save a life today.</p>
+                <p>Welcome back, <span id="welcomeDonorName">there</span>! You can save a life today.</p>
             </div>
 
         </section>
@@ -308,126 +308,9 @@
 
 
                 <div class="requests-list">
-
-                    <!-- Request 1 -->
-                    <div class="request-card">
-
-                        <div class="request-icon urgent-icon">
-                            🩸
-                        </div>
-
-                        <div class="request-info">
-
-                            <div class="request-title">
-                                <strong>O- Blood Needed</strong>
-                                <span>3 Units</span>
-                            </div>
-
-                            <div class="request-location">
-                                <strong>Black Lion Hospital</strong>
-                                <span> | Addis Ababa</span>
-                            </div>
-
-                        </div>
-
-                        <div class="request-meta">
-
-                            <span class="distance">
-                                2.4 km away
-                            </span>
-
-                            <span class="urgency urgent">
-                                URGENT
-                            </span>
-
-                        </div>
-
-                        <a href="donor-requests.html" class="view-details">
-                            View Details
-                        </a>
-
+                    <div class="request-card" style="text-align:center; padding:28px; color:var(--text-muted, #999);">
+                        Loading requests...
                     </div>
-
-
-                    <!-- Request 2 -->
-                    <div class="request-card">
-
-                        <div class="request-icon medium-icon">
-                            🩸
-                        </div>
-
-                        <div class="request-info">
-
-                            <div class="request-title">
-                                <strong>A+ Blood Needed</strong>
-                                <span>2 Units</span>
-                            </div>
-
-                            <div class="request-location">
-                                <strong>Tikur Anbessa Hospital</strong>
-                                <span> | Addis Ababa</span>
-                            </div>
-
-                        </div>
-
-                        <div class="request-meta">
-
-                            <span class="distance">
-                                3.7 km away
-                            </span>
-
-                            <span class="urgency medium">
-                                MEDIUM
-                            </span>
-
-                        </div>
-
-                        <a href="donor-requests.html" class="view-details">
-                            View Details
-                        </a>
-
-                    </div>
-
-
-                    <!-- Request 3 -->
-                    <div class="request-card">
-
-                        <div class="request-icon low-icon">
-                            🩸
-                        </div>
-
-                        <div class="request-info">
-
-                            <div class="request-title">
-                                <strong>B+ Blood Needed</strong>
-                                <span>1 Unit</span>
-                            </div>
-
-                            <div class="request-location">
-                                <strong>St. Paul Hospital</strong>
-                                <span> | Addis Ababa</span>
-                            </div>
-
-                        </div>
-
-                        <div class="request-meta">
-
-                            <span class="distance">
-                                5.1 km away
-                            </span>
-
-                            <span class="urgency low">
-                                LOW
-                            </span>
-
-                        </div>
-
-                        <a href="donor-requests.html" class="view-details">
-                            View Details
-                        </a>
-
-                    </div>
-
                 </div>
 
             </div>
@@ -586,7 +469,7 @@
     <!-- ================= JAVASCRIPT ================= -->
 
     <script type="module" src="../src/js/api/api.js"></script>
-    <script src="../src/js/donor-common.js"></script>
+    <script type="module" src="../src/js/donor-common.js"></script>
     <script type="module" src="../src/js/donor.js"></script>
 
 </html>

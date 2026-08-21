@@ -1,9 +1,7 @@
 // backend/src/user/hospital/hospitalController.js
 
-import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
-
-const prisma = new PrismaClient();
+import prisma from '../../config/database.js';
 
 // ============ GET DASHBOARD STATS ============
 export const getDashboardStats = async (req, res) => {

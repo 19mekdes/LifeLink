@@ -7,7 +7,10 @@ import {
   getDashboardStats,
   getProfile,
   updateProfile,
-  getInventory
+  getInventory,
+  getRequests,
+  approveRequest,
+  rejectRequest
 } from './bloodBankController.js';
 
 const router = express.Router();
@@ -24,5 +27,12 @@ router.put('/profile', [
   body('city').optional().notEmpty().withMessage('City cannot be empty')
 ], updateProfile);
 router.get('/inventory', getInventory);
+
+// ============ REQUESTS ============
+router.get('/requests', getRequests);
+router.put('/requests/:id/approve', approveRequest);
+router.put('/requests/:id/reject', [
+  body('reason').optional().isString().withMessage('Reason must be a string')
+], rejectRequest);
 
 export default router;

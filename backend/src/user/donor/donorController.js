@@ -1,10 +1,8 @@
 // backend/src/user/donor/donorController.js
 
-import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../../middleware/errorHandler.js';
-
-const prisma = new PrismaClient();
+import prisma from '../../config/database.js';
 
 // ============ GET DONOR PROFILE ============
 export const getProfile = asyncHandler(async (req, res) => {

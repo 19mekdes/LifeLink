@@ -1,3 +1,5 @@
+import api from './api/api.js';
+
 console.log("Donor common JS is working!");
 
 
@@ -48,8 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
             "Donor";
 
 
-        const initial =
-            name.charAt(0).toUpperCase();
+        const nameParts = name.trim().split(/\s+/);
+        let initial = nameParts[0]?.charAt(0)?.toUpperCase() || '';
+        if (nameParts.length > 1) {
+            initial += nameParts[nameParts.length - 1]?.charAt(0)?.toUpperCase() || '';
+        }
 
 
         const topbarName =
@@ -84,14 +89,20 @@ document.addEventListener("DOMContentLoaded", () => {
             profileInitial.textContent =
                 initial;
 
+        }        if (dashboardProfileInitial) {
+            dashboardProfileInitial.textContent =
+                initial;
         }
 
 
-        if (dashboardProfileInitial) {
+        const dashboardProfileName =
+            document.getElementById(
+                "dashboardProfileName"
+            );
 
-            dashboardProfileInitial.textContent =
-                initial;
-
+        if (dashboardProfileName) {
+            dashboardProfileName.textContent =
+                name;
         }
 
 

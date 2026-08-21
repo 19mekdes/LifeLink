@@ -1,3 +1,6 @@
+/* ============================================================
+   1. DESIGN TOKENS / CSS VARIABLES
+   ============================================================ */
 :root {
     --primary: #7b1e2b;
     --primary-dark: #611722;
@@ -28,6 +31,9 @@
     --sidebar-width-collapsed: 84px;
 }
 
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
 * {
     margin: 0;
     padding: 0;
@@ -43,7 +49,27 @@ body {
     overflow: hidden;
 }
 
-/* SIDEBAR */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* ============================================================
+   3. LAYOUT — SIDEBAR
+   ============================================================ */
 .sidebar {
     width: var(--sidebar-width);
     background: #7b1e2b;
@@ -58,102 +84,6 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     transition: width 0.25s ease;
-}
-
-.toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    pointer-events: none;
-    max-width: 360px;
-}
-
-.spinner {
-    display: none;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    margin-left: 8px;
-    vertical-align: middle;
-    animation: spin 0.6s linear infinite;
-}
-
-.spinner.active {
-    display: inline-block;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-#submit-stock-update-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.toast {
-    pointer-events: auto;
-    background: #1e293b;
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.loading-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 60px 20px;
-    color: var(--text-muted, #64748b);
-    grid-column: 1 / -1;
-}
-
-.btn-danger {
-    background: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-}
-
-.btn-danger:hover {
-    background: #fee2e2;
-}
-
-.btn-danger:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.spinner-lg {
-    width: 32px;
-    height: 32px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top-color: var(--primary, #b3261e);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-}
-
-.toast-success {
-    border-left: 4px solid #16a34a;
-}
-
-.toast-error {
-    border-left: 4px solid #dc2626;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -344,7 +274,7 @@ body {
     padding: 11px;
 }
 
-/* COLLAPSED SIDEBAR (desktop) */
+/* Collapsed sidebar (desktop) */
 .sidebar.collapsed {
     width: var(--sidebar-width-collapsed);
     padding-left: 12px;
@@ -370,7 +300,9 @@ body {
     padding: 12px;
 }
 
-/* MAIN */
+/* ============================================================
+   4. LAYOUT — MAIN CONTENT & HEADER
+   ============================================================ */
 .main-content {
     flex-grow: 1;
     display: flex;
@@ -436,6 +368,10 @@ body {
     border: 2px solid white;
 }
 
+.user-profile-wrap {
+    position: relative;
+}
+
 .user-profile-badge {
     display: flex;
     align-items: center;
@@ -447,8 +383,9 @@ body {
     transition: var(--transition);
 }
 
-.user-profile-wrap {
-    position: relative;
+.user-profile-badge:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .user-dropdown {
@@ -462,7 +399,6 @@ body {
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
     padding: 8px;
-
     z-index: 60;
 }
 
@@ -502,11 +438,6 @@ body {
     color: var(--danger);
 }
 
-.user-profile-badge:hover {
-    border-color: var(--primary);
-    box-shadow: var(--shadow-sm);
-}
-
 .user-avatar {
     width: 34px;
     height: 34px;
@@ -541,7 +472,47 @@ body {
     flex-grow: 1;
 }
 
-/* PAGES */
+/* ============================================================
+   5. LAYOUT — MOBILE NAV CONTROLS
+   ============================================================ */
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-main);
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.menu-toggle:hover {
+    background: var(--bg-light);
+}
+
+.sidebar-close {
+    display: none;
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 149;
+}
+
+.sidebar-backdrop.active {
+    display: block;
+}
+
+/* ============================================================
+   6. PAGE TRANSITIONS
+   ============================================================ */
 .page-content {
     animation: fadeIn 0.3s ease;
 }
@@ -558,7 +529,558 @@ body {
     }
 }
 
-/* METRICS */
+/* ============================================================
+   7. COMPONENT — BUTTONS
+   ============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--bg-light);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--border-color);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+/* NOTE: .btn-danger is intentionally defined twice below.
+   Order preserved exactly as in the original file — the second
+   definition overrides background/color of the first. Changing
+   this order would change the rendered result. */
+.btn-danger {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.btn-danger:hover {
+    background: #fee2e2;
+}
+
+.btn-danger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+#submit-stock-update-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   8. COMPONENT — LOADING / SPINNERS
+   ============================================================ */
+.spinner {
+    display: none;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    margin-left: 8px;
+    vertical-align: middle;
+    animation: spin 0.6s linear infinite;
+}
+
+.spinner.active {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner-lg {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--primary, #b3261e);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px 20px;
+    color: var(--text-muted, #64748b);
+    grid-column: 1 / -1;
+}
+
+/* ============================================================
+   9. COMPONENT — TOAST NOTIFICATIONS
+   ============================================================ */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+    max-width: 360px;
+}
+
+.toast {
+    pointer-events: auto;
+    background: #1e293b;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-success {
+    border-left: 4px solid #16a34a;
+}
+
+.toast-error {
+    border-left: 4px solid #dc2626;
+}
+
+/* ============================================================
+   10. COMPONENT — BADGES
+   ============================================================ */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.badge.emergency {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.badge.emergency::before {
+    background: var(--danger);
+}
+
+.badge.urgent {
+    background: var(--warning-light);
+    color: #b45309;
+}
+
+.badge.urgent::before {
+    background: var(--warning);
+}
+
+.badge.completed {
+    background: var(--success-light);
+    color: #047857;
+}
+
+.badge.completed::before {
+    background: var(--success);
+}
+
+.badge.pending {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+.badge.pending::before {
+    background: var(--warning);
+}
+
+.badge.approved {
+    background: var(--info-light);
+    color: #1d4ed8;
+}
+
+.badge.approved::before {
+    background: var(--info);
+}
+
+.badge.low {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.badge.low::before {
+    background: var(--danger);
+}
+
+.badge.adequate {
+    background: var(--success-light);
+    color: #047857;
+}
+
+.badge.adequate::before {
+    background: var(--success);
+}
+
+/* ============================================================
+   11. COMPONENT — TABLES
+   ============================================================ */
+.table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th,
+td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+th {
+    background: #f9fafb;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    transition: var(--transition);
+}
+
+tbody tr:hover {
+    background: #f9fafb;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ============================================================
+   12. COMPONENT — PAGINATION
+   ============================================================ */
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+    font-size: 13px;
+    color: var(--text-muted, #64748b);
+}
+
+/* NOTE: .pagination-controls is intentionally defined twice below.
+   Order preserved exactly as in the original file — the second
+   definition (gap: 10px) overrides the first (gap: 4px). */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.page-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: #f1f5f9;
+}
+
+.page-btn.active {
+    background: var(--primary, #b3261e);
+    color: #fff;
+    border-color: var(--primary, #b3261e);
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-ellipsis {
+    padding: 0 4px;
+    color: var(--text-muted);
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   13. COMPONENT — FORMS
+   ============================================================ */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-main);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 14px;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: var(--transition);
+    background: var(--bg-white);
+    color: var(--text-main);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(123, 30, 43, 0.1);
+}
+
+/* ============================================================
+   14. COMPONENT — MODAL
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: modalSlide 0.25s ease;
+}
+
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: var(--bg-light);
+    color: var(--text-main);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ============================================================
+   15. COMPONENT — EMPTY STATE
+   ============================================================ */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-muted);
+}
+
+.empty-state .icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.3;
+}
+
+.empty-state h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.empty-state p {
+    font-size: 14px;
+}
+
+/* ============================================================
+   16. COMPONENT — GENERIC SECTION BOX
+   ============================================================ */
+.section-box {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: var(--transition);
+}
+
+.section-box:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.section-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ============================================================
+   17. PAGE — DASHBOARD METRICS
+   ============================================================ */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -679,223 +1201,9 @@ body {
     margin-top: 4px;
 }
 
-/* SECTIONS */
-.section-box {
-    background: var(--bg-white);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    padding: 24px;
-    margin-bottom: 24px;
-    transition: var(--transition);
-}
-
-.section-box:hover {
-    box-shadow: var(--shadow-sm);
-}
-
-.section-header {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.section-header h2 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.section-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-/* BUTTONS */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    border: none;
-    outline: none;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--primary-dark);
-    box-shadow: var(--shadow-md);
-}
-
-.btn-secondary {
-    background: var(--bg-light);
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-}
-
-.btn-secondary:hover {
-    background: var(--border-color);
-}
-
-.btn-success {
-    background: var(--success);
-    color: white;
-}
-
-.btn-success:hover {
-    background: #059669;
-}
-
-.btn-danger {
-    background: var(--danger);
-    color: white;
-}
-
-.btn-sm {
-    padding: 6px 12px;
-    font-size: 12px;
-}
-
-/* TABLES */
-.table-wrap {
-    overflow-x: auto;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-color);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-}
-
-th,
-td {
-    padding: 14px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    white-space: nowrap;
-}
-
-th {
-    background: #f9fafb;
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-tbody tr {
-    transition: var(--transition);
-}
-
-tbody tr:hover {
-    background: #f9fafb;
-}
-
-tbody tr:last-child td {
-    border-bottom: none;
-}
-
-/* BADGES */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.badge::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-}
-
-.badge.emergency {
-    background: var(--danger-light);
-    color: var(--danger);
-}
-
-.badge.emergency::before {
-    background: var(--danger);
-}
-
-.badge.urgent {
-    background: var(--warning-light);
-    color: #b45309;
-}
-
-.badge.urgent::before {
-    background: var(--warning);
-}
-
-.badge.completed {
-    background: var(--success-light);
-    color: #047857;
-}
-
-.badge.completed::before {
-    background: var(--success);
-}
-
-.badge.pending {
-    background: #fef9c3;
-    color: #a16207;
-}
-
-.badge.pending::before {
-    background: var(--warning);
-}
-
-.badge.approved {
-    background: var(--info-light);
-    color: #1d4ed8;
-}
-
-.badge.approved::before {
-    background: var(--info);
-}
-
-.badge.low {
-    background: var(--danger-light);
-    color: var(--danger);
-}
-
-.badge.low::before {
-    background: var(--danger);
-}
-
-.badge.adequate {
-    background: var(--success-light);
-    color: #047857;
-}
-
-.badge.adequate::before {
-    background: var(--success);
-}
-
-/* INVENTORY GRID */
+/* ============================================================
+   18. PAGE — BLOOD INVENTORY
+   ============================================================ */
 .inventory-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -990,7 +1298,61 @@ tbody tr:last-child td {
     font-size: 11px;
 }
 
-/* PROFILE & FORMS */
+/* ============================================================
+   19. PAGE — HOSPITAL REQUESTS TOOLBAR
+   ============================================================ */
+.requests-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.toolbar-search {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+}
+
+.toolbar-search .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+
+.toolbar-search input {
+    width: 100%;
+    padding: 8px 12px 8px 34px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+}
+
+.toolbar-filters {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.toolbar-filters select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+}
+
+.row-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ============================================================
+   20. PAGE — BANK PROFILE
+   ============================================================ */
 .profile-details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1020,46 +1382,9 @@ tbody tr:last-child td {
     font-weight: 500;
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--text-main);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 10px 14px;
-    width: 100%;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    transition: var(--transition);
-    background: var(--bg-white);
-    color: var(--text-main);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(123, 30, 43, 0.1);
-}
-
-/* NOTIFICATIONS */
+/* ============================================================
+   21. PAGE — NOTIFICATIONS
+   ============================================================ */
 .notification-list {
     list-style: none;
 }
@@ -1133,7 +1458,9 @@ tbody tr:last-child td {
     font-weight: 500;
 }
 
-/* OUTREACH */
+/* ============================================================
+   22. PAGE — DONOR OUTREACH
+   ============================================================ */
 .outreach-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1225,7 +1552,9 @@ tbody tr:last-child td {
     color: var(--success);
 }
 
-/* ANALYTICS */
+/* ============================================================
+   23. PAGE — ANALYTICS
+   ============================================================ */
 .analytics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -1272,151 +1601,9 @@ tbody tr:last-child td {
     color: var(--text-main);
 }
 
-/* MODAL */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    backdrop-filter: blur(4px);
-}
-
-.modal-overlay.active {
-    display: flex;
-}
-
-.modal {
-    background: var(--bg-white);
-    border-radius: var(--radius-lg);
-    width: 100%;
-    max-width: 520px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: var(--shadow-lg);
-    animation: modalSlide 0.25s ease;
-}
-
-@keyframes modalSlide {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-header h3 {
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 22px;
-    color: var(--text-muted);
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-sm);
-    transition: var(--transition);
-}
-
-.modal-close:hover {
-    background: var(--bg-light);
-    color: var(--text-main);
-}
-
-.modal-body {
-    padding: 24px;
-}
-
-.modal-footer {
-    padding: 16px 24px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-/* EMPTY STATE */
-.empty-state {
-    text-align: center;
-    padding: 48px 24px;
-    color: var(--text-muted);
-}
-
-.empty-state .icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.3;
-}
-
-.empty-state h4 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--text-main);
-}
-
-.empty-state p {
-    font-size: 14px;
-}
-
-/* MENU / COLLAPSE TOGGLE BUTTON */
-.menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: var(--text-main);
-    padding: 8px;
-    border-radius: var(--radius-sm);
-    transition: var(--transition);
-    flex-shrink: 0;
-}
-
-.menu-toggle:hover {
-    background: var(--bg-light);
-}
-
-.sidebar-close {
-    display: none;
-}
-
-.sidebar-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 149;
-}
-
-.sidebar-backdrop.active {
-    display: block;
-}
-
-/* RESPONSIVE */
+/* ============================================================
+   24. RESPONSIVE
+   ============================================================ */
 @media (max-width: 1024px) {
     .dashboard-container {
         padding: 20px;
@@ -1515,22 +1702,4 @@ tbody tr:last-child td {
         padding: 4px;
         border: none;
     }
-}
-
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
 }

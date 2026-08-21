@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeLink - Donation Records</title>
   <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard-additions.css">
 
   <base target="_blank">
 </head>
@@ -15,7 +16,7 @@
   <aside class="sidebar" id="sidebar">
     <div>
       <div class="logo-area">
-        <div class="logo-icon">🩸</div>
+        <div class="logo-icon" data-icon="droplet"></div>
         <div class="logo-text">LifeLink</div>
         <button class="sidebar-close" id="sidebar-close">&times;</button>
       </div>
@@ -23,33 +24,33 @@
         <div class="nav-section-title">Main</div>
         <ul class="nav-links">
           <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span
-                class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon">🩸</span><span
+                class="nav-icon" data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon" data-icon="droplet"></span><span
                 class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon">🏥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon" data-icon="hospital"></span><span
                 class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon">👥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon" data-icon="users"></span><span
                 class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item active" href="bloodbank-donations.html"><span class="nav-icon">📥</span><span
+          <li><a class="nav-item active" href="bloodbank-donations.html" target="_self"><span class="nav-icon" data-icon="inbox"></span><span
                 class="nav-label">Donation Records</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">Insights</div>
         <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon">📈</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon" data-icon="trending"></span><span
                 class="nav-label">Analytics</span></a></li>
           <li><a class="nav-item" target="_self" href="bloodbank-notifications.html"><span
-                class="nav-icon">🔔</span><span class="nav-label">Notifications</span> <span class="nav-badge"
+                class="nav-icon" data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
                 id="notif-badge">0</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">System</div>
         <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon">🏥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon" data-icon="hospital"></span><span
                 class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon">⚙️</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon" data-icon="settings"></span><span
                 class="nav-label">Settings</span></a></li>
         </ul>
       </div>
@@ -59,6 +60,11 @@
         <span class="status-dot online" id="sidebar-status-dot"></span>
         <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
       </div>
+      <div class="sidebar-footer-actions">
+        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
+          <span data-icon="logout" data-icon-size="15"></span> Logout
+        </button>
+      </div>
     </div>
   </aside>
   <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
@@ -66,7 +72,7 @@
   <!-- MAIN CONTENT -->
   <main class="main-content">
     <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
       <div class="header-title">
         <h1 id="page-title">Donation Records</h1>
         <p>Track donor collection logs.</p>
@@ -74,7 +80,7 @@
       <div class="header-actions">
         <button class="header-btn" id="notif-header-btn" title="Notifications"
           onclick="window.location.href='bloodbank-notifications.html'">
-          🔔
+          <span data-icon="bell" data-icon-size="18"></span>
           <span class="dot" id="header-notif-dot"></span>
         </button>
         <div class="user-profile-wrap" id="user-profile-wrap">
@@ -88,9 +94,9 @@
           <div class="user-dropdown" id="user-dropdown">
             <div class="user-dropdown-name" id="dropdown-user-name">—</div>
             <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self">🏥 Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self">⚙️ Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn" target="_self">🚪 Logout</a>
+            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self"><span data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
+            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self"><span data-icon="settings" data-icon-size="15"></span> Settings</a>
+            <a class="user-dropdown-item danger" id="dropdown-logout-btn" target="_self"><span data-icon="logout" data-icon-size="15"></span> Logout</a>
           </div>
         </div>
       </div>
@@ -100,11 +106,34 @@
       <section class="page-content">
         <div class="section-box">
           <div class="section-header">
-            <h2>📥 Donor Collection Logs</h2>
+            <h2><span data-icon="inbox" data-icon-size="17"></span> Donor Collection Logs</h2>
             <div class="section-actions">
               <button class="btn btn-primary" id="open-record-donation-btn">+ Record Donation</button>
             </div>
           </div>
+
+          <!-- ============ FILTER / SEARCH TOOLBAR ============ -->
+          <div class="donations-toolbar">
+            <div class="toolbar-search">
+              <span class="search-icon" data-icon="search" data-icon-size="16"></span>
+              <input type="text" id="donation-search" placeholder="Search by donor name or blood type...">
+            </div>
+            <div class="toolbar-filters">
+              <select id="donation-bloodtype-filter">
+                <option value="">All Blood Types</option>
+                <option value="A_POS">A+</option>
+                <option value="A_NEG">A-</option>
+                <option value="B_POS">B+</option>
+                <option value="B_NEG">B-</option>
+                <option value="AB_POS">AB+</option>
+                <option value="AB_NEG">AB-</option>
+                <option value="O_POS">O+</option>
+                <option value="O_NEG">O-</option>
+              </select>
+              <button class="btn btn-secondary btn-sm" id="clear-donation-filters-btn">Clear</button>
+            </div>
+          </div>
+
           <div class="table-wrap">
             <table>
               <thead>
@@ -116,8 +145,16 @@
                   <th>Status</th>
                 </tr>
               </thead>
-              <tbody id="donations-table"></tbody>
+              <tbody id="donations-table">
+                <tr><td colspan="5"><div class="loading-state"><div class="spinner-lg"></div><p>Loading donations…</p></div></td></tr>
+              </tbody>
             </table>
+          </div>
+
+          <!-- ============ PAGINATION ============ -->
+          <div class="pagination-bar" id="pagination-bar" style="display:none;">
+            <span class="pagination-info" id="pagination-info"></span>
+            <div class="pagination-controls" id="pagination-controls"></div>
           </div>
         </div>
       </section>
@@ -126,7 +163,7 @@
   <div class="modal-overlay" id="recordDonationModal">
     <div class="modal">
       <div class="modal-header">
-        <h3>📥 Record Donation</h3>
+        <h3><span data-icon="inbox" data-icon-size="17"></span> Record Donation</h3>
         <button class="modal-close" data-close-modal="recordDonationModal">&times;</button>
       </div>
       <div class="modal-body">
@@ -139,7 +176,10 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-close-modal="recordDonationModal">Cancel</button>
-        <button class="btn btn-primary" id="submit-donation-btn">Record Donation</button>
+        <button class="btn btn-primary" id="submit-donation-btn">
+          <span id="submit-donation-text">Record Donation</span>
+          <span id="submit-donation-spinner" class="spinner"></span>
+        </button>
       </div>
     </div>
   </div>
@@ -150,20 +190,157 @@
   <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
   <script type="module">
     import api from '../../src/js/api/api.js';
-    import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
+    import { initShell, loadCommonData, showToast, iconMarkup } from '../../src/js/bloodbank-sidebar-common.js';
+
+    const ENUM_TO_BLOOD_TYPE = {
+      A_POS: 'A+', A_NEG: 'A-', B_POS: 'B+', B_NEG: 'B-',
+      AB_POS: 'AB+', AB_NEG: 'AB-', O_POS: 'O+', O_NEG: 'O-',
+    };
 
     const shell = initShell();
     if (shell) {
-      await loadCommonData(api, shell.paintProfile);
+      const { profile } = await loadCommonData(api, shell.paintProfile);
+      const bloodBankId = profile?.id;
+
+      // ---------- State ----------
+      let donations = [];
+      let pagination = { page: 1, limit: 10, total: 0, pages: 0 };
+      let searchTerm = '';
+      let searchDebounceTimer = null;
+
+      const tableBody = document.getElementById('donations-table');
+      const searchInputEl = document.getElementById('donation-search');
+      const bloodTypeFilterEl = document.getElementById('donation-bloodtype-filter');
+      const paginationBar = document.getElementById('pagination-bar');
+      const paginationInfo = document.getElementById('pagination-info');
+
+      function renderLoadingState() {
+        tableBody.innerHTML = `<tr><td colspan="5"><div class="loading-state"><div class="spinner-lg"></div><p>Loading donations...</p></div></td></tr>`;
+        paginationBar.style.display = 'none';
+      }
+
+      function renderErrorState(message) {
+        tableBody.innerHTML = `<tr><td colspan="5"><div class="empty-state error-state"><div class="icon-lg">${iconMarkup('alert', { size: 30 })}</div><h4>Failed to load donations</h4><p>${message || 'Please try again.'}</p></div></td></tr>`;
+        paginationBar.style.display = 'none';
+      }
+
+      function getFilteredForDisplay() {
+        if (!searchTerm.trim()) return donations;
+        const term = searchTerm.trim().toLowerCase();
+        return donations.filter((d) =>
+          (d.donor?.user?.name || '').toLowerCase().includes(term) ||
+          (ENUM_TO_BLOOD_TYPE[d.donor?.bloodType] || '').toLowerCase().includes(term)
+        );
+      }
+
+      function renderDonations() {
+        const rows = getFilteredForDisplay();
+        const row = (d) => `<tr>
+          <td>${d.donor?.user?.name || '—'}</td>
+          <td><strong>${ENUM_TO_BLOOD_TYPE[d.donor?.bloodType] || d.donor?.bloodType || '—'}</strong></td>
+          <td>${d.units ?? '—'} Units</td>
+          <td>${d.donationDate ? new Date(d.donationDate).toLocaleDateString() : '—'}</td>
+          <td><span class="badge ${d.status === 'COMPLETED' ? 'completed' : 'pending'}">${d.status || 'RECORDED'}</span></td>
+        </tr>`;
+
+        tableBody.innerHTML = rows.map(row).join('') ||
+          `<tr><td colspan="5"><div class="empty-state"><div class="icon-lg">${iconMarkup('inbox', { size: 30 })}</div><h4>No donation records</h4><p>Recorded donations will appear here.</p></div></td></tr>`;
+
+        renderPagination();
+      }
+
+      function renderPagination() {
+        const controls = document.getElementById('pagination-controls');
+        if (pagination.pages <= 1 && donations.length === 0) {
+          paginationBar.style.display = 'none';
+          return;
+        }
+        paginationBar.style.display = 'flex';
+        const start = (pagination.page - 1) * pagination.limit + 1;
+        const end = Math.min(pagination.page * pagination.limit, pagination.total);
+        paginationInfo.textContent = pagination.total > 0
+          ? `Showing ${start}–${end} of ${pagination.total} donations`
+          : 'No donations';
+
+        const { page, pages } = pagination;
+        let html = `<button class="page-btn nav-btn" id="prev-page-btn" ${page <= 1 ? 'disabled' : ''}>${iconMarkup('chevronLeft', { size: 14 })} Prev</button>`;
+        for (let p = 1; p <= pages; p++) {
+          if (p === 1 || p === pages || (p >= page - 1 && p <= page + 1)) {
+            html += `<button class="page-btn ${p === page ? 'active' : ''}" data-page="${p}">${p}</button>`;
+          } else if (p === page - 2 || p === page + 2) {
+            html += `<span class="page-ellipsis">...</span>`;
+          }
+        }
+        html += `<button class="page-btn nav-btn" id="next-page-btn" ${page >= pages ? 'disabled' : ''}>Next ${iconMarkup('chevronRight', { size: 14 })}</button>`;
+        controls.innerHTML = html;
+
+        document.querySelectorAll('[data-page]').forEach((btn) => {
+          btn.addEventListener('click', () => { pagination.page = parseInt(btn.dataset.page); loadDonations(); });
+        });
+        document.getElementById('prev-page-btn')?.addEventListener('click', () => {
+          if (pagination.page > 1) { pagination.page -= 1; loadDonations(); }
+        });
+        document.getElementById('next-page-btn')?.addEventListener('click', () => {
+          if (pagination.page < pagination.pages) { pagination.page += 1; loadDonations(); }
+        });
+      }
+
+      async function loadDonations() {
+        renderLoadingState();
+        try {
+          const params = { page: pagination.page, limit: pagination.limit };
+          if (bloodBankId) params.bloodBankId = bloodBankId;
+          if (bloodTypeFilterEl.value) params.bloodType = bloodTypeFilterEl.value;
+
+          const res = await api.get('/v1/donations', params);
+          if (!res.success) throw new Error(res.message);
+
+          donations = res.data || [];
+          pagination = {
+            page: res.pagination?.currentPage || 1,
+            limit: res.pagination?.pageSize || pagination.limit,
+            total: res.pagination?.totalRecords || donations.length,
+            pages: res.pagination?.totalPages || 1,
+          };
+          renderDonations();
+        } catch (err) {
+          renderErrorState(err.message);
+        }
+      }
+
+      bloodTypeFilterEl?.addEventListener('change', () => { pagination.page = 1; loadDonations(); });
+      searchInputEl?.addEventListener('input', (e) => {
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(() => { searchTerm = e.target.value; renderDonations(); }, 250);
+      });
+      document.getElementById('clear-donation-filters-btn')?.addEventListener('click', () => {
+        bloodTypeFilterEl.value = '';
+        searchInputEl.value = '';
+        searchTerm = '';
+        pagination.page = 1;
+        loadDonations();
+      });
+
+      // ---------- Record donation modal ----------
+      const modal = document.getElementById('recordDonationModal');
+      const submitBtn = document.getElementById('submit-donation-btn');
+      const submitText = document.getElementById('submit-donation-text');
+      const submitSpinner = document.getElementById('submit-donation-spinner');
 
       document.getElementById('open-record-donation-btn')?.addEventListener('click', () => {
-        document.getElementById('recordDonationModal').classList.add('active');
+        modal.classList.add('active');
       });
       document.querySelectorAll('[data-close-modal]').forEach((el) => {
         el.addEventListener('click', () => document.getElementById(el.dataset.closeModal).classList.remove('active'));
       });
 
-      document.getElementById('submit-donation-btn')?.addEventListener('click', async () => {
+      function setSubmitLoading(loading) {
+        submitBtn.disabled = loading;
+        submitSpinner.classList.toggle('active', loading);
+        submitText.textContent = loading ? 'Recording...' : 'Record Donation';
+      }
+
+      submitBtn?.addEventListener('click', async () => {
         const donorId = document.getElementById('donation-donor-id').value.trim();
         const requestId = document.getElementById('donation-request-id').value.trim();
         const units = parseInt(document.getElementById('donation-units').value) || 1;
@@ -174,18 +351,28 @@
           return;
         }
 
+        setSubmitLoading(true);
         try {
-          const res = await api.post('/v1/donations', { donorId, requestId, units, notes, donationDate: new Date().toISOString() });
+          const res = await api.post('/blood-banks/donations', {
+            donorId, requestId, units, notes, donationDate: new Date().toISOString()
+          });
           if (!res.success) throw new Error(res.message);
-          document.getElementById('recordDonationModal').classList.remove('active');
+          modal.classList.remove('active');
           document.getElementById('donation-donor-id').value = '';
           document.getElementById('donation-request-id').value = '';
           document.getElementById('donation-notes').value = '';
+          document.getElementById('donation-units').value = 1;
           showToast('Donation recorded successfully.');
+          pagination.page = 1;
+          loadDonations();
         } catch (err) {
           showToast(err.message || 'Failed to record donation', 'error');
+        } finally {
+          setSubmitLoading(false);
         }
       });
+
+      loadDonations();
     }
   </script>
 </body>

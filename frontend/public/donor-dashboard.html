@@ -17,12 +17,7 @@
     <aside class="sidebar" id="sidebar">
 
         <!-- Hamburger -->
-        <button
-            class="sidebar-toggle"
-            id="sidebarToggle"
-            type="button"
-            aria-label="Toggle sidebar"
-        >
+        <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Toggle sidebar">
             <span></span>
             <span></span>
             <span></span>
@@ -59,16 +54,16 @@
             <a href="donor-notifications.html">
                 <span class="sidebar-icon">♧</span>
                 <span class="sidebar-text">Notifications</span>
-                <span class="notification-count">3</span>
+                <span class="notification-count" id="notificationCount">3</span>
             </a>
 
         </nav>
 
         <!-- Logout -->
-            <a href="login.html" class="logout" id="logoutButton">
-                <span class="sidebar-icon">←</span>
-                <span class="sidebar-text">Logout</span>
-            </a>
+        <a href="login.html" class="logout" id="logoutButton">
+            <span class="sidebar-icon">←</span>
+            <span class="sidebar-text">Logout</span>
+        </a>
 
     </aside>
 
@@ -84,11 +79,7 @@
             <!-- Search -->
             <div class="search-box">
                 <span class="search-icon">⌕</span>
-                <input
-                    type="text"
-                    placeholder="Search something..."
-                    aria-label="Search"
-                >
+                <input type="text" placeholder="Search something..." aria-label="Search">
             </div>
 
             <!-- Top actions -->
@@ -96,7 +87,7 @@
 
                 <a href="donor-notifications.html" class="top-action notification-btn">
                     ♧
-                    <span>3</span>
+                    <span id="topNotificationCount">3</span>
                 </a>
 
                 <a href="#" class="top-action">
@@ -111,8 +102,8 @@
                         <span class="profile-avatar" id="profileInitial">KH</span>
 
                         <span class="profile-info">
-                                <strong id="topbarName">Hi, Kalkidan</strong>
-                                <small>Donor</small>
+                            <strong id="topbarName">Hi, Kalkidan</strong>
+                            <small>Donor</small>
                         </span>
 
                         <span class="profile-arrow">⌄</span>
@@ -194,7 +185,10 @@
                 </div>
 
                 <div class="card-icon">
-                    🩸
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2.5C12 2.5 5 10.2 5 15.2C5 19.1 8.1 22 12 22s7-2.9 7-6.8C19 10.2 12 2.5 12 2.5Z"
+                            fill="currentColor" />
+                    </svg>
                 </div>
 
             </div>
@@ -221,7 +215,13 @@
                 </div>
 
                 <div class="card-icon green">
-                    🏥
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M12 3.2C12 3.2 7.2 8.7 7.2 12.5C7.2 15.4 9.3 17.5 12 17.5s4.8-2.1 4.8-5c0-3.8-4.8-9.3-4.8-9.3Z"
+                            fill="currentColor" />
+                        <path d="M4 19.5h16M6.5 16.5v3M17.5 16.5v3" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
                 </div>
 
             </div>
@@ -243,9 +243,15 @@
                 </div>
 
                 <div class="card-icon orange">
-                    📅
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="4" y="5" width="16" height="15" rx="2" fill="none" stroke="currentColor"
+                            stroke-width="1.8" />
+                        <path d="M8 3v4M16 3v4M4 9h16" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                        <path d="m9 14 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
                 </div>
-
             </div>
 
 
@@ -265,7 +271,13 @@
                 </div>
 
                 <div class="card-icon red">
-                    ❤️
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M12 20.5S4 15.5 4 9.2C4 6.5 6 4.5 8.5 4.5c1.5 0 2.8.8 3.5 2 0.7-1.2 2-2 3.5-2C18 4.5 20 6.5 20 9.2c0 6.3-8 11.3-8 11.3Z"
+                            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                        <path d="M12 8v6M9 11h6" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
                 </div>
 
             </div>
@@ -573,10 +585,8 @@
 
     <!-- ================= JAVASCRIPT ================= -->
 
-    <script src="../src/js/api.js"></script>
+    <script type="module" src="../src/js/api/api.js"></script>
     <script src="../src/js/donor-common.js"></script>
-    <script src="../src/js/donor.js"></script>
-
-</body>
+    <script type="module" src="../src/js/donor.js"></script>
 
 </html>

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeLink - Donor Outreach</title>
   <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard-additions.css">
 
   <base target="_blank">
 </head>
@@ -15,7 +16,7 @@
   <aside class="sidebar" id="sidebar">
     <div>
       <div class="logo-area">
-        <div class="logo-icon">🩸</div>
+        <div class="logo-icon" data-icon="droplet"></div>
         <div class="logo-text">LifeLink</div>
         <button class="sidebar-close" id="sidebar-close">&times;</button>
       </div>
@@ -23,33 +24,33 @@
         <div class="nav-section-title">Main</div>
         <ul class="nav-links">
           <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span
-                class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon">🩸</span><span
+                class="nav-icon" data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon" data-icon="droplet"></span><span
                 class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon">🏥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon" data-icon="hospital"></span><span
                 class="nav-label">Hospital Requests</span></a></li>
           <li><a class="nav-item active" target="_self" href="bloodbank-outreach.html"><span
-                class="nav-icon">👥</span><span class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon">📥</span><span
+                class="nav-icon" data-icon="users"></span><span class="nav-label">Donor Outreach</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon" data-icon="inbox"></span><span
                 class="nav-label">Donation Records</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">Insights</div>
         <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon">📈</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon" data-icon="trending"></span><span
                 class="nav-label">Analytics</span></a></li>
           <li><a class="nav-item" target="_self" href="bloodbank-notifications.html"><span
-                class="nav-icon">🔔</span><span class="nav-label">Notifications</span> <span class="nav-badge"
+                class="nav-icon" data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
                 id="notif-badge">0</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">System</div>
         <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon">🏥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon" data-icon="hospital"></span><span
                 class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon">⚙️</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon" data-icon="settings"></span><span
                 class="nav-label">Settings</span></a></li>
         </ul>
       </div>
@@ -59,6 +60,11 @@
         <span class="status-dot online" id="sidebar-status-dot"></span>
         <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
       </div>
+      <div class="sidebar-footer-actions">
+        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
+          <span data-icon="logout" data-icon-size="15"></span> Logout
+        </button>
+      </div>
     </div>
   </aside>
   <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
@@ -66,15 +72,15 @@
   <!-- MAIN CONTENT -->
   <main class="main-content">
     <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
       <div class="header-title">
         <h1 id="page-title">Donor Outreach</h1>
-        <p>Smart donor matching for urgent and critical requests.</p>
+        <p>Donor matching for urgent and critical requests.</p>
       </div>
       <div class="header-actions">
         <button class="header-btn" id="notif-header-btn" title="Notifications"
           onclick="window.location.href='bloodbank-notifications.html'">
-          🔔
+          <span data-icon="bell" data-icon-size="18"></span>
           <span class="dot" id="header-notif-dot"></span>
         </button>
         <div class="user-profile-wrap" id="user-profile-wrap">
@@ -88,9 +94,9 @@
           <div class="user-dropdown" id="user-dropdown">
             <div class="user-dropdown-name" id="dropdown-user-name">—</div>
             <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self">🏥 Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self">⚙️ Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn">🚪 Logout</a>
+            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self"><span data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
+            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self"><span data-icon="settings" data-icon-size="15"></span> Settings</a>
+            <a class="user-dropdown-item danger" id="dropdown-logout-btn"><span data-icon="logout" data-icon-size="15"></span> Logout</a>
           </div>
         </div>
       </div>
@@ -100,16 +106,12 @@
       <section class="page-content">
         <div class="section-box">
           <div class="section-header">
-            <h2>👥 Smart Donor Matching</h2>
+            <h2><span data-icon="users" data-icon-size="17"></span> Smart Donor Matching</h2>
             <p style="color: var(--text-muted); font-size: 13px;">Donors are matched automatically for urgent and
-              critical requests.</p>
+              critical requests. This view shows who has been notified and how they responded.</p>
           </div>
           <div class="outreach-grid" id="outreach-grid-body">
-            <div class="empty-state">
-              <div class="icon">👥</div>
-              <h4>No active outreach</h4>
-              <p>Outreach appears automatically when a request needs donor support.</p>
-            </div>
+            <div class="loading-state"><div class="spinner-lg"></div><p>Loading outreach activity…</p></div>
           </div>
         </div>
       </section>
@@ -122,11 +124,92 @@
   <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
   <script type="module">
     import api from '../../src/js/api/api.js';
-    import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
+    import { initShell, loadCommonData, showToast, iconMarkup } from '../../src/js/bloodbank-sidebar-common.js';
+
+    const ACTIVE_STATUSES = ['PENDING', 'APPROVED', 'PROCESSING'];
 
     const shell = initShell();
     if (shell) {
       await loadCommonData(api, shell.paintProfile);
+
+      const grid = document.getElementById('outreach-grid-body');
+
+      function responsePill(r) {
+        const cls = r === 'ACCEPTED' ? 'accepted' : r === 'DECLINED' ? 'declined' : 'maybe';
+        return `<span class="response-pill ${cls}">${r}</span>`;
+      }
+
+      function renderOutreach(requests) {
+        if (!requests.length) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <div class="icon-lg">${iconMarkup('users', { size: 34 })}</div>
+              <h4>No active outreach</h4>
+              <p>Outreach appears automatically when an urgent or critical request needs donor support.</p>
+            </div>`;
+          return;
+        }
+
+        grid.innerHTML = requests.map((req) => {
+          const responses = req.donorResponses || [];
+          const accepted = responses.filter((r) => r.response === 'ACCEPTED').length;
+          const declined = responses.filter((r) => r.response === 'DECLINED').length;
+          const maybe = responses.filter((r) => r.response === 'MAYBE').length;
+          const hospitalName = req.hospital?.hospitalName || req.hospital?.user?.name || 'Hospital';
+          const urgencyClass = req.urgency === 'CRITICAL_EMERGENCY' ? 'emergency' : 'urgent';
+
+          const donorRows = responses.length
+            ? responses.map((r) => `
+                <div class="outreach-donor-row">
+                  <span>${r.donor?.user?.name || 'Donor'}</span>
+                  ${responsePill(r.response)}
+                </div>`).join('')
+            : `<p style="font-size:12.5px; color:var(--text-light); margin:4px 0 0;">Notified — awaiting donor responses.</p>`;
+
+          return `<div class="outreach-card">
+            <div class="outreach-card-head">
+              <div>
+                <strong>${hospitalName}</strong>
+                <div style="font-size:12.5px; color:var(--text-muted);">${req.bloodType} • ${req.unitsRequired} units needed</div>
+              </div>
+              <span class="badge ${urgencyClass}">${req.urgency.replace('_', ' ')}</span>
+            </div>
+            <div class="outreach-stats">
+              <span>${iconMarkup('users', { size: 13 })} ${responses.length} notified</span>
+              <span style="color:#1c7c41;">${accepted} accepted</span>
+              <span style="color:#a5382c;">${declined} declined</span>
+              <span style="color:#9a7300;">${maybe} maybe</span>
+            </div>
+            <div class="outreach-donor-list">${donorRows}</div>
+          </div>`;
+        }).join('');
+      }
+
+      function renderError(message) {
+        grid.innerHTML = `<div class="empty-state error-state"><div class="icon-lg">${iconMarkup('alert', { size: 34 })}</div><h4>Failed to load outreach activity</h4><p>${message || 'Please try again.'}</p></div>`;
+      }
+
+      async function loadOutreach() {
+        try {
+          const [urgentRes, criticalRes] = await Promise.all([
+            api.get('/blood-banks/requests', { urgency: 'URGENT', limit: 25 }),
+            api.get('/blood-banks/requests', { urgency: 'CRITICAL_EMERGENCY', limit: 25 }),
+          ]);
+
+          const urgent = urgentRes.success ? (urgentRes.data.requests || []) : [];
+          const critical = criticalRes.success ? (criticalRes.data.requests || []) : [];
+
+          const merged = [...critical, ...urgent]
+            .filter((r) => ACTIVE_STATUSES.includes(r.status))
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+          renderOutreach(merged);
+        } catch (err) {
+          renderError(err.message);
+        }
+      }
+
+      loadOutreach();
     }
   </script>
 </body>

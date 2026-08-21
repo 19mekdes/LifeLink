@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeLink - Notifications</title>
   <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard-additions.css">
 
   <base target="_blank">
 </head>
@@ -15,7 +16,7 @@
   <aside class="sidebar" id="sidebar">
     <div>
       <div class="logo-area">
-        <div class="logo-icon">🩸</div>
+        <div class="logo-icon" data-icon="droplet"></div>
         <div class="logo-text">LifeLink</div>
         <button class="sidebar-close" id="sidebar-close">&times;</button>
       </div>
@@ -23,33 +24,33 @@
         <div class="nav-section-title">Main</div>
         <ul class="nav-links">
           <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span
-                class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon">🩸</span><span
+                class="nav-icon" data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon" data-icon="droplet"></span><span
                 class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon">🏥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon" data-icon="hospital"></span><span
                 class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon">👥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon" data-icon="users"></span><span
                 class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon">📥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon" data-icon="inbox"></span><span
                 class="nav-label">Donation Records</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">Insights</div>
         <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon">📈</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon" data-icon="trending"></span><span
                 class="nav-label">Analytics</span></a></li>
           <li><a class="nav-item active" target="_self" href="bloodbank-notifications.html"><span
-                class="nav-icon">🔔</span><span class="nav-label">Notifications</span> <span class="nav-badge"
+                class="nav-icon" data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
                 id="notif-badge">0</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">System</div>
         <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon">🏥</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon" data-icon="hospital"></span><span
                 class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon">⚙️</span><span
+          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon" data-icon="settings"></span><span
                 class="nav-label">Settings</span></a></li>
         </ul>
       </div>
@@ -59,6 +60,11 @@
         <span class="status-dot online" id="sidebar-status-dot"></span>
         <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
       </div>
+      <div class="sidebar-footer-actions">
+        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
+          <span data-icon="logout" data-icon-size="15"></span> Logout
+        </button>
+      </div>
     </div>
   </aside>
   <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
@@ -66,7 +72,7 @@
   <!-- MAIN CONTENT -->
   <main class="main-content">
     <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
       <div class="header-title">
         <h1 id="page-title">Notifications</h1>
         <p>Alerts & system messages.</p>
@@ -74,7 +80,7 @@
       <div class="header-actions">
         <button class="header-btn" id="notif-header-btn" title="Notifications"
           onclick="window.location.href='bloodbank-notifications.html'">
-          🔔
+          <span data-icon="bell" data-icon-size="18"></span>
           <span class="dot" id="header-notif-dot"></span>
         </button>
         <div class="user-profile-wrap" id="user-profile-wrap">
@@ -88,9 +94,9 @@
           <div class="user-dropdown" id="user-dropdown">
             <div class="user-dropdown-name" id="dropdown-user-name">—</div>
             <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" target="_self" href="bloodbank-profile.html">🏥 Bank Profile</a>
-            <a class="user-dropdown-item" target="_self" href="bloodbank-settings.html">⚙️ Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn">🚪 Logout</a>
+            <a class="user-dropdown-item" target="_self" href="bloodbank-profile.html"><span data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
+            <a class="user-dropdown-item" target="_self" href="bloodbank-settings.html"><span data-icon="settings" data-icon-size="15"></span> Settings</a>
+            <a class="user-dropdown-item danger" id="dropdown-logout-btn"><span data-icon="logout" data-icon-size="15"></span> Logout</a>
           </div>
         </div>
       </div>
@@ -100,10 +106,18 @@
       <section class="page-content">
         <div class="section-box">
           <div class="section-header">
-            <h2>🔔 Alerts & System Messages</h2>
-            <button class="btn btn-secondary btn-sm" id="mark-all-read-btn">Mark All Read</button>
+            <h2><span data-icon="bell" data-icon-size="17"></span> Alerts & System Messages</h2>
+            <div class="section-actions" style="display:flex; gap:8px; align-items:center;">
+              <select id="notif-filter" style="padding:6px 10px; border-radius:8px; border:1px solid var(--border-color,#ececec); font-size:13px;">
+                <option value="">All</option>
+                <option value="unread">Unread only</option>
+              </select>
+              <button class="btn btn-secondary btn-sm" id="mark-all-read-btn">Mark All Read</button>
+            </div>
           </div>
-          <ul class="notification-list" id="notifications-list"></ul>
+          <ul class="notification-list" id="notifications-list">
+            <li class="loading-state"><div class="spinner-lg"></div><p>Loading notifications…</p></li>
+          </ul>
         </div>
       </section>
     </div>
@@ -115,18 +129,20 @@
   <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
   <script type="module">
     import api from '../../src/js/api/api.js';
-    import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
+    import { initShell, loadCommonData, showToast, iconMarkup } from '../../src/js/bloodbank-sidebar-common.js';
 
     const shell = initShell();
     if (shell) {
       const { notifications } = await loadCommonData(api, shell.paintProfile);
       let notifData = notifications;
+      let filter = '';
 
       function renderNotifications() {
-        document.getElementById('notifications-list').innerHTML = notifData.map((n) => `
+        const list = filter === 'unread' ? notifData.filter((n) => !n.isRead) : notifData;
+        document.getElementById('notifications-list').innerHTML = list.map((n) => `
           <li class="notification-item" style="${n.isRead ? '' : 'background: #fffafa; border-left: 3px solid var(--primary);'}">
             <div class="notification-content">
-              <div class="notification-icon ${(n.type || '').toLowerCase()}">${n.type === 'EMERGENCY' ? '⚠️' : '🔔'}</div>
+              <div class="notification-icon ${(n.type || '').toLowerCase()}">${iconMarkup(n.type === 'EMERGENCY' ? 'emergency' : 'bell', { size: 16 })}</div>
               <div>
                 <div class="notification-text">${n.title ? `<strong>${n.title}</strong><br>` : ''}${n.message}</div>
                 <div class="notification-meta">${n.isRead ? 'Read' : 'Unread'} • Blood Bank System</div>
@@ -134,9 +150,14 @@
             </div>
             <div class="notification-time">${new Date(n.createdAt).toLocaleString()}</div>
           </li>`).join('') ||
-          '<li class="empty-state"><div class="icon">🔔</div><h4>No notifications</h4></li>';
+          `<li class="empty-state"><div class="icon-lg">${iconMarkup('bell', { size: 30 })}</div><h4>No notifications</h4><p>${filter === 'unread' ? 'You are all caught up.' : 'System alerts will appear here.'}</p></li>`;
       }
       renderNotifications();
+
+      document.getElementById('notif-filter')?.addEventListener('change', (e) => {
+        filter = e.target.value;
+        renderNotifications();
+      });
 
       document.getElementById('mark-all-read-btn')?.addEventListener('click', async () => {
         try {
@@ -151,6 +172,7 @@
         if (badge) badge.style.display = 'none';
         const dot = document.getElementById('header-notif-dot');
         if (dot) dot.style.display = 'none';
+        showToast('All notifications marked as read.');
       });
     }
   </script>

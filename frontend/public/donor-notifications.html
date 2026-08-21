@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | Notifications</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <!-- Sidebar toggle -->
+    <button
+        class="sidebar-toggle"
+        id="sidebarToggle"
+        type="button"
+        aria-label="Toggle sidebar"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <span>♥</span>
+        <span class="sidebar-text">LifeLink</span>
+    </a>
+
+    <!-- Navigation -->
+        <nav>
+
+            <a href="donor-dashboard.html" class="active">
+                <span class="sidebar-icon">▦</span>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+
+            <a href="donor-profile.html">
+                <span class="sidebar-icon">○</span>
+                <span class="sidebar-text">My Profile</span>
+            </a>
+            <a href="donor-requests.html">
+                <span class="sidebar-icon">□</span>
+                <span class="sidebar-text">Blood Requests</span>
+            </a>
+
+            <a href="donor-history.html">
+                <span class="sidebar-icon">◷</span>
+                <span class="sidebar-text">Donation History</span>
+            </a>
+
+            <a href="donor-notifications.html">
+                <span class="sidebar-icon">♧</span>
+                <span class="sidebar-text">Notifications</span>
+                <span class="notification-count">3</span>
+            </a>
+
+        </nav>
+
+    <!-- Logout -->
+    <a href="login.html" class="logout" id="logoutButton">
+    <span class="sidebar-icon">←</span>
+    <span class="sidebar-text">Logout</span>
+</a>
+
+</aside>
+
+<main class="main-content">
+<header class="topbar">
+
+            <!-- Top actions -->
+            <div class="topbar-actions">
+
+                <a href="donor-notifications.html" class="top-action notification-btn">
+                    ♧
+                    <span>3</span>
+                </a>
+
+                <a href="#" class="top-action">
+                    ✉
+                </a>
+
+                <!-- Profile -->
+                <div class="profile-menu">
+
+                    <button class="profile-button" id="profileButton">
+
+                        <span class="profile-avatar" id="profileInitial">KH</span>
+
+                        <span class="profile-info">
+                                <strong id="topbarName">Hi, Kalkidan</strong>
+                                <small>Donor</small>
+                        </span>
+
+                        <span class="profile-arrow">⌄</span>
+
+                    </button>
+
+
+                    <div class="profile-dropdown" id="profileDropdown">
+
+                        <div class="profile-dropdown-header">
+
+                            <div class="profile-avatar large" id="dashboardProfileInitial">
+                                KH
+                            </div>
+
+                            <div>
+                                <strong>Kalkidan Habtamu</strong>
+                                <small>Donor</small>
+                            </div>
+
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a href="donor-profile.html">
+                            👤 My Profile
+                        </a>
+
+                        <a href="donor-notifications.html">
+                            🔔 Notifications
+                        </a>
+
+                        <a href="#">
+                            ⚙️ Account Settings
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a href="#" id="dropdownLogoutButton" class="logout">
+                            🚪 Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <div>
+                <h1>Notifications</h1>
+<p>Stay updated about donation requests.</p>
+            </div>
+
+            <button class="edit-profile-btn" id="markAllRead">
+                Mark All Read
+            </button>
+        </div>
+
+        <div id="notificationList">
+            <p>Loading notifications...</p>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../src/js/api.js"></script>
+<script src="../src/js/donor-common.js"></script>
+<script src="../src/js/donor-notifications.js"></script>
+</body>
+</html>

@@ -1,14 +1,13 @@
-// backend/src/routes/adminRoutes.js
-
 import express from 'express';
 import { body } from 'express-validator';
+import { authenticate } from '../middleware/auth.js';
+import { authorize, isSuperAdmin } from '../middleware/roleAuth.js';
 import {
-  getDashboard,
+  getDashboardStats,
   getUsers,
   getUserById,
   updateUser,
   deleteUser,
-  createAdmin,
   getHospitals,
   verifyHospital,
   getBloodBanks,
@@ -16,105 +15,55 @@ import {
   getDonors,
   verifyDonor,
   getAuditLogs,
-  getStats,
-  getSummaryStats,
-  exportData,
-  getBloodInventoryStats,
-  getSignupsStats,
-  getRequestTypesStats,
-  getFulfillmentStats,
-  getGeographicStats,
-  getAdminProfile,
-  updateAdminProfile,
-  changeAdminPassword,
-  getAdminNotifications,
-  markAdminNotificationRead,
-  markAllAdminNotificationsRead
+  getSystemStats,
+  createAdmin,
+  exportData
 } from '../controllers/adminController.js';
-import { authenticate } from '../middleware/auth.js';
-import { isAdmin } from '../middleware/roleAuth.js';
-import { validate } from '../middleware/validation.js';
-import {
-  updateUserValidation,
-  createAdminValidation,
-  verifyHospitalValidation,
-  verifyBloodBankValidation,
-  verifyDonorValidation,
-  exportValidation
-} from '../validators/adminValidator.js';
 
 const router = express.Router();
 
-// Apply authentication and Admin role check on all admin routes
-router.use(authenticate, isAdmin);
+// All admin routes require authentication and ADMIN role
+router.use(authenticate);
+router.use(authorize('ADMIN'));
 
-// 1. GET /api/admin/dashboard
-router.get('/dashboard', getDashboard);
+// ============ DASHBOARD ============
+router.get('/dashboard', getDashboardStats);
 
-// 2. GET /api/admin/users
+// ============ USERS ============
 router.get('/users', getUsers);
-
-// 3. GET /api/admin/users/:id
 router.get('/users/:id', getUserById);
-
-// 4. PUT /api/admin/users/:id
-router.put('/users/:id', updateUserValidation, validate, updateUser);
-
-// 5. DELETE /api/admin/users/:id
+router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
 
-// 6. POST /api/admin/admins
-router.post('/admins', createAdminValidation, validate, createAdmin);
+// ============ ADMINS (Super Admin only) ============
+router.post('/admins', isSuperAdmin, [
+  body('name').notEmpty().withMessage('Name is required'),
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('phone').notEmpty().withMessage('Phone is required'),
+  body('role').isIn(['SUPER_ADMIN', 'HOSPITAL_ADMIN', 'DONOR_ADMIN', 'ADMIN'])
+    .withMessage('Invalid role')
+], createAdmin);
 
-// 7. GET /api/admin/hospitals
+// ============ HOSPITALS ============
 router.get('/hospitals', getHospitals);
+router.put('/hospitals/:id/verify', [
+  body('status').isIn(['VERIFIED', 'REJECTED']).withMessage('Invalid status')
+], verifyHospital);
 
-// 8. PUT /api/admin/hospitals/:id/verify
-router.put('/hospitals/:id/verify', verifyHospitalValidation, validate, verifyHospital);
-
-// 9. GET /api/admin/blood-banks
+// ============ BLOOD BANKS ============
 router.get('/blood-banks', getBloodBanks);
+router.put('/blood-banks/:id/verify', [
+  body('status').isIn(['VERIFIED', 'REJECTED']).withMessage('Invalid status')
+], verifyBloodBank);
 
-// 10. PUT /api/admin/blood-banks/:id/verify
-router.put('/blood-banks/:id/verify', verifyBloodBankValidation, validate, verifyBloodBank);
-
-// 11. GET /api/admin/donors
+// ============ DONORS ============
 router.get('/donors', getDonors);
+router.put('/donors/:id/verify', verifyDonor);
 
-// 12. PUT /api/admin/donors/:id/verify
-router.put('/donors/:id/verify', verifyDonorValidation, validate, verifyDonor);
-
-// 13. GET /api/admin/audit-logs
+// ============ SYSTEM ============
 router.get('/audit-logs', getAuditLogs);
-
-// 14. GET /api/admin/stats
-router.get('/stats', getStats);
-router.get('/stats/summary', getSummaryStats);
-router.get('/stats/blood-inventory', getBloodInventoryStats);
-router.get('/stats/signups', getSignupsStats);
-router.get('/stats/request-types', getRequestTypesStats);
-router.get('/stats/fulfillment', getFulfillmentStats);
-router.get('/stats/geographic', getGeographicStats);
-
-// 15. GET /api/admin/export
-router.get('/export', exportValidation, validate, exportData);
-
-// 16. Admin Profile & Password Management
-router.get('/profile', getAdminProfile);
-router.put('/profile', [
-  body('name').optional().trim().isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
-  body('email').optional().trim().isEmail().withMessage('Valid email is required'),
-  body('phone').optional().trim()
-], validate, updateAdminProfile);
-
-router.put('/change-password', [
-  body('currentPassword').notEmpty().withMessage('Current password is required'),
-  body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters')
-], validate, changeAdminPassword);
-
-// 17. Admin Notifications
-router.get('/notifications', getAdminNotifications);
-router.put('/notifications/:id/read', markAdminNotificationRead);
-router.put('/notifications/read-all', markAllAdminNotificationsRead);
+router.get('/stats', getSystemStats);
+router.get('/export', exportData);
 
 export default router;

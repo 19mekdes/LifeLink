@@ -1,8 +1,5 @@
 import { Prisma } from '@prisma/client';
 
-/**
- * Custom error class for API errors
- */
 export class ApiError extends Error {
   constructor(statusCode, message, errors = null) {
     super(message);
@@ -13,10 +10,7 @@ export class ApiError extends Error {
   }
 }
 
-/**
- * Error handler middleware
- * Catches all errors and sends appropriate response
- */
+
 export const errorHandler = (err, req, res, next) => {
   console.error('❌ Error:', err);
 
@@ -79,9 +73,7 @@ export const errorHandler = (err, req, res, next) => {
   });
 };
 
-/**
- * Get user-friendly error message for Prisma errors
- */
+
 function getPrismaErrorMessage(err) {
   const errorMessages = {
     P2000: 'The provided value is too long for the field',
@@ -127,29 +119,19 @@ function getPrismaErrorMessage(err) {
   return errorMessages[err.code] || `Database error: ${err.message}`;
 }
 
-/**
- * Not found middleware
- * Catches all unmatched routes
- */
+
 export const notFoundHandler = (req, res, next) => {
   const error = new ApiError(404, `Route not found: ${req.method} ${req.path}`);
   next(error);
 };
 
-/**
- * Async handler wrapper
- * Wraps async route handlers to catch errors
- */
 export const asyncHandler = (fn) => {
   return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };
 };
 
-/**
- * Validation error handler
- * Formats validation errors from express-validator
- */
+
 export const handleValidationErrors = (req, res, next) => {
   const { validationResult } = require('express-validator');
   const errors = validationResult(req);
@@ -162,9 +144,7 @@ export const handleValidationErrors = (req, res, next) => {
   next();
 };
 
-/**
- * Rate limit exceeded handler
- */
+
 export const rateLimitHandler = (req, res) => {
   res.status(429).json({
     success: false,
@@ -172,7 +152,6 @@ export const rateLimitHandler = (req, res) => {
   });
 };
 
-// Export all handlers as a single object
 export default {
   ApiError,
   errorHandler,

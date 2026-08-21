@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | My Profile</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <!-- Sidebar toggle -->
+    <button
+        class="sidebar-toggle"
+        id="sidebarToggle"
+        type="button"
+        aria-label="Toggle sidebar"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <span>♥</span>
+        <span class="sidebar-text">LifeLink</span>
+    </a>
+
+    <!-- Navigation -->
+        <nav>
+
+            <a href="donor-dashboard.html" class="active">
+                <span class="sidebar-icon">▦</span>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+
+            <a href="donor-profile.html">
+                <span class="sidebar-icon">○</span>
+                <span class="sidebar-text">My Profile</span>
+            </a>
+            <a href="donor-requests.html">
+                <span class="sidebar-icon">□</span>
+                <span class="sidebar-text">Blood Requests</span>
+            </a>
+
+            <a href="donor-history.html">
+                <span class="sidebar-icon">◷</span>
+                <span class="sidebar-text">Donation History</span>
+            </a>
+
+            <a href="donor-notifications.html">
+                <span class="sidebar-icon">♧</span>
+                <span class="sidebar-text">Notifications</span>
+                <span class="notification-count">3</span>
+            </a>
+
+        </nav>
+
+    <!-- Logout -->
+    <a href="login.html" class="logout" id="logoutButton">
+    <span class="sidebar-icon">←</span>
+    <span class="sidebar-text">Logout</span>
+</a>
+
+</aside>
+
+<main class="main-content">
+
+    <header class="topbar">
+
+            <!-- Top actions -->
+            <div class="topbar-actions">
+
+                <a href="donor-notifications.html" class="top-action notification-btn">
+                    ♧
+                    <span>3</span>
+                </a>
+
+                <a href="#" class="top-action">
+                    ✉
+                </a>
+
+                <!-- Profile -->
+                <div class="profile-menu">
+
+                    <button class="profile-button" id="profileButton">
+
+                        <span class="profile-avatar" id="profileInitial">KH</span>
+
+                        <span class="profile-info">
+                                <strong id="topbarName">Hi, Kalkidan</strong>
+                                <small>Donor</small>
+                        </span>
+
+                        <span class="profile-arrow">⌄</span>
+
+                    </button>
+
+
+                    <div class="profile-dropdown" id="profileDropdown">
+
+                        <div class="profile-dropdown-header">
+
+                            <div class="profile-avatar large" id="dashboardProfileInitial">
+                                KH
+                            </div>
+
+                            <div>
+                                <strong>Kalkidan Habtamu</strong>
+                                <small>Donor</small>
+                            </div>
+
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a href="donor-profile.html">
+                            👤 My Profile
+                        </a>
+
+                        <a href="donor-notifications.html">
+                            🔔 Notifications
+                        </a>
+
+                        <a href="#">
+                            ⚙️ Account Settings
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a href="#" id="dropdownLogoutButton" class="logout">
+                            🚪 Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+    <section class="profile-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Personal Information</h2>
+                <p>Keep your donor information up to date.</p>
+            </div>
+
+            <button class="edit-profile-btn" id="editProfileBtn">
+                Edit Profile
+            </button>
+        </div>
+
+        <div class="profile-content">
+
+            <div class="large-profile-icon" id="largeProfileInitial">
+                D
+            </div>
+
+            <div class="profile-details">
+
+                <div class="profile-field">
+                    <span>Full Name</span>
+                    <strong id="donorName">Loading...</strong>
+                    <input id="editName" class="profile-input" type="text">
+                </div>
+
+                <div class="profile-field">
+                    <span>Email</span>
+                    <strong id="donorEmail">Loading...</strong>
+                </div>
+
+                <div class="profile-field">
+                    <span>Phone</span>
+                    <strong id="donorPhone">Loading...</strong>
+                    <input id="editPhone" class="profile-input" type="text">
+                </div>
+
+                <div class="profile-field">
+                    <span>Blood Type</span>
+                    <strong id="donorBloodType">Loading...</strong>
+
+                    <select id="editBloodType" class="profile-input">
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+
+                <div class="profile-field">
+                    <span>Location</span>
+                    <strong id="donorLocation">Loading...</strong>
+                    <input id="editLocation" class="profile-input" type="text">
+                </div>
+
+                <div class="profile-field">
+                    <span>Availability</span>
+                    <strong class="available" id="donorStatus">
+                        Loading...
+                    </strong>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="profile-actions" id="profileActions">
+            <button class="save-profile-btn" id="saveProfileBtn">
+                Save Changes
+            </button>
+
+            <button class="cancel-profile-btn" id="cancelProfileBtn">
+                Cancel
+            </button>
+        </div>
+
+    </section>
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Donor Availability</h2>
+                <p>Let blood banks know if you are available to donate.</p>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <div class="status-icon">✓</div>
+
+            <div>
+                <h3 id="availabilityText">Available</h3>
+                <p>Your availability can be updated when needed.</p>
+            </div>
+
+            <button class="respond-btn" id="availabilityBtn">
+                Update Status
+            </button>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../src/js/api.js"></script>
+<script src="../src/js/donor-common.js"></script>
+<script src="../src/js/donor-profile.js"></script>
+
+</body>
+</html>

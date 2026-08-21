@@ -122,8 +122,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (donorStatus) {
+        const statusMap = {
+            'AVAILABLE': 'Available',
+            'TEMPORARILY_UNAVAILABLE': 'Temporarily Unavailable',
+            'UNAVAILABLE': 'Unavailable'
+        };
         donorStatus.textContent =
-            availability;
+            statusMap[availability] || availability;
     }
 
 
@@ -181,8 +186,13 @@ if (dashboardProfileName) {
     // ==========================================
 
     if (availabilityText) {
+        const statusMapDisplay = {
+            'AVAILABLE': 'Available',
+            'TEMPORARILY_UNAVAILABLE': 'Temporarily Unavailable',
+            'UNAVAILABLE': 'Unavailable'
+        };
         availabilityText.textContent =
-            availability;
+            statusMapDisplay[availability] || availability;
     }
 
 
@@ -450,29 +460,25 @@ alert(
 
 
             const currentAvailability =
+                donor.availabilityStatus ||
                 donor.availability ||
                 donor.status ||
-                "Available";
+                "AVAILABLE";
 
 
             const newAvailability =
-                currentAvailability === "Available"
-                    ? "Unavailable"
-                    : "Available";
+                currentAvailability === "AVAILABLE"
+                    ? "UNAVAILABLE"
+                    : "AVAILABLE";
 
 
             try {
 
                 const result =
-                    await apiRequest(
-                        "/api/donors/availability",
+                    await api.put(
+                        "/donors/availability",
                         {
-                            method: "PUT",
-
-                            body: JSON.stringify({
-                                availability:
-                                    newAvailability
-                            })
+                            availabilityStatus: newAvailability
                         }
                     );
 

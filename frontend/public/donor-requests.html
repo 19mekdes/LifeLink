@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LifeLink | Blood Requests</title>
     <link rel="stylesheet" href="../src/css/dashboard.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -157,6 +158,19 @@
 
         <div class="section-header">
             <div>
+                <h2>Nearby Hospitals</h2>
+                <p>Hospitals requesting blood near you.</p>
+            </div>
+        </div>
+
+        <div id="map" style="height: 350px; border-radius: 10px; margin-bottom: 20px;"></div>
+
+    </section>
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <div>
                 <h2>Available Requests</h2>
                 <p>These requests may match your blood type.</p>
             </div>
@@ -170,9 +184,10 @@
 
 </main>
 
-<script type="module" src="../src/js/api/api.js"></script>
-<script type="module" src="../src/js/donor-common.js"></script>
-<script type="module" src="../src/js/donor-request.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module" src="../src/js/api/api.js?v=2"></script>
+<script type="module" src="../src/js/donor-common.js?v=2"></script>
+<script type="module" src="../src/js/donor-request.js?v=2"></script>
 
 </body>
 </html>

@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // ==================================
 
             const data =
-                await apiRequest(
+                await api.get(
                     "/donors/donations"
                 );
 
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // ==================================
 
             const profileResponse =
-                await apiRequest(
+                await api.get(
                     "/donors/profile"
                 );
 
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const data =
-                await apiRequest(
+                await api.get(
                     "/donors/notifications"
                 );
 

@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const data =
-                await apiRequest(
+                await api.get(
                     "/donors/notifications"
                 );
 
@@ -240,11 +240,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const result =
-                await apiRequest(
-                    `/donors/notifications/${notificationId}/read`,
-                    {
-                        method: "PUT"
-                    }
+                await api.put(
+                    `/donors/notifications/${notificationId}/read`
                 );
 
             console.log(
@@ -295,11 +292,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 const result =
-                    await apiRequest(
-                        "/donors/notifications/read-all",
-                        {
-                            method: "PUT"
-                        }
+                    await api.put(
+                        "/donors/notifications/read-all"
                     );
 
 

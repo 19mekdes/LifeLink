@@ -23,8 +23,10 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      'script-src': ["'self'", "'unsafe-inline'"],
-      'connect-src': ["'self'", 'http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:5001', 'http://127.0.0.1:5001']
+      'script-src': ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      'style-src': ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      'img-src': ["'self'", "data:", "https://*.tile.openstreetmap.org", "https://unpkg.com"],
+      'connect-src': ["'self'", 'http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:5001', 'http://127.0.0.1:5001', 'https://*.tile.openstreetmap.org']
     }
   }
 }));

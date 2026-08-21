@@ -70,6 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 name;
 
         }
+        document.querySelectorAll(".profile-name").forEach(element => {
+            element.textContent = name;
+        });
+
+        document.querySelectorAll(".profile-avatar").forEach(element => {
+            element.textContent = initial;
+        });
 
 
         if (profileInitial) {
@@ -138,41 +145,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadNotificationCount() {
 
-    try {
+        try {
 
-        const data =
-            await api.get("/donors/notifications");
+            const data =
+                await api.get("/donors/notifications");
 
-        console.log(
-            "Notification response:",
-            data
-        );
-
-        const notifications =
-            data?.data?.notifications || [];
-
-        const unread =
-            data?.data?.unreadCount || 0;
-
-        const counters =
-            document.querySelectorAll(
-                "#notificationCount, #topNotificationCount"
+            console.log(
+                "Notification response:",
+                data
             );
 
-        counters.forEach(counter => {
-            counter.textContent = unread;
-        });
+            const notifications =
+                data?.data?.notifications || [];
 
-    } catch (error) {
+            const unread =
+                data?.data?.unreadCount || 0;
 
-        console.error(
-            "Could not load notification count:",
-            error
-        );
+            const counters =
+                document.querySelectorAll(
+                    "#notificationCount, #topNotificationCount"
+                );
+
+            counters.forEach(counter => {
+                counter.textContent = unread;
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Could not load notification count:",
+                error
+            );
+
+        }
 
     }
-
-}
 
 
     /* =====================================================
@@ -488,3 +495,95 @@ document.addEventListener("DOMContentLoaded", () => {
     setupSidebar();
 
 });
+
+// =====================================================
+// DYNAMIC PROFILE DROPDOWN
+// =====================================================
+
+async function updateProfileDropdown() {
+
+    try {
+
+        const response = await api.get("/donors/profile");
+
+        console.log(
+            "Dropdown profile data:",
+            response
+        );
+
+        if (
+            !response.success ||
+            !response.data ||
+            !response.data.user
+        ) {
+            return;
+        }
+
+        const name =
+            response.data.user.name;
+
+        if (!name) {
+            return;
+        }
+
+
+        // ---------------------------------------------
+        // UPDATE PROFILE NAME
+        // ---------------------------------------------
+
+        const nameElement =
+            document.querySelector(
+                ".profile-dropdown-header strong"
+            );
+
+        if (nameElement) {
+
+            nameElement.textContent =
+                name;
+
+        }
+
+
+        // ---------------------------------------------
+        // UPDATE PROFILE CIRCLE
+        // ---------------------------------------------
+
+        const initialElement =
+            document.getElementById(
+                "dashboardProfileInitial"
+            );
+
+        if (initialElement) {
+
+            const nameParts =
+                name.trim().split(/\s+/);
+
+            let initials =
+                nameParts[0][0];
+
+            if (nameParts.length > 1) {
+
+                initials +=
+                    nameParts[
+                    nameParts.length - 1
+                    ][0];
+
+            }
+
+            initialElement.textContent =
+                initials.toUpperCase();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Could not update profile dropdown:",
+            error
+        );
+
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", updateProfileDropdown);

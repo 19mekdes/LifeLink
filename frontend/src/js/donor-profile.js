@@ -128,33 +128,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ==========================================
-    // TOPBAR
-    // ==========================================
+// PROFILE INITIAL
+// ==========================================
 
-    if (topbarName) {
-        topbarName.textContent =
-            name;
-    }
+const initial =
+    name.charAt(0).toUpperCase();
 
 
-    // ==========================================
-    // PROFILE INITIAL
-    // ==========================================
+// ==========================================
+// TOPBAR
+// ==========================================
 
-    const initial =
-        name.charAt(0).toUpperCase();
-
-    if (profileInitial) {
-        profileInitial.textContent =
-            initial;
-    }
-
-    if (largeProfileInitial) {
-        largeProfileInitial.textContent =
-            initial;
-    }
+if (topbarName) {
+    topbarName.textContent =
+        name;
+}
 
 
+// ==========================================
+// PROFILE INITIAL
+// ==========================================
+
+if (profileInitial) {
+    profileInitial.textContent =
+        initial;
+}
+
+if (largeProfileInitial) {
+    largeProfileInitial.textContent =
+        initial;
+}
+
+
+// ==========================================
+// PROFILE DROPDOWN
+// ==========================================
+
+document.querySelectorAll(".profile-name").forEach(element => {
+    element.textContent = name;
+});
+
+document.querySelectorAll(".profile-avatar").forEach(element => {
+    element.textContent = initial;
+});
     // ==========================================
     // AVAILABILITY SECTION
     // ==========================================

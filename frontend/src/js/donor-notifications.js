@@ -32,9 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const notifications =
-                Array.isArray(data)
-                    ? data
-                    : data.notifications || [];
+                data?.data?.notifications || [];
 
 
             updateNotificationCount(
@@ -143,21 +141,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         </div>
 
-                        ${
-                            !isRead
-                                ? `
+                        ${!isRead
+                        ? `
                                     <button
                                         class="mark-read-btn"
                                         data-id="${id}">
                                         Mark as Read
                                     </button>
                                   `
-                                : `
+                        : `
                                     <span>
                                         Read
                                     </span>
                                   `
-                        }
+                    }
 
                     </div>
                 `;
@@ -242,12 +239,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result =
                 await apiRequest(
-                    `/api/donors/notifications/${notificationId}/read`,
+                    `/donors/notifications/${notificationId}/read`,
                     {
                         method: "PUT"
                     }
                 );
-
 
             console.log(
                 "Notification marked as read:",
@@ -298,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const result =
                     await apiRequest(
-                        "/api/donors/notifications/read-all",
+                        "/donors/notifications/read-all",
                         {
                             method: "PUT"
                         }

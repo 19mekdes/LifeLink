@@ -131,23 +131,29 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </span>
 
 
-                                ${userResponse
-
+         ${userResponse
                             ? `
-                                        <button
-                                            class="respond-btn"
-                                            disabled>
-                                            ${userResponse}
-                                        </button>
-                                    `
-
+        <button
+            class="respond-btn"
+            disabled>
+            ${userResponse}
+        </button>
+    `
                             : `
-                                        <button
-                                            class="respond-btn"
-                                            data-request-id="${id}">
-                                            Respond
-                                        </button>
-                                    `
+        <button
+            class="respond-btn accept-btn"
+            data-request-id="${id}"
+            data-response="ACCEPTED">
+            Accept
+        </button>
+
+        <button
+            class="respond-btn reject-btn"
+            data-request-id="${id}"
+            data-response="REJECTED">
+            Reject
+        </button>
+    `
                         }
 
                             </div>
@@ -175,8 +181,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             const requestId =
                                 button.dataset.requestId;
 
+                            const response =
+                                button.dataset.response;
+
                             respondToRequest(
                                 requestId,
+                                response,
                                 button
                             );
 
@@ -215,26 +225,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function respondToRequest(
         requestId,
+        response,
         button
     ) {
 
-        if (!requestId) {
+        if (!requestId || !response) {
 
             console.error(
-                "Missing request ID."
+                "Missing request ID or response."
             );
 
             return;
         }
 
 
+        const action =
+            response === "ACCEPTED"
+                ? "accept"
+                : "reject";
+
+
         const confirmed =
             confirm(
-                "Would you like to respond to this blood request?"
+                `Are you sure you want to ${action} this blood request?`
             );
 
 
-        if (!confirmed) return;
+        if (!confirmed) {
+            return;
+        }
 
 
         try {
@@ -242,14 +261,16 @@ document.addEventListener("DOMContentLoaded", () => {
             button.disabled = true;
 
             button.textContent =
-                "Sending...";
+                response === "ACCEPTED"
+                    ? "Accepting..."
+                    : "Rejecting...";
 
 
             const result =
                 await api.post(
                     `/donors/requests/${requestId}/respond`,
                     {
-                        response: "ACCEPTED"
+                        response: response
                     }
                 );
 
@@ -260,12 +281,43 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
+            if (!result?.success) {
+
+                throw new Error(
+                    result?.message ||
+                    "Request response failed."
+                );
+
+            }
+
+
             button.textContent =
-                "ACCEPTED";
+                response;
+
+
+            // Disable the other button
+            const requestCard =
+                button.closest(".request-card");
+
+            if (requestCard) {
+
+                requestCard
+                    .querySelectorAll(
+                        ".respond-btn[data-request-id]"
+                    )
+                    .forEach(otherButton => {
+
+                        otherButton.disabled = true;
+
+                    });
+
+            }
 
 
             alert(
-                "Thank you. Your response has been sent to the blood bank."
+                response === "ACCEPTED"
+                    ? "You accepted this blood request."
+                    : "You rejected this blood request."
             );
 
 
@@ -280,7 +332,9 @@ document.addEventListener("DOMContentLoaded", () => {
             button.disabled = false;
 
             button.textContent =
-                "Respond";
+                response === "ACCEPTED"
+                    ? "Accept"
+                    : "Reject";
 
 
             alert(

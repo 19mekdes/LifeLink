@@ -3,9 +3,3172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <!-- Prevent browser caching to ensure fresh session state -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Admin Operations Center — LifeLink Portal</title>
+  <meta name="description" content="LifeLink Admin Portal — manage blood requests, donors, hospitals, blood banks, donations, analytics, and system users.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="../src/css/admin-dashboard.css">
+  <!-- Chart.js CDN for Interactive Data Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Mock / Fallback Datasets (Dev & Offline preview) -->
+  <script>
+    if (['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.port !== '' || window.ENV?.LOAD_MOCK_DATA !== false) {
+      document.write('<script src="../src/js/mock-data.js"><\/script>');
+    }
+  </script>
 </head>
 <body>
-  
+
+  <!-- Mobile overlay — tap to close sidebar -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileSidebar()" aria-hidden="true"></div>
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="sidebar-header">
+      <button
+        type="button"
+        class="sidebar-toggle-btn"
+        id="sidebar-toggle"
+        onclick="toggleDesktopSidebar()"
+        aria-label="Toggle navigation sidebar"
+        title="Toggle sidebar"
+      >
+        <svg class="icon" viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="sidebar-header-brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor"/></svg>
+        </div>
+        <div class="brand-title-wrap">
+          <span class="brand-title">LifeLink</span>
+          <span class="brand-subtitle">Admin Operations</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Admin sections">
+      <!-- Group 1: Operations -->
+      <div class="nav-section-label">Operations</div>
+
+      <button type="button" class="nav-item active" id="nav-dashboard" onclick="switchView('dashboard')">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboard</span>
+      </button>
+
+      <button type="button" class="nav-item" id="nav-requests" onclick="switchView('requests')">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        <span>Blood Requests</span>
+      </button>
+
+      <!-- Expandable User Menu Group -->
+      <div class="nav-group" id="nav-user-group-container">
+        <button type="button" class="nav-item-parent" id="nav-user-group" onclick="toggleUserMenu(event)" aria-expanded="false" aria-controls="nav-user-submenu">
+          <div class="nav-item-parent-left">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>User</span>
+          </div>
+          <svg class="icon nav-chevron" id="nav-user-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="nav-submenu" id="nav-user-submenu" role="region" aria-label="User navigation">
+          <button type="button" class="nav-sub-item" id="nav-hospitals" onclick="switchView('hospitals')">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/></svg>
+            <span>Hospital</span>
+          </button>
+
+          <button type="button" class="nav-sub-item" id="nav-blood-banks" onclick="switchView('blood-banks')">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <span>Blood Bank</span>
+          </button>
+
+          <button type="button" class="nav-sub-item" id="nav-donors" onclick="switchView('donors')">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span>Donor</span>
+          </button>
+
+          <button type="button" class="nav-sub-item" id="nav-users" onclick="switchView('users')">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span>Account</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="nav-item" id="nav-donations" onclick="switchView('donations')">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Donations</span>
+      </button>
+
+      <!-- Group 2: Analytics -->
+      <div class="nav-divider"></div>
+      <div class="nav-section-label">Analytics & Reports</div>
+
+      <button type="button" class="nav-item" id="nav-statistics" onclick="switchView('statistics')">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Statistics</span>
+      </button>
+
+      <button type="button" class="nav-item" id="nav-reports" onclick="switchView('reports')">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+        <span>Reports & Export</span>
+      </button>
+
+      <!-- Group 3: Administration -->
+      <div class="nav-divider"></div>
+      <div class="nav-section-label">Administration</div>
+
+      <button type="button" class="nav-item" id="nav-settings" onclick="switchView('settings')">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Admin Profile & Settings</span>
+      </button>
+
+      <div class="nav-divider"></div>
+
+      <button type="button" class="nav-item logout" id="nav-logout" onclick="handleLogout()">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Logout</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer" id="sidebar-footer-profile" role="button" tabindex="0" onclick="switchView('settings')" onkeydown="if(event.key==='Enter'||event.key===' ')switchView('settings')" title="Admin Profile & Settings">
+      <div class="user-avatar-sidebar" id="sidebar-user-initials" aria-hidden="true">SA</div>
+      <div class="user-details-sidebar">
+        <span class="user-name-sidebar" id="sidebar-user-name">System Admin</span>
+        <span class="user-role-sidebar">Administrator</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ── -->
+  <div class="main-wrapper" id="main-wrapper">
+
+    <!-- Top Bar -->
+    <header class="top-header">
+      <div class="top-header-left">
+        <button
+          type="button"
+          class="mobile-menu-btn"
+          id="mobile-menu-btn"
+          onclick="openMobileSidebar()"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="sidebar"
+        >
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="top-header-center">
+        <!-- Top Search Bar -->
+        <label class="sr-only" for="top-search-input">Search hospitals, blood banks, and donors</label>
+        <div class="top-search-group" id="top-search-group">
+          <svg class="icon search-icon" viewBox="0 0 24 24" style="color:var(--text-light)" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            type="search"
+            class="top-search-input"
+            id="top-search-input"
+            placeholder="Search hospitals, blood banks, donors..."
+            aria-label="Search hospitals, blood banks, donors"
+            oninput="handleHeaderSearch(this.value)"
+          >
+        </div>
+      </div>
+
+      <div class="top-header-right header-user-profile">
+        <!-- Notification Button -->
+        <button type="button" class="header-icon-btn" id="notification-bell-btn" title="Notifications" aria-label="Notifications" onclick="toggleNotificationDropdown()">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notification-dot" id="header-unread-count" style="display:none;">0</span>
+        </button>
+
+        <!-- Notification Dropdown -->
+        <div class="notification-dropdown" id="notification-dropdown">
+          <div class="notification-dropdown-header">
+            <span class="notification-dropdown-title">System Notifications</span>
+            <button type="button" class="btn-sm btn-sm-outline" style="padding:3px 8px;font-size:0.72rem;" onclick="markAllNotificationsRead()">Mark all read</button>
+          </div>
+          <div class="notification-list" id="notification-list-container">
+            <div class="notification-empty">Loading notifications...</div>
+          </div>
+        </div>
+
+        <!-- Admin Profile Badge at Far Right -->
+        <div class="user-profile-badge" id="header-user-profile-badge" onclick="switchView('settings')" title="Admin Profile & Settings">
+          <div class="hospital-identity">
+            <span class="hospital-name" id="header-user-name">System Administrator</span>
+            <span class="role-badge" id="header-user-role">Admin</span>
+          </div>
+          <div class="hospital-avatar" id="header-user-avatar" aria-hidden="true">SA</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="page-container">
+
+      <!-- Page Header -->
+      <section class="page-header-section">
+        <h1 class="page-title" id="page-title-heading">Dashboard</h1>
+        <p class="page-subtitle" id="welcome-message">Welcome back to LifeLink Operations Center.</p>
+      </section>
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 1: DASHBOARD                               -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-dashboard" class="view-section active">
+
+        <!-- Dashboard Time Range Filter Bar -->
+        <div role="group" aria-label="Dashboard time range filter" class="time-range-bar" id="dashboard-time-range-bar" style="margin-bottom: 1.25rem;">
+          <button type="button" class="time-range-btn" id="db-trange-today" onclick="setDashboardTimeframe('today')">Today</button>
+          <button type="button" class="time-range-btn" id="db-trange-week" onclick="setDashboardTimeframe('week')">This Week</button>
+          <button type="button" class="time-range-btn" id="db-trange-month" onclick="setDashboardTimeframe('month')">This Month</button>
+          <button type="button" class="time-range-btn active" id="db-trange-alltime" onclick="setDashboardTimeframe('alltime')">All Time</button>
+        </div>
+
+        <!-- Dynamic Critical Alert Banner -->
+        <div id="critical-alert-banner-container" style="display:none;margin-bottom:1.5rem;"></div>
+
+        <!-- 6 Summary KPI Cards -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-purple">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Total Blood Banks</span>
+              <span class="stat-value" id="stat-total-bloodbanks">6</span>
+              <span class="stat-footer-text">Registered facilities</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-blue">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Total Hospitals</span>
+              <span class="stat-value" id="stat-total-hospitals">12</span>
+              <span class="stat-footer-text">Medical centers</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-green">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Total Donors</span>
+              <span class="stat-value" id="stat-total-donors">148</span>
+              <span class="stat-footer-text">Registered donors</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-red">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Total Requests</span>
+              <span class="stat-value" id="stat-total-requests">34</span>
+              <span class="stat-footer-text">Blood requests</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-amber">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Completed Donations</span>
+              <span class="stat-value" id="stat-completed-donations">28</span>
+              <span class="stat-footer-text">Fulfilled units</span>
+            </div>
+          </div>
+
+          <div class="stat-card" onclick="switchView('hospitals')" style="cursor:pointer;" title="Click to review pending verifications">
+            <div class="stat-icon-wrap" style="background:rgba(245, 158, 11, 0.12);color:#d97706;">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Pending Verifications</span>
+              <span class="stat-value" id="stat-pending-verifications">3</span>
+              <span class="stat-footer-text">Action required</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TWO INTERACTIVE CHARTS ── -->
+        <div class="charts-grid">
+          <!-- Chart A: Bar Chart — Blood Inventory by Type -->
+          <div class="chart-panel">
+            <div class="chart-header">
+              <h2 class="chart-title">Blood Inventory by Type</h2>
+              <div class="chart-controls">
+                <div class="chart-btn-group" id="inventory-chart-toggles">
+                  <button type="button" class="chart-btn active" onclick="setInventoryChartSeries('all')">All</button>
+                  <button type="button" class="chart-btn" onclick="setInventoryChartSeries('donated')">Donated</button>
+                  <button type="button" class="chart-btn" onclick="setInventoryChartSeries('issued')">Issued</button>
+                  <button type="button" class="chart-btn" onclick="setInventoryChartSeries('inStock')">In Stock</button>
+                </div>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap">
+              <canvas id="bloodInventoryChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart B: Pie / Doughnut Chart — Blood Request Types Breakdown -->
+          <div class="chart-panel">
+            <div class="chart-header">
+              <h2 class="chart-title">Request Types Breakdown</h2>
+              <span class="chart-badge" id="request-types-total-badge">Total: 34 Requests</span>
+            </div>
+            <div class="chart-canvas-wrap" style="display:flex;align-items:center;justify-content:center;">
+              <canvas id="requestTypesPieChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Recent Requests & Recent Actions Section ── -->
+        <div class="dashboard-mid-grid">
+          <!-- Recent Requests Feed -->
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <h2 class="card-panel-title">Recent Urgent Requests</h2>
+              <button type="button" class="view-all-link" onclick="switchView('requests')">View all →</button>
+            </div>
+            <div class="recent-actions-list" id="dashboard-recent-feed"></div>
+          </div>
+
+          <!-- Recent Actions (Audit Logs) Feed -->
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <h2 class="card-panel-title">Recent Admin Actions</h2>
+              <button type="button" class="view-all-link" onclick="switchView('settings')">Audit Trail →</button>
+            </div>
+            <div class="recent-actions-list" id="dashboard-recent-actions"></div>
+          </div>
+        </div>
+
+        <!-- Urgent Blood Requests Table -->
+        <div class="card-panel" style="margin-bottom:2rem;">
+          <div class="card-panel-header">
+            <h2 class="card-panel-title">Active Blood Requests Overview</h2>
+            <button type="button" class="view-all-link" onclick="switchView('requests')">Manage requests →</button>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="Urgent blood requests">
+              <thead>
+                <tr>
+                  <th>Blood Type</th>
+                  <th>Units Needed</th>
+                  <th>Urgency</th>
+                  <th>Hospital</th>
+                  <th>Location</th>
+                  <th>Posted On</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-requests-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 2: BLOOD REQUESTS                          -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-requests" class="view-section">
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">All Hospital Blood Requests</h2>
+            </div>
+            <div class="table-controls">
+              <label class="sr-only" for="filter-req-status">Filter by status</label>
+              <select class="filter-select" id="filter-req-status" onchange="resetAndFilter('requests')">
+                <option value="">All Statuses</option>
+                <option value="PENDING">Active / Pending</option>
+                <option value="PROCESSING">In-Progress</option>
+                <option value="FULFILLED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+              <label class="sr-only" for="filter-req-urgency">Filter by urgency</label>
+              <select class="filter-select" id="filter-req-urgency" onchange="resetAndFilter('requests')">
+                <option value="">All Urgency</option>
+                <option value="CRITICAL_EMERGENCY">Emergency</option>
+                <option value="URGENT">Urgent</option>
+                <option value="NORMAL">Normal</option>
+              </select>
+              <label class="sr-only" for="search-requests">Search requests</label>
+              <input type="search" class="search-input-sm" id="search-requests" placeholder="Search ID or hospital..." oninput="debouncedResetAndFilter('requests')">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="All blood requests">
+              <thead>
+                <tr><th>Ref ID</th><th>Hospital</th><th>Blood Type</th><th>Units</th><th>Urgency</th><th>Responses</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="requests-table-body"></tbody>
+            </table>
+          </div>
+          <div class="pagination-wrap" id="requests-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 3: DONORS                                  -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-donors" class="view-section">
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">Registered Blood Donors</h2>
+            </div>
+            <div class="table-controls">
+              <label class="sr-only" for="filter-donor-blood">Filter by blood type</label>
+              <select class="filter-select" id="filter-donor-blood" onchange="resetAndFilter('donors')">
+                <option value="">All Blood Types</option>
+                <option value="A+">A+</option><option value="A-">A-</option>
+                <option value="B+">B+</option><option value="B-">B-</option>
+                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                <option value="O+">O+</option><option value="O-">O-</option>
+              </select>
+              <label class="sr-only" for="filter-donor-verified">Filter by verification</label>
+              <select class="filter-select" id="filter-donor-verified" onchange="resetAndFilter('donors')">
+                <option value="">All Donors</option>
+                <option value="true">Verified Only</option>
+                <option value="false">Unverified Only</option>
+              </select>
+              <label class="sr-only" for="search-donors">Search donors</label>
+              <input type="search" class="search-input-sm" id="search-donors" placeholder="Search name or city..." oninput="debouncedResetAndFilter('donors')">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="Registered blood donors">
+              <thead>
+                <tr><th>Donor Name</th><th>Blood Type</th><th>City</th><th>Availability</th><th>Donations</th><th>Verified</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="donors-table-body"></tbody>
+            </table>
+          </div>
+          <div class="pagination-wrap" id="donors-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 4: HOSPITALS                               -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-hospitals" class="view-section">
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">Hospital Facilities & Accreditations</h2>
+            </div>
+            <div class="table-controls">
+              <label class="sr-only" for="filter-hosp-status">Filter by status</label>
+              <select class="filter-select" id="filter-hosp-status" onchange="resetAndFilter('hospitals')">
+                <option value="">All Statuses</option>
+                <option value="VERIFIED">Verified</option>
+                <option value="PENDING">Pending</option>
+                <option value="REJECTED">Rejected</option>
+              </select>
+              <label class="sr-only" for="search-hospitals">Search hospitals</label>
+              <input type="search" class="search-input-sm" id="search-hospitals" placeholder="Search hospital or city..." oninput="debouncedResetAndFilter('hospitals')">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="Hospital facilities">
+              <thead>
+                <tr><th>Hospital Name</th><th>License No.</th><th>City</th><th>Contact</th><th>Status</th><th>Requests</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="hospitals-table-body"></tbody>
+            </table>
+          </div>
+          <div class="pagination-wrap" id="hospitals-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 5: BLOOD BANKS                             -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-blood-banks" class="view-section">
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">Blood Bank Facilities</h2>
+            </div>
+            <div class="table-controls">
+              <label class="sr-only" for="filter-bb-status">Filter by status</label>
+              <select class="filter-select" id="filter-bb-status" onchange="resetAndFilter('bloodBanks')">
+                <option value="">All Statuses</option>
+                <option value="VERIFIED">Verified</option>
+                <option value="PENDING">Pending</option>
+                <option value="REJECTED">Rejected</option>
+              </select>
+              <label class="sr-only" for="search-blood-banks">Search blood banks</label>
+              <input type="search" class="search-input-sm" id="search-blood-banks" placeholder="Search blood bank or city..." oninput="debouncedResetAndFilter('bloodBanks')">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="Blood bank facilities">
+              <thead>
+                <tr><th>Blood Bank Name</th><th>License No.</th><th>City</th><th>Contact</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="blood-banks-table-body"></tbody>
+            </table>
+          </div>
+          <div class="pagination-wrap" id="blood-banks-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 6: DONATIONS                               -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-donations" class="view-section">
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">Donation Records</h2>
+            </div>
+            <div class="table-controls">
+              <label class="sr-only" for="filter-don-status">Filter by status</label>
+              <select class="filter-select" id="filter-don-status" onchange="resetAndFilter('donations')">
+                <option value="">All Statuses</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="SCHEDULED">Scheduled</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+              <label class="sr-only" for="search-donations">Search donations</label>
+              <input type="search" class="search-input-sm" id="search-donations" placeholder="Search donor or hospital..." oninput="debouncedResetAndFilter('donations')">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="Donation records">
+              <thead>
+                <tr><th>Donor Name</th><th>Blood Type</th><th>Date</th><th>Hospital</th><th>Request ID</th><th>Units</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="donations-table-body"></tbody>
+            </table>
+          </div>
+          <div class="pagination-wrap" id="donations-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 7: STATISTICS                              -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-statistics" class="view-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+          <div role="group" aria-label="Time range filter" class="time-range-bar" id="stats-time-range-bar" style="margin-bottom:0;">
+            <button type="button" class="time-range-btn active" id="trange-today"    onclick="setStatsRange('today')">Today</button>
+            <button type="button" class="time-range-btn"        id="trange-week"     onclick="setStatsRange('week')">This Week</button>
+            <button type="button" class="time-range-btn"        id="trange-month"    onclick="setStatsRange('month')">This Month</button>
+            <button type="button" class="time-range-btn"        id="trange-alltime"  onclick="setStatsRange('alltime')">All Time</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="btn-sm btn-sm-outline" onclick="exportStatsReport('csv')" title="Download statistics summary as CSV">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Stats CSV
+            </button>
+            <button type="button" class="btn-sm btn-sm-outline" onclick="exportStatsReport('json')" title="Download statistics summary as JSON">
+              Export JSON
+            </button>
+          </div>
+        </div>
+
+        <!-- System Summary Totals Table -->
+        <p class="stats-section-title">System Entity Totals & Real-Time Overview</p>
+        <div class="data-card" style="margin-bottom:1.75rem;">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">Platform Entity Summary Totals</h2>
+              <span class="status-badge status-verified">● Live Database</span>
+            </div>
+            <span style="font-size:0.78rem;color:var(--text-muted);" id="stats-summary-updated-at">Updated: Real-time</span>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="System summary totals table">
+              <thead>
+                <tr>
+                  <th>Platform Entity</th>
+                  <th>Total Count</th>
+                  <th>Active / Verified</th>
+                  <th>Coverage & Metric</th>
+                  <th>Data Source</th>
+                </tr>
+              </thead>
+              <tbody id="stats-summary-totals-body">
+                <tr>
+                  <td><strong>Registered Users</strong></td>
+                  <td><strong id="sum-total-users">--</strong></td>
+                  <td><span id="sum-active-users">--</span></td>
+                  <td>Active Accounts</td>
+                  <td><span class="status-badge status-verified">Live DB</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Donors</strong></td>
+                  <td><strong id="sum-total-donors">--</strong></td>
+                  <td><span id="sum-verified-donors">--</span></td>
+                  <td>Verified Donors</td>
+                  <td><span class="status-badge status-verified">Live DB</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Hospitals</strong></td>
+                  <td><strong id="sum-total-hospitals">--</strong></td>
+                  <td><span id="sum-verified-hospitals">--</span></td>
+                  <td>Verified Medical Facilities</td>
+                  <td><span class="status-badge status-verified">Live DB</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Blood Banks</strong></td>
+                  <td><strong id="sum-total-bloodbanks">--</strong></td>
+                  <td><span id="sum-verified-bloodbanks">--</span></td>
+                  <td>Verified Blood Centers</td>
+                  <td><span class="status-badge status-verified">Live DB</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Blood Requests</strong></td>
+                  <td><strong id="sum-total-requests">--</strong></td>
+                  <td><span id="sum-fulfilled-requests">--</span></td>
+                  <td>Fulfilled Requests</td>
+                  <td><span class="status-badge status-verified">Live DB</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Donations Recorded</strong></td>
+                  <td><strong id="sum-total-donations">--</strong></td>
+                  <td><span id="sum-completed-donations">--</span></td>
+                  <td>Completed Donations</td>
+                  <td><span class="status-badge status-verified">Live DB</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Request Fulfillment Performance Cards -->
+        <p class="stats-section-title">Emergency & Request Fulfillment Performance</p>
+        <div class="fulfillment-grid" id="fulfillment-cards-grid">
+          <div class="fulfillment-card">
+            <div class="fulfillment-card-header">
+              <span class="fulfillment-tier-title"><span class="fulfillment-dot" style="background:#dc2626;"></span> Critical Emergency</span>
+              <span class="turnaround-pill" id="turnaround-critical">Avg ~1.4h</span>
+            </div>
+            <div class="fulfillment-metrics-row">
+              <span class="fulfillment-rate-val" id="rate-critical">90.0%</span>
+              <span style="font-size:0.8rem;color:var(--text-muted);" id="ratio-critical">9 of 10 fulfilled</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="pfill-critical" style="width:90%;background:#dc2626;"></div></div>
+          </div>
+
+          <div class="fulfillment-card">
+            <div class="fulfillment-card-header">
+              <span class="fulfillment-tier-title"><span class="fulfillment-dot" style="background:#d97706;"></span> Urgent Requests</span>
+              <span class="turnaround-pill" id="turnaround-urgent">Avg ~3.8h</span>
+            </div>
+            <div class="fulfillment-metrics-row">
+              <span class="fulfillment-rate-val" id="rate-urgent">85.7%</span>
+              <span style="font-size:0.8rem;color:var(--text-muted);" id="ratio-urgent">12 of 14 fulfilled</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="pfill-urgent" style="width:85.7%;background:#d97706;"></div></div>
+          </div>
+
+          <div class="fulfillment-card">
+            <div class="fulfillment-card-header">
+              <span class="fulfillment-tier-title"><span class="fulfillment-dot" style="background:#2563eb;"></span> Normal Priority</span>
+              <span class="turnaround-pill" id="turnaround-normal">Avg ~12.5h</span>
+            </div>
+            <div class="fulfillment-metrics-row">
+              <span class="fulfillment-rate-val" id="rate-normal">90.0%</span>
+              <span style="font-size:0.8rem;color:var(--text-muted);" id="ratio-normal">9 of 10 fulfilled</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="pfill-normal" style="width:90%;background:#2563eb;"></div></div>
+          </div>
+        </div>
+
+        <!-- Geographic Supply vs Demand Breakdown -->
+        <p class="stats-section-title">Regional Supply vs. Demand Distribution</p>
+        <div class="geo-grid" id="geographic-cards-grid" style="margin-bottom:1.75rem;"></div>
+
+        <!-- Signups Over Time Line Chart -->
+        <div class="chart-panel" style="margin-bottom: 1.75rem;">
+          <div class="chart-header">
+            <h2 class="chart-title">Signups Over Time</h2>
+            <div class="chart-controls">
+              <div class="chart-btn-group" id="signups-period-toggles">
+                <button type="button" class="chart-btn active" onclick="setSignupsPeriod('daily')">Daily</button>
+                <button type="button" class="chart-btn" onclick="setSignupsPeriod('weekly')">Weekly</button>
+                <button type="button" class="chart-btn" onclick="setSignupsPeriod('monthly')">Monthly</button>
+                <button type="button" class="chart-btn" onclick="setSignupsPeriod('yearly')">Yearly</button>
+              </div>
+              <div class="chart-btn-group" id="signups-series-toggles">
+                <button type="button" class="chart-btn active" onclick="setSignupsSeries('all')">All</button>
+                <button type="button" class="chart-btn" onclick="setSignupsSeries('bloodBanks')">Blood Banks</button>
+                <button type="button" class="chart-btn" onclick="setSignupsSeries('hospitals')">Hospitals</button>
+                <button type="button" class="chart-btn" onclick="setSignupsSeries('donors')">Donors</button>
+              </div>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="signupsLineChart"></canvas>
+          </div>
+        </div>
+
+        <p class="stats-section-title">Blood Type Summary & Shortage Monitoring</p>
+        <div class="data-card" style="margin-bottom:1.75rem;">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">Blood Type Inventory & Activity</h2>
+              <span class="low-stock-badge">⚠ Safety threshold: <span id="low-stock-threshold-label">5</span> units</span>
+            </div>
+            <span style="font-size:0.78rem;color:var(--text-muted);" id="stats-range-label">Showing: Today</span>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="Blood type summary table">
+              <thead>
+                <tr>
+                  <th>Blood Type</th>
+                  <th>In Stock</th>
+                  <th>Donated</th>
+                  <th>Delivered</th>
+                  <th>Stock Status</th>
+                </tr>
+              </thead>
+              <tbody id="stats-summary-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="stats-section-title">Hospital Fulfillment Rankings</p>
+        <div class="data-card">
+          <div class="data-card-header">
+            <h3 class="data-card-title">Hospitals by Units Received</h3>
+            <span style="font-size:0.78rem;color:var(--text-muted);">Click column headers to sort</span>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="Hospital ranking by units received">
+              <thead>
+                <tr>
+                  <th>Hospital Name</th>
+                  <th class="sortable-th" id="sort-th-units" onclick="sortHospitalRanking('units')" tabindex="0">Units Received <span class="sort-arrow"></span></th>
+                  <th class="sortable-th" id="sort-th-reqs"  onclick="sortHospitalRanking('reqs'  )" tabindex="0">Requests Made <span class="sort-arrow"></span></th>
+                  <th class="sortable-th" id="sort-th-date"  onclick="sortHospitalRanking('date'  )" tabindex="0">Last Request <span class="sort-arrow"></span></th>
+                </tr>
+              </thead>
+              <tbody id="stats-hospital-ranking-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 8: REPORTS & EXPORT                        -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-reports" class="view-section">
+        <div class="data-card no-print" style="padding:1.75rem;margin-bottom:1.5rem;">
+          <h2 class="data-card-title" style="margin-bottom:0.5rem;">Generate System Reports & Export</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:1.5rem;">Export data as CSV or print formatted reports across system entities.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;">
+            <div>
+              <label for="report-type" class="form-label">Select Entity</label>
+              <select id="report-type" class="form-input" onchange="updateReportPreview()">
+                <option value="users">Unified Users List</option>
+                <option value="hospitals">Hospital Facilities</option>
+                <option value="blood-banks">Blood Bank Facilities</option>
+                <option value="donors">Registered Donors</option>
+                <option value="donations">Donation Activity</option>
+                <option value="requests">Blood Requests</option>
+                <option value="audit-logs">System Audit Trail</option>
+              </select>
+            </div>
+            <div>
+              <label for="report-format" class="form-label">Export Format</label>
+              <select id="report-format" class="form-input">
+                <option value="csv">CSV Spreadsheet</option>
+                <option value="json">JSON Data</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="btn-sm btn-sm-primary" style="padding:10px 20px;font-size:0.9rem;" onclick="executeExportDownload()">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Export
+            </button>
+            <button type="button" class="btn-sm btn-sm-outline" style="padding:10px 20px;font-size:0.9rem;" onclick="printReport()">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Print Preview
+            </button>
+          </div>
+        </div>
+
+        <div class="data-card print-area" id="report-print-area" style="padding:1.75rem;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;">
+            <div>
+              <h2 style="font-size:1.3rem;font-weight:800;color:var(--text-main);" id="report-print-title">Report</h2>
+              <p style="font-size:0.82rem;color:var(--text-muted);" id="report-print-meta"></p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-weight:800;font-size:1.1rem;color:var(--primary);">LifeLink</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Admin Portal Report</div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" id="report-preview-table" aria-label="Report preview">
+              <thead id="report-preview-thead"></thead>
+              <tbody id="report-preview-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 9: USERS (With Unified Search & Pagination)-->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-users" class="view-section">
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h2 class="data-card-title">Unified User Accounts</h2>
+            </div>
+            <div class="table-controls">
+              <label class="sr-only" for="filter-user-role">Filter by role</label>
+              <select class="filter-select" id="filter-user-role" onchange="resetAndFilter('users')">
+                <option value="">All Roles</option>
+                <option value="ADMIN">Admin</option>
+                <option value="HOSPITAL">Hospital</option>
+                <option value="BLOOD_BANK">Blood Bank</option>
+                <option value="DONOR">Donor</option>
+              </select>
+              <label class="sr-only" for="filter-user-status">Filter by status</label>
+              <select class="filter-select" id="filter-user-status" onchange="resetAndFilter('users')">
+                <option value="">All Statuses</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+              <label class="sr-only" for="search-users">Search users</label>
+              <input type="search" class="search-input-sm" id="search-users" placeholder="Search name, email, phone..." oninput="debouncedResetAndFilter('users')">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="All user accounts">
+              <thead>
+                <tr><th>Name / Identity</th><th>Email</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="users-table-body"></tbody>
+            </table>
+          </div>
+          <div class="pagination-wrap" id="users-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- VIEW 10: ADMIN PROFILE & SETTINGS               -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <section id="view-settings" class="view-section">
+        <!-- Admin Profile Form -->
+        <div class="data-card" style="padding:1.75rem;margin-bottom:1.5rem;">
+          <h2 class="data-card-title" style="margin-bottom:0.5rem;">Admin Profile & Security</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:1.5rem;">Manage your administrator credentials and account security.</p>
+          
+          <div class="section-divider">Profile Information</div>
+          <form id="admin-profile-form" onsubmit="event.preventDefault(); saveAdminProfile();">
+            <div class="settings-grid" style="margin-bottom:1.5rem;">
+              <div>
+                <label for="settings-name" class="form-label">Full Name</label>
+                <input type="text" id="settings-name" class="form-input" placeholder="System Administrator" value="System Administrator" required>
+              </div>
+              <div>
+                <label for="settings-email" class="form-label">Email Address</label>
+                <input type="email" id="settings-email" class="form-input" placeholder="admin@lifelink.org" value="admin@lifelink.org" required>
+              </div>
+              <div>
+                <label for="settings-phone" class="form-label">Phone Number</label>
+                <input type="tel" id="settings-phone" class="form-input" placeholder="+251 91 123 4567" value="+251 91 100 1001">
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn-sm btn-sm-primary" style="padding:10px 24px;">Save Profile</button>
+            </div>
+          </form>
+
+          <div class="section-divider">Change Password</div>
+          <form id="admin-password-form" onsubmit="event.preventDefault(); changeAdminPassword();">
+            <div class="settings-grid" style="margin-bottom:1.5rem;">
+              <div>
+                <label for="settings-current-pw" class="form-label">Current Password</label>
+                <input type="password" id="settings-current-pw" class="form-input" placeholder="••••••••" required>
+              </div>
+              <div>
+                <label for="settings-new-pw" class="form-label">New Password (min. 8 chars)</label>
+                <input type="password" id="settings-new-pw" class="form-input" placeholder="••••••••" required minlength="8">
+              </div>
+              <div>
+                <label for="settings-confirm-pw" class="form-label">Confirm New Password</label>
+                <input type="password" id="settings-confirm-pw" class="form-input" placeholder="••••••••" required minlength="8">
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn-sm btn-sm-primary" style="padding:10px 24px;">Update Password</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Create Admin Account -->
+        <div class="data-card" style="padding:1.75rem;margin-bottom:1.5rem;">
+          <h2 class="data-card-title" style="margin-bottom:0.5rem;">Create Admin Account</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:1.5rem;">Provision a new system administrator. The new admin can log in immediately.</p>
+
+          <form id="create-admin-form" onsubmit="event.preventDefault(); createNewAdmin();">
+            <div class="settings-grid" style="margin-bottom:1.5rem;">
+              <div>
+                <label for="new-admin-name" class="form-label">Full Name</label>
+                <input type="text" id="new-admin-name" class="form-input" placeholder="e.g. Jane Admin" required minlength="2">
+              </div>
+              <div>
+                <label for="new-admin-email" class="form-label">Email Address</label>
+                <input type="email" id="new-admin-email" class="form-input" placeholder="jane@lifelink.org" required>
+              </div>
+              <div>
+                <label for="new-admin-phone" class="form-label">Phone (optional)</label>
+                <input type="tel" id="new-admin-phone" class="form-input" placeholder="+251 91 000 0000">
+              </div>
+              <div>
+                <label for="new-admin-password" class="form-label">Password (min. 8 chars)</label>
+                <input type="password" id="new-admin-password" class="form-input" placeholder="••••••••" required minlength="8">
+              </div>
+              <div>
+                <label for="new-admin-confirm-pw" class="form-label">Confirm Password</label>
+                <input type="password" id="new-admin-confirm-pw" class="form-input" placeholder="••••••••" required minlength="8">
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn-sm btn-sm-primary" style="padding:10px 24px;" id="create-admin-submit-btn">Create Admin</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Audit Trail Table -->
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title-group">
+              <h3 class="data-card-title">System Audit Trail</h3>
+            </div>
+            <div class="table-controls">
+              <input type="search" class="search-input-sm" id="search-audit" placeholder="Search action, user, or entity..." oninput="debouncedResetAndFilter('audit')">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" aria-label="System audit logs">
+              <thead>
+                <tr><th>Timestamp</th><th>Admin User</th><th>Action</th><th>Entity</th><th>Details</th></tr>
+              </thead>
+              <tbody id="audit-logs-table-body"></tbody>
+            </table>
+          </div>
+          <div class="pagination-wrap" id="audit-pagination"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- MODALS                                              -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <!-- Confirm Modal -->
+  <div class="modal-backdrop" id="confirmModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3 class="modal-title" id="confirm-modal-title">Confirm Action</h3>
+      <p class="modal-subtitle" id="confirm-modal-subtitle">Are you sure you want to proceed?</p>
+      <div class="modal-actions">
+        <button type="button" class="btn-sm btn-sm-outline" style="flex:1;padding:10px;" id="modal-cancel-btn" onclick="closeConfirmModal()">Cancel</button>
+        <button type="button" class="btn-sm btn-sm-primary" style="flex:1;padding:10px;" id="confirm-modal-action-btn" onclick="executePendingAction()">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request Detail Modal -->
+  <div class="modal-backdrop" id="requestDetailModal" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-lg">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;">
+        <div>
+          <h3 class="modal-title" id="req-detail-modal-title">Blood Request Details</h3>
+          <p class="modal-subtitle" id="req-detail-modal-id" style="margin-bottom:0;"></p>
+        </div>
+        <button type="button" class="btn-sm btn-sm-outline" onclick="closeModal('requestDetailModal')" aria-label="Close">✕</button>
+      </div>
+      <div id="req-detail-body"></div>
+      <div class="modal-actions" id="req-detail-actions"></div>
+    </div>
+  </div>
+
+  <!-- Donor Detail Modal -->
+  <div class="modal-backdrop" id="donorDetailModal" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-lg">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;">
+        <h3 class="modal-title" id="donor-detail-modal-title">Donor Profile</h3>
+        <button type="button" class="btn-sm btn-sm-outline" onclick="closeModal('donorDetailModal')" aria-label="Close">✕</button>
+      </div>
+      <div id="donor-detail-body"></div>
+      <div class="modal-actions" id="donor-detail-actions"></div>
+    </div>
+  </div>
+
+  <!-- User Manage Modal -->
+  <div class="modal-backdrop" id="userManageModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;">
+        <h3 class="modal-title" id="user-manage-modal-title">Manage User Account</h3>
+        <button type="button" class="btn-sm btn-sm-outline" onclick="closeModal('userManageModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">User ID</label>
+        <input type="text" class="modal-input" id="user-manage-id" readonly style="background:#f8fafc;">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Name</label>
+        <input type="text" class="modal-input" id="user-manage-name">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Email</label>
+        <input type="email" class="modal-input" id="user-manage-email">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="user-manage-role">Role</label>
+        <select class="modal-select" id="user-manage-role">
+          <option value="ADMIN">Admin</option>
+          <option value="HOSPITAL">Hospital</option>
+          <option value="BLOOD_BANK">Blood Bank</option>
+          <option value="DONOR">Donor</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="user-manage-status">Account Status</label>
+        <select class="modal-select" id="user-manage-status">
+          <option value="true">Active</option>
+          <option value="false">Inactive / Suspended</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sm btn-sm-outline" style="flex:1;padding:10px;" onclick="closeModal('userManageModal')">Cancel</button>
+        <button type="button" class="btn-sm btn-sm-primary" style="flex:1;padding:10px;" onclick="saveUserManage()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- DASHBOARD JAVASCRIPT LOGIC                          -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <script>
+    const API_BASE = window.ENV?.API_BASE || window.API_BASE || window.API_URL ||
+      (window.location.port === '5000' || window.location.port === '3000' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:5000/api'
+        : '/api');
+    let adminToken = (typeof localStorage !== 'undefined' ? (localStorage.getItem('token') || localStorage.getItem('auth_token')) : null);
+    let pendingActionFn = null;
+
+    // Client-side authentication guard
+    (function checkAuthGuard() {
+      if (typeof window === 'undefined' || window.__TEST_ENV__) return;
+      const isDevPreview = (['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.port !== '') && window.location.search.includes('preview=true');
+      if (!adminToken && !isDevPreview) {
+        if (!window.location.pathname.endsWith('login.html')) {
+          window.location.replace('login.html');
+        }
+      }
+    })();
+
+    // Debounce utility for search & filter inputs
+    function debounce(fn, delay = 300) {
+      let timer = null;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+    const debouncedResetAndFilter = debounce((viewKey) => resetAndFilter(viewKey), 300);
+    const debouncedHeaderSearch = debounce((q) => handleHeaderSearch(q), 300);
+
+    // Chart instances
+    let inventoryChartInstance = null;
+    let signupsChartInstance = null;
+    let currentInventorySeries = 'all'; // all | donated | issued | inStock
+    let currentSignupsPeriod = 'daily'; // daily | weekly | monthly
+    let currentSignupsSeries = 'all';   // all | bloodBanks | hospitals | donors
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Default / Fallback Datasets (Loaded from mock-data.js in dev)
+    // ─────────────────────────────────────────────────────────────────
+    const mockData = window.MockAdminData || {};
+    let defaultUsers = mockData.defaultUsers || [];
+    let defaultHospitals = mockData.defaultHospitals || [];
+    let defaultBloodBanks = mockData.defaultBloodBanks || [];
+    let defaultDonors = mockData.defaultDonors || [];
+    let defaultRequests = mockData.defaultRequests || [];
+    let defaultDonations = mockData.defaultDonations || [];
+    let defaultAuditLogs = mockData.defaultAuditLogs || [];
+    let defaultNotifications = mockData.defaultNotifications || [];
+    let defaultInventoryStats = mockData.defaultInventoryStats || {
+      categories: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      series: []
+    };
+    let defaultSignupsStats = mockData.defaultSignupsStats || {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      series: { bloodBanks: [], hospitals: [], donors: [] }
+    };
+    let defaultRequestTypes = mockData.defaultRequestTypes || {
+      total: 0,
+      series: [
+        { key: 'CRITICAL_EMERGENCY', label: 'Critical Emergency', count: 0, percentage: 0, color: '#dc2626' },
+        { key: 'URGENT', label: 'Urgent', count: 0, percentage: 0, color: '#d97706' },
+        { key: 'NORMAL', label: 'Normal', count: 0, percentage: 0, color: '#2563eb' }
+      ]
+    };
+
+    // Active state cache
+    let usersData = [...defaultUsers];
+    let hospitalsData = [...defaultHospitals];
+    let bloodBanksData = [...defaultBloodBanks];
+    let donorsData = [...defaultDonors];
+    let requestsData = [...defaultRequests];
+    let donationsData = [...defaultDonations];
+    let auditLogsData = [...defaultAuditLogs];
+    let notificationsData = [...defaultNotifications];
+    let inventoryStatsRaw = defaultInventoryStats;
+    let signupsStatsRaw = defaultSignupsStats;
+    let requestTypesStatsRaw = defaultRequestTypes;
+    let requestTypesChartInstance = null;
+    let currentDashboardTimeframe = 'alltime';
+    let currentStatsRange = 'today';
+    let hospitalRankingSort = { key: null, asc: false };
+
+    // Pagination states per view
+    const paginationState = {
+      users:       { page: 1, limit: 5, total: defaultUsers.length, pages: Math.max(1, Math.ceil(defaultUsers.length / 5)) },
+      hospitals:   { page: 1, limit: 5, total: defaultHospitals.length, pages: 1 },
+      bloodBanks:  { page: 1, limit: 5, total: defaultBloodBanks.length, pages: 1 },
+      donors:      { page: 1, limit: 5, total: defaultDonors.length, pages: 1 },
+      requests:    { page: 1, limit: 5, total: defaultRequests.length, pages: 1 },
+      donations:   { page: 1, limit: 5, total: defaultDonations.length, pages: 1 },
+      audit:       { page: 1, limit: 5, total: defaultAuditLogs.length, pages: 1 }
+    };
+
+    // Helper functions
+    function escapeHTML(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatBloodType(raw) {
+      if (!raw) return '?';
+      return String(raw)
+        .replace('AB_POS','AB+').replace('AB_NEG','AB-')
+        .replace('A_POS','A+').replace('A_NEG','A-')
+        .replace('B_POS','B+').replace('B_NEG','B-')
+        .replace('O_POS','O+').replace('O_NEG','O-');
+    }
+
+    function bloodTypeToEnum(raw) {
+      if (!raw) return '';
+      const map = {
+        'A+': 'A_POS', 'A-': 'A_NEG',
+        'B+': 'B_POS', 'B-': 'B_NEG',
+        'AB+': 'AB_POS', 'AB-': 'AB_NEG',
+        'O+': 'O_POS', 'O-': 'O_NEG'
+      };
+      return map[raw.trim()] || raw;
+    }
+
+    function escapeCsvCell(val) {
+      if (val == null) return '""';
+      let str = String(val);
+      if (/^[=+\-@]/.test(str)) {
+        str = "'" + str;
+      }
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+
+    function formatDate(raw) {
+      if (!raw) return 'N/A';
+      try {
+        return new Date(raw).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+      } catch {
+        return String(raw);
+      }
+    }
+
+    function formatDateTime(raw) {
+      if (!raw) return 'N/A';
+      try {
+        const d = new Date(raw);
+        return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' }) + ' ' + d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+      } catch {
+        return String(raw);
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Offline State Tracker
+    // ─────────────────────────────────────────────────────────────────
+    const _offlineKeys = new Set();
+
+    function markOffline(key) {
+      _offlineKeys.add(key);
+      _updateOfflineBanner();
+    }
+
+    function markOnline(key) {
+      _offlineKeys.delete(key);
+      _updateOfflineBanner();
+    }
+
+    function _updateOfflineBanner() {
+      const banner = document.getElementById('offline-banner');
+      if (!banner) return;
+      if (_offlineKeys.size > 0) {
+        const detail = document.getElementById('offline-banner-detail');
+        if (detail) {
+          const sources = [..._offlineKeys].join(', ');
+          detail.textContent = `Offline sources: ${sources}. Numbers shown are demo/mock values.`;
+        }
+        banner.classList.add('visible');
+      } else {
+        banner.classList.remove('visible');
+      }
+    }
+
+    async function retryAllFailed() {
+      const btn = document.getElementById('offline-retry-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Retrying…'; }
+      await Promise.allSettled([
+        fetchDashboardOverview(currentDashboardTimeframe),
+        fetchInventoryChartData(),
+        fetchRequestTypesChartData(currentDashboardTimeframe),
+        fetchSignupsChartData(),
+        fetchNotifications(),
+        loadUsersList(),
+        loadHospitalsList(),
+        loadBloodBanksList(),
+        loadDonorsList(),
+        loadRequestsList(),
+        loadDonationsList(),
+        loadAuditLogsList(),
+        loadAdminProfileInfo()
+      ]);
+      if (btn) { btn.disabled = false; btn.textContent = '↺ Retry'; }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Network request helper
+    // ─────────────────────────────────────────────────────────────────
+    async function apiFetch(endpoint, options = {}) {
+      const url = `${API_BASE}${endpoint}`;
+      const headers = { 'Content-Type': 'application/json' };
+      if (adminToken) headers['Authorization'] = `Bearer ${adminToken}`;
+      try {
+        const res = await fetch(url, { ...options, headers: { ...headers, ...options.headers } });
+        if (res.ok) {
+          return await res.json();
+        }
+        // API responded with 4xx/5xx
+        let body = {};
+        try { body = await res.json(); } catch (_) {}
+        console.warn(`[LifeLink] API error ${res.status} on ${endpoint}:`, body.message || res.statusText);
+        return { success: false, _httpError: true, status: res.status, message: body.message || res.statusText, data: body.data || null };
+      } catch (err) {
+        // Network/server unreachable
+        console.warn(`[LifeLink] Network unreachable for ${endpoint}:`, err.message);
+        return { success: false, offline: true, reason: err.message, endpoint };
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Initialisation
+    // ─────────────────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminProfileInfo();
+      fetchDashboardOverview();
+      fetchNotifications();
+      fetchInventoryChartData();
+      fetchRequestTypesChartData();
+      renderRequestTypesChart();
+      renderSignupsChart();
+      loadUsersList();
+      loadHospitalsList();
+      loadBloodBanksList();
+      loadDonorsList();
+      loadRequestsList();
+      loadDonationsList();
+      loadAuditLogsList();
+      renderStatisticsSummaryTable();
+      fetchSummaryTotalsStats();
+      initModalFocusTrap();
+    });
+
+    // ─────────────────────────────────────────────────────────────────
+    //  View Switching & Submenu Accordion
+    // ─────────────────────────────────────────────────────────────────
+    function toggleUserMenu(event) {
+      if (event) event.stopPropagation();
+      const submenu = document.getElementById('nav-user-submenu');
+      const parent = document.getElementById('nav-user-group');
+      const chevron = document.getElementById('nav-user-chevron');
+      if (!submenu) return;
+
+      const isOpen = submenu.classList.contains('open');
+      if (isOpen) {
+        submenu.classList.remove('open');
+        if (parent) parent.setAttribute('aria-expanded', 'false');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      } else {
+        submenu.classList.add('open');
+        if (parent) parent.setAttribute('aria-expanded', 'true');
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function switchView(viewName) {
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-item, .nav-sub-item').forEach(n => n.classList.remove('active'));
+      const activeNav = document.getElementById(`nav-${viewName}`);
+      if (activeNav) activeNav.classList.add('active');
+
+      const userSubViews = ['hospitals', 'blood-banks', 'donors', 'users'];
+      const userParent = document.getElementById('nav-user-group');
+      const userSubmenu = document.getElementById('nav-user-submenu');
+      const userChevron = document.getElementById('nav-user-chevron');
+
+      if (userSubViews.includes(viewName)) {
+        if (userParent) {
+          userParent.classList.add('active-parent');
+          userParent.setAttribute('aria-expanded', 'true');
+        }
+        if (userSubmenu) userSubmenu.classList.add('open');
+        if (userChevron) userChevron.style.transform = 'rotate(180deg)';
+      } else {
+        if (userParent) {
+          userParent.classList.remove('active-parent');
+        }
+      }
+
+      const titleMap = {
+        dashboard:    'Dashboard Overview',
+        requests:     'Blood Requests',
+        donors:       'Donor Management',
+        hospitals:    'Hospital Facilities',
+        'blood-banks':'Blood Bank Facilities',
+        donations:    'Donation Records',
+        statistics:   'Platform Statistics',
+        reports:      'Reports & Export',
+        users:        'Unified User Accounts',
+        settings:     'Admin Profile & Settings',
+      };
+      const heading = document.getElementById('page-title-heading');
+      if (heading) heading.textContent = titleMap[viewName] || 'Admin Operations';
+
+      if (viewName === 'statistics') {
+        renderStatisticsSummaryTable();
+        fetchSummaryTotalsStats();
+        setTimeout(() => {
+          if (signupsChartInstance) {
+            signupsChartInstance.resize();
+          } else {
+            renderSignupsChart();
+          }
+        }, 50);
+        fetchSignupsChartData();
+        fetchFulfillmentStats(currentStatsRange);
+        fetchGeographicStats();
+      }
+      if (viewName === 'dashboard') {
+        fetchDashboardOverview(currentDashboardTimeframe);
+        fetchRequestTypesChartData(currentDashboardTimeframe);
+        fetchInventoryChartData(currentDashboardTimeframe);
+      }
+      if (viewName === 'hospitals') loadHospitalsList();
+      if (viewName === 'blood-banks') loadBloodBanksList();
+      if (viewName === 'donors') loadDonorsList();
+      if (viewName === 'requests') loadRequestsList();
+      if (viewName === 'donations') loadDonationsList();
+      if (viewName === 'users') loadUsersList();
+      if (viewName === 'reports') updateReportPreview();
+      if (viewName === 'settings') loadAdminProfileInfo();
+
+      // On mobile, close sidebar after clicking nav item
+      if (window.innerWidth <= 1024) {
+        closeMobileSidebar();
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  1. Dashboard Overview & Summary Counts
+    // ─────────────────────────────────────────────────────────────────
+    function setDashboardTimeframe(timeframe) {
+      currentDashboardTimeframe = timeframe;
+      const buttons = document.querySelectorAll('#dashboard-time-range-bar .time-range-btn');
+      buttons.forEach(btn => {
+        btn.classList.toggle('active', btn.id === `db-trange-${timeframe}`);
+      });
+      fetchDashboardOverview(timeframe);
+      fetchRequestTypesChartData(timeframe);
+      fetchInventoryChartData(timeframe);
+    }
+
+    async function fetchDashboardOverview(timeframe = currentDashboardTimeframe) {
+      const res = await apiFetch(`/admin/dashboard?timeframe=${timeframe}`);
+      let criticalAlertsData = null;
+
+      if (res && res.success && res.data) {
+        markOnline('dashboard');
+        const m = res.data.metrics || {};
+        _setText('stat-total-bloodbanks', m.bloodBanks?.total ?? 0);
+        _setText('stat-total-hospitals',  m.hospitals?.total ?? 0);
+        _setText('stat-total-donors',     m.donors?.total ?? 0);
+        _setText('stat-total-requests',   m.requests?.total ?? 0);
+        _setText('stat-completed-donations', m.donations?.completed ?? 0);
+        _setText('stat-pending-verifications', m.pendingVerifications ?? ((m.hospitals?.pending || 0) + (m.bloodBanks?.pending || 0) + (m.donors?.unverified || 0)));
+
+        criticalAlertsData = m.criticalAlerts || null;
+        if (res.data.recentRequests) requestsData = res.data.recentRequests;
+        if (res.data.recentAuditLogs) auditLogsData = res.data.recentAuditLogs;
+      } else {
+        markOffline('dashboard');
+        if (window.MockAdminData && typeof window.MockAdminData.filterMockDataByTimeframe === 'function') {
+          const filtered = window.MockAdminData.filterMockDataByTimeframe(timeframe);
+          _setText('stat-total-bloodbanks', filtered.bloodBanks.length);
+          _setText('stat-total-hospitals',  filtered.hospitals.length);
+          _setText('stat-total-donors',     filtered.donors.length);
+          _setText('stat-total-requests',   filtered.requests.length);
+          _setText('stat-completed-donations', filtered.donations.filter(d => d.status === 'COMPLETED').length);
+          const pendingHosp = filtered.hospitals.filter(h => h.verificationStatus === 'PENDING').length;
+          const pendingBB = filtered.bloodBanks.filter(b => b.verificationStatus === 'PENDING').length;
+          const unverifiedDnr = filtered.donors.filter(d => !d.isVerified).length;
+          _setText('stat-pending-verifications', pendingHosp + pendingBB + unverifiedDnr);
+          requestsData = filtered.requests;
+          auditLogsData = filtered.auditLogs;
+        } else {
+          _setText('stat-total-bloodbanks', bloodBanksData.length);
+          _setText('stat-total-hospitals',  hospitalsData.length);
+          _setText('stat-total-donors',     donorsData.length);
+          _setText('stat-total-requests',   requestsData.length);
+          _setText('stat-completed-donations', donationsData.filter(d => d.status === 'COMPLETED').length);
+          _setText('stat-pending-verifications', 3);
+        }
+      }
+
+      renderCriticalAlertsBanner(criticalAlertsData, requestsData, inventoryStatsRaw);
+      renderRecentRequestsFeed(requestsData);
+      renderRecentActionsFeed(auditLogsData);
+      renderDashboardUrgentTable(requestsData);
+    }
+
+    function renderCriticalAlertsBanner(alerts, requests, inventory) {
+      const container = document.getElementById('critical-alert-banner-container');
+      if (!container) return;
+
+      const urgentRequests = (requests || []).filter(r => r.urgency === 'CRITICAL_EMERGENCY' && ['PENDING', 'APPROVED', 'PROCESSING'].includes(r.status));
+      const lowStockSeries = (inventory?.series || []).filter(s => s.inStock < 5);
+
+      const tags = [];
+      if (urgentRequests.length > 0) {
+        tags.push(`<span class="critical-alert-tag">🚨 ${urgentRequests.length} Critical Request${urgentRequests.length === 1 ? '' : 's'} Pending</span>`);
+      }
+      lowStockSeries.forEach(s => {
+        tags.push(`<span class="critical-alert-tag">🩸 ${escapeHTML(s.type)} Low (${s.inStock} left)</span>`);
+      });
+
+      if (tags.length === 0) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+      }
+
+      container.style.display = 'block';
+      container.innerHTML = `
+        <div class="critical-alert-banner">
+          <div class="critical-alert-left">
+            <div class="critical-alert-icon-wrap" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor"/></svg>
+            </div>
+            <div class="critical-alert-content">
+              <div class="critical-alert-title">Critical Operational Shortages & Emergency Alerts</div>
+              <div class="critical-alert-desc">Immediate administrative coordination required for life-saving blood supply.</div>
+              <div class="critical-alert-tags">${tags.join('')}</div>
+            </div>
+          </div>
+          <button type="button" class="critical-alert-btn" onclick="switchView('requests')">
+            Review Critical Requests →
+          </button>
+        </div>
+      `;
+    }
+
+    function _setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    }
+
+    function renderRecentRequestsFeed(requests) {
+      const feed = document.getElementById('dashboard-recent-feed');
+      if (!feed) return;
+      if (!requests.length) {
+        feed.innerHTML = '<div class="notification-empty">No active requests at this time.</div>';
+        return;
+      }
+      feed.innerHTML = requests.slice(0, 6).map(r => {
+        const bt = formatBloodType(r.bloodType);
+        const urgClass = r.urgency === 'CRITICAL_EMERGENCY' ? 'pill-red' : (r.urgency === 'URGENT' ? 'pill-amber' : 'pill-green');
+        return `
+          <div class="recent-action-item" onclick="openRequestDetail('${escapeHTML(r.id)}')" style="cursor:pointer;">
+            <div class="action-left">
+              <span class="blood-badge">${escapeHTML(bt)}</span>
+              <div class="action-details">
+                <span class="action-desc">${escapeHTML(String(r.unitsRequired || r.units || 1))} Units Required</span>
+                <span class="action-user">${escapeHTML(r.hospital?.hospitalName || r.location || 'Hospital')}</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+              <span class="status-pill ${urgClass}">${escapeHTML((r.urgency || 'NORMAL').replace(/_/g,' '))}</span>
+              <span class="action-time">${formatDate(r.createdAt || r.requestedAt)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderRecentActionsFeed(logs) {
+      const feed = document.getElementById('dashboard-recent-actions');
+      if (!feed) return;
+      if (!logs.length) {
+        feed.innerHTML = '<div class="notification-empty">No recent admin actions recorded.</div>';
+        return;
+      }
+      feed.innerHTML = logs.slice(0, 6).map(l => {
+        let badgeClass = 'badge-update';
+        if (l.action.includes('VERIFY')) badgeClass = 'badge-verify';
+        else if (l.action.includes('CREATE')) badgeClass = 'badge-create';
+        else if (l.action.includes('DELETE') || l.action.includes('DEACTIVATE')) badgeClass = 'badge-delete';
+
+        return `
+          <div class="recent-action-item">
+            <div class="action-left">
+              <span class="action-badge ${badgeClass}">${escapeHTML(l.action.replace(/_/g,' '))}</span>
+              <div class="action-details">
+                <span class="action-desc">${escapeHTML(l.entity)} #${escapeHTML(String(l.entityId || '').slice(0,8))}</span>
+                <span class="action-user">by ${escapeHTML(l.user?.name || l.user?.email || 'Admin')}</span>
+              </div>
+            </div>
+            <span class="action-time">${formatDateTime(l.createdAt)}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDashboardUrgentTable(requests) {
+      const tbody = document.getElementById('dashboard-requests-table');
+      if (!tbody) return;
+      if (!requests.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">No urgent requests pending.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = requests.map(r => `
+        <tr onclick="openRequestDetail('${escapeHTML(r.id)}')">
+          <td><span class="blood-badge">${escapeHTML(formatBloodType(r.bloodType))}</span></td>
+          <td><strong>${escapeHTML(String(r.unitsRequired || 1))} Units</strong></td>
+          <td><span class="status-badge status-emergency">${escapeHTML((r.urgency||'NORMAL').replace(/_/g,' '))}</span></td>
+          <td>${escapeHTML(r.hospital?.hospitalName || 'Hospital')}</td>
+          <td>${escapeHTML(r.location || r.hospital?.city || 'N/A')}</td>
+          <td>${formatDate(r.createdAt)}</td>
+          <td><button type="button" class="btn-sm btn-sm-outline" onclick="event.stopPropagation();openRequestDetail('${escapeHTML(r.id)}')">View</button></td>
+        </tr>
+      `).join('');
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  2. Interactive Charts (Chart.js)
+    // ─────────────────────────────────────────────────────────────────
+    async function fetchInventoryChartData(timeframe = currentDashboardTimeframe) {
+      const res = await apiFetch(`/admin/stats/blood-inventory?timeframe=${timeframe}`);
+      if (res && res.success && res.data) {
+        markOnline('blood-inventory');
+        inventoryStatsRaw = res.data;
+      } else {
+        markOffline('blood-inventory');
+        if (window.MockAdminData && typeof window.MockAdminData.getMockInventoryForTimeframe === 'function') {
+          inventoryStatsRaw = window.MockAdminData.getMockInventoryForTimeframe(timeframe);
+        }
+      }
+      renderBloodInventoryChart();
+      renderStatisticsSummaryTable();
+    }
+
+    function renderBloodInventoryChart() {
+      const canvas = document.getElementById('bloodInventoryChart');
+      if (!canvas || !inventoryStatsRaw || typeof Chart === 'undefined') return;
+
+      const categories = inventoryStatsRaw.categories || ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+      const series = inventoryStatsRaw.series || [];
+
+      const donatedData = series.map(s => s.donated);
+      const issuedData  = series.map(s => s.issued);
+      const stockData   = series.map(s => s.inStock);
+
+      const datasets = [];
+      if (currentInventorySeries === 'all' || currentInventorySeries === 'donated') {
+        datasets.push({
+          label: 'Blood Donated',
+          data: donatedData,
+          backgroundColor: 'rgba(123, 30, 43, 0.85)',
+          borderRadius: 4
+        });
+      }
+      if (currentInventorySeries === 'all' || currentInventorySeries === 'issued') {
+        datasets.push({
+          label: 'Blood Issued/Given',
+          data: issuedData,
+          backgroundColor: 'rgba(217, 119, 6, 0.85)',
+          borderRadius: 4
+        });
+      }
+      if (currentInventorySeries === 'all' || currentInventorySeries === 'inStock') {
+        datasets.push({
+          label: 'Blood In Stock',
+          data: stockData,
+          backgroundColor: 'rgba(59, 140, 88, 0.85)',
+          borderRadius: 4
+        });
+      }
+
+      if (inventoryChartInstance) inventoryChartInstance.destroy();
+
+      inventoryChartInstance = new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: { labels: categories, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' } } }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, grid: { color: '#eee3df' } }
+          }
+        }
+      });
+    }
+
+    function setInventoryChartSeries(seriesName) {
+      currentInventorySeries = seriesName;
+      document.querySelectorAll('#inventory-chart-toggles .chart-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.toLowerCase().replace(/\s/g, '') === seriesName.toLowerCase().replace(/\s/g, ''));
+      });
+      renderBloodInventoryChart();
+    }
+
+    async function fetchRequestTypesChartData(timeframe = currentDashboardTimeframe) {
+      const res = await apiFetch(`/admin/stats/request-types?timeframe=${timeframe}`);
+      if (res && res.success && res.data) {
+        markOnline('request-types');
+        requestTypesStatsRaw = res.data;
+      } else {
+        markOffline('request-types');
+        if (window.MockAdminData && typeof window.MockAdminData.getMockRequestTypesForTimeframe === 'function') {
+          requestTypesStatsRaw = window.MockAdminData.getMockRequestTypesForTimeframe(timeframe);
+        }
+      }
+      renderRequestTypesChart();
+    }
+
+    function renderRequestTypesChart() {
+      const canvas = document.getElementById('requestTypesPieChart');
+      if (!canvas || !requestTypesStatsRaw || typeof Chart === 'undefined') return;
+
+      const series = requestTypesStatsRaw.series || [];
+      const labels = series.map(s => s.label);
+      const counts = series.map(s => s.count);
+      const colors = series.map(s => s.color || '#7b1e2b');
+      const total = requestTypesStatsRaw.total ?? counts.reduce((a, b) => a + b, 0);
+
+      const badge = document.getElementById('request-types-total-badge');
+      if (badge) badge.textContent = `Total: ${total} Request${total === 1 ? '' : 's'}`;
+
+      if (requestTypesChartInstance) requestTypesChartInstance.destroy();
+
+      requestTypesChartInstance = new Chart(canvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: colors,
+            borderWidth: 2,
+            borderColor: '#ffffff',
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '58%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
+                padding: 14,
+                boxWidth: 12
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const label = context.label || '';
+                  const value = context.raw || 0;
+                  const pct = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return ` ${label}: ${value} (${pct}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    async function fetchSignupsChartData() {
+      const res = await apiFetch(`/admin/stats/signups?period=${currentSignupsPeriod}`);
+      if (res && res.success && res.data) {
+        markOnline('signups');
+        signupsStatsRaw = res.data;
+      } else {
+        markOffline('signups');
+        if (window.MockAdminData && typeof window.MockAdminData.getMockSignupsForPeriod === 'function') {
+          signupsStatsRaw = window.MockAdminData.getMockSignupsForPeriod(currentSignupsPeriod);
+        }
+      }
+      renderSignupsChart();
+    }
+
+    function renderSignupsChart() {
+      const canvas = document.getElementById('signupsLineChart');
+      if (!canvas || !signupsStatsRaw || typeof Chart === 'undefined') return;
+
+      const labels = signupsStatsRaw.labels || [];
+      const series = signupsStatsRaw.series || { bloodBanks: [], hospitals: [], donors: [] };
+
+      const datasets = [];
+      if (currentSignupsSeries === 'all' || currentSignupsSeries === 'bloodBanks') {
+        datasets.push({
+          label: 'Blood Banks',
+          data: series.bloodBanks || [],
+          borderColor: '#7c3aed',
+          backgroundColor: 'rgba(124, 58, 237, 0.1)',
+          tension: 0.35,
+          fill: true,
+          pointRadius: 4
+        });
+      }
+      if (currentSignupsSeries === 'all' || currentSignupsSeries === 'hospitals') {
+        datasets.push({
+          label: 'Hospitals',
+          data: series.hospitals || [],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          tension: 0.35,
+          fill: true,
+          pointRadius: 4
+        });
+      }
+      if (currentSignupsSeries === 'all' || currentSignupsSeries === 'donors') {
+        datasets.push({
+          label: 'Donors',
+          data: series.donors || [],
+          borderColor: '#3b8c58',
+          backgroundColor: 'rgba(59, 140, 88, 0.1)',
+          tension: 0.35,
+          fill: true,
+          pointRadius: 4
+        });
+      }
+
+      if (signupsChartInstance) signupsChartInstance.destroy();
+
+      signupsChartInstance = new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' } } }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#eee3df' } }
+          }
+        }
+      });
+    }
+
+    function setSignupsPeriod(p) {
+      currentSignupsPeriod = p;
+      document.querySelectorAll('#signups-period-toggles .chart-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.toLowerCase() === p);
+      });
+      fetchSignupsChartData();
+    }
+
+    function setSignupsSeries(s) {
+      currentSignupsSeries = s;
+      document.querySelectorAll('#signups-series-toggles .chart-btn').forEach(b => {
+        const text = b.textContent.toLowerCase().replace(/\s/g, '');
+        b.classList.toggle('active', text.includes(s.toLowerCase()) || (s === 'all' && text === 'all'));
+      });
+      renderSignupsChart();
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  3. Notifications System
+    // ─────────────────────────────────────────────────────────────────
+    async function fetchNotifications() {
+      const res = await apiFetch('/admin/notifications?limit=10');
+      if (res && res.success && res.data) {
+        markOnline('notifications');
+        notificationsData = res.data.notifications || defaultNotifications;
+      } else {
+        markOffline('notifications');
+      }
+      const count = notificationsData.filter(n => !n.isRead).length;
+      const badge = document.getElementById('header-unread-count');
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+      }
+      renderNotificationsList(notificationsData);
+    }
+
+    function renderNotificationsList(notifications) {
+      const container = document.getElementById('notification-list-container');
+      if (!container) return;
+      if (!notifications.length) {
+        container.innerHTML = '<div class="notification-empty">No notifications yet.</div>';
+        return;
+      }
+      container.innerHTML = notifications.map(n => `
+        <div class="notification-item ${!n.isRead ? 'unread' : ''}" onclick="markNotificationAsRead('${escapeHTML(n.id)}')">
+          <div class="notification-content">
+            <div class="notification-title">${escapeHTML(n.title || 'Notification')}</div>
+            <div class="notification-msg">${escapeHTML(n.message || '')}</div>
+            <div class="notification-time">${formatDateTime(n.createdAt)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleNotificationDropdown() {
+      const dd = document.getElementById('notification-dropdown');
+      if (dd) dd.classList.toggle('show');
+    }
+
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('notification-dropdown');
+      const btn = document.getElementById('notification-bell-btn');
+      if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
+        dd.classList.remove('show');
+      }
+    });
+
+    async function markNotificationAsRead(id) {
+      await apiFetch(`/admin/notifications/${id}/read`, { method: 'PUT' });
+      const item = notificationsData.find(n => n.id === id);
+      if (item) item.isRead = true;
+      fetchNotifications();
+    }
+
+    async function markAllNotificationsRead() {
+      await apiFetch('/admin/notifications/read-all', { method: 'PUT' });
+      notificationsData.forEach(n => n.isRead = true);
+      showToast('All notifications marked as read.');
+      fetchNotifications();
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  4. Reusable Pagination Component
+    // ─────────────────────────────────────────────────────────────────
+    function renderPaginationUI(viewKey, total, page, limit, containerId, onPageChange) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const totalPages = Math.ceil(total / limit) || 1;
+      const startRecord = total > 0 ? (page - 1) * limit + 1 : 0;
+      const endRecord   = Math.min(page * limit, total);
+
+      let pagesHtml = '';
+      const maxButtons = 5;
+      let startPage = Math.max(1, page - Math.floor(maxButtons / 2));
+      let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+      if (endPage - startPage + 1 < maxButtons) {
+        startPage = Math.max(1, endPage - maxButtons + 1);
+      }
+
+      for (let p = startPage; p <= endPage; p++) {
+        pagesHtml += `<button type="button" class="page-btn ${p === page ? 'active' : ''}" onclick="${onPageChange}(${p})">${p}</button>`;
+      }
+
+      container.innerHTML = `
+        <div class="pagination-info">Showing <strong>${startRecord}–${endRecord}</strong> of <strong>${total}</strong> records</div>
+        <div class="pagination-controls">
+          <button type="button" class="pagination-btn" ${page <= 1 ? 'disabled' : ''} onclick="${onPageChange}(${page - 1})">Previous</button>
+          <div class="pagination-pages">${pagesHtml}</div>
+          <button type="button" class="pagination-btn" ${page >= totalPages ? 'disabled' : ''} onclick="${onPageChange}(${page + 1})">Next</button>
+        </div>
+      `;
+    }
+
+    const _debouncedResetAndFilterInternal = debounce((viewKey) => {
+      if (paginationState[viewKey]) paginationState[viewKey].page = 1;
+      if (viewKey === 'users') loadUsersList();
+      else if (viewKey === 'hospitals') loadHospitalsList();
+      else if (viewKey === 'bloodBanks') loadBloodBanksList();
+      else if (viewKey === 'donors') loadDonorsList();
+      else if (viewKey === 'requests') loadRequestsList();
+      else if (viewKey === 'donations') loadDonationsList();
+      else if (viewKey === 'audit') loadAuditLogsList();
+    }, 300);
+
+    function resetAndFilter(viewKey, immediate = false) {
+      if (immediate) {
+        if (paginationState[viewKey]) paginationState[viewKey].page = 1;
+        if (viewKey === 'users') loadUsersList();
+        else if (viewKey === 'hospitals') loadHospitalsList();
+        else if (viewKey === 'bloodBanks') loadBloodBanksList();
+        else if (viewKey === 'donors') loadDonorsList();
+        else if (viewKey === 'requests') loadRequestsList();
+        else if (viewKey === 'donations') loadDonationsList();
+        else if (viewKey === 'audit') loadAuditLogsList();
+      } else {
+        _debouncedResetAndFilterInternal(viewKey);
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  5. Unified Users Management
+    // ─────────────────────────────────────────────────────────────────
+    async function loadUsersList(page = paginationState.users.page) {
+      paginationState.users.page = page;
+      const role   = document.getElementById('filter-user-role')?.value || '';
+      const active = document.getElementById('filter-user-status')?.value || '';
+      const search = (document.getElementById('search-users')?.value || '').toLowerCase();
+
+      let q = `/admin/users?page=${page}&limit=${paginationState.users.limit}`;
+      if (role) q += `&role=${encodeURIComponent(role)}`;
+      if (active !== '') q += `&isActive=${encodeURIComponent(active)}`;
+      if (search) q += `&search=${encodeURIComponent(search)}`;
+
+      const res = await apiFetch(q);
+      let list = usersData;
+      let total = usersData.length;
+
+      if (res && res.success && res.data) {
+        markOnline('users');
+        list = res.data.users || [];
+        total = res.data.pagination?.total || list.length;
+      } else {
+        markOffline('users');
+        list = usersData.filter(u => {
+          const matchRole   = !role || u.role === role;
+          const matchActive = active === '' || String(u.isActive) === active;
+          const matchSearch = !search || u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search) || (u.phone && u.phone.includes(search));
+          return matchRole && matchActive && matchSearch;
+        });
+        total = list.length;
+        list = list.slice((page - 1) * paginationState.users.limit, page * paginationState.users.limit);
+      }
+
+      renderUsersTable(list);
+      renderPaginationUI('users', total, page, paginationState.users.limit, 'users-pagination', 'loadUsersList');
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('users-table-body');
+      if (!tbody) return;
+      if (!users.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted);">No user accounts found matching criteria.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = users.map(u => {
+        let roleClass = 'status-verified';
+        if (u.role === 'ADMIN') roleClass = 'status-emergency';
+        else if (u.role === 'HOSPITAL') roleClass = 'status-info';
+        else if (u.role === 'BLOOD_BANK') roleClass = 'status-pending';
+
+        return `
+          <tr>
+            <td><strong>${escapeHTML(u.name)}</strong><br><small style="color:var(--text-muted);font-size:0.75rem;">${escapeHTML(u.phone || 'No phone')}</small></td>
+            <td>${escapeHTML(u.email)}</td>
+            <td><span class="status-badge ${roleClass}">${escapeHTML(u.role)}</span></td>
+            <td><span class="status-badge ${u.isActive ? 'status-verified' : 'status-emergency'}">${u.isActive ? 'Active' : 'Inactive'}</span></td>
+            <td>${formatDate(u.lastLogin || u.createdAt)}</td>
+            <td>
+              <div class="btn-group">
+                <button type="button" class="btn-sm btn-sm-outline" onclick="openUserManageModal('${escapeHTML(u.id)}')">Manage</button>
+                <button type="button" class="btn-sm ${u.isActive ? 'btn-sm-danger' : 'btn-sm-success'}" onclick="toggleUserStatus('${escapeHTML(u.id)}', ${u.isActive})">
+                  ${u.isActive ? 'Deactivate' : 'Activate'}
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openUserManageModal(userId) {
+      const u = usersData.find(x => x.id === userId);
+      if (!u) return;
+      document.getElementById('user-manage-id').value = u.id;
+      document.getElementById('user-manage-name').value = u.name;
+      document.getElementById('user-manage-email').value = u.email;
+      document.getElementById('user-manage-role').value = u.role;
+      document.getElementById('user-manage-status').value = String(u.isActive);
+      document.getElementById('userManageModal').classList.add('show');
+    }
+
+    async function saveUserManage() {
+      const id       = document.getElementById('user-manage-id').value;
+      const name     = document.getElementById('user-manage-name').value.trim();
+      const email    = document.getElementById('user-manage-email').value.trim();
+      const role     = document.getElementById('user-manage-role').value;
+      const isActive = document.getElementById('user-manage-status').value === 'true';
+
+      const res = await apiFetch(`/admin/users/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ name, email, role, isActive })
+      });
+
+      if (res && res.success) {
+        const u = usersData.find(x => x.id === id);
+        if (u) {
+          u.name = name;
+          u.email = email;
+          u.role = role;
+          u.isActive = isActive;
+        }
+        showToast('User account updated successfully.');
+        closeModal('userManageModal');
+        loadUsersList();
+        fetchDashboardOverview();
+      } else {
+        showToast(res?.message || 'Failed to update user account.', 'danger');
+      }
+    }
+
+    async function toggleUserStatus(userId, currentActive) {
+      const action = currentActive ? 'Deactivate' : 'Activate';
+      openConfirmModal(`${action} User`, `Are you sure you want to ${action.toLowerCase()} this user?`, async () => {
+        const res = currentActive
+          ? await apiFetch(`/admin/users/${userId}`, { method: 'DELETE' })
+          : await apiFetch(`/admin/users/${userId}`, {
+              method: 'PUT',
+              body: JSON.stringify({ isActive: true })
+            });
+
+        if (res && res.success) {
+          const u = usersData.find(x => x.id === userId);
+          if (u) u.isActive = !currentActive;
+          showToast(`User ${action.toLowerCase()}d successfully.`);
+          loadUsersList();
+          fetchDashboardOverview();
+        } else {
+          showToast(res?.message || `Failed to ${action.toLowerCase()} user.`, 'danger');
+        }
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  6. Hospitals Management
+    // ─────────────────────────────────────────────────────────────────
+    async function loadHospitalsList(page = paginationState.hospitals.page) {
+      paginationState.hospitals.page = page;
+      const status = document.getElementById('filter-hosp-status')?.value || '';
+      const topSearch = document.getElementById('top-search-input')?.value || '';
+      const viewSearch = document.getElementById('search-hospitals')?.value || '';
+      const search = (topSearch || viewSearch).toLowerCase().trim();
+
+      let q = `/admin/hospitals?page=${page}&limit=${paginationState.hospitals.limit}`;
+      if (status) q += `&verificationStatus=${encodeURIComponent(status)}`;
+      if (search) q += `&search=${encodeURIComponent(search)}`;
+
+      const res = await apiFetch(q);
+      let list = hospitalsData;
+      let total = hospitalsData.length;
+
+      if (res && res.success && res.data) {
+        markOnline('hospitals');
+        list = res.data.hospitals || [];
+        total = res.data.pagination?.total || list.length;
+      } else {
+        markOffline('hospitals');
+        list = hospitalsData.filter(h => {
+          const matchStatus = !status || h.verificationStatus === status;
+          const matchSearch = !search ||
+            (h.hospitalName && h.hospitalName.toLowerCase().includes(search)) ||
+            (h.city && h.city.toLowerCase().includes(search)) ||
+            (h.licenseNumber && h.licenseNumber.toLowerCase().includes(search)) ||
+            (h.user?.email && h.user.email.toLowerCase().includes(search)) ||
+            (h.user?.name && h.user.name.toLowerCase().includes(search));
+          return matchStatus && matchSearch;
+        });
+        total = list.length;
+        list = list.slice((page - 1) * paginationState.hospitals.limit, page * paginationState.hospitals.limit);
+      }
+
+      renderHospitalsTable(list);
+      renderPaginationUI('hospitals', total, page, paginationState.hospitals.limit, 'hospitals-pagination', 'loadHospitalsList');
+    }
+
+    function renderHospitalsTable(hospitals) {
+      const tbody = document.getElementById('hospitals-table-body');
+      if (!tbody) return;
+      if (!hospitals.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">No hospitals found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = hospitals.map(h => {
+        const vClass = h.verificationStatus === 'VERIFIED' ? 'status-verified' : (h.verificationStatus === 'REJECTED' ? 'status-emergency' : 'status-pending');
+        return `
+          <tr>
+            <td><strong>${escapeHTML(h.hospitalName)}</strong><br><small style="color:var(--text-muted);">${escapeHTML(h.user?.email || '')}</small></td>
+            <td>${escapeHTML(h.licenseNumber)}</td>
+            <td>${escapeHTML(h.city)}</td>
+            <td>${escapeHTML(h.phone || h.user?.phone || 'N/A')}</td>
+            <td><span class="status-badge ${vClass}">${escapeHTML(h.verificationStatus)}</span></td>
+            <td><span class="status-badge status-info">${escapeHTML(String(h._count?.bloodRequests || 0))} Requests</span></td>
+            <td>
+              <div class="btn-group">
+                ${h.verificationStatus !== 'VERIFIED' ? `<button type="button" class="btn-sm btn-sm-success" onclick="verifyHospital('${escapeHTML(h.id)}', 'VERIFIED')">Verify</button>` : ''}
+                ${h.verificationStatus !== 'REJECTED' ? `<button type="button" class="btn-sm btn-sm-danger" onclick="verifyHospital('${escapeHTML(h.id)}', 'REJECTED')">Reject</button>` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function verifyHospital(id, newStatus) {
+      openConfirmModal('Update Hospital Verification', `Set status to ${newStatus}?`, async () => {
+        const res = await apiFetch(`/admin/hospitals/${id}/verify`, {
+          method: 'PUT',
+          body: JSON.stringify({ verificationStatus: newStatus })
+        });
+        if (res && res.success) {
+          const h = hospitalsData.find(x => x.id === id);
+          if (h) h.verificationStatus = newStatus;
+          showToast(`Hospital marked as ${newStatus}.`);
+          loadHospitalsList();
+          fetchDashboardOverview();
+        } else {
+          showToast(res?.message || 'Failed to update hospital status.', 'danger');
+        }
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  7. Blood Banks Management
+    // ─────────────────────────────────────────────────────────────────
+    async function loadBloodBanksList(page = paginationState.bloodBanks.page) {
+      paginationState.bloodBanks.page = page;
+      const status = document.getElementById('filter-bb-status')?.value || '';
+      const topSearch = document.getElementById('top-search-input')?.value || '';
+      const viewSearch = document.getElementById('search-blood-banks')?.value || '';
+      const search = (topSearch || viewSearch).toLowerCase().trim();
+
+      let q = `/admin/blood-banks?page=${page}&limit=${paginationState.bloodBanks.limit}`;
+      if (status) q += `&verificationStatus=${encodeURIComponent(status)}`;
+      if (search) q += `&search=${encodeURIComponent(search)}`;
+
+      const res = await apiFetch(q);
+      let list = bloodBanksData;
+      let total = bloodBanksData.length;
+
+      if (res && res.success && res.data) {
+        markOnline('blood-banks');
+        list = res.data.bloodBanks || [];
+        total = res.data.pagination?.total || list.length;
+      } else {
+        markOffline('blood-banks');
+        list = bloodBanksData.filter(b => {
+          const matchStatus = !status || b.verificationStatus === status;
+          const matchSearch = !search ||
+            (b.bankName && b.bankName.toLowerCase().includes(search)) ||
+            (b.city && b.city.toLowerCase().includes(search)) ||
+            (b.licenseNumber && b.licenseNumber.toLowerCase().includes(search)) ||
+            (b.user?.email && b.user.email.toLowerCase().includes(search)) ||
+            (b.user?.name && b.user.name.toLowerCase().includes(search));
+          return matchStatus && matchSearch;
+        });
+        total = list.length;
+        list = list.slice((page - 1) * paginationState.bloodBanks.limit, page * paginationState.bloodBanks.limit);
+      }
+
+      renderBloodBanksTable(list);
+      renderPaginationUI('bloodBanks', total, page, paginationState.bloodBanks.limit, 'blood-banks-pagination', 'loadBloodBanksList');
+    }
+
+    function renderBloodBanksTable(banks) {
+      const tbody = document.getElementById('blood-banks-table-body');
+      if (!tbody) return;
+      if (!banks.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted);">No blood banks found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = banks.map(b => {
+        const vClass = b.verificationStatus === 'VERIFIED' ? 'status-verified' : (b.verificationStatus === 'REJECTED' ? 'status-emergency' : 'status-pending');
+        return `
+          <tr>
+            <td><strong>${escapeHTML(b.bankName)}</strong><br><small style="color:var(--text-muted);">${escapeHTML(b.user?.email || '')}</small></td>
+            <td>${escapeHTML(b.licenseNumber)}</td>
+            <td>${escapeHTML(b.city)}</td>
+            <td>${escapeHTML(b.phone || b.user?.phone || 'N/A')}</td>
+            <td><span class="status-badge ${vClass}">${escapeHTML(b.verificationStatus)}</span></td>
+            <td>
+              <div class="btn-group">
+                ${b.verificationStatus !== 'VERIFIED' ? `<button type="button" class="btn-sm btn-sm-success" onclick="verifyBloodBank('${escapeHTML(b.id)}', 'VERIFIED')">Verify</button>` : ''}
+                ${b.verificationStatus !== 'REJECTED' ? `<button type="button" class="btn-sm btn-sm-danger" onclick="verifyBloodBank('${escapeHTML(b.id)}', 'REJECTED')">Reject</button>` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function verifyBloodBank(id, newStatus) {
+      openConfirmModal('Update Blood Bank Verification', `Set status to ${newStatus}?`, async () => {
+        const res = await apiFetch(`/admin/blood-banks/${id}/verify`, {
+          method: 'PUT',
+          body: JSON.stringify({ verificationStatus: newStatus })
+        });
+        if (res && res.success) {
+          const b = bloodBanksData.find(x => x.id === id);
+          if (b) b.verificationStatus = newStatus;
+          showToast(`Blood Bank marked as ${newStatus}.`);
+          loadBloodBanksList();
+          fetchDashboardOverview();
+        } else {
+          showToast(res?.message || 'Failed to update blood bank status.', 'danger');
+        }
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  8. Donors Management
+    // ─────────────────────────────────────────────────────────────────
+    async function loadDonorsList(page = paginationState.donors.page) {
+      paginationState.donors.page = page;
+      const bloodType = document.getElementById('filter-donor-blood')?.value || '';
+      const verified  = document.getElementById('filter-donor-verified')?.value || '';
+      const topSearch = document.getElementById('top-search-input')?.value || '';
+      const viewSearch = document.getElementById('search-donors')?.value || '';
+      const search = (topSearch || viewSearch).toLowerCase().trim();
+
+      let q = `/admin/donors?page=${page}&limit=${paginationState.donors.limit}`;
+      if (bloodType) q += `&bloodType=${encodeURIComponent(bloodType)}`;
+      if (verified !== '') q += `&isVerified=${encodeURIComponent(verified)}`;
+      if (search) q += `&search=${encodeURIComponent(search)}`;
+
+      const res = await apiFetch(q);
+      let list = donorsData;
+      let total = donorsData.length;
+
+      if (res && res.success && res.data) {
+        markOnline('donors');
+        list = res.data.donors || [];
+        total = res.data.pagination?.total || list.length;
+      } else {
+        markOffline('donors');
+        list = donorsData.filter(d => {
+          const bt = formatBloodType(d.bloodType);
+          const matchBlood = !bloodType || bt === bloodType || d.bloodType === bloodType;
+          const matchVerif = verified === '' || String(d.isVerified) === verified;
+          const matchSearch = !search ||
+            (d.user?.name && d.user.name.toLowerCase().includes(search)) ||
+            (d.user?.email && d.user.email.toLowerCase().includes(search)) ||
+            (d.city && d.city.toLowerCase().includes(search)) ||
+            (d.bloodType && d.bloodType.toLowerCase().includes(search)) ||
+            formatBloodType(d.bloodType).toLowerCase().includes(search) ||
+            (d.address && d.address.toLowerCase().includes(search));
+          return matchBlood && matchVerif && matchSearch;
+        });
+        total = list.length;
+        list = list.slice((page - 1) * paginationState.donors.limit, page * paginationState.donors.limit);
+      }
+
+      renderDonorsTable(list);
+      renderPaginationUI('donors', total, page, paginationState.donors.limit, 'donors-pagination', 'loadDonorsList');
+    }
+
+    function renderDonorsTable(donors) {
+      const tbody = document.getElementById('donors-table-body');
+      if (!tbody) return;
+      if (!donors.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">No donors found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = donors.map(d => {
+        const avail = d.availabilityStatus === 'AVAILABLE' ? 'status-verified' : 'status-pending';
+        return `
+          <tr onclick="openDonorDetail('${escapeHTML(d.id)}')">
+            <td><strong>${escapeHTML(d.user?.name || 'Donor')}</strong><br><small style="color:var(--text-muted);">${escapeHTML(d.user?.email || '')}</small></td>
+            <td><span class="blood-badge">${escapeHTML(formatBloodType(d.bloodType))}</span></td>
+            <td>${escapeHTML(d.city || 'N/A')}</td>
+            <td><span class="status-badge ${avail}">${escapeHTML((d.availabilityStatus||'AVAILABLE').replace(/_/g,' '))}</span></td>
+            <td><strong>${escapeHTML(String(d.totalDonations || d._count?.donations || 0))}</strong></td>
+            <td><span class="status-badge ${d.isVerified ? 'status-verified' : 'status-pending'}">${d.isVerified ? 'Verified' : 'Unverified'}</span></td>
+            <td><span class="status-badge ${d.user?.isActive ? 'status-verified' : 'status-emergency'}">${d.user?.isActive ? 'Active' : 'Inactive'}</span></td>
+            <td onclick="event.stopPropagation()">
+              <button type="button" class="btn-sm ${d.isVerified ? 'btn-sm-warning' : 'btn-sm-success'}" onclick="verifyDonor('${escapeHTML(d.id)}', ${!d.isVerified})">
+                ${d.isVerified ? 'Unverify' : 'Verify'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function verifyDonor(id, shouldVerify) {
+      const action = shouldVerify ? 'Verify' : 'Unverify';
+      openConfirmModal(`${action} Donor`, `Are you sure you want to ${action.toLowerCase()} this donor?`, async () => {
+        const d = donorsData.find(x => x.id === id);
+        if (d) d.isVerified = shouldVerify;
+
+        await apiFetch(`/admin/donors/${id}/verify`, {
+          method: 'PUT',
+          body: JSON.stringify({ isVerified: shouldVerify })
+        });
+        showToast(`Donor ${action.toLowerCase()}d successfully.`);
+        loadDonorsList();
+        fetchDashboardOverview();
+      });
+    }
+
+    function openDonorDetail(donorId) {
+      const d = donorsData.find(x => x.id === donorId);
+      if (!d) return;
+      document.getElementById('donor-detail-modal-title').textContent = d.user?.name || 'Donor Profile';
+      document.getElementById('donor-detail-body').innerHTML = `
+        <div class="modal-detail-row"><span class="modal-detail-label">Blood Type</span><span class="modal-detail-value"><span class="blood-badge">${escapeHTML(formatBloodType(d.bloodType))}</span></span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Email</span><span class="modal-detail-value">${escapeHTML(d.user?.email || 'N/A')}</span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Phone</span><span class="modal-detail-value">${escapeHTML(d.user?.phone || 'N/A')}</span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">City / Address</span><span class="modal-detail-value">${escapeHTML(d.city || '')} ${escapeHTML(d.address || '')}</span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Availability</span><span class="modal-detail-value"><span class="status-badge status-verified">${escapeHTML((d.availabilityStatus||'AVAILABLE').replace(/_/g,' '))}</span></span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Total Donations</span><span class="modal-detail-value"><strong>${escapeHTML(String(d.totalDonations || 0))}</strong></span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Verified</span><span class="modal-detail-value"><span class="status-badge ${d.isVerified ? 'status-verified' : 'status-pending'}">${d.isVerified ? 'Verified' : 'Unverified'}</span></span></div>
+      `;
+      document.getElementById('donor-detail-actions').innerHTML = `
+        <button type="button" class="btn-sm btn-sm-outline" style="flex:1;padding:10px;" onclick="closeModal('donorDetailModal')">Close</button>
+        <button type="button" class="btn-sm ${d.isVerified ? 'btn-sm-warning' : 'btn-sm-success'}" style="flex:1;padding:10px;" onclick="closeModal('donorDetailModal');verifyDonor('${escapeHTML(d.id)}', ${!d.isVerified})">
+          ${d.isVerified ? 'Unverify' : 'Verify'}
+        </button>
+      `;
+      document.getElementById('donorDetailModal').classList.add('show');
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  9. Requests & Donations Lists
+    // ─────────────────────────────────────────────────────────────────
+    async function loadRequestsList(page = paginationState.requests.page) {
+      paginationState.requests.page = page;
+      const status  = document.getElementById('filter-req-status')?.value || '';
+      const urgency = document.getElementById('filter-req-urgency')?.value || '';
+      const search  = (document.getElementById('search-requests')?.value || '').toLowerCase();
+
+      let q = `/hospitals/requests?page=${page}&limit=${paginationState.requests.limit}`;
+      if (status) q += `&status=${encodeURIComponent(status)}`;
+      if (urgency) q += `&urgency=${encodeURIComponent(urgency)}`;
+
+      const res = await apiFetch(q);
+      let list = requestsData;
+      let total = requestsData.length;
+
+      if (res && res.success && res.data) {
+        markOnline('requests');
+        list = res.data.requests || [];
+        total = res.data.pagination?.total || list.length;
+      } else {
+        markOffline('requests');
+        list = requestsData.filter(r => {
+          const matchStatus  = !status || r.status === status;
+          const matchUrgency = !urgency || r.urgency === urgency;
+          const matchSearch  = !search || r.id.toLowerCase().includes(search) || r.hospital?.hospitalName?.toLowerCase().includes(search);
+          return matchStatus && matchUrgency && matchSearch;
+        });
+        total = list.length;
+        list = list.slice((page - 1) * paginationState.requests.limit, page * paginationState.requests.limit);
+      }
+
+      renderRequestsTable(list);
+      renderPaginationUI('requests', total, page, paginationState.requests.limit, 'requests-pagination', 'loadRequestsList');
+    }
+
+    function renderRequestsTable(requests) {
+      const tbody = document.getElementById('requests-table-body');
+      if (!tbody) return;
+      if (!requests.length) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-muted);">No blood requests found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = requests.map(r => {
+        const bt = formatBloodType(r.bloodType);
+        const urgClass = r.urgency === 'CRITICAL_EMERGENCY' ? 'status-emergency' : (r.urgency === 'URGENT' ? 'status-pending' : 'status-info');
+        const stClass  = r.status === 'FULFILLED' ? 'status-verified' : (r.status === 'CANCELLED' ? 'status-emergency' : 'status-pending');
+        return `
+          <tr onclick="openRequestDetail('${escapeHTML(r.id)}')">
+            <td><strong style="color:var(--primary);">${escapeHTML(r.id.slice(0,8))}</strong></td>
+            <td>${escapeHTML(r.hospital?.hospitalName || 'Hospital')}</td>
+            <td><span class="blood-badge">${escapeHTML(bt)}</span></td>
+            <td><strong>${escapeHTML(String(r.unitsRequired || 1))}</strong></td>
+            <td><span class="status-badge ${urgClass}">${escapeHTML((r.urgency||'NORMAL').replace(/_/g,' '))}</span></td>
+            <td><span class="status-badge status-info">${escapeHTML(String(r.donorResponses?.length || 0))}</span></td>
+            <td><span class="status-badge ${stClass}">${escapeHTML(r.status)}</span></td>
+            <td>${formatDate(r.createdAt || r.requestedAt)}</td>
+            <td><button type="button" class="btn-sm btn-sm-outline" onclick="event.stopPropagation();openRequestDetail('${escapeHTML(r.id)}')">Details</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openRequestDetail(reqId) {
+      const r = requestsData.find(x => x.id === reqId);
+      if (!r) return;
+      document.getElementById('req-detail-modal-title').textContent = 'Blood Request Details';
+      document.getElementById('req-detail-modal-id').textContent = `ID: ${r.id}`;
+      document.getElementById('req-detail-body').innerHTML = `
+        <div class="modal-detail-row"><span class="modal-detail-label">Hospital</span><span class="modal-detail-value">${escapeHTML(r.hospital?.hospitalName || 'Hospital')}</span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Blood Type</span><span class="modal-detail-value"><span class="blood-badge">${escapeHTML(formatBloodType(r.bloodType))}</span></span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Units</span><span class="modal-detail-value">${escapeHTML(String(r.unitsRequired || 1))} Units</span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Urgency</span><span class="modal-detail-value">${escapeHTML((r.urgency||'NORMAL').replace(/_/g,' '))}</span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Status</span><span class="modal-detail-value">${escapeHTML(r.status)}</span></div>
+        <div class="modal-detail-row"><span class="modal-detail-label">Location</span><span class="modal-detail-value">${escapeHTML(r.location || 'N/A')}</span></div>
+      `;
+      document.getElementById('req-detail-actions').innerHTML = `
+        <button type="button" class="btn-sm btn-sm-outline" style="flex:1;padding:10px;" onclick="closeModal('requestDetailModal')">Close</button>
+      `;
+      document.getElementById('requestDetailModal').classList.add('show');
+    }
+
+    async function loadDonationsList(page = paginationState.donations.page) {
+      paginationState.donations.page = page;
+      const status = document.getElementById('filter-don-status')?.value || '';
+      const search = (document.getElementById('search-donations')?.value || '').toLowerCase();
+
+      const res = await apiFetch(`/donors/donations?page=${page}&limit=${paginationState.donations.limit}`);
+      let list = donationsData;
+      let total = donationsData.length;
+
+      if (res && res.success && res.data) {
+        markOnline('donations');
+        list = res.data.donations || [];
+        total = res.data.pagination?.total || list.length;
+      } else {
+        markOffline('donations');
+        list = donationsData.filter(d => {
+          const matchStatus = !status || d.status === status;
+          const matchSearch = !search || d.donor?.user?.name?.toLowerCase().includes(search) || d.hospital?.hospitalName?.toLowerCase().includes(search);
+          return matchStatus && matchSearch;
+        });
+        total = list.length;
+        list = list.slice((page - 1) * paginationState.donations.limit, page * paginationState.donations.limit);
+      }
+
+      renderDonationsTable(list);
+      renderPaginationUI('donations', total, page, paginationState.donations.limit, 'donations-pagination', 'loadDonationsList');
+    }
+
+    function renderDonationsTable(donations) {
+      const tbody = document.getElementById('donations-table-body');
+      if (!tbody) return;
+      if (!donations.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">No donation records found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = donations.map(d => `
+        <tr>
+          <td><strong>${escapeHTML(d.donor?.user?.name || 'Donor')}</strong></td>
+          <td><span class="blood-badge">${escapeHTML(formatBloodType(d.donor?.bloodType || 'O+'))}</span></td>
+          <td>${formatDate(d.donationDate)}</td>
+          <td>${escapeHTML(d.hospital?.hospitalName || 'Hospital Facility')}</td>
+          <td>${escapeHTML(d.requestId ? d.requestId.slice(0,8) : 'N/A')}</td>
+          <td><strong>${escapeHTML(String(d.units || 1))} Unit(s)</strong></td>
+          <td><span class="status-badge ${d.status === 'COMPLETED' ? 'status-verified' : 'status-pending'}">${escapeHTML(d.status)}</span></td>
+          <td><button type="button" class="btn-sm btn-sm-outline" onclick="switchView('donors')">View Donor</button></td>
+        </tr>
+      `).join('');
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  10. Audit Logs List
+    // ─────────────────────────────────────────────────────────────────
+    async function loadAuditLogsList(page = paginationState.audit.page) {
+      paginationState.audit.page = page;
+      const search = (document.getElementById('search-audit')?.value || '').toLowerCase();
+
+      let q = `/admin/audit-logs?page=${page}&limit=${paginationState.audit.limit}`;
+      if (search) q += `&search=${encodeURIComponent(search)}`;
+
+      const res = await apiFetch(q);
+      let list = auditLogsData;
+      let total = auditLogsData.length;
+
+      if (res && res.success && res.data) {
+        markOnline('audit-logs');
+        list = res.data.logs || [];
+        total = res.data.pagination?.total || list.length;
+      } else {
+        markOffline('audit-logs');
+        list = auditLogsData.filter(l => {
+          return !search || l.action?.toLowerCase().includes(search) || l.entity?.toLowerCase().includes(search) || l.user?.name?.toLowerCase().includes(search);
+        });
+        total = list.length;
+        list = list.slice((page - 1) * paginationState.audit.limit, page * paginationState.audit.limit);
+      }
+
+      renderAuditLogsTable(list);
+      renderPaginationUI('audit', total, page, paginationState.audit.limit, 'audit-pagination', 'loadAuditLogsList');
+    }
+
+    function renderAuditLogsTable(logs) {
+      const tbody = document.getElementById('audit-logs-table-body');
+      if (!tbody) return;
+      if (!logs.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">No audit log entries.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = logs.map(l => `
+        <tr class="no-hover">
+          <td style="font-size:0.8rem;white-space:nowrap;">${formatDateTime(l.createdAt)}</td>
+          <td><strong>${escapeHTML(l.user?.name || l.user?.email || 'Admin')}</strong></td>
+          <td><span class="status-badge status-verified">${escapeHTML(l.action)}</span></td>
+          <td>${escapeHTML(l.entity)}</td>
+          <td style="font-size:0.83rem;">${escapeHTML(l.changes ? JSON.stringify(l.changes) : `Target ID: ${l.entityId}`)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  11. Admin Profile & Password Management
+    // ─────────────────────────────────────────────────────────────────
+    async function loadAdminProfileInfo() {
+      const res = await apiFetch('/admin/profile');
+      let name = 'System Administrator';
+      let email = 'admin@lifelink.org';
+      let phone = '+251 91 100 1001';
+
+      if (res && res.success && res.data) {
+        markOnline('profile');
+        name = res.data.name || name;
+        email = res.data.email || email;
+        phone = res.data.phone || phone;
+      } else {
+        markOffline('profile');
+      }
+
+      const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      _setText('sidebar-user-name', name);
+      _setText('sidebar-user-initials', initials);
+      _setText('header-user-name', name);
+      _setText('header-user-avatar', initials);
+      _setText('welcome-message', `Welcome back, ${name.split(' ')[0]}!`);
+
+      const nameField = document.getElementById('settings-name');
+      const emailField = document.getElementById('settings-email');
+      const phoneField = document.getElementById('settings-phone');
+      if (nameField) nameField.value = name;
+      if (emailField) emailField.value = email;
+      if (phoneField) phoneField.value = phone;
+    }
+
+    async function saveAdminProfile() {
+      const name = document.getElementById('settings-name').value.trim();
+      const email = document.getElementById('settings-email').value.trim();
+      const phone = document.getElementById('settings-phone').value.trim();
+
+      const res = await apiFetch('/admin/profile', {
+        method: 'PUT',
+        body: JSON.stringify({ name, email, phone })
+      });
+
+      if (res && res.success) {
+        showToast('Admin profile updated successfully.');
+        loadAdminProfileInfo();
+      } else {
+        showToast(res?.message || 'Failed to update admin profile.', 'danger');
+      }
+    }
+
+    async function changeAdminPassword() {
+      const currentPassword = document.getElementById('settings-current-pw').value;
+      const newPassword = document.getElementById('settings-new-pw').value;
+      const confirmPassword = document.getElementById('settings-confirm-pw').value;
+
+      if (newPassword.length < 8) {
+        showToast('New password must be at least 8 characters.', 'danger');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showToast('New passwords do not match.', 'danger');
+        return;
+      }
+
+      const res = await apiFetch('/admin/change-password', {
+        method: 'PUT',
+        body: JSON.stringify({ currentPassword, newPassword })
+      });
+
+      if (res && res.success) {
+        showToast('Password changed successfully.');
+        document.getElementById('admin-password-form').reset();
+      } else {
+        showToast(res?.message || 'Failed to change password.', 'danger');
+      }
+    }
+
+    async function createNewAdmin() {
+      const name     = document.getElementById('new-admin-name').value.trim();
+      const email    = document.getElementById('new-admin-email').value.trim();
+      const phone    = document.getElementById('new-admin-phone').value.trim();
+      const password = document.getElementById('new-admin-password').value;
+      const confirm  = document.getElementById('new-admin-confirm-pw').value;
+
+      if (password.length < 8) {
+        showToast('Password must be at least 8 characters.', 'danger');
+        return;
+      }
+
+      if (password !== confirm) {
+        showToast('Passwords do not match.', 'danger');
+        return;
+      }
+
+      const btn = document.getElementById('create-admin-submit-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Creating…'; }
+
+      const res = await apiFetch('/admin/admins', {
+        method: 'POST',
+        body: JSON.stringify({ name, email, password, phone: phone || undefined })
+      });
+
+      if (btn) { btn.disabled = false; btn.textContent = 'Create Admin'; }
+
+      if (res && res.success) {
+        showToast(`Admin account created for ${res.data?.name || email}.`);
+        document.getElementById('create-admin-form').reset();
+      } else {
+        showToast(res?.message || 'Failed to create admin account.', 'danger');
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  12. Statistics Summary & Operational Analytics
+    // ─────────────────────────────────────────────────────────────────
+    let summaryTotalsRaw = null;
+    let fulfillmentStatsRaw = null;
+    let geographicStatsRaw = null;
+
+    async function fetchSummaryTotalsStats() {
+      const res = await apiFetch('/admin/stats/summary');
+      if (res && res.success && res.data) {
+        markOnline('stats-summary-totals');
+        summaryTotalsRaw = res.data;
+        renderSummaryTotalsTable(res.data);
+      } else {
+        markOffline('stats-summary-totals');
+        if (window.MockAdminData && typeof window.MockAdminData.getMockSummaryStats === 'function') {
+          summaryTotalsRaw = window.MockAdminData.getMockSummaryStats();
+          renderSummaryTotalsTable(summaryTotalsRaw);
+        }
+      }
+    }
+
+    function renderSummaryTotalsTable(data) {
+      if (!data) return;
+      const totals = data.totals || {};
+      const el = (id, val) => {
+        const node = document.getElementById(id);
+        if (node) node.textContent = (val !== undefined && val !== null) ? val : '--';
+      };
+
+      el('sum-total-users', totals.totalUsers);
+      el('sum-active-users', `${totals.activeUsers || 0} Active`);
+      el('sum-total-donors', totals.totalDonors);
+      el('sum-verified-donors', `${totals.verifiedDonors || 0} Verified`);
+      el('sum-total-hospitals', totals.totalHospitals);
+      el('sum-verified-hospitals', `${totals.verifiedHospitals || 0} Verified`);
+      el('sum-total-bloodbanks', totals.totalBloodBanks);
+      el('sum-verified-bloodbanks', `${totals.verifiedBloodBanks || 0} Verified`);
+      el('sum-total-requests', totals.totalBloodRequests);
+      el('sum-fulfilled-requests', `${totals.fulfilledRequests || 0} Fulfilled`);
+      el('sum-total-donations', totals.totalDonations);
+      el('sum-completed-donations', `${totals.completedDonations || 0} Completed (${totals.totalUnitsDonated || 0} Units)`);
+
+      const updatedNode = document.getElementById('stats-summary-updated-at');
+      if (updatedNode && data.timestamp) {
+        try {
+          const dt = new Date(data.timestamp);
+          updatedNode.textContent = `Updated: ${dt.toLocaleTimeString()}`;
+        } catch (e) {
+          updatedNode.textContent = 'Updated: Real-time';
+        }
+      }
+    }
+
+    async function fetchFulfillmentStats(timeframe = currentStatsRange) {
+      const res = await apiFetch(`/admin/stats/fulfillment?timeframe=${timeframe}`);
+      if (res && res.success && res.data) {
+        markOnline('stats-fulfillment');
+        fulfillmentStatsRaw = res.data;
+      } else {
+        markOffline('stats-fulfillment');
+        if (window.MockAdminData && typeof window.MockAdminData.getMockFulfillmentForTimeframe === 'function') {
+          fulfillmentStatsRaw = window.MockAdminData.getMockFulfillmentForTimeframe(timeframe);
+        }
+      }
+      renderFulfillmentStats(fulfillmentStatsRaw);
+    }
+
+    function renderFulfillmentStats(data) {
+      if (!data || !data.breakdown) return;
+      const breakdown = data.breakdown;
+
+      const crit = breakdown.find(b => b.urgency === 'CRITICAL_EMERGENCY') || { rate: 100, fulfilled: 0, total: 0, avgTurnaroundHours: 1.4 };
+      const urg = breakdown.find(b => b.urgency === 'URGENT') || { rate: 100, fulfilled: 0, total: 0, avgTurnaroundHours: 3.8 };
+      const norm = breakdown.find(b => b.urgency === 'NORMAL') || { rate: 100, fulfilled: 0, total: 0, avgTurnaroundHours: 12.5 };
+
+      _setText('turnaround-critical', `Avg ~${crit.avgTurnaroundHours}h`);
+      _setText('rate-critical', `${crit.rate}%`);
+      _setText('ratio-critical', `${crit.fulfilled} of ${crit.total} fulfilled`);
+      const pCrit = document.getElementById('pfill-critical');
+      if (pCrit) pCrit.style.width = `${Math.min(100, crit.rate)}%`;
+
+      _setText('turnaround-urgent', `Avg ~${urg.avgTurnaroundHours}h`);
+      _setText('rate-urgent', `${urg.rate}%`);
+      _setText('ratio-urgent', `${urg.fulfilled} of ${urg.total} fulfilled`);
+      const pUrg = document.getElementById('pfill-urgent');
+      if (pUrg) pUrg.style.width = `${Math.min(100, urg.rate)}%`;
+
+      _setText('turnaround-normal', `Avg ~${norm.avgTurnaroundHours}h`);
+      _setText('rate-normal', `${norm.rate}%`);
+      _setText('ratio-normal', `${norm.fulfilled} of ${norm.total} fulfilled`);
+      const pNorm = document.getElementById('pfill-normal');
+      if (pNorm) pNorm.style.width = `${Math.min(100, norm.rate)}%`;
+    }
+
+    async function fetchGeographicStats() {
+      const res = await apiFetch('/admin/stats/geographic');
+      if (res && res.success && res.data) {
+        markOnline('stats-geographic');
+        geographicStatsRaw = res.data;
+      } else {
+        markOffline('stats-geographic');
+        if (window.MockAdminData && typeof window.MockAdminData.getMockGeographicStats === 'function') {
+          geographicStatsRaw = window.MockAdminData.getMockGeographicStats();
+        }
+      }
+      renderGeographicStats(geographicStatsRaw);
+    }
+
+    function renderGeographicStats(data) {
+      const grid = document.getElementById('geographic-cards-grid');
+      if (!grid) return;
+      const regions = data?.regions || [];
+      if (!regions.length) {
+        grid.innerHTML = '<div class="notification-empty">No regional distribution data available.</div>';
+        return;
+      }
+
+      grid.innerHTML = regions.map(r => {
+        let statusBadge = '<span class="status-pill-balanced">BALANCED</span>';
+        if (r.status === 'DEFICIT' || r.balance < 0) {
+          statusBadge = `<span class="status-pill-deficit">DEFICIT (${r.balance})</span>`;
+        } else if (r.status === 'SURPLUS' || r.balance > 5) {
+          statusBadge = `<span class="status-pill-surplus">SURPLUS (+${r.balance})</span>`;
+        }
+
+        return `
+          <div class="geo-card">
+            <div class="geo-card-header">
+              <span class="geo-city-name">📍 ${escapeHTML(r.city)}</span>
+              ${statusBadge}
+            </div>
+            <div class="geo-stats-row">
+              <span>Registered Donors</span>
+              <strong>${r.donors || 0}</strong>
+            </div>
+            <div class="geo-stats-row">
+              <span>Blood Requests</span>
+              <strong>${r.requests || 0}</strong>
+            </div>
+            <div class="geo-stats-row">
+              <span>Medical Facilities</span>
+              <strong>${r.hospitals || 0}</strong>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStatisticsSummaryTable() {
+      const tbody = document.getElementById('stats-summary-table-body');
+      if (!tbody || !inventoryStatsRaw) return;
+
+      const series = inventoryStatsRaw.series || [];
+      tbody.innerHTML = series.map(s => {
+        let statusTag = `<span class="stock-healthy-tag">Healthy (${s.inStock})</span>`;
+        if (s.inStock === 0) {
+          statusTag = '<span class="low-stock-critical-tag">Critical (0 units)</span>';
+        } else if (s.inStock < 5) {
+          statusTag = `<span class="low-stock-warning-tag">Low Stock (${s.inStock} units)</span>`;
+        }
+
+        return `
+          <tr class="${s.inStock < 5 ? 'low-stock' : ''} no-hover">
+            <td><strong style="color:var(--primary);font-size:0.95rem;">${escapeHTML(s.type)}</strong></td>
+            <td><strong>${s.inStock}</strong> units</td>
+            <td>${s.donated} units</td>
+            <td>${s.issued} units</td>
+            <td>${statusTag}</td>
+          </tr>
+        `;
+      }).join('');
+
+      renderHospitalRankings();
+    }
+
+    function renderHospitalRankings() {
+      const tbody = document.getElementById('stats-hospital-ranking-body');
+      if (!tbody) return;
+      tbody.innerHTML = hospitalsData.map((h, i) => `
+        <tr class="no-hover">
+          <td><strong>${escapeHTML(h.hospitalName)}</strong></td>
+          <td><strong>${(h._count?.bloodRequests || 1) * 2}</strong> units</td>
+          <td>${h._count?.bloodRequests || 1} requests</td>
+          <td>${formatDate(h.createdAt || new Date())}</td>
+        </tr>
+      `).join('');
+    }
+
+    function setStatsRange(r) {
+      currentStatsRange = r;
+      const buttons = document.querySelectorAll('#stats-time-range-bar .time-range-btn');
+      buttons.forEach(b => {
+        b.classList.toggle('active', b.id === `trange-${r}`);
+      });
+      const rangeMap = {
+        today: 'Today',
+        week: 'This Week',
+        month: 'This Month',
+        alltime: 'All Time'
+      };
+      _setText('stats-range-label', `Showing: ${rangeMap[r] || (r.charAt(0).toUpperCase() + r.slice(1))}`);
+      fetchInventoryChartData(r);
+      fetchFulfillmentStats(r);
+      fetchGeographicStats();
+    }
+
+    function exportStatsReport(format = 'csv') {
+      const inventory = inventoryStatsRaw?.series || [];
+      const fulfillment = fulfillmentStatsRaw || {};
+      const geo = geographicStatsRaw?.regions || [];
+
+      if (format === 'json') {
+        const payload = {
+          timeframe: currentStatsRange,
+          exportedAt: new Date().toISOString(),
+          inventorySummary: inventory,
+          fulfillmentPerformance: fulfillment,
+          geographicDistribution: geo
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `lifelink-statistics-${currentStatsRange}-${Date.now()}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast('Statistics exported as JSON.');
+        return;
+      }
+
+      // Format as CSV
+      const rows = [];
+      rows.push(['Section', 'Key/Type', 'Metric 1', 'Metric 2', 'Metric 3']);
+      inventory.forEach(s => {
+        rows.push(['Inventory', s.type, `InStock: ${s.inStock}`, `Donated: ${s.donated}`, `Issued: ${s.issued}`]);
+      });
+      if (fulfillment.breakdown) {
+        fulfillment.breakdown.forEach(b => {
+          rows.push(['Fulfillment', b.label, `Rate: ${b.rate}%`, `Fulfilled: ${b.fulfilled}/${b.total}`, `AvgTurnaround: ${b.avgTurnaroundHours}h`]);
+        });
+      }
+      geo.forEach(g => {
+        rows.push(['Geographic', g.city, `Donors: ${g.donors}`, `Requests: ${g.requests}`, `Status: ${g.status}`]);
+      });
+
+      const csvContent = rows.map(r => r.map(c => escapeCsvCell(c)).join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `lifelink-statistics-${currentStatsRange}-${Date.now()}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Statistics exported as CSV.');
+    }
+
+    function sortHospitalRanking(key) {
+      if (hospitalRankingSort.key === key) {
+        hospitalRankingSort.asc = !hospitalRankingSort.asc;
+      } else {
+        hospitalRankingSort.key = key;
+        hospitalRankingSort.asc = (key === 'name');
+      }
+
+      hospitalsData.sort((a, b) => {
+        let valA, valB;
+        if (key === 'units') {
+          valA = (a._count?.bloodRequests || 1) * 2;
+          valB = (b._count?.bloodRequests || 1) * 2;
+        } else if (key === 'reqs') {
+          valA = a._count?.bloodRequests || 0;
+          valB = b._count?.bloodRequests || 0;
+        } else if (key === 'date') {
+          valA = new Date(a.createdAt || 0).getTime();
+          valB = new Date(b.createdAt || 0).getTime();
+        } else {
+          valA = (a.hospitalName || '').toLowerCase();
+          valB = (b.hospitalName || '').toLowerCase();
+        }
+
+        if (valA < valB) return hospitalRankingSort.asc ? -1 : 1;
+        if (valA > valB) return hospitalRankingSort.asc ? 1 : -1;
+        return 0;
+      });
+
+      renderHospitalRankings();
+      showToast(`Hospital rankings sorted by ${key} (${hospitalRankingSort.asc ? 'Ascending' : 'Descending'}).`);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  13. Reports & Data Export
+    // ─────────────────────────────────────────────────────────────────
+    function updateReportPreview() {
+      const type = document.getElementById('report-type')?.value || 'users';
+      const thead = document.getElementById('report-preview-thead');
+      const tbody = document.getElementById('report-preview-tbody');
+      _setText('report-print-title', `${type.toUpperCase()} Report`);
+      _setText('report-print-meta', `Generated on ${new Date().toLocaleString()}`);
+
+      if (!thead || !tbody) return;
+      thead.innerHTML = '<tr><th>Entity</th><th>Record Name</th><th>Status</th><th>Timestamp</th></tr>';
+      tbody.innerHTML = `<tr><td>${escapeHTML(type)}</td><td>Active Dataset Export Preview</td><td><span class="status-badge status-verified">Verified</span></td><td>${formatDate(new Date())}</td></tr>`;
+    }
+
+    function executeExportDownload() {
+      const entity = document.getElementById('report-type')?.value || 'users';
+      const format = document.getElementById('report-format')?.value || 'csv';
+      const url = `${API_BASE}/admin/export?entity=${encodeURIComponent(entity)}&format=${encodeURIComponent(format)}`;
+
+      fetch(url, { headers: { 'Authorization': `Bearer ${adminToken}` } })
+        .then(res => {
+          if (!res.ok) throw new Error('API offline');
+          if (format === 'json') return res.json().then(data => JSON.stringify(data, null, 2));
+          return res.text();
+        })
+        .then(content => {
+          const blob = new Blob([content], { type: format === 'json' ? 'application/json' : 'text/csv' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `lifelink-${entity}-${Date.now()}.${format}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          showToast(`Exported ${entity} as ${format.toUpperCase()}.`);
+        })
+        .catch(() => {
+          // Fallback client-side CSV generator with injection guard & proper quote escaping
+          const csvHeader = 'ID,Name,Email,Role,Status\n';
+          const csvRows = usersData.map(u => [
+            escapeCsvCell(u.id),
+            escapeCsvCell(u.name),
+            escapeCsvCell(u.email),
+            escapeCsvCell(u.role),
+            escapeCsvCell(u.isActive ? 'Active' : 'Inactive')
+          ].join(',')).join('\n');
+          const blob = new Blob([csvHeader + csvRows], { type: 'text/csv' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `lifelink-${entity}-${Date.now()}.csv`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          showToast(`Exported ${entity} report as CSV.`);
+        });
+    }
+
+    function printReport() {
+      updateReportPreview();
+      window.print();
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  14. Header Search, Global Search & Modals
+    // ─────────────────────────────────────────────────────────────────
+    const _debouncedHeaderSearchInternal = debounce((query) => {
+      const q = (query || '').trim();
+      const hospSearch = document.getElementById('search-hospitals');
+      const bbSearch = document.getElementById('search-blood-banks');
+      const donorSearch = document.getElementById('search-donors');
+
+      if (hospSearch) hospSearch.value = q;
+      if (bbSearch) bbSearch.value = q;
+      if (donorSearch) donorSearch.value = q;
+
+      // Re-query with pagination reset to page 1
+      loadHospitalsList(1);
+      loadBloodBanksList(1);
+      loadDonorsList(1);
+
+      // If user is currently on an unrelated view, switch to hospitals (first user subview)
+      const currentActive = document.querySelector('.view-section.active');
+      const currentId = currentActive ? currentActive.id : '';
+      if (q && !['view-hospitals', 'view-blood-banks', 'view-donors'].includes(currentId)) {
+        switchView('hospitals');
+      }
+    }, 300);
+
+    function handleHeaderSearch(query) {
+      _debouncedHeaderSearchInternal(query);
+    }
+
+
+    function handleGlobalSearch(q) {
+      if (!q.trim()) return;
+      switchView('users');
+      const searchBox = document.getElementById('search-users');
+      if (searchBox) {
+        searchBox.value = q;
+        resetAndFilter('users');
+      }
+    }
+
+    function openConfirmModal(title, subtitle, actionFn) {
+      document.getElementById('confirm-modal-title').textContent = title;
+      document.getElementById('confirm-modal-subtitle').textContent = subtitle;
+      pendingActionFn = actionFn;
+      document.getElementById('confirmModal').classList.add('show');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.remove('show');
+      pendingActionFn = null;
+    }
+
+    function executePendingAction() {
+      if (pendingActionFn) pendingActionFn();
+      closeConfirmModal();
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('show');
+    }
+
+    function initModalFocusTrap() {
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          ['confirmModal', 'requestDetailModal', 'donorDetailModal', 'userManageModal'].forEach(closeModal);
+        }
+      });
+      ['confirmModal', 'requestDetailModal', 'donorDetailModal', 'userManageModal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('click', e => { if (e.target === el) closeModal(id); });
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  15. Responsive Sidebar & Logout
+    // ─────────────────────────────────────────────────────────────────
+    function toggleDesktopSidebar() {
+      if (window.innerWidth <= 1024) {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && sidebar.classList.contains('mobile-open')) {
+          closeMobileSidebar();
+        } else {
+          openMobileSidebar();
+        }
+        return;
+      }
+      const sidebar = document.getElementById('sidebar');
+      const wrapper = document.getElementById('main-wrapper');
+      if (sidebar) sidebar.classList.toggle('collapsed');
+      if (wrapper) wrapper.classList.toggle('sidebar-collapsed');
+    }
+
+    function openMobileSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar) {
+        sidebar.classList.remove('collapsed');
+        sidebar.classList.add('mobile-open');
+      }
+      if (overlay) overlay.style.display = 'block';
+    }
+
+    function closeMobileSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar) sidebar.classList.remove('mobile-open');
+      if (overlay) overlay.style.display = 'none';
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+      showToast('Logged out.');
+      setTimeout(() => window.location.href = 'login.html', 500);
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.setAttribute('role', 'status');
+      const iconClass = type === 'danger' ? 'toast-icon-danger' : 'toast-icon-success';
+      toast.innerHTML = `<div class="${iconClass}">✓</div><span>${escapeHTML(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.classList.add('show'), 10);
+      setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3500);
+    }
+  </script>
 </body>
 </html>

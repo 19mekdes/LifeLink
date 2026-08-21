@@ -292,11 +292,11 @@ a {
 
 @media (min-width: 769px) {
 
-    .sidebar:not(.open) ~ .main-content {
+    .sidebar:not(.open)~.main-content {
         margin-left: 70px;
     }
 
-    .sidebar.open ~ .main-content {
+    .sidebar.open~.main-content {
         margin-left: 230px;
     }
 }
@@ -1022,10 +1022,8 @@ a {
     border-radius: 50%;
 
     background:
-        conic-gradient(
-            #7b1e2b 0deg 230deg,
-            #e8c8cc 230deg 360deg
-        );
+        conic-gradient(#7b1e2b 0deg 230deg,
+            #e8c8cc 230deg 360deg);
 
     position: relative;
 
@@ -1089,7 +1087,7 @@ a {
     padding-top: 5px;
 }
 
-.donation-years > div {
+.donation-years>div {
     display: flex;
 
     align-items: center;
@@ -1344,7 +1342,7 @@ a {
         transition: none;
     }
 
-    .sidebar.open ~ .main-content {
+    .sidebar.open~.main-content {
         margin-left: 70px;
     }
 
@@ -1483,6 +1481,7 @@ a {
         height: 90px;
     }
 }
+
 /* =========================================================
    DONOR PROFILE PAGE
    Uses the existing LifeLink dashboard colors
@@ -1548,7 +1547,7 @@ a {
     border-bottom: 1px solid #f0e5e3;
 }
 
-.profile-field > span {
+.profile-field>span {
     color: #888;
     font-size: 12px;
     font-weight: 600;
@@ -1679,7 +1678,7 @@ a {
     font-weight: bold;
 }
 
-.status-card > div:nth-child(2) {
+.status-card>div:nth-child(2) {
     flex: 1;
 }
 

@@ -8,13 +8,12 @@ import { fileURLToPath } from 'url';
 
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
-// Load environment variables
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Frontend directory (sibling of backend/)
+// Frontend directory
 const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
 
 const app = express();
@@ -25,7 +24,7 @@ app.use(helmet({
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       'script-src': ["'self'", "'unsafe-inline'"],
-      'connect-src': ["'self'", 'http://localhost:5000', 'http://127.0.0.1:5000']
+      'connect-src': ["'self'", 'http://localhost:5001', 'http://127.0.0.1:5001']
     }
   }
 }));
@@ -69,18 +68,25 @@ app.get('/api/health', (req, res) => {
 
 // Import routes
 import authRoutes from './routes/authRoutes.js';
-import hospitalRoutes from './routes/hospitalRoutes.js';
-import donorRoutes from './routes/donorRoutes.js';  // ✅ ADD THIS LINE
+import hospitalRoutes from './user/hospital/hospitalRoutes.js';
+import donorRoutes from './user/donor/donorRoutes.js';
+import donationRoutes from './routes/donationRoutes.js';
+import bloodBankRoutes from './user/bloodbank/bloodBankRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import auditRoutes from './routes/auditRoutes.js';
 
 // Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hospitals', hospitalRoutes);
-app.use('/api/donors', donorRoutes);  // ✅ ADD THIS LINE
-
-// Other routes (to be added later)
-// app.use('/api/blood-banks', require('./routes/bloodBankRoutes'));
-// app.use('/api/blood-requests', require('./routes/bloodRequestRoutes'));
-// app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/donors', donorRoutes);
+app.use('/api/v1/donations', donationRoutes); 
+app.use('/api/blood-banks', bloodBankRoutes); 
+app.use('/api/admin', adminRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/audit', auditRoutes);
 
 // ============ STATIC FRONTEND ============
 app.use(express.static(path.join(FRONTEND_DIR, 'public')));
@@ -92,10 +98,7 @@ app.get('/', (req, res) => {
 });
 
 // ============ ERROR HANDLING ============
-// 404 handler - must be after all routes
 app.use(notFoundHandler);
-
-// Global error handler - must be last
 app.use(errorHandler);
 
 export default app;

@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-
 const EMAIL_HOST = process.env.EMAIL_HOST;
 const EMAIL_PORT = parseInt(process.env.EMAIL_PORT);
 const EMAIL_USER = process.env.EMAIL_USER;
@@ -7,11 +6,10 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-// Create transporter
 const transporter = nodemailer.createTransport({
   host: EMAIL_HOST,
   port: EMAIL_PORT,
-  secure: EMAIL_PORT === 465, 
+  secure: EMAIL_PORT === 465,
   auth: {
     user: EMAIL_USER,
     pass: EMAIL_PASS,
@@ -20,12 +18,6 @@ const transporter = nodemailer.createTransport({
 
 /**
  * Send email
- * @param {Object} options - Email options
- * @param {string} options.to - Recipient email
- * @param {string} options.subject - Email subject
- * @param {string} options.html - HTML content
- * @param {string} options.text - Plain text content (optional)
- * @returns {Promise} - Nodemailer response
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
   try {
@@ -34,7 +26,7 @@ export const sendEmail = async ({ to, subject, html, text }) => {
       to,
       subject,
       html,
-      text: text || html.replace(/<[^>]*>/g, ''), // Strip HTML for text version
+      text: text || html.replace(/<[^>]*>/g, ''),
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -47,10 +39,6 @@ export const sendEmail = async ({ to, subject, html, text }) => {
 };
 
 // ============ EMAIL TEMPLATES ============
-
-/**
- * Welcome email template
- */
 export const welcomeEmail = (name, email) => {
   return {
     subject: 'Welcome to LifeLink! 🩸',
@@ -61,7 +49,7 @@ export const welcomeEmail = (name, email) => {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #dc2626; color: white; padding: 20px; text-align: center; }
+          .header { background: #dc2626; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { padding: 20px; background: #f9fafb; }
           .button { display: inline-block; background: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; }
           .footer { text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }
@@ -98,12 +86,12 @@ export const welcomeEmail = (name, email) => {
 };
 
 /**
- * Emergency blood request notification
+ * 2. Emergency Blood Request - Sent to matching donors
  */
 export const emergencyRequestEmail = (donorName, request) => {
-  const urgencyEmoji = request.urgency === 'CRITICAL_EMERGENCY' ? '🚨' : 
-                       request.urgency === 'URGENT' ? '⚠️' : 'ℹ️';
-  
+  const urgencyEmoji = request.urgency === 'CRITICAL_EMERGENCY' ? '🚨' :
+    request.urgency === 'URGENT' ? '⚠️' : 'ℹ️';
+
   return {
     subject: `${urgencyEmoji} Emergency Blood Request: ${request.bloodType} Needed!`,
     html: `
@@ -113,8 +101,8 @@ export const emergencyRequestEmail = (donorName, request) => {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #dc2626; color: white; padding: 20px; text-align: center; }
-          .emergency { background: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; }
+          .header { background: #dc2626; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+          .emergency { background: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; border-radius: 4px; }
           .content { padding: 20px; background: #f9fafb; }
           .button { display: inline-block; background: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; }
           .footer { text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }
@@ -157,7 +145,7 @@ export const emergencyRequestEmail = (donorName, request) => {
 };
 
 /**
- * Donation confirmation email
+ * 3. Donation Confirmation - Sent to donor after donation
  */
 export const donationConfirmationEmail = (donorName, donation) => {
   return {
@@ -169,7 +157,7 @@ export const donationConfirmationEmail = (donorName, donation) => {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #16a34a; color: white; padding: 20px; text-align: center; }
+          .header { background: #16a34a; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { padding: 20px; background: #f9fafb; }
           .button { display: inline-block; background: #16a34a; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; }
           .footer { text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }
@@ -208,9 +196,7 @@ export const donationConfirmationEmail = (donorName, donation) => {
   };
 };
 
-/**
- * Request status update email
- */
+
 export const requestStatusUpdateEmail = (hospitalName, request) => {
   const statusMessages = {
     'APPROVED': '✅ Your blood request has been APPROVED! We are processing it now.',
@@ -229,7 +215,7 @@ export const requestStatusUpdateEmail = (hospitalName, request) => {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2563eb; color: white; padding: 20px; text-align: center; }
+          .header { background: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { padding: 20px; background: #f9fafb; }
           .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; }
           .footer { text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }
@@ -264,12 +250,10 @@ export const requestStatusUpdateEmail = (hospitalName, request) => {
   };
 };
 
-/**
- * Password reset email
- */
+
 export const passwordResetEmail = (name, resetToken) => {
   const resetLink = `${FRONTEND_URL}/reset-password.html?token=${resetToken}`;
-  
+
   return {
     subject: '🔐 Password Reset Request',
     html: `
@@ -279,7 +263,7 @@ export const passwordResetEmail = (name, resetToken) => {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #f59e0b; color: white; padding: 20px; text-align: center; }
+          .header { background: #f59e0b; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { padding: 20px; background: #f9fafb; }
           .button { display: inline-block; background: #f59e0b; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; }
           .footer { text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }
@@ -312,7 +296,6 @@ export const passwordResetEmail = (name, resetToken) => {
   };
 };
 
-// Export all services
 export default {
   sendEmail,
   welcomeEmail,

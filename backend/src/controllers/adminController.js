@@ -344,7 +344,8 @@ export const getHospitals = asyncHandler(async (req, res) => {
 //  verifyHospital function
 export const verifyHospital = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { status, notes } = req.body;
+  const { status: statusRaw, verificationStatus, notes } = req.body;
+  const status = verificationStatus || statusRaw;
 
   // Check if hospital exists
   const hospital = await prisma.hospital.findUnique({
@@ -362,6 +363,10 @@ export const verifyHospital = asyncHandler(async (req, res) => {
 
   if (!hospital) {
     throw new ApiError(404, 'Hospital not found');
+  }
+
+  if (!status || !['PENDING', 'VERIFIED', 'REJECTED'].includes(status)) {
+    throw new ApiError(400, 'Invalid verification status. Must be PENDING, VERIFIED, or REJECTED');
   }
 
   // Update hospital verification status
@@ -466,7 +471,8 @@ export const getBloodBanks = asyncHandler(async (req, res) => {
 //  verifyBloodBank function
 export const verifyBloodBank = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { status, notes } = req.body;
+  const { status: statusRaw, verificationStatus, notes } = req.body;
+  const status = verificationStatus || statusRaw;
 
   // Check if blood bank exists
   const bloodBank = await prisma.bloodBank.findUnique({
@@ -484,6 +490,10 @@ export const verifyBloodBank = asyncHandler(async (req, res) => {
 
   if (!bloodBank) {
     throw new ApiError(404, 'Blood bank not found');
+  }
+
+  if (!status || !['PENDING', 'VERIFIED', 'REJECTED'].includes(status)) {
+    throw new ApiError(400, 'Invalid verification status. Must be PENDING, VERIFIED, or REJECTED');
   }
 
   // Update blood bank verification status
@@ -638,6 +648,119 @@ export const verifyDonor = asyncHandler(async (req, res) => {
     success: true,
     data: donor,
     message: `Donor ${donor.user?.name || 'Unknown'} verified successfully`
+  });
+});
+
+// ============ ADMIN PROFILE ============
+export const getAdminProfile = asyncHandler(async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      role: true,
+      isActive: true,
+      createdAt: true,
+      adminProfile: true
+    }
+  });
+
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+  }
+
+  res.json({
+    success: true,
+    data: serializeData(user)
+  });
+});
+
+export const updateAdminProfile = asyncHandler(async (req, res) => {
+  const { name, email, phone } = req.body;
+
+  // Check if email is already taken by another user
+  if (email) {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing && existing.id !== req.user.id) {
+      throw new ApiError(400, 'Email is already in use by another account');
+    }
+  }
+
+  const user = await prisma.user.update({
+    where: { id: req.user.id },
+    data: {
+      ...(name && { name }),
+      ...(email && { email }),
+      ...(phone !== undefined && { phone })
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      role: true,
+      adminProfile: true
+    }
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      userId: req.user.id,
+      action: 'UPDATE_ADMIN_PROFILE',
+      entity: 'User',
+      entityId: user.id,
+      changes: { name, email, phone }
+    }
+  });
+
+  res.json({
+    success: true,
+    data: serializeData(user),
+    message: 'Admin profile updated successfully'
+  });
+});
+
+export const changeAdminPassword = asyncHandler(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    throw new ApiError(400, 'Current password and new password are required');
+  }
+
+  if (newPassword.length < 8) {
+    throw new ApiError(400, 'New password must be at least 8 characters long');
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch) {
+    throw new ApiError(400, 'Current password is incorrect');
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await prisma.user.update({
+    where: { id: req.user.id },
+    data: { password: hashedPassword }
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      userId: req.user.id,
+      action: 'CHANGE_PASSWORD',
+      entity: 'User',
+      entityId: req.user.id
+    }
+  });
+
+  res.json({
+    success: true,
+    message: 'Password changed successfully'
   });
 });
 

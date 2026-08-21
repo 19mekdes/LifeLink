@@ -1,4 +1,7 @@
-const API_URL = window.API_URL || 'http://localhost:5001/api';
+const API_URL = window.API_BASE_URL || window.API_URL ||
+  (window.location.port === '5500' || window.location.port === '5001' || window.location.port === '3000' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5001/api'
+    : '/api');
 
 /**
  * Base API Client for LifeLink
@@ -29,7 +32,7 @@ class ApiClient {
    * @returns {string|null} JWT token
    */
   getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem('token') || localStorage.getItem('auth_token');
   }
 
   /**
@@ -37,8 +40,12 @@ class ApiClient {
    * @returns {object|null} User object
    */
   getUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    try {
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) : null;
+    } catch (e) {
+      return null;
+    }
   }
 
   /**
@@ -56,7 +63,7 @@ class ApiClient {
    * @returns {Promise} Response data
    */
   async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`;
+    const url = endpoint.startsWith('http') ? endpoint : `${this.baseURL}${endpoint}`;
     const token = this.getToken();
     
     // Set token if available
@@ -74,7 +81,11 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
+      
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? await response.json()
+        : await response.text();
       
       // Handle 401 Unauthorized (expired, invalid, missing, or stale token)
       if (response.status === 401) {
@@ -98,27 +109,32 @@ class ApiClient {
   /**
    * GET request
    * @param {string} endpoint - API endpoint
-   * @param {object} params - Query parameters
+   * @param {object} params - Query parameters or fetch options
    * @returns {Promise} Response data
    */
   get(endpoint, params = {}) {
-    const queryString = Object.keys(params)
-      .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-      .join('&');
-    
-    const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-    return this.request(url, { method: 'GET' });
+    if (params && typeof params === 'object' && !params.headers && !params.method) {
+      const queryString = Object.keys(params)
+        .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+        .join('&');
+      
+      const url = queryString ? `${endpoint}${endpoint.includes('?') ? '&' : '?'}${queryString}` : endpoint;
+      return this.request(url, { method: 'GET' });
+    }
+    return this.request(endpoint, { ...params, method: 'GET' });
   }
 
   /**
    * POST request
    * @param {string} endpoint - API endpoint
    * @param {object} body - Request body
+   * @param {object} options - Fetch options
    * @returns {Promise} Response data
    */
-  post(endpoint, body) {
+  post(endpoint, body = {}, options = {}) {
     return this.request(endpoint, {
+      ...options,
       method: 'POST',
       body: JSON.stringify(body),
     });
@@ -128,10 +144,12 @@ class ApiClient {
    * PUT request
    * @param {string} endpoint - API endpoint
    * @param {object} body - Request body
+   * @param {object} options - Fetch options
    * @returns {Promise} Response data
    */
-  put(endpoint, body) {
+  put(endpoint, body = {}, options = {}) {
     return this.request(endpoint, {
+      ...options,
       method: 'PUT',
       body: JSON.stringify(body),
     });
@@ -140,20 +158,23 @@ class ApiClient {
   /**
    * DELETE request
    * @param {string} endpoint - API endpoint
+   * @param {object} options - Fetch options
    * @returns {Promise} Response data
    */
-  delete(endpoint) {
-    return this.request(endpoint, { method: 'DELETE' });
+  delete(endpoint, options = {}) {
+    return this.request(endpoint, { ...options, method: 'DELETE' });
   }
 
   /**
    * PATCH request
    * @param {string} endpoint - API endpoint
    * @param {object} body - Request body
+   * @param {object} options - Fetch options
    * @returns {Promise} Response data
    */
-  patch(endpoint, body) {
+  patch(endpoint, body = {}, options = {}) {
     return this.request(endpoint, {
+      ...options,
       method: 'PATCH',
       body: JSON.stringify(body),
     });
@@ -166,7 +187,10 @@ class ApiClient {
    */
   saveAuth(token, user) {
     localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('auth_token', token);
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
   }
 
   /**
@@ -174,7 +198,9 @@ class ApiClient {
    */
   clearAuth() {
     localStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
+    localStorage.removeItem('lifelinkDonor');
   }
 
   /**
@@ -189,7 +215,7 @@ class ApiClient {
       'HOSPITAL': 'hospital-dashboard.html',
       'DONOR': 'donor-dashboard.html'
     };
-    return dashboards[role] || 'dashboard.html';
+    return dashboards[role] || 'login.html';
   }
 
   /**
@@ -203,6 +229,12 @@ class ApiClient {
 
 // Create singleton instance
 const api = new ApiClient();
+
+// Global compatibility
+if (typeof window !== 'undefined') {
+  window.api = api;
+  window.apiRequest = (endpoint, options) => api.request(endpoint, options);
+}
 
 // Export for use in other files
 export default api;

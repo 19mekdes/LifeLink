@@ -1,19 +1,32 @@
+import api from "./api/api.js";
+
 console.log("Donor JS is working!");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ==========================================
-    // BASIC ELEMENT HELPERS
-    // ==========================================
+    // =====================================================
+    // HELPERS
+    // =====================================================
 
     const $ = (id) => document.getElementById(id);
 
+    const formatDate = (date) => {
+        if (!date) return "Not available";
 
-    // ==========================================
+        const parsedDate = new Date(date);
+
+        if (Number.isNaN(parsedDate.getTime())) {
+            return "Not available";
+        }
+
+        return parsedDate.toLocaleDateString();
+    };
+
+
+    // =====================================================
     // DASHBOARD ELEMENTS
-    // ==========================================
+    // =====================================================
 
-    const dashboardDonorName = $("dashboardDonorName");
     const topbarName = $("topbarName");
 
     const profileInitial = $("profileInitial");
@@ -30,42 +43,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const donationStatus = $("donationStatus");
     const donationStatusMessage = $("donationStatusMessage");
 
-    const notificationCount = $("notificationCount");
-    const topNotificationCount = $("topNotificationCount");
-
     const recentActivity = $("recentActivity");
     const notificationPreview = $("notificationPreview");
 
 
-    // ==========================================
+    // =====================================================
     // DISPLAY DONOR INFORMATION
-    // ==========================================
+    // =====================================================
 
     function displayDonorInfo(donor) {
 
-        if (!donor) return;
+        if (!donor) {
+            console.warn("No donor information received.");
+            return;
+        }
 
+        console.log("Donor information:", donor);
 
-        // Name
+        const user = donor.user || {};
 
         const name =
+            user.name ||
             donor.name ||
             donor.fullName ||
             "Donor";
 
-        if (dashboardDonorName) {
-            dashboardDonorName.textContent = name;
-        }
-
-        if (topbarName) {
-            topbarName.textContent = name;
-        }
-
-
-        // Initial
-
         const initial =
             name.charAt(0).toUpperCase();
+
+        // -------------------------
+        // Name
+        // -------------------------
+
+        if (topbarName) {
+            topbarName.textContent = `Hi, ${name}`;
+        }
+
+        // -------------------------
+        // Initial
+        // -------------------------
 
         if (profileInitial) {
             profileInitial.textContent = initial;
@@ -75,48 +91,76 @@ document.addEventListener("DOMContentLoaded", () => {
             dashboardProfileInitial.textContent = initial;
         }
 
-
-        // Blood type
+        // -------------------------
+        // Blood Type
+        // -------------------------
 
         if (dashboardBloodType) {
+
             dashboardBloodType.textContent =
                 donor.bloodType || "Not available";
+
         }
 
-
+        // -------------------------
         // Location
+        // -------------------------
 
         if (dashboardLocation) {
+
             dashboardLocation.textContent =
-                donor.location || "Not available";
+                donor.city ||
+                donor.address ||
+                "Not available";
+
         }
 
-
+        // -------------------------
         // Availability
+        // -------------------------
 
         const availability =
-            donor.availability ||
-            donor.status ||
+            donor.availabilityStatus ||
             "Not available";
 
         if (dashboardAvailability) {
+
             dashboardAvailability.textContent =
                 availability;
+
         }
 
-
-        // Donation status
+        // -------------------------
+        // Donation Status
+        // -------------------------
 
         if (donationStatus) {
-            donationStatus.textContent =
-                availability === "Available"
-                    ? "Available to Donate"
-                    : availability;
+
+            if (availability === "AVAILABLE") {
+
+                donationStatus.textContent =
+                    "Available to Donate";
+
+            } else if (availability === "TEMPORARILY_UNAVAILABLE") {
+
+                donationStatus.textContent =
+                    "Temporarily Unavailable";
+
+            } else if (availability === "UNAVAILABLE") {
+
+                donationStatus.textContent =
+                    "Unavailable";
+
+            } else {
+
+                donationStatus.textContent =
+                    availability;
+            }
         }
 
         if (donationStatusMessage) {
 
-            if (availability === "Available") {
+            if (availability === "AVAILABLE") {
 
                 donationStatusMessage.textContent =
                     "Your donation can help someone in need.";
@@ -125,233 +169,464 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 donationStatusMessage.textContent =
                     "Your current availability status is shown above.";
-
             }
         }
     }
 
 
-    // ==========================================
-    // LOAD DASHBOARD
-    // ==========================================
+    // =====================================================
+    // DISPLAY DASHBOARD STATS
+    // =====================================================
 
-    async function loadDashboardData() {
+    function displayDashboardStats(stats) {
 
-        try {
+        if (!stats) {
+            console.warn("No dashboard statistics received.");
+            return;
+        }
 
-            const data =
-                await apiRequest("/api/donors/dashboard");
+        console.log("Dashboard statistics:", stats);
 
-            console.log("Dashboard data:", data);
+        // -------------------------
+        // Total Donations
+        // -------------------------
+
+        if (totalDonations) {
+
+            totalDonations.textContent =
+                stats.totalDonations ?? 0;
+        }
+
+        // -------------------------
+        // Total / Pending Requests
+        // -------------------------
+
+        if (totalRequests) {
+
+            totalRequests.textContent =
+                stats.pendingRequests ?? 0;
+        }
+
+        // -------------------------
+        // Last Donation
+        // -------------------------
+
+        if (lastDonation) {
+
+            lastDonation.textContent =
+                stats.lastDonationDate
+                    ? formatDate(stats.lastDonationDate)
+                    : "No donations yet";
+        }
+
+        // -------------------------
+        // Next Eligible Date
+        // -------------------------
+
+        const nextEligible =
+            $("nextEligible");
+
+        if (nextEligible) {
+
+            nextEligible.textContent =
+                stats.nextEligibleDate
+                    ? formatDate(stats.nextEligibleDate)
+                    : "Not available";
+        }
+
+        // -------------------------
+        // Lives Impacted
+        // -------------------------
+
+        const livesImpacted =
+            $("livesImpacted");
+
+        if (livesImpacted) {
 
             /*
-             * We are intentionally not guessing the backend
-             * response structure yet.
+             * The backend does not currently provide
+             * a separate livesImpacted value.
              *
-             * Once your backend teammate starts the server,
-             * we'll inspect the actual response and map it here.
+             * For now, use total donations as the
+             * available value rather than inventing
+             * another backend field.
              */
 
-            const donor =
-                data.donor ||
-                data.profile ||
-                data;
+            livesImpacted.textContent =
+                stats.totalDonations ?? 0;
+        }
 
-            displayDonorInfo(donor);
+        // -------------------------
+        // Donation Summary
+        // -------------------------
 
+        const donationTotal =
+            $("donationTotal");
 
-            // Recent activity
+        if (donationTotal) {
 
-            if (recentActivity) {
+            donationTotal.textContent =
+                stats.totalDonations ?? 0;
+        }
 
-                if (data.recentActivity) {
+        // -------------------------
+        // Current Year Donations
+        // -------------------------
 
-                    recentActivity.innerHTML = `
-                        <p>
-                            ${data.recentActivity}
-                        </p>
-                    `;
+        const currentYearDonations =
+            $("currentYearDonations");
 
-                } else {
+        const previousYearDonations =
+            $("previousYearDonations");
 
-                    recentActivity.innerHTML = `
-                        <p>
-                            No recent activity available.
-                        </p>
-                    `;
-                }
-            }
+        /*
+         * The dashboard endpoint does not currently
+         * provide donations grouped by year.
+         *
+         * Therefore we do not invent these values.
+         */
 
+        if (currentYearDonations) {
+            currentYearDonations.textContent = "—";
+        }
 
-        } catch (error) {
-
-            console.error(
-                "Failed to load dashboard:",
-                error
-            );
-
+        if (previousYearDonations) {
+            previousYearDonations.textContent = "—";
         }
     }
 
 
-    // ==========================================
-    // LOAD DONOR STATISTICS
-    // ==========================================
+    // =====================================================
+    // DISPLAY AVAILABLE REQUESTS
+    // =====================================================
 
-    async function loadDonorStats() {
+    function displayAvailableRequests(requests) {
 
-        try {
+        const requestsList =
+            document.querySelector(".requests-list");
 
-            const stats =
-                await apiRequest("/api/donors/stats");
+        if (!requestsList) return;
 
-            console.log("Donor stats:", stats);
+        if (!Array.isArray(requests) || requests.length === 0) {
 
+            requestsList.innerHTML = `
+                <div class="request-card">
+                    <div class="request-info">
+                        <strong>No blood requests available.</strong>
+                    </div>
+                </div>
+            `;
 
-            /*
-             * Again, we don't guess the exact field names.
-             * We'll map them after seeing the real backend
-             * response.
-             */
-
-
-            if (totalDonations) {
-
-                totalDonations.textContent =
-                    stats.totalDonations ??
-                    stats.donations ??
-                    0;
-            }
-
-
-            if (totalRequests) {
-
-                totalRequests.textContent =
-                    stats.totalRequests ??
-                    stats.requests ??
-                    0;
-            }
-
-
-            if (lastDonation) {
-
-                lastDonation.textContent =
-                    stats.lastDonation ??
-                    "No donations yet";
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                "Failed to load donor stats:",
-                error
-            );
-
+            return;
         }
+
+        requestsList.innerHTML =
+            requests.map(request => {
+
+                const bloodType =
+                    request.bloodType || "Unknown";
+
+                const units =
+                    request.unitsRequired ??
+                    0;
+
+                const hospitalName =
+                    request.hospital?.user?.name ||
+                    request.hospital?.name ||
+                    "Hospital";
+
+                const location =
+                    request.location ||
+                    "Location unavailable";
+
+                const urgency =
+                    request.urgency || "NORMAL";
+
+                const urgencyClass =
+                    urgency.toLowerCase();
+
+                return `
+                    <div class="request-card">
+
+                        <div class="request-icon ${urgencyClass}-icon">
+                            🩸
+                        </div>
+
+                        <div class="request-info">
+
+                            <div class="request-title">
+                                <strong>
+                                    ${bloodType} Blood Needed
+                                </strong>
+
+                                <span>
+                                    ${units} Units
+                                </span>
+                            </div>
+
+                            <div class="request-location">
+                                <strong>
+                                    ${hospitalName}
+                                </strong>
+
+                                <span>
+                                    | ${location}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="request-meta">
+
+                            <span class="urgency ${urgencyClass}">
+                                ${urgency}
+                            </span>
+
+                        </div>
+
+                        <a
+                            href="donor-requests.html"
+                            class="view-details"
+                        >
+                            View Details
+                        </a>
+
+                    </div>
+                `;
+
+            }).join("");
     }
 
 
-    // ==========================================
-    // LOAD NOTIFICATION COUNT
-    // ==========================================
+    // =====================================================
+    // DISPLAY RECENT ACTIVITY
+    // =====================================================
 
-    async function loadNotificationCount() {
+    function displayRecentActivity(
+        recentDonations,
+        recentNotifications
+    ) {
+
+        if (!recentActivity) return;
+
+        const donations =
+            Array.isArray(recentDonations)
+                ? recentDonations
+                : [];
+
+        const notifications =
+            Array.isArray(recentNotifications)
+                ? recentNotifications
+                : [];
+
+        if (
+            donations.length === 0 &&
+            notifications.length === 0
+        ) {
+
+            recentActivity.innerHTML = `
+                <p>No recent activity available.</p>
+            `;
+
+            return;
+        }
+
+        let html = "";
+
+        donations.slice(0, 3).forEach(donation => {
+
+            html += `
+                <div class="activity-item">
+
+                    <strong>
+                        Donation recorded
+                    </strong>
+
+                    <p>
+                        ${formatDate(donation.donationDate)}
+                    </p>
+
+                </div>
+            `;
+        });
+
+        notifications.slice(0, 3).forEach(notification => {
+
+            html += `
+                <div class="activity-item">
+
+                    <strong>
+                        ${notification.title || "Notification"}
+                    </strong>
+
+                    <p>
+                        ${notification.message || ""}
+                    </p>
+
+                </div>
+            `;
+        });
+
+        recentActivity.innerHTML = html;
+    }
+
+
+    // =====================================================
+    // DISPLAY NOTIFICATIONS
+    // =====================================================
+
+    function displayNotifications(
+        notifications,
+        unreadCount
+    ) {
+
+        const notificationElements =
+            document.querySelectorAll(
+                ".notification-count, .notification-btn span"
+            );
+
+        notificationElements.forEach(element => {
+
+            element.textContent =
+                unreadCount ?? 0;
+        });
+
+
+        if (!notificationPreview) return;
+
+        if (
+            !Array.isArray(notifications) ||
+            notifications.length === 0
+        ) {
+
+            notificationPreview.innerHTML = `
+                <p>No new notifications.</p>
+            `;
+
+            return;
+        }
+
+        notificationPreview.innerHTML =
+            notifications
+                .slice(0, 3)
+                .map(notification => {
+
+                    return `
+                        <div class="notification-item">
+
+                            <strong>
+                                ${notification.title || "Notification"}
+                            </strong>
+
+                            <p>
+                                ${notification.message || ""}
+                            </p>
+
+                        </div>
+                    `;
+
+                })
+                .join("");
+    }
+
+
+    // =====================================================
+    // LOAD DASHBOARD
+    // =====================================================
+
+    async function loadDashboard() {
 
         try {
-
-            const notifications =
-                await apiRequest(
-                    "/api/donors/notifications"
-                );
 
             console.log(
-                "Notifications:",
-                notifications
+                "Loading donor dashboard..."
             );
 
+            const response =
+                await api.get("/donors/dashboard");
 
-            /*
-             * This is intentionally flexible until we see
-             * the backend response structure.
-             */
+            console.log(
+                "Raw dashboard response:",
+                response
+            );
 
-            const list =
-                Array.isArray(notifications)
-                    ? notifications
-                    : notifications.notifications || [];
+            if (!response.success) {
 
-
-            const unreadCount =
-                list.filter(
-                    notification =>
-                        !notification.read &&
-                        !notification.isRead
-                ).length;
-
-
-            if (notificationCount) {
-                notificationCount.textContent =
-                    unreadCount;
+                throw new Error(
+                    "Dashboard request was not successful."
+                );
             }
 
-            if (topNotificationCount) {
-                topNotificationCount.textContent =
-                    unreadCount;
+            const data =
+                response.data;
+
+            if (!data) {
+
+                throw new Error(
+                    "Dashboard response does not contain data."
+                );
             }
 
+            console.log(
+                "Dashboard data:",
+                data
+            );
 
-            // Notification preview
+            // -------------------------
+            // Donor
+            // -------------------------
 
-            if (notificationPreview) {
+            displayDonorInfo(
+                data.donor
+            );
 
-                if (!list.length) {
+            // -------------------------
+            // Statistics
+            // -------------------------
 
-                    notificationPreview.innerHTML = `
-                        <p>
-                            No new notifications.
-                        </p>
-                    `;
+            displayDashboardStats(
+                data.stats
+            );
 
-                } else {
+            // -------------------------
+            // Requests
+            // -------------------------
 
-                    const latest =
-                        list.slice(0, 3);
+            displayAvailableRequests(
+                data.availableRequests
+            );
 
-                    notificationPreview.innerHTML =
-                        latest.map(notification => {
+            // -------------------------
+            // Activity
+            // -------------------------
 
-                            return `
-                                <div class="notification-item">
-                                    <strong>
-                                        ${notification.title || "Notification"}
-                                    </strong>
+            displayRecentActivity(
+                data.recentDonations,
+                data.recentNotifications
+            );
 
-                                    <p>
-                                        ${notification.message || ""}
-                                    </p>
-                                </div>
-                            `;
+            // -------------------------
+            // Notifications
+            // -------------------------
 
-                        }).join("");
-                }
-            }
-
+            displayNotifications(
+                data.recentNotifications,
+                data.stats?.unreadNotifications ?? 0
+            );
 
         } catch (error) {
 
             console.error(
-                "Failed to load notifications:",
+                "Failed to load donor dashboard:",
                 error
             );
-
         }
     }
 
 
-    // ==========================================
+    // =====================================================
     // SIDEBAR NAVIGATION
-    // ==========================================
+    // =====================================================
 
     document
         .querySelectorAll(".sidebar nav a")
@@ -366,16 +641,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                 link.classList.add("active");
+
             });
 
         });
 
-    // ==========================================
-    // START DASHBOARD
-    // ==========================================
 
-    loadDashboardData();
-    loadDonorStats();
-    loadNotificationCount();
+    // =====================================================
+    // START DASHBOARD
+    // =====================================================
+
+    loadDashboard();
 
 });

@@ -28,6 +28,22 @@
             <h2>Welcome Back</h2>
             <p class="subtitle">Login to save lives</p>
 
+            <!-- Role Selector -->
+            <div class="login-role-selector">
+                <button type="button" class="role-btn active" data-role="HOSPITAL">
+                    <i class="fas fa-hospital"></i> Hospital
+                </button>
+                <button type="button" class="role-btn" data-role="ADMIN">
+                    <i class="fas fa-user-shield"></i> Admin
+                </button>
+                <button type="button" class="role-btn" data-role="DONOR">
+                    <i class="fas fa-user"></i> Donor
+                </button>
+                <button type="button" class="role-btn" data-role="BLOOD_BANK">
+                    <i class="fas fa-warehouse"></i> Blood Bank
+                </button>
+            </div>
+
             <!-- Login Form -->
             <form id="loginForm" novalidate>
                 <div class="form-group">
@@ -76,6 +92,9 @@
                 </button>
             </form>
 
+            <!-- Selected role indicator -->
+            <p class="selected-role-hint" id="selectedRoleHint">Logging in as <strong>Hospital</strong></p>
+
             <!-- Footer -->
             <div class="auth-footer">
                 Don't have an account? <a href="register.html">Register here</a>
@@ -110,6 +129,27 @@
         const toastContainer = document.getElementById('toastContainer');
         const togglePassword = document.getElementById('togglePassword');
         const rememberMe = document.getElementById('rememberMe');
+        const selectedRoleHint = document.getElementById('selectedRoleHint');
+
+        // ============ ROLE SELECTION ============
+        let selectedRole = 'HOSPITAL';
+        const roleBtns = document.querySelectorAll('.login-role-selector .role-btn');
+
+        const roleLabels = {
+            'HOSPITAL': 'Hospital',
+            'ADMIN': 'Admin',
+            'DONOR': 'Donor',
+            'BLOOD_BANK': 'Blood Bank'
+        };
+
+        roleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                roleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedRole = btn.dataset.role;
+                selectedRoleHint.innerHTML = `Logging in as <strong>${roleLabels[selectedRole]}</strong>`;
+            });
+        });
 
         // ============ TOAST FUNCTION ============
         function showToast(message, type = 'success') {
@@ -199,39 +239,27 @@
                     
                     showToast(response.message || 'Login successful! 🎉', 'success');
                     
-                    // Redirect after delay
+                    // Redirect after delay — use the user's actual role from the server response
+                    // but fallback to the selected role if server didn't return one
                     setTimeout(() => {
-                        const dashboard = authApi.getDashboardUrl(response.data.user?.role) || 'admin-dashboard.html';
-                        console.log('Redirecting to:', dashboard);
+                        const userRole = response.data.user?.role || selectedRole;
+                        const dashboard = authApi.getDashboardUrl(userRole);
+                        console.log('Redirecting to:', dashboard, '(role:', userRole, ')');
                         window.location.href = dashboard;
                     }, 800);
                 } else {
-                    // Fallback to local admin login if server is offline or returned error
-                    const demoUser = {
-                        id: 'usr_admin_1',
-                        name: email.includes('hospital') ? 'Good Hope Hospital' : 'System Administrator',
-                        email: email,
-                        role: 'ADMIN'
-                    };
-                    authApi.saveAuth('mock_admin_token', demoUser);
-                    showToast('Logged in as Administrator (Offline / Demo Mode) 🎉', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'admin-dashboard.html';
-                    }, 800);
+                    // Server returned an error response — show it to the user
+                    const errorMsg = response?.message || 'Login failed. Please check your credentials and try again.';
+                    showToast(errorMsg, 'error');
+                    formError.textContent = errorMsg;
+                    formError.classList.add('show');
                 }
             } catch (error) {
-                console.error('Login error, fallback to admin dashboard:', error);
-                const demoUser = {
-                    id: 'usr_admin_1',
-                    name: 'System Administrator',
-                    email: email,
-                    role: 'ADMIN'
-                };
-                authApi.saveAuth('mock_admin_token', demoUser);
-                showToast('Logged in as Administrator 🎉', 'success');
-                setTimeout(() => {
-                    window.location.href = 'admin-dashboard.html';
-                }, 800);
+                console.error('Login error:', error);
+                const errorMsg = 'Unable to connect to the server. Please check your connection and try again.';
+                showToast(errorMsg, 'error');
+                formError.textContent = errorMsg;
+                formError.classList.add('show');
             } finally {
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';

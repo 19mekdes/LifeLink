@@ -42,6 +42,16 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     prisma.notification.count()
   ]);
 
+  const recentRequests = await prisma.bloodRequest.findMany({
+    include: {
+      hospital: {
+        include: { user: true }
+      }
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 10
+  });
+
   const monthlyRegistrations = await prisma.$queryRaw`
     SELECT 
       DATE_TRUNC('month', "createdAt") as month,
@@ -91,6 +101,15 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   `;
 
   const responseData = {
+    metrics: {
+      bloodBanks: { total: totalBloodBanks },
+      hospitals: { total: totalHospitals, pending: 0 },
+      donors: { total: totalDonors, unverified: 0 },
+      requests: { total: totalRequests },
+      donations: { completed: totalDonations }
+    },
+    recentRequests: recentRequests,
+    recentAuditLogs: recentActivity,
     stats: {
       totalUsers,
       totalDonors,
@@ -105,7 +124,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     },
     monthlyRegistrations: serializeData(monthlyRegistrations),
     bloodTypeDistribution: serializeData(bloodTypeDistribution),
-    recentActivity,
     requestTrends: serializeData(requestTrends)
   };
 
@@ -695,7 +713,9 @@ export const getSystemStats = asyncHandler(async (req, res) => {
   ]);
 
   const rate = fulfillmentRate[0] || { total: 0, fulfilled: 0 };
-  const ratePercentage = rate.total > 0 ? (rate.fulfilled / rate.total) * 100 : 0;
+  const totalFulfill = Number(rate.total || 0);
+  const fulfilledCount = Number(rate.fulfilled || 0);
+  const ratePercentage = totalFulfill > 0 ? (fulfilledCount / totalFulfill) * 100 : 0;
 
   const responseData = {
     totalUsers,
@@ -703,7 +723,7 @@ export const getSystemStats = asyncHandler(async (req, res) => {
     totalDonations,
     totalRequests,
     fulfillmentRate: Math.round(ratePercentage),
-    avgResponseTime: Math.round(avgResponseTime[0]?.avg_seconds || 0)
+    avgResponseTime: Math.round(Number(avgResponseTime[0]?.avg_seconds || 0))
   };
 
   res.json({

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api';
+const API_URL = window.API_URL || 'http://localhost:5001/api';
 
 /**
  * Base API Client for LifeLink

@@ -1433,73 +1433,7 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
   }
 }
 
-/* ==========================================================================
-   Offline / Sample Data Banner
-   ========================================================================== */
-#offline-banner {
-  display: none;
-  align-items: center;
-  gap: 10px;
-  background: linear-gradient(90deg, #fffbe6 0%, #fff8dc 100%);
-  border: 1px solid #f6d860;
-  border-radius: 10px;
-  padding: 11px 16px;
-  margin-bottom: 1.25rem;
-  font-size: 0.845rem;
-  color: #7a5c00;
-  font-weight: 500;
-  box-shadow: 0 1px 6px rgba(215, 163, 0, 0.10);
-  animation: bannerSlideIn 0.28s ease;
-}
-#offline-banner.visible {
-  display: flex;
-}
-@keyframes bannerSlideIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.offline-dot {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #d97706;
-  flex-shrink: 0;
-  animation: offlinePulse 1.6s ease-in-out infinite;
-}
-@keyframes offlinePulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.8); }
-}
-.offline-banner-text {
-  flex: 1;
-  line-height: 1.4;
-}
-.offline-banner-text strong {
-  display: block;
-  font-size: 0.875rem;
-  color: #6b4c00;
-}
-.offline-banner-text span {
-  color: #8a6a10;
-  font-weight: 400;
-  font-size: 0.8rem;
-}
-#offline-retry-btn {
-  background: #d97706;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.18s;
-  font-family: inherit;
-}
-#offline-retry-btn:hover { background: #b45309; }
-#offline-retry-btn:active { transform: scale(0.97); }
+
 
 /* ── Critical Alerts Banner ── */
 .critical-alert-banner {

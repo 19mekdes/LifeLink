@@ -226,12 +226,15 @@ import api from '../../src/js/api/api.js';
   }
 
   // ------------------------------------------------------------------
-  // MOBILE SIDEBAR HAMBURGER NAVIGATION
+  // SIDEBAR & TOPBAR NAVIGATION HANDLERS
   // ------------------------------------------------------------------
   const hamburgerBtn = $('#hamburger-btn');
   const sidebar = $('#sidebar');
   const sidebarOverlay = $('#sidebar-overlay');
+  const sidebarToggleBtn = $('#sidebar-toggle-btn');
+  const mainContent = $('#main-content');
 
+  // Mobile sidebar toggle
   function toggleSidebar() {
     if (sidebar) sidebar.classList.toggle('open');
     if (sidebarOverlay) sidebarOverlay.classList.toggle('open');
@@ -245,9 +248,57 @@ import api from '../../src/js/api/api.js';
   hamburgerBtn?.addEventListener('click', toggleSidebar);
   sidebarOverlay?.addEventListener('click', closeSidebar);
 
-  // Topbar hospital account navigation to profile
+  // Desktop sidebar collapse toggle (3-line button next to LifeLink)
+  sidebarToggleBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (sidebar) sidebar.classList.toggle('collapsed');
+    if (mainContent) mainContent.classList.toggle('collapsed-sidebar');
+  });
+
+  // Topbar hospital account popup dropdown
   const topbarAccount = $('#topbar-hospital-account');
-  topbarAccount?.addEventListener('click', () => showPage('profile'));
+  const accountDropdown = $('#account-dropdown');
+
+  function toggleAccountDropdown(show) {
+    const isShown = show !== undefined ? show : !accountDropdown?.classList.contains('show');
+    if (accountDropdown) accountDropdown.classList.toggle('show', isShown);
+    if (topbarAccount) topbarAccount.classList.toggle('active', isShown);
+  }
+
+  topbarAccount?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleAccountDropdown();
+  });
+
+  // Close account dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (accountDropdown && !accountDropdown.contains(e.target) && topbarAccount && !topbarAccount.contains(e.target)) {
+      toggleAccountDropdown(false);
+    }
+  });
+
+  // Account dropdown menu navigation actions
+  $('#dropdown-item-profile')?.addEventListener('click', () => {
+    toggleAccountDropdown(false);
+    showPage('profile');
+  });
+
+  $('#dropdown-item-notifications')?.addEventListener('click', () => {
+    toggleAccountDropdown(false);
+    showPage('settings');
+    const notifTab = $('#settings-tabs .tab[data-filter="notifications"]');
+    if (notifTab) notifTab.click();
+  });
+
+  $('#dropdown-item-settings')?.addEventListener('click', () => {
+    toggleAccountDropdown(false);
+    showPage('settings');
+  });
+
+  $('#dropdown-item-logout')?.addEventListener('click', () => {
+    toggleAccountDropdown(false);
+    api.logout();
+  });
 
   // ------------------------------------------------------------------
   // NAVIGATION & PAGE ROUTING
@@ -323,9 +374,12 @@ import api from '../../src/js/api/api.js';
     safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
       const hospitalName = profile.hospitalName || profile.user?.name || 'Hospital';
-      $('#hospital-name').textContent = hospitalName;
-      $('#welcome-hospital-name').textContent = hospitalName;
-      $('#hospital-avatar').textContent = hospitalName.charAt(0).toUpperCase();
+      const hospitalEmail = profile.user?.email || profile.email || 'hospital@lifelink.org';
+      if ($('#hospital-name')) $('#hospital-name').textContent = hospitalName;
+      if ($('#welcome-hospital-name')) $('#welcome-hospital-name').textContent = hospitalName;
+      if ($('#hospital-avatar')) $('#hospital-avatar').textContent = hospitalName.charAt(0).toUpperCase();
+      if ($('#dropdown-hospital-name')) $('#dropdown-hospital-name').textContent = hospitalName;
+      if ($('#dropdown-hospital-email')) $('#dropdown-hospital-email').textContent = hospitalEmail;
 
       // Default location in create request form if empty
       const locInput = $('#location');

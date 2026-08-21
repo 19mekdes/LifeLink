@@ -16,16 +16,23 @@
     <!-- ================= SIDEBAR ================= -->
     <aside class="sidebar" id="sidebar">
 
-<div class="logo">
-        <span class="logo-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Blood droplet -->
-            <path d="M12 2C12 2 5 10 5 15a7 7 0 0 0 14 0C19 10 12 2 12 2Z" fill="#d71920"/>
-            <!-- White heart outline inside the droplet -->
-            <path d="M12 19.5C12 19.5 6.2 15 6.2 11.2C6.2 9.1 7.9 7.5 9.9 7.5C10.9 7.5 11.7 7.9 12 8.5C12.3 7.9 13.1 7.5 14.1 7.5C16.1 7.5 17.8 9.1 17.8 11.2C17.8 15 12 19.5 12 19.5Z" stroke="#ffffff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </span>
-        <span>LifeLink</span>
+      <div class="logo">
+        <a href="index.html" class="logo-brand" id="logo-brand" title="Go to Home">
+          <span class="logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Blood droplet -->
+              <path d="M12 2C12 2 5 10 5 15a7 7 0 0 0 14 0C19 10 12 2 12 2Z" fill="#d71920"/>
+              <!-- White heart outline inside the droplet -->
+              <path d="M12 19.5C12 19.5 6.2 15 6.2 11.2C6.2 9.1 7.9 7.5 9.9 7.5C10.9 7.5 11.7 7.9 12 8.5C12.3 7.9 13.1 7.5 14.1 7.5C16.1 7.5 17.8 9.1 17.8 11.2C17.8 15 12 19.5 12 19.5Z" stroke="#ffffff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="logo-text">LifeLink</span>
+        </a>
+        <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle Desktop Sidebar" title="Collapse/Expand Sidebar">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
 
       <nav class="sidebar-nav">
@@ -63,8 +70,8 @@
       </nav>
 
       <button class="logout-btn" id="logout-btn">
-        <span>↪</span>
-        <span>Logout</span>
+        <span class="logout-icon">↪</span>
+        <span class="logout-text">Logout</span>
       </button>
 
     </aside>
@@ -74,7 +81,7 @@
 
 
     <!-- ================= MAIN AREA ================= -->
-    <main class="main">
+    <main class="main" id="main-content">
 
       <!-- TOP BAR -->
       <header class="topbar">
@@ -87,17 +94,44 @@
           </button>
         </div>
 
-        <div class="hospital-account" id="topbar-hospital-account" title="View Profile">
+        <div class="hospital-account-wrapper">
+          <div class="hospital-account" id="topbar-hospital-account" title="Account Options">
 
-          <div class="hospital-avatar" id="hospital-avatar">H</div>
+            <div class="hospital-avatar" id="hospital-avatar">H</div>
 
-          <div class="hospital-info">
-            <strong id="hospital-name">Hospital</strong>
-            <span>Hospital</span>
+            <div class="hospital-info">
+              <strong id="hospital-name">Hospital</strong>
+              <span>Hospital</span>
+            </div>
+
+            <button class="account-arrow" id="account-menu-btn">⌄</button>
+
           </div>
 
-          <button class="account-arrow" id="account-menu-btn">⌄</button>
-
+          <div class="account-dropdown" id="account-dropdown">
+            <div class="dropdown-header">
+              <strong id="dropdown-hospital-name">Hospital</strong>
+              <span id="dropdown-hospital-email">hospital@lifelink.org</span>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="dropdown-item-profile">
+              <span class="dropdown-icon">♙</span>
+              <span>Hospital Profile</span>
+            </button>
+            <button class="dropdown-item" id="dropdown-item-notifications">
+              <span class="dropdown-icon">🔔</span>
+              <span>Notifications</span>
+            </button>
+            <button class="dropdown-item" id="dropdown-item-settings">
+              <span class="dropdown-icon">⚙</span>
+              <span>Settings</span>
+            </button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item logout" id="dropdown-item-logout">
+              <span class="dropdown-icon">↪</span>
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
 
       </header>

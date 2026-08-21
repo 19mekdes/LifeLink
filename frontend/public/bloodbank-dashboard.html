@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeLink - Dashboard</title>
   <link rel="stylesheet" href="../src/css/bloodbank-dashboard.css">
+  <link rel="stylesheet" href="../src/css/bloodbank-dashboard-additions.css">
 
   <base target="_blank">
 </head>
@@ -15,41 +16,42 @@
   <aside class="sidebar" id="sidebar">
     <div>
       <div class="logo-area">
-        <div class="logo-icon">🩸</div>
+        <div class="logo-icon" data-icon="droplet"></div>
         <div class="logo-text">LifeLink</div>
         <button class="sidebar-close" id="sidebar-close">&times;</button>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">Main</div>
         <ul class="nav-links">
-          <li><a class="nav-item active" href="bloodbank-dashboard.html"><span class="nav-icon">📊</span><span
-                class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" href="bloodbank/bloodbank-inventory.html"><span class="nav-icon">🩸</span><span
-                class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" href="bloodbank/bloodbank-requests.html"><span class="nav-icon">🏥</span><span
-                class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" href="bloodbank/bloodbank-outreach.html"><span class="nav-icon">👥</span><span
-                class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item" href="bloodbank/bloodbank-donations.html"><span class="nav-icon">📥</span><span
-                class="nav-label">Donation Records</span></a></li>
+          <li><a class="nav-item active" target="_self" href="bloodbank-dashboard.html"><span class="nav-icon"
+                data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-inventory.html"><span class="nav-icon"
+                data-icon="droplet"></span><span class="nav-label">Blood Inventory</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-requests.html"><span class="nav-icon"
+                data-icon="hospital"></span><span class="nav-label">Hospital Requests</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-outreach.html"><span class="nav-icon"
+                data-icon="users"></span><span class="nav-label">Donor Outreach</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-donations.html"><span class="nav-icon"
+                data-icon="inbox"></span><span class="nav-label">Donation Records</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">Insights</div>
         <ul class="nav-links">
-          <li><a class="nav-item" href="bloodbank/bloodbank-analytics.html"><span class="nav-icon">📈</span><span
-                class="nav-label">Analytics</span></a></li>
-          <li><a class="nav-item" href="bloodbank/bloodbank-notifications.html"><span class="nav-icon">🔔</span><span
-                class="nav-label">Notifications</span> <span class="nav-badge" id="notif-badge">0</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-analytics.html"><span class="nav-icon"
+                data-icon="trending"></span><span class="nav-label">Analytics</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-notifications.html"><span class="nav-icon"
+                data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
+                id="notif-badge">0</span></a></li>
         </ul>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">System</div>
         <ul class="nav-links">
-          <li><a class="nav-item" href="bloodbank/bloodbank-profile.html"><span class="nav-icon">🏥</span><span
-                class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" href="bloodbank/bloodbank-settings.html"><span class="nav-icon">⚙️</span><span
-                class="nav-label">Settings</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-profile.html"><span class="nav-icon"
+                data-icon="hospital"></span><span class="nav-label">Bank Profile</span></a></li>
+          <li><a class="nav-item" target="_self" href="bloodbank/bloodbank-settings.html"><span class="nav-icon"
+                data-icon="settings"></span><span class="nav-label">Settings</span></a></li>
         </ul>
       </div>
     </div>
@@ -58,6 +60,11 @@
         <span class="status-dot online" id="sidebar-status-dot"></span>
         <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
       </div>
+      <div class="sidebar-footer-actions">
+        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
+          <span data-icon="logout" data-icon-size="15"></span> Logout
+        </button>
+      </div>
     </div>
   </aside>
   <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
@@ -65,7 +72,7 @@
   <!-- MAIN CONTENT -->
   <main class="main-content">
     <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
       <div class="header-title">
         <h1 id="page-title">Dashboard</h1>
         <p>Welcome back, <span id="bank-name-header"></span> — here's what's happening today.</p>
@@ -73,7 +80,7 @@
       <div class="header-actions">
         <button class="header-btn" id="notif-header-btn" title="Notifications"
           onclick="window.location.href='bloodbank/bloodbank-notifications.html'">
-          🔔
+          <span data-icon="bell" data-icon-size="18"></span>
           <span class="dot" id="header-notif-dot"></span>
         </button>
         <div class="user-profile-wrap" id="user-profile-wrap">
@@ -87,9 +94,12 @@
           <div class="user-dropdown" id="user-dropdown">
             <div class="user-dropdown-name" id="dropdown-user-name">—</div>
             <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank/bloodbank-profile.html">🏥 Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank/bloodbank-settings.html">⚙️ Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn">🚪 Logout</a>
+            <a class="user-dropdown-item" target="_self" href="bloodbank/bloodbank-profile.html"><span
+                data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
+            <a class="user-dropdown-item" target="_self" href="bloodbank/bloodbank-settings.html"><span
+                data-icon="settings" data-icon-size="15"></span> Settings</a>
+            <a class="user-dropdown-item danger" id="dropdown-logout-btn"><span data-icon="logout"
+                data-icon-size="15"></span> Logout</a>
           </div>
         </div>
       </div>
@@ -100,7 +110,7 @@
         <div class="metrics-grid">
           <div class="metric-card highlight">
             <div class="metric-header">
-              <div class="metric-icon red">🩸</div>
+              <div class="metric-icon red" data-icon="droplet"></div>
             </div>
             <div class="metric-label">Total Units in Stock</div>
             <div class="metric-value" id="stat-total-stock">—</div>
@@ -108,7 +118,7 @@
           </div>
           <div class="metric-card warning">
             <div class="metric-header">
-              <div class="metric-icon yellow">🏥</div>
+              <div class="metric-icon yellow" data-icon="hospital"></div>
             </div>
             <div class="metric-label">Active Requests</div>
             <div class="metric-value" id="stat-active-requests">—</div>
@@ -116,7 +126,7 @@
           </div>
           <div class="metric-card success">
             <div class="metric-header">
-              <div class="metric-icon green">✅</div>
+              <div class="metric-icon green" data-icon="check"></div>
             </div>
             <div class="metric-label">Fulfilled Requests</div>
             <div class="metric-value" id="stat-fulfilled-today">—</div>
@@ -124,7 +134,7 @@
           </div>
           <div class="metric-card info">
             <div class="metric-header">
-              <div class="metric-icon blue">⚠️</div>
+              <div class="metric-icon blue" data-icon="alert"></div>
             </div>
             <div class="metric-label">Critical Groups</div>
             <div class="metric-value" id="stat-low-stock">—</div>
@@ -134,16 +144,22 @@
 
         <div class="section-box">
           <div class="section-header">
-            <h2>🩸 Current Stock Overview</h2>
-            <a class="btn btn-secondary btn-sm" href="bloodbank/bloodbank-inventory.html">View All</a>
+            <h2><span data-icon="droplet" data-icon-size="17"></span> Current Stock Overview</h2>
+            <a class="btn btn-secondary btn-sm" target="_self" href="bloodbank/bloodbank-inventory.html">View All</a>
           </div>
-          <div class="inventory-grid" id="dash-inventory-summary"></div>
+          <div class="inventory-grid" id="dash-inventory-summary">
+            <div class="loading-state">
+              <div class="spinner-lg"></div>
+              <p>Loading inventory…</p>
+            </div>
+          </div>
         </div>
 
         <div class="section-box">
           <div class="section-header">
-            <h2>🏥 Pending Hospital Requests</h2>
-            <a class="btn btn-primary btn-sm" href="bloodbank/bloodbank-requests.html">Manage Requests</a>
+            <h2><span data-icon="hospital" data-icon-size="17"></span> Pending Hospital Requests</h2>
+            <a class="btn btn-primary btn-sm" target="_self" href="bloodbank/bloodbank-requests.html">Manage
+              Requests</a>
           </div>
           <div class="table-wrap">
             <table>
@@ -157,7 +173,13 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody id="dash-requests-table"></tbody>
+              <tbody id="dash-requests-table">
+                <tr>
+                  <td colspan="6" style="text-align:center; padding: 28px;">
+                    <div class="spinner-lg" style="margin:0 auto;"></div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -171,7 +193,7 @@
   <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
   <script type="module">
     import api from '../src/js/api/api.js';
-    import { initShell, loadCommonData, showToast } from '../src/js/bloodbank-sidebar-common.js';
+    import { initShell, loadCommonData, showToast, withProgress, iconMarkup } from '../src/js/bloodbank-sidebar-common.js';
 
     const shell = initShell();
     if (shell) {
@@ -198,17 +220,18 @@
             </div>`;
       };
       document.getElementById('dash-inventory-summary').innerHTML = inventory.map(renderCard).join('') ||
-        '<div class="empty-state"><div class="icon">🩸</div><h4>No inventory yet</h4></div>';
+        `<div class="empty-state"><div class="icon-lg">${iconMarkup('droplet', { size: 34 })}</div><h4>No inventory yet</h4><p>Add stock from the Blood Inventory page to see it summarized here.</p></div>`;
 
       async function loadRequests() {
-        const res = await api.get('/blood-banks/requests');
-        const requests = res.success ? (res.data.requests || []) : [];
-        const hospitalName = (req) => req.hospital?.hospitalName || req.hospital?.user?.name || '—';
-        const urgencyBadge = (u) => u === 'CRITICAL_EMERGENCY' ? 'emergency' : u === 'URGENT' ? 'urgent' : 'pending';
+        await withProgress(async () => {
+          const res = await api.get('/blood-banks/requests');
+          const requests = res.success ? (res.data.requests || []) : [];
+          const hospitalName = (req) => req.hospital?.hospitalName || req.hospital?.user?.name || '—';
+          const urgencyBadge = (u) => u === 'CRITICAL_EMERGENCY' ? 'emergency' : u === 'URGENT' ? 'urgent' : 'pending';
 
-        document.getElementById('dash-requests-table').innerHTML = requests
-          .filter((r) => r.status === 'PENDING')
-          .map((req) => `<tr>
+          const pending = requests.filter((r) => r.status === 'PENDING');
+          document.getElementById('dash-requests-table').innerHTML = pending
+            .map((req) => `<tr>
               <td>${hospitalName(req)}</td>
               <td><strong>${req.bloodType}</strong></td>
               <td>${req.unitsRequired} Units</td>
@@ -216,18 +239,24 @@
               <td>${new Date(req.createdAt).toLocaleDateString()}</td>
               <td><button class="btn btn-success btn-sm" data-approve="${req.id}">Approve</button></td>
             </tr>`).join('') ||
-          '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No pending requests</td></tr>';
+            '<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:28px;">No pending requests right now</td></tr>';
 
-        document.querySelectorAll('[data-approve]').forEach((btn) => {
-          btn.addEventListener('click', async () => {
-            try {
-              const r = await api.put(`/blood-banks/requests/${btn.dataset.approve}/approve`, {});
-              if (!r.success) throw new Error(r.message);
-              showToast('Request approved. Dispatch initiated.');
-              loadRequests();
-            } catch (err) {
-              showToast(err.message || 'Failed to approve request', 'error');
-            }
+          document.querySelectorAll('[data-approve]').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              btn.disabled = true;
+              const original = btn.textContent;
+              btn.textContent = 'Approving…';
+              try {
+                const r = await api.put(`/blood-banks/requests/${btn.dataset.approve}/approve`, {});
+                if (!r.success) throw new Error(r.message);
+                showToast('Request approved. Dispatch initiated.');
+                loadRequests();
+              } catch (err) {
+                showToast(err.message || 'Failed to approve request', 'error');
+                btn.disabled = false;
+                btn.textContent = original;
+              }
+            });
           });
         });
       }

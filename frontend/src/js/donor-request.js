@@ -18,20 +18,26 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const data =
-                await apiRequest(
-                    "/api/donors/requests"
-                );
+                await api.get("/donors/requests");
 
+            console.log("BLOOD REQUESTS API DATA:", data);
             console.log(
-                "Blood requests:",
+                "Blood requests response:",
                 data
             );
 
 
+            // Backend response:
+            // {
+            //     success: true,
+            //     data: {
+            //         requests: [],
+            //         pagination: {}
+            //     }
+            // }
+
             const requests =
-                Array.isArray(data)
-                    ? data
-                    : data.requests || [];
+                data?.data?.requests || [];
 
 
             if (!requestList) return;
@@ -53,9 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 requests.map(request => {
 
                     const id =
-                        request.id ||
-                        request.requestId ||
-                        request._id;
+                        request.id;
 
 
                     const bloodType =
@@ -64,8 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                     const hospital =
-                        request.hospital ||
-                        request.hospitalName ||
+                        request.hospital?.user?.name ||
+                        request.hospital?.name ||
                         "Hospital";
 
 
@@ -76,13 +80,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const urgency =
                         request.urgency ||
-                        request.priority ||
                         "Normal";
 
 
                     const status =
                         request.status ||
-                        "Pending";
+                        "PENDING";
+
+
+                    const userResponse =
+                        request.userResponse;
 
 
                     return `
@@ -92,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                 <strong>
                                     ${request.title ||
-                                    "Blood Request"}
+                        "Blood Request"}
                                 </strong>
 
                                 <p>
@@ -103,9 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <small>
                                     ${hospital}
                                     ${location !==
-                                    "Location unavailable"
-                                        ? " • " + location
-                                        : ""}
+                            "Location unavailable"
+                            ? " • " + location
+                            : ""
+                        }
                                 </small>
 
                                 <small>
@@ -123,26 +131,30 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </span>
 
 
-                                ${
-                                    status.toLowerCase() ===
-                                    "pending"
+         ${userResponse
+                            ? `
+        <button
+            class="respond-btn"
+            disabled>
+            ${userResponse}
+        </button>
+    `
+                            : `
+        <button
+            class="respond-btn accept-btn"
+            data-request-id="${id}"
+            data-response="ACCEPTED">
+            Accept
+        </button>
 
-                                    ? `
-                                        <button
-                                            class="respond-btn"
-                                            data-request-id="${id}">
-                                            Respond
-                                        </button>
-                                      `
-
-                                    : `
-                                        <button
-                                            class="respond-btn"
-                                            disabled>
-                                            ${status}
-                                        </button>
-                                      `
-                                }
+        <button
+            class="respond-btn reject-btn"
+            data-request-id="${id}"
+            data-response="REJECTED">
+            Reject
+        </button>
+    `
+                        }
 
                             </div>
 
@@ -152,10 +164,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }).join("");
 
 
-            // Add response button listeners
+            // ==========================================
+            // RESPONSE BUTTONS
+            // ==========================================
 
             document
-                .querySelectorAll(".respond-btn")
+                .querySelectorAll(
+                    ".respond-btn[data-request-id]"
+                )
                 .forEach(button => {
 
                     button.addEventListener(
@@ -165,8 +181,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             const requestId =
                                 button.dataset.requestId;
 
+                            const response =
+                                button.dataset.response;
+
                             respondToRequest(
                                 requestId,
+                                response,
                                 button
                             );
 
@@ -191,8 +211,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         Unable to load blood requests.
                     </p>
                 `;
+
             }
+
         }
+
     }
 
 
@@ -202,26 +225,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function respondToRequest(
         requestId,
+        response,
         button
     ) {
 
-        if (!requestId) {
+        if (!requestId || !response) {
 
             console.error(
-                "Missing request ID."
+                "Missing request ID or response."
             );
 
             return;
         }
 
 
+        const action =
+            response === "ACCEPTED"
+                ? "accept"
+                : "reject";
+
+
         const confirmed =
             confirm(
-                "Would you like to respond to this blood request?"
+                `Are you sure you want to ${action} this blood request?`
             );
 
 
-        if (!confirmed) return;
+        if (!confirmed) {
+            return;
+        }
 
 
         try {
@@ -229,18 +261,16 @@ document.addEventListener("DOMContentLoaded", () => {
             button.disabled = true;
 
             button.textContent =
-                "Sending...";
+                response === "ACCEPTED"
+                    ? "Accepting..."
+                    : "Rejecting...";
 
 
             const result =
-                await apiRequest(
-                    `/api/donors/requests/${requestId}/respond`,
+                await api.post(
+                    `/donors/requests/${requestId}/respond`,
                     {
-                        method: "POST",
-
-                        body: JSON.stringify({
-                            response: "accepted"
-                        })
+                        response: response
                     }
                 );
 
@@ -251,12 +281,43 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
+            if (!result?.success) {
+
+                throw new Error(
+                    result?.message ||
+                    "Request response failed."
+                );
+
+            }
+
+
             button.textContent =
-                "Response Sent";
+                response;
+
+
+            // Disable the other button
+            const requestCard =
+                button.closest(".request-card");
+
+            if (requestCard) {
+
+                requestCard
+                    .querySelectorAll(
+                        ".respond-btn[data-request-id]"
+                    )
+                    .forEach(otherButton => {
+
+                        otherButton.disabled = true;
+
+                    });
+
+            }
 
 
             alert(
-                "Thank you. Your response has been sent to the blood bank."
+                response === "ACCEPTED"
+                    ? "You accepted this blood request."
+                    : "You rejected this blood request."
             );
 
 
@@ -271,13 +332,17 @@ document.addEventListener("DOMContentLoaded", () => {
             button.disabled = false;
 
             button.textContent =
-                "Respond";
+                response === "ACCEPTED"
+                    ? "Accept"
+                    : "Reject";
 
 
             alert(
                 "Unable to respond to this request. Please try again."
             );
+
         }
+
     }
 
 
@@ -290,29 +355,40 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const data =
-                await apiRequest(
-                    "/api/donors/notifications"
+                await api.get(
+                    "/donors/notifications"
                 );
 
 
-            const notifications =
-                Array.isArray(data)
-                    ? data
-                    : data.notifications || [];
+            console.log(
+                "Request page notification response:",
+                data
+            );
 
 
             const unread =
-                notifications.filter(
-                    notification =>
-                        !notification.read &&
-                        !notification.isRead
-                ).length;
+                data?.data?.unreadCount || 0;
 
 
             if (notificationCount) {
 
                 notificationCount.textContent =
                     unread;
+
+            }
+
+
+            const topNotificationCount =
+                document.getElementById(
+                    "topNotificationCount"
+                );
+
+
+            if (topNotificationCount) {
+
+                topNotificationCount.textContent =
+                    unread;
+
             }
 
 
@@ -322,7 +398,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Failed to load notifications:",
                 error
             );
+
         }
+
     }
 
 
@@ -331,6 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
 
     loadRequests();
+
     loadNotificationCount();
 
 });

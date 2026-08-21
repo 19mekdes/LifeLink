@@ -70,6 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 name;
 
         }
+        document.querySelectorAll(".profile-name").forEach(element => {
+            element.textContent = name;
+        });
+
+        document.querySelectorAll(".profile-avatar").forEach(element => {
+            element.textContent = initial;
+        });
 
 
         if (profileInitial) {
@@ -140,56 +147,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
-            if (
-                typeof apiRequest !==
-                "function"
-            ) {
-
-                return;
-
-            }
-
-
             const data =
-                await apiRequest(
-                    "/api/donors/notifications"
-                );
+                await api.get("/donors/notifications");
 
+            console.log(
+                "Notification response:",
+                data
+            );
 
             const notifications =
-                Array.isArray(data)
-                    ? data
-                    : (
-                        data &&
-                        Array.isArray(
-                            data.notifications
-                        )
-                            ? data.notifications
-                            : []
-                    );
-
+                data?.data?.notifications || [];
 
             const unread =
-                notifications.filter(
-                    notification =>
-                        !notification.read &&
-                        !notification.isRead
-                ).length;
-
+                data?.data?.unreadCount || 0;
 
             const counters =
                 document.querySelectorAll(
                     "#notificationCount, #topNotificationCount"
                 );
 
-
             counters.forEach(counter => {
-
-                counter.textContent =
-                    unread;
-
+                counter.textContent = unread;
             });
-
 
         } catch (error) {
 
@@ -324,38 +303,38 @@ document.addEventListener("DOMContentLoaded", () => {
    LOGOUT
 ===================================================== */
 
-function setupLogout() {
+    function setupLogout() {
 
-    const logoutButton =
-        document.getElementById("logoutButton");
+        const logoutButton =
+            document.getElementById("logoutButton");
 
-    if (!logoutButton) {
-        return;
-    }
-
-    logoutButton.addEventListener("click", event => {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        const confirmed =
-            confirm("Are you sure you want to logout?");
-
-        if (!confirmed) {
+        if (!logoutButton) {
             return;
         }
 
-        // Remove donor authentication data
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("lifelinkDonor");
+        logoutButton.addEventListener("click", event => {
 
-        // Go to login page
-        window.location.href = "login.html";
+            event.preventDefault();
+            event.stopPropagation();
 
-    });
+            const confirmed =
+                confirm("Are you sure you want to logout?");
 
-}
+            if (!confirmed) {
+                return;
+            }
+
+            // Remove donor authentication data
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("lifelinkDonor");
+
+            // Go to login page
+            window.location.href = "login.html";
+
+        });
+
+    }
 
     /* =====================================================
        SIDEBAR
@@ -516,3 +495,95 @@ function setupLogout() {
     setupSidebar();
 
 });
+
+// =====================================================
+// DYNAMIC PROFILE DROPDOWN
+// =====================================================
+
+async function updateProfileDropdown() {
+
+    try {
+
+        const response = await api.get("/donors/profile");
+
+        console.log(
+            "Dropdown profile data:",
+            response
+        );
+
+        if (
+            !response.success ||
+            !response.data ||
+            !response.data.user
+        ) {
+            return;
+        }
+
+        const name =
+            response.data.user.name;
+
+        if (!name) {
+            return;
+        }
+
+
+        // ---------------------------------------------
+        // UPDATE PROFILE NAME
+        // ---------------------------------------------
+
+        const nameElement =
+            document.querySelector(
+                ".profile-dropdown-header strong"
+            );
+
+        if (nameElement) {
+
+            nameElement.textContent =
+                name;
+
+        }
+
+
+        // ---------------------------------------------
+        // UPDATE PROFILE CIRCLE
+        // ---------------------------------------------
+
+        const initialElement =
+            document.getElementById(
+                "dashboardProfileInitial"
+            );
+
+        if (initialElement) {
+
+            const nameParts =
+                name.trim().split(/\s+/);
+
+            let initials =
+                nameParts[0][0];
+
+            if (nameParts.length > 1) {
+
+                initials +=
+                    nameParts[
+                    nameParts.length - 1
+                    ][0];
+
+            }
+
+            initialElement.textContent =
+                initials.toUpperCase();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Could not update profile dropdown:",
+            error
+        );
+
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", updateProfileDropdown);

@@ -1,19 +1,19 @@
 import express from 'express';
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { authenticate } from '../middleware/auth.js';
 import { authorize } from '../middleware/roleAuth.js';
 import {
   getDashboard,
   getInventory,
   updateInventory,
+  deleteInventoryItem,
   getRequests,
   approveRequest,
-   deleteInventoryItem,
   rejectRequest,
   recordDonation,
-  getProfile,        
-  updateProfile,     
-  getStats           
+  getProfile,
+  updateProfile,
+  getStats
 } from '../controllers/bloodBankController.js';
 
 const router = express.Router();
@@ -52,17 +52,66 @@ router.put('/profile', [
 router.get('/stats', getStats);
 
 // ============ DASHBOARD ============
+/**
+ * @route   GET /api/blood-banks/dashboard
+ * @desc    Get blood bank dashboard
+ * @access  Private (Blood Bank)
+ */
 router.get('/dashboard', getDashboard);
 
 // ============ INVENTORY ============
+/**
+ * @route   GET /api/blood-banks/inventory
+ * @desc    Get all inventory items
+ * @access  Private (Blood Bank)
+ */
 router.get('/inventory', getInventory);
-router.put('/inventory', updateInventory);
+
+/**
+ * @route   PUT /api/blood-banks/inventory
+ * @desc    Create or update inventory item
+ * @access  Private (Blood Bank)
+ */
+router.put('/inventory', [
+  body('bloodType')
+    .notEmpty()
+    .withMessage('Blood type is required')
+    .isIn(['A_POS', 'A_NEG', 'B_POS', 'B_NEG', 'AB_POS', 'AB_NEG', 'O_POS', 'O_NEG'])
+    .withMessage('Invalid blood type'),
+  body('unitsAvailable')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Units must be a non-negative integer'),
+  body('minStockLevel')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Min stock level must be a non-negative integer')
+], updateInventory);
+
+/**
+ * @route   DELETE /api/blood-banks/inventory/:bloodType
+ * @desc    Delete an inventory item
+ * @access  Private (Blood Bank)
+ */
+router.delete(
+  '/inventory/:bloodType',
+  [
+    param('bloodType')
+      .notEmpty()
+      .withMessage('Blood type is required')
+      .isIn(['A_POS', 'A_NEG', 'B_POS', 'B_NEG', 'AB_POS', 'AB_NEG', 'O_POS', 'O_NEG'])
+      .withMessage('Invalid blood type')
+  ],
+  deleteInventoryItem
+);
 
 // ============ REQUESTS ============
+/**
+ * @route   GET /api/blood-banks/requests
+ * @desc    Get all blood requests
+ * @access  Private (Blood Bank)
+ */
 router.get('/requests', getRequests);
-router.put('/requests/:id/approve', approveRequest);
-router.put('/requests/:id/reject', rejectRequest);
-
 
 /**
  * @route   PUT /api/blood-banks/requests/:id/approve
@@ -70,6 +119,9 @@ router.put('/requests/:id/reject', rejectRequest);
  * @access  Private (Blood Bank)
  */
 router.put('/requests/:id/approve', [
+  param('id')
+    .notEmpty()
+    .withMessage('Request ID is required'),
   body('notes').optional().isString().withMessage('Notes must be a string')
 ], approveRequest);
 
@@ -79,15 +131,24 @@ router.put('/requests/:id/approve', [
  * @access  Private (Blood Bank)
  */
 router.put('/requests/:id/reject', [
+  param('id')
+    .notEmpty()
+    .withMessage('Request ID is required'),
   body('reason').optional().isString().withMessage('Reason must be a string')
 ], rejectRequest);
+
+// ============ DONATIONS ============
 /**
- * @route   DELETE /api/blood-banks/inventory/:bloodType
- * @desc    Delete an inventory item
+ * @route   POST /api/blood-banks/donations
+ * @desc    Record a donation
  * @access  Private (Blood Bank)
  */
-router.delete('/inventory/:bloodType', deleteInventoryItem);
-// ============ DONATIONS ============
-router.post('/donations', recordDonation);
+router.post('/donations', [
+  body('donorId').notEmpty().withMessage('Donor ID is required'),
+  body('requestId').notEmpty().withMessage('Request ID is required'),
+  body('units').isInt({ min: 1 }).withMessage('Units must be at least 1'),
+  body('notes').optional().isString().withMessage('Notes must be a string'),
+  body('donationDate').optional().isISO8601().withMessage('Invalid date format')
+], recordDonation);
 
 export default router;

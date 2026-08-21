@@ -1,5 +1,3 @@
-// backend/src/controllers/bloodBankController.js
-
 import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
@@ -26,10 +24,7 @@ const serializeData = (data) => {
 };
 
 // ============ GET BLOOD BANK PROFILE ============
-/**
- * Get blood bank profile
- * GET /api/blood-banks/profile
- */
+
 export const getProfile = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id },
@@ -64,10 +59,7 @@ export const getProfile = asyncHandler(async (req, res) => {
 });
 
 // ============ UPDATE BLOOD BANK PROFILE ============
-/**
- * Update blood bank profile
- * PUT /api/blood-banks/profile
- */
+
 export const updateProfile = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -143,10 +135,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 });
 
 // ============ GET BLOOD BANK STATISTICS ============
-/**
- * Get blood bank statistics
- * GET /api/blood-banks/stats
- */
+
 export const getStats = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
@@ -464,7 +453,7 @@ export const updateInventory = asyncHandler(async (req, res) => {
     message: 'Inventory updated successfully'
   });
 });
-//==========delete invertory =====
+
 // ============ DELETE INVENTORY ITEM ============
 export const deleteInventoryItem = asyncHandler(async (req, res) => {
   const { bloodType } = req.params;
@@ -490,7 +479,6 @@ export const deleteInventoryItem = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Inventory item not found');
   }
 
-  // Guard: don't delete if units are currently reserved against active requests
   if (inventory.unitsReserved > 0) {
     throw new ApiError(400, 'Cannot delete: units are currently reserved for pending requests');
   }

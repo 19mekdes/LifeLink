@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api';
+const API_URL = 'http://localhost:5000/api';
 
 /**
  * Base API Client for LifeLink
@@ -76,16 +76,11 @@ class ApiClient {
       const response = await fetch(url, config);
       const data = await response.json();
       
-      // Handle token expiration (401 Unauthorized)
+      // Handle 401 Unauthorized (expired, invalid, missing, or stale token)
       if (response.status === 401) {
-        // Check if it's a token expiration
-        if (data.message?.toLowerCase().includes('expired') || 
-            data.message?.toLowerCase().includes('invalid')) {
-          this.clearAuth();
-          // Redirect to login if not already there
-          if (!window.location.pathname.includes('login.html')) {
-            window.location.href = 'login.html';
-          }
+        this.clearAuth();
+        if (!window.location.pathname.includes('login.html')) {
+          window.location.href = 'login.html';
         }
       }
       

@@ -17,7 +17,10 @@ import {
   getAuditLogs,
   getSystemStats,
   createAdmin,
-  exportData
+  exportData,
+  getAdminProfile,
+  updateAdminProfile,
+  changeAdminPassword
 } from '../controllers/adminController.js';
 
 const router = express.Router();
@@ -25,6 +28,18 @@ const router = express.Router();
 // All admin routes require authentication and ADMIN role
 router.use(authenticate);
 router.use(authorize('ADMIN'));
+
+// ============ ADMIN PROFILE ============
+router.get('/profile', getAdminProfile);
+router.put('/profile', [
+  body('name').optional().trim().isLength({ min: 2, max: 100 }).withMessage('Name must be between 2 and 100 characters'),
+  body('email').optional().isEmail().withMessage('Please provide a valid email address'),
+  body('phone').optional().trim().notEmpty().withMessage('Phone cannot be empty if provided')
+], updateAdminProfile);
+router.put('/change-password', [
+  body('currentPassword').notEmpty().withMessage('Current password is required'),
+  body('newPassword').isLength({ min: 8 }).withMessage('New password must be at least 8 characters')
+], changeAdminPassword);
 
 // ============ DASHBOARD ============
 router.get('/dashboard', getDashboardStats);

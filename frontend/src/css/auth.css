@@ -232,6 +232,58 @@
     color: var(--primary);
 }
 
+/* ============ LOGIN ROLE SELECTOR ============ */
+
+.login-role-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.login-role-selector .role-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    background: var(--white);
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.login-role-selector .role-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.login-role-selector .role-btn.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.login-role-selector .role-btn i {
+    font-size: 0.875rem;
+}
+
+.selected-role-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    margin-top: -0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.selected-role-hint strong {
+    color: var(--primary);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .auth-card {
@@ -247,6 +299,16 @@
     .test-credentials .cred-row {
         flex-direction: column;
         gap: 0.25rem;
+    }
+
+    .login-role-selector {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .login-role-selector .role-btn {
+        justify-content: center;
+        width: 100%;
     }
 }
 

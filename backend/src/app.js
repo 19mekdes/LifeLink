@@ -31,12 +31,16 @@ app.use(helmet({
   }
 }));
 
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
 app.use(cors({
   origin(origin, callback) {
     if (!origin || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) {
       return callback(null, true);
     }
     if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) {
+      return callback(null, true);
+    }
+    if (ALLOWED_ORIGINS.includes(origin)) {
       return callback(null, true);
     }
     callback(new Error('Origin not allowed by CORS'));

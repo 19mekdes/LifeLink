@@ -1065,10 +1065,7 @@
   <!-- DASHBOARD JAVASCRIPT LOGIC                          -->
   <!-- ═══════════════════════════════════════════════════ -->
   <script>
-    const API_BASE = window.ENV?.API_BASE || window.API_BASE || window.API_URL ||
-      (window.location.port === '5000' || window.location.port === '3000' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:5000/api'
-        : '/api');
+    const API_BASE = 'https://lifelink-ub6e.onrender.com/api';
     let adminToken = (typeof localStorage !== 'undefined' ? (localStorage.getItem('token') || localStorage.getItem('auth_token')) : null);
     let pendingActionFn = null;
 

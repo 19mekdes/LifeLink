@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cp -R frontend/src frontend/public/src",
+  "outputDirectory": "frontend/public",
+  "framework": null,
+  "cleanUrls": true
+}

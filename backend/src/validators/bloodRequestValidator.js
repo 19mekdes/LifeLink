@@ -1,8 +1,5 @@
 import { body, param, query } from 'express-validator';
 
-/**
- * Validation rules for creating a blood request
- */
 export const createBloodRequestValidation = [
   body('bloodType')
     .notEmpty()

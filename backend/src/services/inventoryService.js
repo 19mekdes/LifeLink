@@ -1,9 +1,5 @@
 import prisma from '../config/database.js';
 
-/**
- * Inventory Service
- * Handles all inventory-related business logic
- */
 class InventoryService {
   /**
    * Check if inventory is sufficient for a request

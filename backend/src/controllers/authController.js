@@ -1,21 +1,14 @@
-// backend/src/controllers/authController.js
-
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
-// ✅ Import email service
 import { sendEmail, welcomeEmail } from '../services/emailService.js';
 import prisma from '../config/database.js';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-151112';
 const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d';
 
-/**
- * Register a new user
- * POST /api/auth/register
- */
 export const register = asyncHandler(async (req, res) => {
-  // Validate input
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ApiError(400, 'Validation Error', errors.array());
@@ -27,20 +20,19 @@ export const register = asyncHandler(async (req, res) => {
     password,
     phone,
     role,
-    // Donor fields
     age,
     gender,
     bloodType,
     address,
     city,
-    // Hospital fields
+    
     hospitalName,
     licenseNumber,
-    // Blood Bank fields
+    
     bankName
   } = req.body;
 
-  // Check if user already exists
+  
   const existingUser = await prisma.user.findUnique({
     where: { email }
   });
@@ -49,12 +41,10 @@ export const register = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Email already registered. Please login.');
   }
 
-  // Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Create user with transaction
   const result = await prisma.$transaction(async (prisma) => {
-    // 1. Create user
+    
     const user = await prisma.user.create({
       data: {
         name,
@@ -66,7 +56,7 @@ export const register = asyncHandler(async (req, res) => {
       }
     });
 
-    // 2. Create role-specific profile
+    
     if (role === 'DONOR' || !role) {
       await prisma.donorProfile.create({
         data: {
@@ -113,7 +103,7 @@ export const register = asyncHandler(async (req, res) => {
     return user;
   });
 
-  // Generate JWT token
+ 
   const token = jwt.sign(
     {
       userId: result.id,
@@ -123,8 +113,7 @@ export const register = asyncHandler(async (req, res) => {
     JWT_SECRET,
     { expiresIn: JWT_EXPIRE }
   );
-
-  // Get complete user data with profile
+ // Get complete user data with profile
   const user = await prisma.user.findUnique({
     where: { id: result.id },
     include: {
@@ -134,7 +123,7 @@ export const register = asyncHandler(async (req, res) => {
     }
   });
 
-  // ✅ Send welcome email (don't block registration if email fails)
+
   try {
     const emailTemplate = welcomeEmail(user.name, user.email);
     await sendEmail({
@@ -145,10 +134,10 @@ export const register = asyncHandler(async (req, res) => {
     console.log(`✅ Welcome email sent to ${user.email}`);
   } catch (emailError) {
     console.error(`❌ Failed to send welcome email to ${user.email}:`, emailError.message);
-    // Don't fail registration if email fails
+    
   }
 
-  // Remove password from response
+  
   const { password: _, ...userWithoutPassword } = user;
 
   res.status(201).json({
@@ -161,12 +150,9 @@ export const register = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * Login user
- * POST /api/auth/login
- */
+
 export const login = asyncHandler(async (req, res) => {
-  // Validate input
+  
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ApiError(400, 'Validation Error', errors.array());
@@ -174,7 +160,6 @@ export const login = asyncHandler(async (req, res) => {
 
   const { email, password } = req.body;
 
-  // Find user with all profiles
   const user = await prisma.user.findUnique({
     where: { email },
     include: {
@@ -188,24 +173,22 @@ export const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'Invalid email or password.');
   }
 
-  // Check if user is active
+  
   if (!user.isActive) {
     throw new ApiError(403, 'Account is disabled. Please contact support.');
   }
 
-  // Verify password
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
     throw new ApiError(401, 'Invalid email or password.');
   }
 
-  // Update last login
+ 
   await prisma.user.update({
     where: { id: user.id },
     data: { lastLogin: new Date() }
   });
 
-  // Generate JWT token
   const token = jwt.sign(
     {
       userId: user.id,
@@ -215,8 +198,7 @@ export const login = asyncHandler(async (req, res) => {
     JWT_SECRET,
     { expiresIn: JWT_EXPIRE }
   );
-  
-  // Send welcome email
+ 
 try {
   const emailContent = welcomeEmail(user.name, user.email);
 
@@ -228,10 +210,10 @@ try {
 } catch (emailError) {
   console.error('Welcome email failed:', emailError.message);
 }
-  // Remove password from response
+  
   const { password: _, ...userWithoutPassword } = user;
 
-  // Get dashboard URL based on role
+  
   const dashboardUrl = getDashboardUrl(user.role);
 
   res.json({
@@ -245,10 +227,7 @@ try {
   });
 });
 
-/**
- * Get current user
- * GET /api/auth/me
- */
+
 export const getMe = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user.id },
@@ -271,21 +250,16 @@ export const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * Logout user
- * POST /api/auth/logout
- */
+
 export const logout = asyncHandler(async (req, res) => {
-  // Client side will remove the token
+  
   res.json({
     success: true,
     message: 'Logged out successfully'
   });
 });
 
-/**
- * Get dashboard URL based on role
- */
+
 const getDashboardUrl = (role) => {
   const dashboardMap = {
     'ADMIN': '/admin-dashboard.html',

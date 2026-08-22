@@ -3,7 +3,6 @@ import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
 import { sendEmail, donationConfirmationEmail, emergencyRequestEmail } from '../services/emailService.js';
 import prisma from '../config/database.js';
 
-// Standard whole blood donation interval: 56 days (8 weeks)
 const DONATION_COOLDOWN_DAYS = 56;
 
 // ============ GET ALL DONATIONS ============

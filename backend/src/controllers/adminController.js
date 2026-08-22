@@ -26,7 +26,9 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     activeRequests,
     fulfilledRequests,
     totalDonations,
-    totalNotifications
+    totalNotifications,
+    pendingHospitalVerifications,
+    pendingBloodBankVerifications
   ] = await Promise.all([
     prisma.user.count(),
     prisma.donorProfile.count(),
@@ -37,8 +39,42 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     prisma.bloodRequest.count({ where: { status: { in: ['APPROVED', 'PROCESSING'] } } }),
     prisma.bloodRequest.count({ where: { status: 'FULFILLED' } }),
     prisma.donation.count(),
-    prisma.notification.count()
+    prisma.notification.count(),
+    prisma.hospital.count({ where: { verificationStatus: 'PENDING' } }),
+    prisma.bloodBank.count({ where: { verificationStatus: 'PENDING' } })
   ]);
+
+  const pendingVerifications = pendingHospitalVerifications + pendingBloodBankVerifications;
+
+  const recentRequests = await prisma.bloodRequest.findMany({
+    include: {
+      hospital: {
+        select: { id: true, hospitalName: true, city: true }
+      },
+      bloodBank: {
+        include: {
+          user: { select: { name: true } }
+        }
+      },
+      _count: { select: { donorResponses: true } }
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 10
+  });
+
+  const recentActivity = await prisma.auditLog.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          role: true
+        }
+      }
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 10
+  });
 
   const monthlyRegistrations = await prisma.$queryRaw`
     SELECT 
@@ -62,20 +98,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     ORDER BY count DESC
   `;
 
-  const recentActivity = await prisma.auditLog.findMany({
-    include: {
-      user: {
-        select: {
-          name: true,
-          email: true,
-          role: true
-        }
-      }
-    },
-    orderBy: { createdAt: 'desc' },
-    take: 10
-  });
-
   const requestTrends = await prisma.$queryRaw`
     SELECT 
       DATE_TRUNC('month', "createdAt") as month,
@@ -88,7 +110,26 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     ORDER BY month DESC
   `;
 
+  // Critical alerts: critical emergency requests that are still active
+  const criticalAlerts = await prisma.bloodRequest.count({
+    where: {
+      urgency: 'CRITICAL_EMERGENCY',
+      status: { in: ['PENDING', 'APPROVED', 'PROCESSING'] }
+    }
+  });
+
   const responseData = {
+    metrics: {
+      bloodBanks: { total: totalBloodBanks },
+      hospitals: { total: totalHospitals },
+      donors: { total: totalDonors },
+      requests: { total: totalRequests },
+      donations: { completed: fulfilledRequests },
+      pendingVerifications,
+      criticalAlerts: criticalAlerts > 0 ? { count: criticalAlerts } : null
+    },
+    recentRequests,
+    recentAuditLogs: recentActivity,
     stats: {
       totalUsers,
       totalDonors,
@@ -103,7 +144,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     },
     monthlyRegistrations: serializeData(monthlyRegistrations),
     bloodTypeDistribution: serializeData(bloodTypeDistribution),
-    recentActivity,
     requestTrends: serializeData(requestTrends)
   };
 
@@ -675,7 +715,7 @@ export const getAdminProfile = asyncHandler(async (req, res) => {
 export const updateAdminProfile = asyncHandler(async (req, res) => {
   const { name, email, phone } = req.body;
 
-  // Check if email is already taken by another user
+  
   if (email) {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing && existing.id !== req.user.id) {
@@ -803,7 +843,7 @@ export const markAllNotificationsRead = asyncHandler(async (req, res) => {
   res.json({ success: true, message: 'All notifications marked as read' });
 });
 
-// ============ ADMIN REQUESTS (all requests) ============
+// ============ ADMIN REQUESTS  ============
 export const getAdminRequests = asyncHandler(async (req, res) => {
   const { status, urgency, search, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -854,7 +894,7 @@ export const getAdminRequests = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ ADMIN DONATIONS (all donations) ============
+// ============ ADMIN DONATIONS  ============
 export const getAdminDonations = asyncHandler(async (req, res) => {
   const { status, search, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -906,8 +946,6 @@ export const getAdminDonations = asyncHandler(async (req, res) => {
 });
 
 // ============ STATS ENDPOINTS ============
-
-// Helper: compute cutoff date from timeframe
 function getTimeframeCutoff(timeframe) {
   if (!timeframe || timeframe === 'all' || timeframe === 'alltime') return null;
   const now = new Date();
@@ -986,7 +1024,7 @@ export const getBloodInventoryStats = asyncHandler(async (req, res) => {
   const categories = Object.values(bloodTypeLabels);
   const bloodTypeKeys = Object.keys(bloodTypeLabels);
 
-  // Get donations per blood type (donated)
+  
   const donationWhere = cutoff ? { donationDate: { gte: cutoff } } : {};
   const donationsByType = await prisma.donation.groupBy({
     by: ['donorId'],
@@ -1054,7 +1092,7 @@ export const getBloodInventoryStats = asyncHandler(async (req, res) => {
 });
 
 export const getSignupsStats = asyncHandler(async (req, res) => {
-  const { period } = req.query; // daily, weekly, monthly, yearly
+  const { period } = req.query; 
 
   let labels = [];
   let bbCounts = [];
@@ -1285,13 +1323,12 @@ export const getFulfillmentStats = asyncHandler(async (req, res) => {
 });
 
 export const getGeographicStats = asyncHandler(async (req, res) => {
-  // Get donors by city
+  
   const donorsByCity = await prisma.donorProfile.groupBy({
     by: ['city'],
     _count: { id: true }
   });
 
-  // Get requests by location
   const requestsByLocation = await prisma.bloodRequest.groupBy({
     by: ['location'],
     _count: { id: true }

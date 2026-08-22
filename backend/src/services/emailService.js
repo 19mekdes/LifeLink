@@ -85,9 +85,6 @@ export const welcomeEmail = (name, email) => {
   };
 };
 
-/**
- * 2. Emergency Blood Request - Sent to matching donors
- */
 export const emergencyRequestEmail = (donorName, request) => {
   const urgencyEmoji = request.urgency === 'CRITICAL_EMERGENCY' ? '🚨' :
     request.urgency === 'URGENT' ? '⚠️' : 'ℹ️';
@@ -144,9 +141,7 @@ export const emergencyRequestEmail = (donorName, request) => {
   };
 };
 
-/**
- * 3. Donation Confirmation - Sent to donor after donation
- */
+
 export const donationConfirmationEmail = (donorName, donation) => {
   return {
     subject: 'Thank You for Your Donation! ❤️',

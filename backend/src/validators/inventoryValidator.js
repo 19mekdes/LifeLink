@@ -1,5 +1,3 @@
-// backend/src/validators/inventoryValidator.js
-
 import { body, param, query } from 'express-validator';
 
 // ============ BLOOD TYPE VALIDATION ============
@@ -7,9 +5,7 @@ const BLOOD_TYPES = ['A_POS', 'A_NEG', 'B_POS', 'B_NEG', 'AB_POS', 'AB_NEG', 'O_
 
 const INVENTORY_STATUSES = ['AVAILABLE', 'LOW', 'OUT_OF_STOCK', 'EXPIRED'];
 
-/**
- * Validation for blood type parameter
- */
+
 export const bloodTypeParamValidation = [
   param('bloodType')
     .notEmpty()
@@ -18,9 +14,7 @@ export const bloodTypeParamValidation = [
     .withMessage(`Invalid blood type. Must be one of: ${BLOOD_TYPES.join(', ')}`)
 ];
 
-/**
- * Validation for creating/updating inventory
- */
+
 export const upsertInventoryValidation = [
   body('bloodType')
     .notEmpty()

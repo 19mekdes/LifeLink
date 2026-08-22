@@ -1,8 +1,6 @@
 import { body } from 'express-validator';
 
-/**
- * Validation rules for user registration
- */
+
 export const registerValidation = [
   // Common fields
   body('name')

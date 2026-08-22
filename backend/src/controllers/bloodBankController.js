@@ -74,7 +74,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
     emergencyContact 
   } = req.body;
 
-  // Check if blood bank exists
   const existingBloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
   });
@@ -83,7 +82,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Blood Bank profile not found');
   }
 
-  // Update blood bank
   const bloodBank = await prisma.bloodBank.update({
     where: { userId: req.user.id },
     data: {
@@ -106,7 +104,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
     }
   });
 
-  // Update user name if provided
   if (req.body.name) {
     await prisma.user.update({
       where: { id: req.user.id },
@@ -114,7 +111,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
     });
   }
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,

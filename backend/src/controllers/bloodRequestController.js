@@ -108,7 +108,6 @@ export const createRequest = asyncHandler(async (req, res) => {
     }
   });
 
-  // Create request
   const request = await prisma.bloodRequest.create({
     data: {
       hospitalId: hospital.id,
@@ -711,7 +710,6 @@ export const respondToRequest = asyncHandler(async (req, res) => {
     }
   });
 
-  // ✅ If donor ACCEPTED, notify hospital
   if (response === 'ACCEPTED' && request.hospital?.user?.email) {
     try {
       const subject = `✅ Donor Responded to Your Request: ${request.bloodType}`;

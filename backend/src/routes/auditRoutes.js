@@ -1,5 +1,3 @@
-// backend/src/routes/auditRoutes.js
-
 import express from 'express';
 import { param, query, body } from 'express-validator';
 import { authenticate } from '../middleware/auth.js';

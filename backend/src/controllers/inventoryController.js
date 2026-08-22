@@ -29,7 +29,6 @@ export const getAllInventory = asyncHandler(async (req, res) => {
     orderBy: { bloodType: 'asc' }
   });
 
-  // Calculate summary
   const totalUnits = inventory.reduce((sum, item) => sum + Number(item.unitsAvailable), 0);
   const lowStockItems = inventory.filter(
     item => item.unitsAvailable <= item.minStockLevel

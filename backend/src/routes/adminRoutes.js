@@ -36,7 +36,7 @@ import {
 
 const router = express.Router();
 
-// All admin routes require authentication and ADMIN role
+
 router.use(authenticate);
 router.use(authorize('ADMIN'));
 

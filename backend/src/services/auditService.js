@@ -568,5 +568,5 @@ class AuditService {
   }
 }
 
-// Export singleton instance
+
 export default new AuditService();

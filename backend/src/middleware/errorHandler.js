@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-
 export class ApiError extends Error {
   constructor(statusCode, message, errors = null) {
     super(message);
@@ -14,24 +13,24 @@ export class ApiError extends Error {
 export const errorHandler = (err, req, res, next) => {
   console.error('❌ Error:', err);
 
-  // Default error response
+
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
   let errors = err.errors || null;
 
-  // Handle Prisma errors
+
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     statusCode = 400;
     message = getPrismaErrorMessage(err);
   }
 
-  // Handle Prisma validation errors
+  
   if (err instanceof Prisma.PrismaClientValidationError) {
     statusCode = 400;
     message = 'Invalid data provided';
   }
 
-  // Handle JWT errors
+  
   if (err.name === 'JsonWebTokenError') {
     statusCode = 401;
     message = 'Invalid token. Please login again.';
@@ -42,26 +41,26 @@ export const errorHandler = (err, req, res, next) => {
     message = 'Session expired. Please login again.';
   }
 
-  // Handle validation errors (express-validator)
+
   if (err.name === 'ValidationError' || err.array) {
     statusCode = 400;
     message = 'Validation error';
     errors = err.array ? err.array() : err.errors;
   }
 
-  // Handle duplicate key errors
+  
   if (err.code === 'P2002') {
     statusCode = 409;
     message = `Duplicate field: ${err.meta?.target?.join(', ') || 'Unknown'}`;
   }
 
-  // Handle not found errors
+  
   if (err.code === 'P2025') {
     statusCode = 404;
     message = 'Record not found';
   }
 
-  // Send error response
+ 
   res.status(statusCode).json({
     success: false,
     message,

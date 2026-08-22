@@ -1,10 +1,6 @@
-// backend/src/validators/adminValidator.js
-
 import { body, param, query } from 'express-validator';
 
-/**
- * Validation for updating a user
- */
+
 export const updateUserValidation = [
   param('id')
     .notEmpty()
@@ -40,9 +36,7 @@ export const updateUserValidation = [
     .withMessage('isActive must be a boolean value')
 ];
 
-/**
- * Validation for creating a new admin
- */
+
 export const createAdminValidation = [
   body('name')
     .trim()
@@ -76,9 +70,7 @@ export const createAdminValidation = [
     .withMessage('Role for this endpoint must be ADMIN')
 ];
 
-/**
- * Validation for verifying a hospital
- */
+
 export const verifyHospitalValidation = [
   param('id')
     .notEmpty()
@@ -100,9 +92,7 @@ export const verifyHospitalValidation = [
     .withMessage('verified must be a boolean')
 ];
 
-/**
- * Validation for verifying a blood bank
- */
+
 export const verifyBloodBankValidation = [
   param('id')
     .notEmpty()

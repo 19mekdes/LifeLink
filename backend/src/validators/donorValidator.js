@@ -1,8 +1,5 @@
 import { body } from 'express-validator';
 
-/**
- * Validation rules for donor profile update
- */
 export const updateProfileValidation = [
   body('name')
     .optional()

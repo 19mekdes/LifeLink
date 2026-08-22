@@ -29,9 +29,6 @@ export const validate = (req, res, next) => {
   });
 };
 
-/**
- * Common validation rules for IDs
- */
 export const idValidation = [
   param('id')
     .notEmpty()
@@ -83,9 +80,7 @@ export const searchValidation = [
     .trim()
 ];
 
-/**
- * Validation for email
- */
+
 export const emailValidation = [
   body('email')
     .notEmpty()
@@ -95,9 +90,6 @@ export const emailValidation = [
     .normalizeEmail()
 ];
 
-/**
- * Validation for password
- */
 export const passwordValidation = [
   body('password')
     .notEmpty()
@@ -108,9 +100,7 @@ export const passwordValidation = [
     .withMessage('Password must contain at least one letter and one number')
 ];
 
-/**
- * Validation for phone number
- */
+
 export const phoneValidation = [
   body('phone')
     .notEmpty()
@@ -119,15 +109,13 @@ export const phoneValidation = [
     .withMessage('Please provide a valid phone number')
 ];
 
-/**
- * Validation for Ethiopian phone number
- */
+
 export const ethiopianPhoneValidation = [
   body('phone')
     .notEmpty()
     .withMessage('Phone number is required')
     .custom((value) => {
-      // Ethiopian phone format: +251XXXXXXXXX or 09XXXXXXXX
+     
       const phoneRegex = /^(\+251|0)?[0-9]{9}$/;
       if (!phoneRegex.test(value)) {
         throw new Error('Phone must be a valid Ethiopian number (e.g., +251911111111 or 0911111111)');
@@ -136,9 +124,7 @@ export const ethiopianPhoneValidation = [
     })
 ];
 
-/**
- * Validation for blood type
- */
+
 export const bloodTypeValidation = [
   body('bloodType')
     .notEmpty()
@@ -147,9 +133,7 @@ export const bloodTypeValidation = [
     .withMessage('Invalid blood type')
 ];
 
-/**
- * Validation for urgency level
- */
+
 export const urgencyValidation = [
   body('urgency')
     .optional()
@@ -157,9 +141,7 @@ export const urgencyValidation = [
     .withMessage('Urgency must be NORMAL, URGENT, or CRITICAL_EMERGENCY')
 ];
 
-/**
- * Validation for request status
- */
+
 export const statusValidation = [
   body('status')
     .notEmpty()
@@ -168,9 +150,7 @@ export const statusValidation = [
     .withMessage('Invalid status')
 ];
 
-/**
- * Validation for availability status
- */
+
 export const availabilityValidation = [
   body('availabilityStatus')
     .notEmpty()
@@ -179,9 +159,7 @@ export const availabilityValidation = [
     .withMessage('Invalid availability status')
 ];
 
-/**
- * Validation for verification status
- */
+
 export const verificationValidation = [
   body('verificationStatus')
     .notEmpty()
@@ -190,9 +168,7 @@ export const verificationValidation = [
     .withMessage('Invalid verification status')
 ];
 
-/**
- * Validation for role
- */
+
 export const roleValidation = [
   body('role')
     .notEmpty()
@@ -201,9 +177,7 @@ export const roleValidation = [
     .withMessage('Invalid role')
 ];
 
-/**
- * Validation for date range
- */
+
 export const dateRangeValidation = [
   query('startDate')
     .optional()
@@ -224,9 +198,7 @@ export const dateRangeValidation = [
     })
 ];
 
-/**
- * Validation for units
- */
+
 export const unitsValidation = [
   body('units')
     .notEmpty()
@@ -235,9 +207,7 @@ export const unitsValidation = [
     .withMessage('Units must be between 1 and 100')
 ];
 
-/**
- * Validation for amount (money)
- */
+
 export const amountValidation = [
   body('amount')
     .notEmpty()
@@ -246,9 +216,7 @@ export const amountValidation = [
     .withMessage('Amount must be a positive number')
 ];
 
-/**
- * Validation for percentage
- */
+
 export const percentageValidation = [
   body('percentage')
     .notEmpty()
@@ -257,9 +225,7 @@ export const percentageValidation = [
     .withMessage('Percentage must be between 0 and 100')
 ];
 
-/**
- * Validation for URL
- */
+
 export const urlValidation = [
   body('url')
     .optional()
@@ -267,9 +233,7 @@ export const urlValidation = [
     .withMessage('Please provide a valid URL')
 ];
 
-/**
- * Validation for coordinates (latitude/longitude)
- */
+
 export const coordinatesValidation = [
   body('latitude')
     .optional()
@@ -282,23 +246,19 @@ export const coordinatesValidation = [
     .withMessage('Longitude must be between -180 and 180')
 ];
 
-/**
- * Validation for file upload
- */
+
 export const fileValidation = [
   body('file')
     .optional()
     .custom((value) => {
-      // Check if file is present
+      
       if (!value) return true;
-      // Add custom file validation logic
+      
       return true;
     })
 ];
 
-/**
- * Sanitize HTML content
- */
+
 export const sanitizeHTML = [
   body('content')
     .optional()
@@ -307,9 +267,7 @@ export const sanitizeHTML = [
     .stripLow()
 ];
 
-/**
- * Validate and sanitize string
- */
+
 export const sanitizeString = [
   body('text')
     .optional()

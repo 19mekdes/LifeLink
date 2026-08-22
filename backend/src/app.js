@@ -70,10 +70,10 @@ app.get('/api/health', (req, res) => {
 
 // Import routes
 import authRoutes from './routes/authRoutes.js';
-import hospitalRoutes from './user/hospital/hospitalRoutes.js';
-import donorRoutes from './user/donor/donorRoutes.js';
+import hospitalRoutes from './routes/hospitalRoutes.js';
+import donorRoutes from './routes/donorRoutes.js';
 import donationRoutes from './routes/donationRoutes.js';
-import bloodBankRoutes from './user/bloodbank/bloodBankRoutes.js';
+import bloodBankRoutes from './routes/bloodBankRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';

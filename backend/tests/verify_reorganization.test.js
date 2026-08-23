@@ -1,4 +1,3 @@
-// backend/tests/verify_reorganization.test.js
 import http from 'http';
 import jwt from 'jsonwebtoken';
 import app from '../src/app.js';

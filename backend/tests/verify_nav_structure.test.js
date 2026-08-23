@@ -1,4 +1,3 @@
-// backend/tests/verify_nav_structure.test.js
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

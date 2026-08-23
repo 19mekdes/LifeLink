@@ -1,4 +1,3 @@
-// backend/tests/verify_responsive_layout.test.js
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';

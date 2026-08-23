@@ -1,4 +1,3 @@
-// backend/tests/verify_audit_log.test.js
 import * as auditService from '../src/services/auditService.js';
 
 async function runAuditTests() {

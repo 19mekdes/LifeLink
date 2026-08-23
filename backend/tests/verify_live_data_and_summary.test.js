@@ -1,4 +1,3 @@
-// backend/tests/verify_live_data_and_summary.test.js
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';

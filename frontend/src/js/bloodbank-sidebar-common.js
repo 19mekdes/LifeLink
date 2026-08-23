@@ -7,7 +7,9 @@ import { applyIcons, iconMarkup } from './bloodbank-icons.js';
  * top loading indicator, and painting the header/profile fields that are
  * common to all pages.
  */
-
+const LOGIN_URL = window.location.pathname.includes('/bloodbank/')
+    ? '../login.html'
+    : 'login.html';
 const COLLAPSE_STORAGE_KEY = 'lb_sidebar_collapsed';
 
 function ensureProgressBar() {
@@ -44,7 +46,7 @@ export async function withProgress(fn) {
 export function initShell() {
   // Guard: bounce out if not logged in
   if (!authApi.isAuthenticated()) {
-    window.location.href = 'login.html';
+    window.location.href = LOGIN_URL;
     return null;
   }
 
@@ -132,7 +134,7 @@ export function initShell() {
       /* proceed to clear local session regardless */
     } finally {
       authApi.clearAuth();
-      window.location.href = 'login.html';
+      window.location.href = LOGIN_URL;
     }
   }
   document.getElementById('dropdown-logout-btn')?.addEventListener('click', logout);

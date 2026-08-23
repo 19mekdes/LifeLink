@@ -1716,3 +1716,31 @@ tbody tr:last-child td {
         border: none;
     }
 }
+
+.sidebar-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    width: 100%;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    cursor: pointer;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.sidebar-logout-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.sidebar.collapsed .sidebar-logout-btn {
+    justify-content: center;
+    padding: 12px;
+}

@@ -1,5 +1,3 @@
-// backend/tests/admin.test.js
-
 import jwt from 'jsonwebtoken';
 import http from 'http';
 import app from '../src/app.js';

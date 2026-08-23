@@ -1,4 +1,3 @@
-// test_all_features.js
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';

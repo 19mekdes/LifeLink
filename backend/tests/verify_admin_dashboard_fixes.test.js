@@ -1,4 +1,3 @@
-// backend/tests/verify_admin_dashboard_fixes.test.js
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';

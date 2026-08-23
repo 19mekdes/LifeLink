@@ -3,37 +3,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     // ==============================
-    // Hamburger Menu Toggle
-    // ==============================
-
-    const hamburger = document.getElementById("hamburger");
-    const navLinksContainer = document.getElementById("nav-links");
-
-    if (hamburger && navLinksContainer) {
-        hamburger.addEventListener("click", () => {
-            hamburger.classList.toggle("active");
-            navLinksContainer.classList.toggle("mobile-open");
-        });
-
-        // Close mobile menu when a link is clicked
-        navLinksContainer.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", () => {
-                hamburger.classList.remove("active");
-                navLinksContainer.classList.remove("mobile-open");
-            });
-        });
-
-        // Close mobile menu on resize to desktop
-        window.addEventListener("resize", () => {
-            if (window.innerWidth > 900) {
-                hamburger.classList.remove("active");
-                navLinksContainer.classList.remove("mobile-open");
-            }
-        });
-    }
-
-
-    // ==============================
     // Smooth Scrolling
     // ==============================
 

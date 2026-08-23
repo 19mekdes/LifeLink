@@ -645,6 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 error
             );
 
+            // Show error to the user instead of silently swallowing it
             const welcomeEl = document.getElementById("welcomeDonorName");
             if (welcomeEl) {
                 welcomeEl.textContent = "";
@@ -654,6 +655,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 bloodTypeEl.textContent = error.message || "Error loading data";
                 bloodTypeEl.style.color = "#dc2626";
             }
+            // If unauthorized, redirect to login
             if (
                 error.message?.includes("401") ||
                 error.message?.includes("403") ||

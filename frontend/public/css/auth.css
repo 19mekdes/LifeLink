@@ -1,0 +1,475 @@
+/* src/css/auth.css */
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fef2f2 0%, #ffffff 50%, #f0fdf4 100%);
+    padding: 2rem;
+}
+
+.auth-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-card .logo {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+}
+
+.auth-card .logo i {
+    color: var(--primary);
+    margin-right: 0.25rem;
+}
+
+.auth-card .logo span {
+    color: var(--primary);
+}
+
+.auth-card h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 0.25rem;
+}
+
+.auth-card .subtitle {
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.auth-card .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.auth-card .form-group label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+    color: var(--gray-700);
+}
+
+.auth-card .form-group label .required {
+    color: var(--primary);
+}
+
+.auth-card .form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    transition: var(--transition);
+    background: var(--gray-50);
+    color: var(--gray-800);
+}
+
+.auth-card .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.auth-card .form-control::placeholder {
+    color: var(--gray-400);
+}
+
+.auth-card .form-control.error {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.auth-card .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+}
+
+.auth-card .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-500);
+    cursor: pointer;
+}
+
+.auth-card .checkbox-label input[type="checkbox"] {
+    accent-color: var(--primary);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.auth-card .forgot-link {
+    color: var(--primary);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.auth-card .forgot-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.auth-card .error-message {
+    color: var(--primary);
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--primary-light);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: none;
+}
+
+.auth-card .error-message.show {
+    display: block;
+}
+
+.auth-card .auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--gray-500);
+}
+
+.auth-card .auth-footer a {
+    color: var(--primary);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-card .auth-footer a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Password Toggle */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper .form-control {
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-400);
+    font-size: 1rem;
+    padding: 4px 8px;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: var(--gray-600);
+}
+
+/* Test Credentials */
+.test-credentials {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--gray-100);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    line-height: 1.8;
+}
+
+.test-credentials strong {
+    color: var(--gray-700);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.test-credentials .cred-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.test-credentials .cred-row:last-child {
+    border-bottom: none;
+}
+
+.test-credentials .cred-role {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* ============ LOGIN ROLE SELECTOR ============ */
+
+.login-role-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.login-role-selector .role-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    background: var(--white);
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.login-role-selector .role-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.login-role-selector .role-btn.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.login-role-selector .role-btn i {
+    font-size: 0.875rem;
+}
+
+.selected-role-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    margin-top: -0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.selected-role-hint strong {
+    color: var(--primary);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 1.5rem;
+    }
+
+    .auth-card .form-options {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .test-credentials .cred-row {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .login-role-selector {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .login-role-selector .role-btn {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+
+/* Add to src/css/auth.css */
+
+/* ============ REGISTER SPECIFIC ============ */
+
+.register-card .role-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.register-card .role-btn {
+    padding: 0.625rem 1.25rem;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    background: var(--white);
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.register-card .role-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.register-card .role-btn.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.register-card .role-btn i {
+    font-size: 1rem;
+}
+
+.register-card .role-fields {
+    display: none;
+}
+
+.register-card .role-fields.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.register-card .form-group {
+    margin-bottom: 1rem;
+}
+
+.register-card .form-group label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+    color: var(--gray-700);
+}
+
+.register-card .form-group label .required {
+    color: var(--primary);
+}
+
+.register-card .form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    transition: var(--transition);
+    background: var(--gray-50);
+    color: var(--gray-800);
+}
+
+.register-card .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.register-card .form-control.error {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+/* Password wrapper for register */
+.register-card .password-wrapper {
+    position: relative;
+}
+
+.register-card .password-wrapper .form-control {
+    padding-right: 45px;
+}
+
+.register-card .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-400);
+    font-size: 1rem;
+    padding: 4px 8px;
+    transition: color 0.3s ease;
+}
+
+.register-card .password-toggle:hover {
+    color: var(--gray-600);
+}
+
+/* Error message */
+.register-card .error-message {
+    color: var(--primary);
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--primary-light);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: none;
+}
+
+.register-card .error-message.show {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .register-card .role-selector {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .register-card .role-btn {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .register-card {
+        padding: 1.5rem;
+    }
+}

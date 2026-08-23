@@ -1,0 +1,1718 @@
+/* ============================================================
+   1. DESIGN TOKENS / CSS VARIABLES
+   ============================================================ */
+:root {
+    --primary: #7b1e2b;
+    --primary-dark: #611722;
+    --primary-light: #f9e5e8;
+    --bg-light: #f8f5f3;
+    --bg-white: #ffffff;
+    --text-main: #2d2424;
+    --text-muted: #6b7280;
+    --text-light: #9ca3af;
+    --border-color: #eee3df;
+    --success: #3b8c58;
+    --success-light: #d1fae5;
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --info: #3b82f6;
+    --info-light: #dbeafe;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --transition: all 0.2s ease;
+    --font-sans: 'Arial', system-ui, -apple-system, sans-serif;
+    --sidebar-width: 280px;
+    --sidebar-width-collapsed: 84px;
+}
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-sans);
+}
+
+body {
+    background: var(--bg-light);
+    color: var(--text-main);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* ============================================================
+   3. LAYOUT — SIDEBAR
+   ============================================================ */
+.sidebar {
+    width: var(--sidebar-width);
+    background: #7b1e2b;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 16px;
+    flex-shrink: 0;
+    color: white;
+    z-index: 50;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width 0.25s ease;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 24px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 20px;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+}
+
+.logo-link:hover .logo-text {
+    opacity: 0.85;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+
+.logo-sub {
+    display: none;
+}
+
+.nav-section {
+    margin-bottom: 8px;
+}
+
+.nav-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 16px 12px 8px 12px;
+}
+
+.sidebar.collapsed .nav-section-title {
+    display: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    font-size: 14px;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.nav-links a.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-weight: 600;
+}
+
+.nav-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    width: 20px;
+    justify-content: center;
+}
+
+.nav-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-badge {
+    margin-left: auto;
+    background: white;
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+}
+
+.sidebar-footer {
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: auto;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.logout-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #9ca3af;
+    flex-shrink: 0;
+}
+
+.status-dot.online {
+    background: #22c55e;
+}
+
+.sidebar-user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar.collapsed .sidebar-user-name {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-user {
+    justify-content: center;
+    padding: 11px;
+}
+
+/* Collapsed sidebar (desktop) */
+.sidebar.collapsed {
+    width: var(--sidebar-width-collapsed);
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-label,
+.sidebar.collapsed .logout-label,
+.sidebar.collapsed .nav-badge {
+    display: none;
+}
+
+.sidebar.collapsed .logo-area {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.sidebar.collapsed .nav-links a,
+.sidebar.collapsed .logout-btn {
+    justify-content: center;
+    padding: 12px;
+}
+
+/* ============================================================
+   4. LAYOUT — MAIN CONTENT & HEADER
+   ============================================================ */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.top-header {
+    background: var(--bg-white);
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 16px;
+}
+
+.header-title h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.3px;
+}
+
+.header-title p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: var(--transition);
+}
+
+.header-btn:hover {
+    background: var(--bg-light);
+    color: var(--text-main);
+}
+
+.header-btn .dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.user-profile-wrap {
+    position: relative;
+}
+
+.user-profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 12px 6px 6px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.user-profile-badge:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 8px;
+    z-index: 60;
+}
+
+.user-dropdown.open {
+    display: block;
+}
+
+.user-dropdown-name {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 10px 2px;
+}
+
+.user-dropdown-role {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 0 10px 10px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 6px;
+}
+
+.user-dropdown-item {
+    display: block;
+    padding: 9px 10px;
+    font-size: 13px;
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.user-dropdown-item:hover {
+    background: var(--bg-light);
+}
+
+.user-dropdown-item.danger {
+    color: var(--danger);
+}
+
+.user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.user-info {
+    line-height: 1.2;
+}
+
+.user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.user-role {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.dashboard-container {
+    padding: 28px 32px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* ============================================================
+   5. LAYOUT — MOBILE NAV CONTROLS
+   ============================================================ */
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-main);
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.menu-toggle:hover {
+    background: var(--bg-light);
+}
+
+.sidebar-close {
+    display: none;
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 149;
+}
+
+.sidebar-backdrop.active {
+    display: block;
+}
+
+/* ============================================================
+   6. PAGE TRANSITIONS
+   ============================================================ */
+.page-content {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================
+   7. COMPONENT — BUTTONS
+   ============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--bg-light);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--border-color);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+/* NOTE: .btn-danger is intentionally defined twice below.
+   Order preserved exactly as in the original file — the second
+   definition overrides background/color of the first. Changing
+   this order would change the rendered result. */
+.btn-danger {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.btn-danger:hover {
+    background: #fee2e2;
+}
+
+.btn-danger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+#submit-stock-update-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   8. COMPONENT — LOADING / SPINNERS
+   ============================================================ */
+.spinner {
+    display: none;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    margin-left: 8px;
+    vertical-align: middle;
+    animation: spin 0.6s linear infinite;
+}
+
+.spinner.active {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner-lg {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--primary, #b3261e);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px 20px;
+    color: var(--text-muted, #64748b);
+    grid-column: 1 / -1;
+}
+
+/* ============================================================
+   9. COMPONENT — TOAST NOTIFICATIONS
+   ============================================================ */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+    max-width: 360px;
+}
+
+.toast {
+    pointer-events: auto;
+    background: #1e293b;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-success {
+    border-left: 4px solid #16a34a;
+}
+
+.toast-error {
+    border-left: 4px solid #dc2626;
+}
+
+/* ============================================================
+   10. COMPONENT — BADGES
+   ============================================================ */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.badge.emergency {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.badge.emergency::before {
+    background: var(--danger);
+}
+
+.badge.urgent {
+    background: var(--warning-light);
+    color: #b45309;
+}
+
+.badge.urgent::before {
+    background: var(--warning);
+}
+
+.badge.completed {
+    background: var(--success-light);
+    color: #047857;
+}
+
+.badge.completed::before {
+    background: var(--success);
+}
+
+.badge.pending {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+.badge.pending::before {
+    background: var(--warning);
+}
+
+.badge.approved {
+    background: var(--info-light);
+    color: #1d4ed8;
+}
+
+.badge.approved::before {
+    background: var(--info);
+}
+
+.badge.low {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.badge.low::before {
+    background: var(--danger);
+}
+
+.badge.adequate {
+    background: var(--success-light);
+    color: #047857;
+}
+
+.badge.adequate::before {
+    background: var(--success);
+}
+
+/* ============================================================
+   11. COMPONENT — TABLES
+   ============================================================ */
+.table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th,
+td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+th {
+    background: #f9fafb;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    transition: var(--transition);
+}
+
+tbody tr:hover {
+    background: #f9fafb;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ============================================================
+   12. COMPONENT — PAGINATION
+   ============================================================ */
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+    font-size: 13px;
+    color: var(--text-muted, #64748b);
+}
+
+/* NOTE: .pagination-controls is intentionally defined twice below.
+   Order preserved exactly as in the original file — the second
+   definition (gap: 10px) overrides the first (gap: 4px). */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.page-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: #f1f5f9;
+}
+
+.page-btn.active {
+    background: var(--primary, #b3261e);
+    color: #fff;
+    border-color: var(--primary, #b3261e);
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-ellipsis {
+    padding: 0 4px;
+    color: var(--text-muted);
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   13. COMPONENT — FORMS
+   ============================================================ */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-main);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 14px;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: var(--transition);
+    background: var(--bg-white);
+    color: var(--text-main);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(123, 30, 43, 0.1);
+}
+
+/* ============================================================
+   14. COMPONENT — MODAL
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: modalSlide 0.25s ease;
+}
+
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: var(--bg-light);
+    color: var(--text-main);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ============================================================
+   15. COMPONENT — EMPTY STATE
+   ============================================================ */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-muted);
+}
+
+.empty-state .icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.3;
+}
+
+.empty-state h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.empty-state p {
+    font-size: 14px;
+}
+
+/* ============================================================
+   16. COMPONENT — GENERIC SECTION BOX
+   ============================================================ */
+.section-box {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: var(--transition);
+}
+
+.section-box:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.section-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ============================================================
+   17. PAGE — DASHBOARD METRICS
+   ============================================================ */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.metric-card {
+    background: var(--bg-white);
+    padding: 22px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--border-color);
+}
+
+.metric-card.highlight::before {
+    background: var(--primary);
+}
+
+.metric-card.success::before {
+    background: var(--success);
+}
+
+.metric-card.warning::before {
+    background: var(--warning);
+}
+
+.metric-card.info::before {
+    background: var(--info);
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.metric-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.metric-icon.red {
+    background: var(--primary-light);
+}
+
+.metric-icon.green {
+    background: var(--success-light);
+}
+
+.metric-icon.yellow {
+    background: var(--warning-light);
+}
+
+.metric-icon.blue {
+    background: var(--info-light);
+}
+
+.metric-trend {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+
+.metric-trend.up {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.metric-trend.down {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.metric-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-top: 6px;
+    letter-spacing: -0.5px;
+}
+
+.metric-sub {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+/* ============================================================
+   18. PAGE — BLOOD INVENTORY
+   ============================================================ */
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.blood-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.blood-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+}
+
+.blood-card.critical {
+    border-color: var(--danger);
+    background: #fffafa;
+}
+
+.blood-card.critical::after {
+    content: '!';
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    background: var(--danger);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blood-type {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.blood-units {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.blood-bar {
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.blood-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.blood-bar-fill.high {
+    background: var(--success);
+}
+
+.blood-bar-fill.medium {
+    background: var(--warning);
+}
+
+.blood-bar-fill.low {
+    background: var(--danger);
+}
+
+.blood-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+.blood-actions .btn {
+    padding: 5px 10px;
+    font-size: 11px;
+}
+
+/* ============================================================
+   19. PAGE — HOSPITAL REQUESTS TOOLBAR
+   ============================================================ */
+.requests-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.toolbar-search {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+}
+
+.toolbar-search .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+
+.toolbar-search input {
+    width: 100%;
+    padding: 8px 12px 8px 34px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+}
+
+.toolbar-filters {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.toolbar-filters select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+}
+
+.row-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ============================================================
+   20. PAGE — BANK PROFILE
+   ============================================================ */
+.profile-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.profile-field {
+    padding: 16px;
+    background: var(--bg-light);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.profile-field label {
+    font-weight: 600;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.profile-field span {
+    font-size: 15px;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+/* ============================================================
+   21. PAGE — NOTIFICATIONS
+   ============================================================ */
+.notification-list {
+    list-style: none;
+}
+
+.notification-item {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    transition: var(--transition);
+    border-radius: var(--radius-sm);
+}
+
+.notification-item:hover {
+    background: var(--bg-light);
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-content {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.notification-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.notification-icon.critical {
+    background: var(--danger-light);
+}
+
+.notification-icon.info {
+    background: var(--info-light);
+}
+
+.notification-icon.success {
+    background: var(--success-light);
+}
+
+.notification-text {
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.notification-meta {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+.notification-time {
+    font-size: 12px;
+    color: var(--text-light);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+/* ============================================================
+   22. PAGE — DONOR OUTREACH
+   ============================================================ */
+.outreach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.outreach-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    transition: var(--transition);
+}
+
+.outreach-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.outreach-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.outreach-blood {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.outreach-need {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.donor-match-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.donor-match-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--bg-light);
+    border-radius: var(--radius-sm);
+}
+
+.donor-match-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.donor-avatar-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.donor-match-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.donor-match-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.donor-reliability {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: var(--success-light);
+    color: var(--success);
+}
+
+/* ============================================================
+   23. PAGE — ANALYTICS
+   ============================================================ */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+}
+
+.chart-placeholder {
+    height: 260px;
+    background: var(--bg-light);
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    gap: 12px;
+}
+
+.chart-placeholder .icon {
+    font-size: 40px;
+    opacity: 0.4;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* ============================================================
+   24. RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        padding: 20px;
+    }
+
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px !important;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        background: #7b1e2b;
+        z-index: 150;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar.collapsed .logo-text,
+    .sidebar.collapsed .nav-label,
+    .sidebar.collapsed .logout-label,
+    .sidebar.collapsed .nav-badge {
+        display: block;
+    }
+
+    .sidebar.collapsed .nav-links a,
+    .sidebar.collapsed .logout-btn {
+        justify-content: flex-start;
+        padding: 11px 14px;
+    }
+
+    .sidebar-close {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+    }
+
+    .header-title {
+        display: none;
+    }
+
+    .main-content {
+        width: 100%;
+        height: 100vh;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-header {
+        padding: 12px 16px;
+    }
+
+    .dashboard-container {
+        padding: 16px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal {
+        max-width: 92vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-profile-badge .user-info {
+        display: none;
+    }
+
+    .user-profile-badge {
+        padding: 4px;
+        border: none;
+    }
+}

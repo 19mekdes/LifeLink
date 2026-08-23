@@ -229,14 +229,11 @@
                     
                     showToast(response.message || 'Login successful! 🎉', 'success');
                     
-                    // Redirect after delay — use the user's actual role from the server response
-                    // but fallback to the selected role if server didn't return one
-                    setTimeout(() => {
-                        const userRole = response.data.user?.role || selectedRole;
-                        const dashboard = authApi.getDashboardUrl(userRole);
-                        console.log('Redirecting to:', dashboard, '(role:', userRole, ')');
-                        window.location.href = dashboard;
-                    }, 800);
+                    // Redirect immediately — use the user's actual role from the server response
+                    const userRole = response.data.user?.role || selectedRole;
+                    const dashboard = authApi.getDashboardUrl(userRole);
+                    console.log('Redirecting to:', dashboard, '(role:', userRole, ')');
+                    window.location.href = dashboard;
                 } else {
                     // Server returned an error response — show it to the user
                     const errorMsg = response?.message || 'Login failed. Please check your credentials and try again.';

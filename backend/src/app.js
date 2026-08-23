@@ -61,7 +61,7 @@ app.use((req, res, next) => {
 });
 
 // ============ ROUTES ============
-// Health check
+
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,

@@ -160,12 +160,16 @@ export const login = asyncHandler(async (req, res) => {
 
   const { email, password } = req.body;
 
+  // Only select columns needed for login — avoids heavy JOINs
   const user = await prisma.user.findUnique({
     where: { email },
-    include: {
-      donorProfile: true,
-      hospital: true,
-      bloodBank: true
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      password: true,
+      role: true,
+      isActive: true,
     }
   });
 
@@ -173,7 +177,6 @@ export const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'Invalid email or password.');
   }
 
-  
   if (!user.isActive) {
     throw new ApiError(403, 'Account is disabled. Please contact support.');
   }
@@ -183,11 +186,11 @@ export const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'Invalid email or password.');
   }
 
- 
-  await prisma.user.update({
+  // Fire-and-forget: update lastLogin without blocking the response
+  prisma.user.update({
     where: { id: user.id },
     data: { lastLogin: new Date() }
-  });
+  }).catch(() => {});
 
   const token = jwt.sign(
     {
@@ -198,22 +201,9 @@ export const login = asyncHandler(async (req, res) => {
     JWT_SECRET,
     { expiresIn: JWT_EXPIRE }
   );
- 
-try {
-  const emailContent = welcomeEmail(user.name, user.email);
 
-  await sendEmail({
-    to: user.email,
-    subject: emailContent.subject,
-    html: emailContent.html
-  });
-} catch (emailError) {
-  console.error('Welcome email failed:', emailError.message);
-}
-  
   const { password: _, ...userWithoutPassword } = user;
 
-  
   const dashboardUrl = getDashboardUrl(user.role);
 
   res.json({

@@ -5,14 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>LifeLink - Login</title>
 
-        <!-- Google Fonts -->
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-            rel="stylesheet" />
+        <!-- Preconnect for faster external resource loading -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <!-- Google Fonts - async load -->
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
+
+        <!-- Font Awesome - non-blocking -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
 
         <!-- Custom CSS -->
         <link rel="stylesheet" href="../src/css/styles.css" />
@@ -94,8 +97,10 @@
                 <script type="importmap">
         {
             "imports": {
-                "../src/js/api/api.js": "../src/js/api/api.js",
-                "../src/js/api/authApi.js": "../src/js/api/authApi.js"
+                "./js/api/api.js": "./js/api/api.js",
+                "./js/api/authApi.js": "./js/api/authApi.js",
+                "../src/js/api/api.js": "./js/api/api.js",
+                "../src/js/api/authApi.js": "./js/api/authApi.js"
             }
         }
     </script>
@@ -103,7 +108,7 @@
                 <!-- ============ LOGIN SCRIPT ============ -->
                 <script type="module">
         // Import authApi from the correct path
-        import authApi from '../src/js/api/authApi.js';
+        import authApi from './js/api/authApi.js';
         
         // ============ DOM ELEMENTS ============
         const loginForm = document.getElementById('loginForm');

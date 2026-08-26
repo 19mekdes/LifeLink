@@ -1,6 +1,4 @@
 import prisma from '../config/database.js';
-
-
 /**
  * Check if user has one of the allowed roles
  * @param {...string} roles - List of allowed roles

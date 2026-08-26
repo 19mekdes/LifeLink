@@ -24,13 +24,13 @@ export const errorHandler = (err, req, res, next) => {
     message = getPrismaErrorMessage(err);
   }
 
-  
+
   if (err instanceof Prisma.PrismaClientValidationError) {
     statusCode = 400;
     message = 'Invalid data provided';
   }
 
-  
+
   if (err.name === 'JsonWebTokenError') {
     statusCode = 401;
     message = 'Invalid token. Please login again.';
@@ -48,24 +48,24 @@ export const errorHandler = (err, req, res, next) => {
     errors = err.array ? err.array() : err.errors;
   }
 
-  
+
   if (err.code === 'P2002') {
     statusCode = 409;
     message = `Duplicate field: ${err.meta?.target?.join(', ') || 'Unknown'}`;
   }
 
-  
+
   if (err.code === 'P2025') {
     statusCode = 404;
     message = 'Record not found';
   }
 
- 
+
   res.status(statusCode).json({
     success: false,
     message,
     ...(errors && { errors }),
-    ...(process.env.NODE_ENV === 'development' && { 
+    ...(process.env.NODE_ENV === 'development' && {
       stack: err.stack,
       code: err.code,
     }),

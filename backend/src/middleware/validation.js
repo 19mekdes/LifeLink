@@ -115,7 +115,7 @@ export const ethiopianPhoneValidation = [
     .notEmpty()
     .withMessage('Phone number is required')
     .custom((value) => {
-     
+
       const phoneRegex = /^(\+251|0)?[0-9]{9}$/;
       if (!phoneRegex.test(value)) {
         throw new Error('Phone must be a valid Ethiopian number (e.g., +251911111111 or 0911111111)');
@@ -251,9 +251,9 @@ export const fileValidation = [
   body('file')
     .optional()
     .custom((value) => {
-      
+
       if (!value) return true;
-      
+
       return true;
     })
 ];

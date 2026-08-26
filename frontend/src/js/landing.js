@@ -1,10 +1,6 @@
-// LifeLink Landing Page JavaScript
-
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ==============================
-    // Hamburger Menu Toggle
-    // ==============================
+    
 
     const hamburger = document.getElementById("hamburger");
     const navLinksContainer = document.getElementById("nav-links");
@@ -33,9 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ==============================
-    // Smooth Scrolling
-    // ==============================
 
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 
@@ -56,9 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // ==============================
-    // Navbar Scroll Effect
-    // ==============================
+
 
     const navbar = document.querySelector(".navbar");
 
@@ -73,9 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // ==============================
-    // Section Reveal Animation
-    // ==============================
+    
 
     const sections = document.querySelectorAll(
         ".about, .how-it-works, .cta"
@@ -103,9 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // ==============================
-    // Hero Button Feedback
-    // ==============================
+
 
     const donorButtons = document.querySelectorAll(
         'a[href="register.html"]'

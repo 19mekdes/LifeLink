@@ -64,14 +64,14 @@ export const updateProfile = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Validation Error', errors.array());
   }
 
-  const { 
-    bankName, 
-    address, 
-    city, 
-    state, 
-    country, 
-    phone, 
-    emergencyContact 
+  const {
+    bankName,
+    address,
+    city,
+    state,
+    country,
+    phone,
+    emergencyContact
   } = req.body;
 
   const existingBloodBank = await prisma.bloodBank.findUnique({
@@ -174,8 +174,8 @@ export const getStats = asyncHandler(async (req, res) => {
     })
   ]);
 
-  const totalUnitsAvailable = totalUnits._sum.unitsAvailable 
-    ? Number(totalUnits._sum.unitsAvailable) 
+  const totalUnitsAvailable = totalUnits._sum.unitsAvailable
+    ? Number(totalUnits._sum.unitsAvailable)
     : 0;
 
   res.json({
@@ -227,8 +227,8 @@ export const getDashboard = asyncHandler(async (req, res) => {
     totalUnits
   ] = await Promise.all([
     prisma.bloodRequest.count({ where: { bloodBankId: bloodBank.id } }),
-    prisma.bloodRequest.count({ 
-      where: { 
+    prisma.bloodRequest.count({
+      where: {
         bloodBankId: bloodBank.id,
         status: 'PENDING'
       }
@@ -261,8 +261,8 @@ export const getDashboard = asyncHandler(async (req, res) => {
   ]);
 
   // ✅ FIX: Convert BigInt to Number
-  const totalUnitsAvailable = totalUnits._sum.unitsAvailable 
-    ? Number(totalUnits._sum.unitsAvailable) 
+  const totalUnitsAvailable = totalUnits._sum.unitsAvailable
+    ? Number(totalUnits._sum.unitsAvailable)
     : 0;
 
   // Get low stock items
@@ -650,9 +650,9 @@ export const approveRequest = asyncHandler(async (req, res) => {
 
   if (!inventory || inventory.unitsAvailable < request.unitsRequired) {
     requiresDonorSupport = true;
-    
+
     const matchingDonors = await findMatchingDonors(request);
-    
+
     if (matchingDonors.length > 0) {
       for (const donor of matchingDonors) {
         try {
@@ -679,8 +679,8 @@ export const approveRequest = asyncHandler(async (req, res) => {
         push: {
           status: requiresDonorSupport ? 'PROCESSING' : 'APPROVED',
           timestamp: new Date(),
-          notes: notes || (requiresDonorSupport 
-            ? 'Approved. Donor support requested due to low inventory.' 
+          notes: notes || (requiresDonorSupport
+            ? 'Approved. Donor support requested due to low inventory.'
             : 'Approved by blood bank')
         }
       }
@@ -720,8 +720,8 @@ export const approveRequest = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     data: serializeData(updatedRequest),
-    message: requiresDonorSupport 
-      ? 'Request approved. Donor support requested.' 
+    message: requiresDonorSupport
+      ? 'Request approved. Donor support requested.'
       : 'Request approved successfully'
   });
 });
@@ -957,7 +957,8 @@ const findMatchingDonors = async (request) => {
         city: request.location,
         OR: [
           { lastDonationDate: null },
-          { lastDonationDate: {
+          {
+            lastDonationDate: {
               lt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
             }
           }

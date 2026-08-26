@@ -237,7 +237,7 @@ export const recordDonation = asyncHandler(async (req, res) => {
 
   const donorProfile = await prisma.donorProfile.findUnique({
     where: { id: donorId },
-    include: { 
+    include: {
       user: {
         select: {
           id: true,
@@ -400,7 +400,7 @@ export const recordDonation = asyncHandler(async (req, res) => {
         donationDate: executionDate,
         status: 'COMPLETED'
       });
-      
+
       await sendEmail({
         to: donorProfile.user.email,
         subject: emailTemplate.subject,
@@ -455,7 +455,7 @@ export const recordDonation = asyncHandler(async (req, res) => {
         </body>
         </html>
       `;
-      
+
       await sendEmail({
         to: bloodRequest.hospital.user.email,
         subject: subject,
@@ -603,7 +603,7 @@ export const scheduleDonation = asyncHandler(async (req, res) => {
         </body>
         </html>
       `;
-      
+
       await sendEmail({
         to: profile.user.email,
         subject: subject,
@@ -770,7 +770,7 @@ export const updateDonationStatus = asyncHandler(async (req, res) => {
           donationDate: completionDate,
           status: 'COMPLETED'
         });
-        
+
         await sendEmail({
           to: existingDonation.donor.user.email,
           subject: emailTemplate.subject,
@@ -824,7 +824,7 @@ export const updateDonationStatus = asyncHandler(async (req, res) => {
           </body>
           </html>
         `;
-        
+
         await sendEmail({
           to: existingDonation.request.hospital.user.email,
           subject: subject,
@@ -904,7 +904,7 @@ export const updateDonationStatus = asyncHandler(async (req, res) => {
         </body>
         </html>
       `;
-      
+
       await sendEmail({
         to: existingDonation.request.hospital.user.email,
         subject: subject,

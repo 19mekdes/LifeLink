@@ -414,8 +414,8 @@ export const verifyHospital = asyncHandler(async (req, res) => {
       action: 'VERIFY_HOSPITAL',
       entity: 'Hospital',
       entityId: hospital.id,
-      changes: { 
-        status, 
+      changes: {
+        status,
         notes: notes || null,
         hospitalName: hospital.user?.name || 'Unknown'
       }
@@ -539,8 +539,8 @@ export const verifyBloodBank = asyncHandler(async (req, res) => {
       action: 'VERIFY_BLOOD_BANK',
       entity: 'BloodBank',
       entityId: bloodBank.id,
-      changes: { 
-        status, 
+      changes: {
+        status,
         notes: notes || null,
         bankName: bloodBank.user?.name || 'Unknown'
       }
@@ -654,7 +654,7 @@ export const verifyDonor = asyncHandler(async (req, res) => {
       action: 'VERIFY_DONOR',
       entity: 'DonorProfile',
       entityId: donor.id,
-      changes: { 
+      changes: {
         isVerified: true,
         donorName: donor.user?.name || 'Unknown',
         donorEmail: donor.user?.email || 'Unknown'
@@ -715,7 +715,7 @@ export const getAdminProfile = asyncHandler(async (req, res) => {
 export const updateAdminProfile = asyncHandler(async (req, res) => {
   const { name, email, phone } = req.body;
 
-  
+
   if (email) {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing && existing.id !== req.user.id) {
@@ -1024,7 +1024,7 @@ export const getBloodInventoryStats = asyncHandler(async (req, res) => {
   const categories = Object.values(bloodTypeLabels);
   const bloodTypeKeys = Object.keys(bloodTypeLabels);
 
-  
+
   const donationWhere = cutoff ? { donationDate: { gte: cutoff } } : {};
   const donationsByType = await prisma.donation.groupBy({
     by: ['donorId'],
@@ -1092,7 +1092,7 @@ export const getBloodInventoryStats = asyncHandler(async (req, res) => {
 });
 
 export const getSignupsStats = asyncHandler(async (req, res) => {
-  const { period } = req.query; 
+  const { period } = req.query;
 
   let labels = [];
   let bbCounts = [];
@@ -1122,7 +1122,7 @@ export const getSignupsStats = asyncHandler(async (req, res) => {
     for (let m = 11; m >= 0; m--) {
       const d = new Date(now.getFullYear(), now.getMonth() - m, 1);
       const nextMonth = new Date(d.getFullYear(), d.getMonth() + 1, 1);
-      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       labels.push(monthNames[d.getMonth()]);
       const [bb, hosp, dnr] = await Promise.all([
         prisma.bloodBank.count({ where: { createdAt: { gte: d, lt: nextMonth } } }),
@@ -1156,7 +1156,7 @@ export const getSignupsStats = asyncHandler(async (req, res) => {
       day.setHours(0, 0, 0, 0);
       const nextDay = new Date(day);
       nextDay.setDate(nextDay.getDate() + 1);
-      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       labels.push(`${monthNames[day.getMonth()]} ${day.getDate()}`);
       const [bb, hosp, dnr] = await Promise.all([
         prisma.bloodBank.count({ where: { createdAt: { gte: day, lt: nextDay } } }),
@@ -1323,7 +1323,7 @@ export const getFulfillmentStats = asyncHandler(async (req, res) => {
 });
 
 export const getGeographicStats = asyncHandler(async (req, res) => {
-  
+
   const donorsByCity = await prisma.donorProfile.groupBy({
     by: ['city'],
     _count: { id: true }

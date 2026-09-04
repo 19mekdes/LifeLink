@@ -2,9 +2,6 @@ import api from './api/api.js';
 
 console.log("Donor Request JS is working!");
 
-// ==========================================
-// HOSPITAL COORDINATES DATABASE
-// ==========================================
 const hospitalCoordinates = {
     "Black Lion Hospital": { lat: 9.0192, lng: 38.7525 },
     "Black Lion Teaching Hospital": { lat: 9.0192, lng: 38.7525 },
@@ -101,10 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ==========================================
-    // ADD HOSPITAL MARKERS
-    // ==========================================
-
+    
     function addHospitalMarkers(requests) {
         if (!map) return;
 

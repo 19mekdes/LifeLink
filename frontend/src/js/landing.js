@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    
-
     const hamburger = document.getElementById("hamburger");
     const navLinksContainer = document.getElementById("nav-links");
 
@@ -64,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    
+
 
     const sections = document.querySelectorAll(
         ".about, .how-it-works, .cta"

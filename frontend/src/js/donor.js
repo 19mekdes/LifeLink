@@ -4,11 +4,7 @@ console.log("Donor JS is working!");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // =====================================================
-    // HELPERS
-    // =====================================================
-
-    const $ = (id) => document.getElementById(id);
+const $ = (id) => document.getElementById(id);
 
     const formatDate = (date) => {
         if (!date) return "Not available";

@@ -6,10 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const $ = (id) => document.getElementById(id);
 
-    // ==========================================
-    // PROFILE ELEMENTS
-    // ==========================================
-
+   
     const donorName = $("donorName");
     const donorEmail = $("donorEmail");
     const donorPhone = $("donorPhone");
@@ -38,26 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const notificationCount = $("notificationCount");
 
 
-    // ==========================================
-    // CURRENT DONOR
-    // ==========================================
-
     let donor = null;
-
-
-    // ==========================================
-    // DISPLAY PROFILE
-    // ==========================================
-
+ 
    function displayProfile(data) {
 
     if (!data) return;
 
     donor = data.donor || data.profile || data;
 
-    // ==========================================
-    // BACKEND DATA STRUCTURE
-    // ==========================================
 
     const user = donor.user || {};
 
@@ -94,11 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
         donor.status ||
         "Not available";
 
-
-    // ==========================================
-    // MAIN PROFILE
-    // ==========================================
-
     if (donorName) {
         donorName.textContent = name;
     }
@@ -131,28 +111,15 @@ document.addEventListener("DOMContentLoaded", () => {
             statusMap[availability] || availability;
     }
 
-
-    // ==========================================
-// PROFILE INITIAL
-// ==========================================
-
 const initial =
     name.charAt(0).toUpperCase();
 
 
-// ==========================================
-// TOPBAR
-// ==========================================
 
 if (topbarName) {
     topbarName.textContent =
         name;
 }
-
-
-// ==========================================
-// PROFILE INITIAL
-// ==========================================
 
 if (profileInitial) {
     profileInitial.textContent =
@@ -163,11 +130,6 @@ if (largeProfileInitial) {
     largeProfileInitial.textContent =
         initial;
 }
-
-
-// ==========================================
-// PROFILE DROPDOWN
-// ==========================================
 
 document.querySelectorAll(".profile-name").forEach(element => {
     element.textContent = name;

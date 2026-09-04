@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    
+
     function addHospitalMarkers(requests) {
         if (!map) return;
 
@@ -169,9 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ==========================================
-    // LOAD BLOOD REQUESTS
-    // ==========================================
 
     async function loadRequests() {
 
@@ -254,10 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-    // ==========================================
-    // START
-    // ==========================================
 
     initMap();
     loadRequests();

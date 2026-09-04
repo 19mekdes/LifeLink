@@ -143,9 +143,7 @@ const dashboardProfileName = document.getElementById("dashboardProfileName");
 if (dashboardProfileName) {
     dashboardProfileName.textContent = name;
 }
-    // ==========================================
-    // AVAILABILITY SECTION
-    // ==========================================
+    
 
     if (availabilityText) {
         const statusMapDisplay = {
@@ -158,20 +156,12 @@ if (dashboardProfileName) {
     }
 
 
-    // ==========================================
-    // SAVE LOCALLY
-    // ==========================================
-
     localStorage.setItem(
         "lifelinkDonor",
         JSON.stringify(donor)
     );
 }
 
-
-    // ==========================================
-    // LOAD PROFILE
-    // ==========================================
 
     async function loadProfile() {
 
@@ -196,11 +186,7 @@ if (dashboardProfileName) {
                 error
             );
 
-            /*
-             * Temporary fallback only for development.
-             * It allows the page to remain usable while
-             * the backend is offline.
-             */
+        
 
             const saved =
                 localStorage.getItem(
@@ -226,10 +212,6 @@ if (dashboardProfileName) {
         }
     }
 
-
-    // ==========================================
-    // ENTER EDIT MODE
-    // ==========================================
 
     editProfileBtn?.addEventListener(
         "click",
@@ -279,10 +261,6 @@ if (dashboardProfileName) {
         }
     );
 
-
-    // ==========================================
-    // SAVE PROFILE
-    // ==========================================
 
     saveProfileBtn?.addEventListener(
         "click",
@@ -371,10 +349,6 @@ alert(
     );
 
 
-    // ==========================================
-    // CANCEL EDIT
-    // ==========================================
-
     function exitEditMode() {
 
         document
@@ -401,11 +375,6 @@ alert(
         "click",
         exitEditMode
     );
-
-
-    // ==========================================
-    // UPDATE AVAILABILITY
-    // ==========================================
 
     availabilityBtn?.addEventListener(
         "click",
@@ -480,10 +449,6 @@ alert(
     );
 
 
-    // ==========================================
-    // LOAD NOTIFICATION COUNT
-    // ==========================================
-
     async function loadNotificationCount() {
 
     try {
@@ -513,10 +478,7 @@ alert(
             error
         );
     }
-}
-    // ==========================================
-    // START
-    // ==========================================
+
 
     exitEditMode();
 

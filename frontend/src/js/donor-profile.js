@@ -478,6 +478,7 @@ alert(
             error
         );
     }
+}
 
 
     exitEditMode();

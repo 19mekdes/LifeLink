@@ -5,11 +5,6 @@ console.log("Donor common JS is working!");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-
-    /* =====================================================
-       GET SAVED DONOR
-    ===================================================== */
-
     function getSavedDonor() {
 
         try {
@@ -32,10 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    /* =====================================================
-       DISPLAY DONOR HEADER
-    ===================================================== */
 
     function displayDonorHeader() {
 
@@ -149,11 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-    /* =====================================================
-       NOTIFICATION COUNT
-    ===================================================== */
-
     async function loadNotificationCount() {
 
         try {
@@ -191,11 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     }
-
-
-    /* =====================================================
-       ACTIVE SIDEBAR LINK
-    ===================================================== */
 
     function setActiveNavigation() {
 
@@ -242,11 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
     }
-
-
-    /* =====================================================
-       PROFILE DROPDOWN
-    ===================================================== */
 
     function setupProfileDropdown() {
 
@@ -310,10 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =====================================================
-   LOGOUT
-===================================================== */
-
     function setupLogout() {
 
         const logoutButton =
@@ -347,10 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    /* =====================================================
-       SIDEBAR
-    ===================================================== */
-
     function setupSidebar() {
 
         const sidebar =
@@ -377,10 +345,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-
-        /* -----------------------------------------------
-           INITIAL STATE
-        ------------------------------------------------ */
 
         if (window.innerWidth > 768) {
 
@@ -425,10 +389,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         );
 
-
-        /* -----------------------------------------------
-           RESIZE
-        ------------------------------------------------ */
 
         let previousWidth =
             window.innerWidth;
@@ -489,10 +449,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =====================================================
-       START COMMON FEATURES
-    ===================================================== */
-
     displayDonorHeader();
 
     loadNotificationCount();
@@ -506,10 +462,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setupSidebar();
 
 });
-
-// =====================================================
-// DYNAMIC PROFILE DROPDOWN
-// =====================================================
 
 async function updateProfileDropdown() {
 
@@ -538,10 +490,6 @@ async function updateProfileDropdown() {
         }
 
 
-        // ---------------------------------------------
-        // UPDATE PROFILE NAME
-        // ---------------------------------------------
-
         const nameElement =
             document.querySelector(
                 ".profile-dropdown-header strong"
@@ -554,10 +502,6 @@ async function updateProfileDropdown() {
 
         }
 
-
-        // ---------------------------------------------
-        // UPDATE PROFILE CIRCLE
-        // ---------------------------------------------
 
         const initialElement =
             document.getElementById(

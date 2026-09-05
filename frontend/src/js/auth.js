@@ -1,10 +1,8 @@
 import authApi from './api/authApi.js';
 
-// ============ DOM ELEMENTS ============
 const toastContainer = document.getElementById('toastContainer');
 const formError = document.getElementById('formError');
 
-// ============ TOAST FUNCTION ============
 function showToast(message, type = 'success') {
     if (!toastContainer) {
         console.warn('Toast container not found');

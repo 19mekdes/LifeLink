@@ -1,13 +1,6 @@
 import authApi from './api/authApi.js';
 import { applyIcons, iconMarkup } from './bloodbank-icons.js';
 
-/**
- * Shared sidebar + header behavior for every LifeLink blood-bank page.
- * Handles: auth guard, mobile drawer, desktop collapse, profile dropdown,
- * top loading indicator, and painting the header/profile fields that are
- * common to all pages.
- */
-
 const COLLAPSE_STORAGE_KEY = 'lb_sidebar_collapsed';
 
 function ensureProgressBar() {

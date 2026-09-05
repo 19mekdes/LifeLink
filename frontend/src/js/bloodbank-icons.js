@@ -1,19 +1,3 @@
-/**
- * Shared icon set for the LifeLink blood-bank console.
- * Small, stroke-based line icons (currentColor) used in place of emoji
- * throughout the dashboard so the UI reads as a real product rather than
- * a prototype.
- *
- * Usage:
- *   import { iconMarkup, applyIcons } from './bloodbank-icons.js';
- *
- *   // Static markup: <span class="nav-icon" data-icon="dashboard"></span>
- *   applyIcons(); // fills every [data-icon] element on the page
- *
- *   // Dynamic markup built in JS template strings:
- *   `<button>${iconMarkup('trash')} Remove</button>`
- */
-
 const PATHS = {
   dashboard: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
   droplet: '<path d="M12 2.5c3.4 4.4 6.5 8.4 6.5 12A6.5 6.5 0 1 1 5.5 14.5c0-3.6 3.1-7.6 6.5-12z"/>',

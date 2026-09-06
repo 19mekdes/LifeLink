@@ -1346,9 +1346,7 @@ tbody tr:last-child td {
     font-weight: 500;
 }
 
-/* ============================================================
-   21. PAGE — NOTIFICATIONS
-   ============================================================ */
+
 .notification-list {
     list-style: none;
 }
@@ -1422,9 +1420,7 @@ tbody tr:last-child td {
     font-weight: 500;
 }
 
-/* ============================================================
-   22. PAGE — DONOR OUTREACH
-   ============================================================ */
+
 .outreach-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1516,9 +1512,7 @@ tbody tr:last-child td {
     color: var(--success);
 }
 
-/* ============================================================
-   23. PAGE — ANALYTICS
-   ============================================================ */
+
 .analytics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -1565,9 +1559,7 @@ tbody tr:last-child td {
     color: var(--text-main);
 }
 
-/* ============================================================
-   24. RESPONSIVE
-   ============================================================ */
+
 @media (max-width: 1024px) {
     .dashboard-container {
         padding: 20px;

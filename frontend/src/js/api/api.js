@@ -1,9 +1,5 @@
 const API_BASE_URL = "http://localhost:5000/api";
 
-/* =====================================================
-   API REQUEST
-===================================================== */
-
 async function apiRequest(endpoint, options = {}) {
     const token = localStorage.getItem("token");
 
@@ -45,11 +41,6 @@ async function apiRequest(endpoint, options = {}) {
     return data;
 }
 
-
-/* =====================================================
-   API OBJECT
-===================================================== */
-
 const api = {
 
     get: (endpoint, options = {}) =>
@@ -77,11 +68,6 @@ const api = {
             ...options,
             method: "DELETE"
         }),
-
-
-    /* =================================================
-       AUTH STORAGE
-    ================================================= */
 
     saveAuth(token, user) {
         localStorage.setItem("token", token);
@@ -112,10 +98,6 @@ const api = {
     },
 
 
-    /* =================================================
-       DASHBOARD URL
-    ================================================= */
-
     getDashboardUrl(role) {
         const dashboards = {
             ADMIN: "admin-dashboard.html",
@@ -128,10 +110,6 @@ const api = {
     },
 
 
-    /* =================================================
-       LOGOUT
-    ================================================= */
-
     logout() {
         this.clearAuth();
 
@@ -141,10 +119,6 @@ const api = {
     }
 };
 
-
-/* =====================================================
-   GLOBAL COMPATIBILITY
-===================================================== */
 
 window.apiRequest = apiRequest;
 window.api = api;

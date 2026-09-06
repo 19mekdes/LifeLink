@@ -1,6 +1,3 @@
-/* ============================================================
-   1. DESIGN TOKENS / CSS VARIABLES
-   ============================================================ */
 :root {
     --primary: #7b1e2b;
     --primary-dark: #611722;
@@ -31,9 +28,7 @@
     --sidebar-width-collapsed: 84px;
 }
 
-/* ============================================================
-   2. RESET & BASE
-   ============================================================ */
+
 * {
     margin: 0;
     padding: 0;
@@ -67,9 +62,6 @@ body {
     background: #9ca3af;
 }
 
-/* ============================================================
-   3. LAYOUT — SIDEBAR
-   ============================================================ */
 .sidebar {
     width: var(--sidebar-width);
     background: #7b1e2b;
@@ -313,9 +305,7 @@ body {
     padding: 12px;
 }
 
-/* ============================================================
-   4. LAYOUT — MAIN CONTENT & HEADER
-   ============================================================ */
+
 .main-content {
     flex-grow: 1;
     display: flex;
@@ -485,9 +475,7 @@ body {
     flex-grow: 1;
 }
 
-/* ============================================================
-   5. LAYOUT — MOBILE NAV CONTROLS
-   ============================================================ */
+
 .menu-toggle {
     display: flex;
     align-items: center;
@@ -523,9 +511,6 @@ body {
     display: block;
 }
 
-/* ============================================================
-   6. PAGE TRANSITIONS
-   ============================================================ */
 .page-content {
     animation: fadeIn 0.3s ease;
 }
@@ -542,9 +527,6 @@ body {
     }
 }
 
-/* ============================================================
-   7. COMPONENT — BUTTONS
-   ============================================================ */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -623,9 +605,6 @@ body {
     cursor: not-allowed;
 }
 
-/* ============================================================
-   8. COMPONENT — LOADING / SPINNERS
-   ============================================================ */
 .spinner {
     display: none;
     width: 14px;
@@ -668,9 +647,6 @@ body {
     grid-column: 1 / -1;
 }
 
-/* ============================================================
-   9. COMPONENT — TOAST NOTIFICATIONS
-   ============================================================ */
 .toast-container {
     position: fixed;
     top: 20px;
@@ -704,10 +680,6 @@ body {
 .toast-error {
     border-left: 4px solid #dc2626;
 }
-
-/* ============================================================
-   10. COMPONENT — BADGES
-   ============================================================ */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -788,9 +760,6 @@ body {
     background: var(--success);
 }
 
-/* ============================================================
-   11. COMPONENT — TABLES
-   ============================================================ */
 .table-wrap {
     overflow-x: auto;
     border-radius: var(--radius-sm);
@@ -832,9 +801,6 @@ tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* ============================================================
-   12. COMPONENT — PAGINATION
-   ============================================================ */
 .pagination-bar {
     display: flex;
     align-items: center;
@@ -897,9 +863,6 @@ tbody tr:last-child td {
     cursor: not-allowed;
 }
 
-/* ============================================================
-   13. COMPONENT — FORMS
-   ============================================================ */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -939,9 +902,6 @@ tbody tr:last-child td {
     box-shadow: 0 0 0 3px rgba(123, 30, 43, 0.1);
 }
 
-/* ============================================================
-   14. COMPONENT — MODAL
-   ============================================================ */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1025,9 +985,6 @@ tbody tr:last-child td {
     gap: 10px;
 }
 
-/* ============================================================
-   15. COMPONENT — EMPTY STATE
-   ============================================================ */
 .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -1051,9 +1008,6 @@ tbody tr:last-child td {
     font-size: 14px;
 }
 
-/* ============================================================
-   16. COMPONENT — GENERIC SECTION BOX
-   ============================================================ */
 .section-box {
     background: var(--bg-white);
     border-radius: var(--radius-md);
@@ -1091,9 +1045,6 @@ tbody tr:last-child td {
     align-items: center;
 }
 
-/* ============================================================
-   17. PAGE — DASHBOARD METRICS
-   ============================================================ */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

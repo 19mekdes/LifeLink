@@ -6,9 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const $ = (id) => document.getElementById(id);
 
-    // ==========================================
-    // PROFILE ELEMENTS
-    // ==========================================
 
     const donorName = $("donorName");
     const donorEmail = $("donorEmail");
@@ -37,17 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const notificationCount = $("notificationCount");
 
-
-    // ==========================================
-    // CURRENT DONOR
-    // ==========================================
-
     let donor = null;
 
-
-    // ==========================================
-    // DISPLAY PROFILE
-    // ==========================================
 
    function displayProfile(data) {
 
@@ -55,9 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     donor = data.donor || data.profile || data;
 
-    // ==========================================
-    // BACKEND DATA STRUCTURE
-    // ==========================================
 
     const user = donor.user || {};
 
@@ -95,10 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "Not available";
 
 
-    // ==========================================
-    // MAIN PROFILE
-    // ==========================================
-
     if (donorName) {
         donorName.textContent = name;
     }
@@ -131,28 +112,14 @@ document.addEventListener("DOMContentLoaded", () => {
             statusMap[availability] || availability;
     }
 
-
-    // ==========================================
-// PROFILE INITIAL
-// ==========================================
-
 const initial =
     name.charAt(0).toUpperCase();
 
-
-// ==========================================
-// TOPBAR
-// ==========================================
 
 if (topbarName) {
     topbarName.textContent =
         name;
 }
-
-
-// ==========================================
-// PROFILE INITIAL
-// ==========================================
 
 if (profileInitial) {
     profileInitial.textContent =
@@ -164,10 +131,6 @@ if (largeProfileInitial) {
         initial;
 }
 
-
-// ==========================================
-// PROFILE DROPDOWN
-// ==========================================
 
 document.querySelectorAll(".profile-name").forEach(element => {
     element.textContent = name;
@@ -181,9 +144,6 @@ const dashboardProfileName = document.getElementById("dashboardProfileName");
 if (dashboardProfileName) {
     dashboardProfileName.textContent = name;
 }
-    // ==========================================
-    // AVAILABILITY SECTION
-    // ==========================================
 
     if (availabilityText) {
         const statusMapDisplay = {
@@ -196,9 +156,7 @@ if (dashboardProfileName) {
     }
 
 
-    // ==========================================
-    // SAVE LOCALLY
-    // ==========================================
+    
 
     localStorage.setItem(
         "lifelinkDonor",
@@ -207,9 +165,6 @@ if (dashboardProfileName) {
 }
 
 
-    // ==========================================
-    // LOAD PROFILE
-    // ==========================================
 
     async function loadProfile() {
 
@@ -265,9 +220,7 @@ if (dashboardProfileName) {
     }
 
 
-    // ==========================================
-    // ENTER EDIT MODE
-    // ==========================================
+    
 
     editProfileBtn?.addEventListener(
         "click",
@@ -318,9 +271,7 @@ if (dashboardProfileName) {
     );
 
 
-    // ==========================================
-    // SAVE PROFILE
-    // ==========================================
+    
 
     saveProfileBtn?.addEventListener(
         "click",
@@ -409,9 +360,7 @@ alert(
     );
 
 
-    // ==========================================
-    // CANCEL EDIT
-    // ==========================================
+    
 
     function exitEditMode() {
 
@@ -441,9 +390,6 @@ alert(
     );
 
 
-    // ==========================================
-    // UPDATE AVAILABILITY
-    // ==========================================
 
     availabilityBtn?.addEventListener(
         "click",
@@ -518,9 +464,6 @@ alert(
     );
 
 
-    // ==========================================
-    // LOAD NOTIFICATION COUNT
-    // ==========================================
 
     async function loadNotificationCount() {
 
@@ -552,9 +495,6 @@ alert(
         );
     }
 }
-    // ==========================================
-    // START
-    // ==========================================
 
     exitEditMode();
 

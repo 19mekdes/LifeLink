@@ -6,10 +6,6 @@ console.log("Donor common JS is working!");
 document.addEventListener("DOMContentLoaded", () => {
 
 
-    /* =====================================================
-       GET SAVED DONOR
-    ===================================================== */
-
     function getSavedDonor() {
 
         try {
@@ -32,10 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    /* =====================================================
-       DISPLAY DONOR HEADER
-    ===================================================== */
 
     function displayDonorHeader() {
 

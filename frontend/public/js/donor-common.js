@@ -2,7 +2,6 @@ import api from './api/api.js';
 
 console.log("Donor common JS is working!");
 
-
 document.addEventListener("DOMContentLoaded", () => {
 
 

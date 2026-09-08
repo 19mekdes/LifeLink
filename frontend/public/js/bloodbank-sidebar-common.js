@@ -1,8 +1,6 @@
 import authApi from './api/authApi.js';
 import { applyIcons, iconMarkup } from './bloodbank-icons.js';
 
-
-
 const COLLAPSE_STORAGE_KEY = 'lb_sidebar_collapsed';
 
 function ensureProgressBar() {

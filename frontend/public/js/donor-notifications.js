@@ -14,10 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("markAllReadBtn");
 
 
-    // ==========================================
-    // LOAD NOTIFICATIONS
-    // ==========================================
-
+    
     async function loadNotifications() {
 
         try {
@@ -66,10 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // ==========================================
-    // DISPLAY NOTIFICATIONS
-    // ==========================================
 
     function displayNotifications(
         notifications
@@ -187,11 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-
-    // ==========================================
-    // UPDATE UNREAD COUNT
-    // ==========================================
-
     function updateNotificationCount(
         notifications
     ) {
@@ -211,10 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // ==========================================
-    // MARK ONE AS READ
-    // ==========================================
 
     async function markAsRead(
         notificationId,
@@ -273,11 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // ==========================================
-    // MARK ALL AS READ
-    // ==========================================
-
     markAllReadBtn?.addEventListener(
         "click",
         async () => {
@@ -329,11 +308,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     );
-
-
-    // ==========================================
-    // START
-    // ==========================================
 
     loadNotifications();
 

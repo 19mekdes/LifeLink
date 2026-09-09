@@ -4,9 +4,6 @@ console.log("Donor JS is working!");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // =====================================================
-    // HELPERS
-    // =====================================================
 
     const $ = (id) => document.getElementById(id);
 
@@ -34,10 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    // =====================================================
-    // DASHBOARD ELEMENTS
-    // =====================================================
-
     const topbarName = $("topbarName");
 
     const profileInitial = $("profileInitial");
@@ -57,10 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const recentActivity = $("recentActivity");
     const notificationPreview = $("notificationPreview");
 
-
-    // =====================================================
-    // DISPLAY DONOR INFORMATION
-    // =====================================================
 
     function displayDonorInfo(donor) {
 
@@ -93,9 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
             topbarName.textContent = `Hi, ${name}`;
         }
 
-        // -------------------------
-        // Initial
-        // -------------------------
+    
 
         if (profileInitial) {
             profileInitial.textContent = initial;
@@ -105,9 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dashboardProfileInitial.textContent = initial;
         }
 
-        // -------------------------
-        // Welcome Name
-        // -------------------------
+
 
         const welcomeDonorName = $("welcomeDonorName");
         if (welcomeDonorName) {
@@ -115,9 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
             welcomeDonorName.textContent = firstName;
         }
 
-        // -------------------------
-        // Blood Type
-        // -------------------------
 
         if (dashboardBloodType) {
 
@@ -126,10 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        // -------------------------
-        // Location
-        // -------------------------
-
+        
         if (dashboardLocation) {
 
             dashboardLocation.textContent =
@@ -139,9 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        // -------------------------
-        // Availability
-        // -------------------------
+    
 
         const availability =
             donor.availabilityStatus ||
@@ -154,9 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        // -------------------------
-        // Donation Status
-        // -------------------------
 
         if (donationStatus) {
 
@@ -197,11 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // =====================================================
-    // DISPLAY DASHBOARD STATS
-    // =====================================================
-
     function displayDashboardStats(stats) {
 
         if (!stats) {
@@ -211,19 +180,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Dashboard statistics:", stats);
 
-        // -------------------------
-        // Total Donations
-        // -------------------------
-
+    
         if (totalDonations) {
 
             totalDonations.textContent =
                 stats.totalDonations ?? 0;
         }
 
-        // -------------------------
-        // Total / Pending Requests
-        // -------------------------
+
 
         if (totalRequests) {
 
@@ -231,9 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 stats.pendingRequests ?? 0;
         }
 
-        // -------------------------
-        // Last Donation
-        // -------------------------
 
         if (lastDonation) {
 
@@ -243,9 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     : "No donations yet";
         }
 
-        // -------------------------
-        // Next Eligible Date
-        // -------------------------
 
         const nextEligible =
             $("nextEligible");
@@ -258,9 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     : "Not available";
         }
 
-        // -------------------------
-        // Lives Impacted
-        // -------------------------
+
 
         const livesImpacted =
             $("livesImpacted");
@@ -280,9 +236,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 stats.totalDonations ?? 0;
         }
 
-        // -------------------------
-        // Donation Summary
-        // -------------------------
 
         const donationTotal =
             $("donationTotal");
@@ -293,9 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 stats.totalDonations ?? 0;
         }
 
-        // -------------------------
-        // Current Year Donations
-        // -------------------------
 
         const currentYearDonations =
             $("currentYearDonations");
@@ -319,10 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // =====================================================
-    // DISPLAY AVAILABLE REQUESTS
-    // =====================================================
 
     function displayAvailableRequests(requests) {
 
@@ -422,9 +368,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // =====================================================
-    // DISPLAY RECENT ACTIVITY
-    // =====================================================
 
     function displayRecentActivity(
         recentDonations,
@@ -494,11 +437,6 @@ document.addEventListener("DOMContentLoaded", () => {
         recentActivity.innerHTML = html;
     }
 
-
-    // =====================================================
-    // DISPLAY NOTIFICATIONS
-    // =====================================================
-
     function displayNotifications(
         notifications,
         unreadCount
@@ -553,10 +491,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 .join("");
     }
 
-
-    // =====================================================
-    // LOAD DASHBOARD
-    // =====================================================
 
     async function loadDashboard() {
 
@@ -671,10 +605,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // =====================================================
-    // SIDEBAR NAVIGATION
-    // =====================================================
-
     document
         .querySelectorAll(".sidebar nav a")
         .forEach(link => {
@@ -693,10 +623,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-
-    // =====================================================
-    // START DASHBOARD
-    // =====================================================
 
     loadDashboard();
 

@@ -19,18 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const bloodType =
         document.getElementById("bloodType");
 
-
-    // ==========================================
-    // LOAD DONATION HISTORY
-    // ==========================================
-
     async function loadDonationHistory() {
 
         try {
 
-            // ==================================
-            // GET DONATION HISTORY
-            // ==================================
+    
 
             const data =
                 await api.get(
@@ -50,10 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 data?.data?.stats || {};
 
 
-            // ==================================
-            // TOTAL DONATIONS
-            // ==================================
-
+        
             if (totalDonations) {
 
                 totalDonations.textContent =
@@ -61,9 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // ==================================
-            // LAST DONATION
-            // ==================================
 
             if (lastDonation) {
 
@@ -86,9 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // ==================================
-            // DONATION LIST
-            // ==================================
+            
 
             if (!donationList) return;
 
@@ -152,9 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // ==================================
-            // GET DONOR PROFILE
-            // ==================================
 
             const profileResponse =
                 await api.get(
@@ -173,10 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("EXTRACTED PROFILE:", profile);
             console.log("BLOOD TYPE:", profile.bloodType);
 
-            // ==================================
-            // BLOOD TYPE
-            // ==================================
-
+            
             if (bloodType) {
 
                 bloodType.textContent =
@@ -208,9 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ==========================================
-    // NOTIFICATION COUNT
-    // ==========================================
+    
 
     async function loadNotificationCount() {
 
@@ -252,10 +229,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // ==========================================
-    // START
-    // ==========================================
 
     loadDonationHistory();
     loadNotificationCount();

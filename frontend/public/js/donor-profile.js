@@ -37,132 +37,132 @@ document.addEventListener("DOMContentLoaded", () => {
     let donor = null;
 
 
-   function displayProfile(data) {
+    function displayProfile(data) {
 
-    if (!data) return;
+        if (!data) return;
 
-    donor = data.donor || data.profile || data;
-
-
-    const user = donor.user || {};
-
-    const name =
-        user.name ||
-        donor.name ||
-        donor.fullName ||
-        "Not available";
-
-    const email =
-        user.email ||
-        donor.email ||
-        "Not available";
-
-    const phone =
-        user.phone ||
-        donor.phone ||
-        donor.phoneNumber ||
-        "Not available";
-
-    const bloodType =
-        donor.bloodType ||
-        "Not available";
-
-    const location =
-        donor.city ||
-        donor.address ||
-        donor.location ||
-        "Not available";
-
-    const availability =
-        donor.availabilityStatus ||
-        donor.availability ||
-        donor.status ||
-        "Not available";
+        donor = data.donor || data.profile || data;
 
 
-    if (donorName) {
-        donorName.textContent = name;
+        const user = donor.user || {};
+
+        const name =
+            user.name ||
+            donor.name ||
+            donor.fullName ||
+            "Not available";
+
+        const email =
+            user.email ||
+            donor.email ||
+            "Not available";
+
+        const phone =
+            user.phone ||
+            donor.phone ||
+            donor.phoneNumber ||
+            "Not available";
+
+        const bloodType =
+            donor.bloodType ||
+            "Not available";
+
+        const location =
+            donor.city ||
+            donor.address ||
+            donor.location ||
+            "Not available";
+
+        const availability =
+            donor.availabilityStatus ||
+            donor.availability ||
+            donor.status ||
+            "Not available";
+
+
+        if (donorName) {
+            donorName.textContent = name;
+        }
+
+        if (donorEmail) {
+            donorEmail.textContent = email;
+        }
+
+        if (donorPhone) {
+            donorPhone.textContent = phone;
+        }
+
+        if (donorBloodType) {
+            donorBloodType.textContent =
+                bloodType;
+        }
+
+        if (donorLocation) {
+            donorLocation.textContent =
+                location;
+        }
+
+        if (donorStatus) {
+            const statusMap = {
+                'AVAILABLE': 'Available',
+                'TEMPORARILY_UNAVAILABLE': 'Temporarily Unavailable',
+                'UNAVAILABLE': 'Unavailable'
+            };
+            donorStatus.textContent =
+                statusMap[availability] || availability;
+        }
+
+        const initial =
+            name.charAt(0).toUpperCase();
+
+
+        if (topbarName) {
+            topbarName.textContent =
+                name;
+        }
+
+        if (profileInitial) {
+            profileInitial.textContent =
+                initial;
+        }
+
+        if (largeProfileInitial) {
+            largeProfileInitial.textContent =
+                initial;
+        }
+
+
+        document.querySelectorAll(".profile-name").forEach(element => {
+            element.textContent = name;
+        });
+
+        document.querySelectorAll(".profile-avatar").forEach(element => {
+            element.textContent = initial;
+        });
+
+        const dashboardProfileName = document.getElementById("dashboardProfileName");
+        if (dashboardProfileName) {
+            dashboardProfileName.textContent = name;
+        }
+
+        if (availabilityText) {
+            const statusMapDisplay = {
+                'AVAILABLE': 'Available',
+                'TEMPORARILY_UNAVAILABLE': 'Temporarily Unavailable',
+                'UNAVAILABLE': 'Unavailable'
+            };
+            availabilityText.textContent =
+                statusMapDisplay[availability] || availability;
+        }
+
+
+
+
+        localStorage.setItem(
+            "lifelinkDonor",
+            JSON.stringify(donor)
+        );
     }
-
-    if (donorEmail) {
-        donorEmail.textContent = email;
-    }
-
-    if (donorPhone) {
-        donorPhone.textContent = phone;
-    }
-
-    if (donorBloodType) {
-        donorBloodType.textContent =
-            bloodType;
-    }
-
-    if (donorLocation) {
-        donorLocation.textContent =
-            location;
-    }
-
-    if (donorStatus) {
-        const statusMap = {
-            'AVAILABLE': 'Available',
-            'TEMPORARILY_UNAVAILABLE': 'Temporarily Unavailable',
-            'UNAVAILABLE': 'Unavailable'
-        };
-        donorStatus.textContent =
-            statusMap[availability] || availability;
-    }
-
-const initial =
-    name.charAt(0).toUpperCase();
-
-
-if (topbarName) {
-    topbarName.textContent =
-        name;
-}
-
-if (profileInitial) {
-    profileInitial.textContent =
-        initial;
-}
-
-if (largeProfileInitial) {
-    largeProfileInitial.textContent =
-        initial;
-}
-
-
-document.querySelectorAll(".profile-name").forEach(element => {
-    element.textContent = name;
-});
-
-document.querySelectorAll(".profile-avatar").forEach(element => {
-    element.textContent = initial;
-});
-
-const dashboardProfileName = document.getElementById("dashboardProfileName");
-if (dashboardProfileName) {
-    dashboardProfileName.textContent = name;
-}
-
-    if (availabilityText) {
-        const statusMapDisplay = {
-            'AVAILABLE': 'Available',
-            'TEMPORARILY_UNAVAILABLE': 'Temporarily Unavailable',
-            'UNAVAILABLE': 'Unavailable'
-        };
-        availabilityText.textContent =
-            statusMapDisplay[availability] || availability;
-    }
-
-
-    
-
-    localStorage.setItem(
-        "lifelinkDonor",
-        JSON.stringify(donor)
-    );
-}
 
 
 
@@ -172,8 +172,8 @@ if (dashboardProfileName) {
 
             const data =
                 await api.get(
-                "/donors/profile"
-            );
+                    "/donors/profile"
+                );
 
             console.log(
                 "Profile data:",
@@ -220,7 +220,7 @@ if (dashboardProfileName) {
     }
 
 
-    
+
 
     editProfileBtn?.addEventListener(
         "click",
@@ -271,7 +271,7 @@ if (dashboardProfileName) {
     );
 
 
-    
+
 
     saveProfileBtn?.addEventListener(
         "click",
@@ -301,49 +301,49 @@ if (dashboardProfileName) {
 
 
             const bloodTypeBackend = {
-    "A+": "A_POS",
-    "A-": "A_NEG",
-    "B+": "B_POS",
-    "B-": "B_NEG",
-    "AB+": "AB_POS",
-    "AB-": "AB_NEG",
-    "O+": "O_POS",
-    "O-": "O_NEG"
-};
+                "A+": "A_POS",
+                "A-": "A_NEG",
+                "B+": "B_POS",
+                "B-": "B_NEG",
+                "AB+": "AB_POS",
+                "AB-": "AB_NEG",
+                "O+": "O_POS",
+                "O-": "O_NEG"
+            };
 
-const updatedData = {
+            const updatedData = {
 
-    name: name,
+                name: name,
 
-    city: location,
+                city: location,
 
-    bloodType:
-        bloodTypeBackend[bloodType] || bloodType
+                bloodType:
+                    bloodTypeBackend[bloodType] || bloodType
 
-};
+            };
 
 
             try {
 
-             const result =
-    await api.put(
-        "/donors/profile",
-        updatedData
-    );
+                const result =
+                    await api.put(
+                        "/donors/profile",
+                        updatedData
+                    );
 
-console.log(
-    "Updated profile:",
-    result
-);
+                console.log(
+                    "Updated profile:",
+                    result
+                );
 
-// Backend response is inside result.data
-displayProfile(result.data);
+                // Backend response is inside result.data
+                displayProfile(result.data);
 
-exitEditMode();
+                exitEditMode();
 
-alert(
-    "Profile updated successfully."
-);
+                alert(
+                    "Profile updated successfully."
+                );
 
             } catch (error) {
 
@@ -360,7 +360,7 @@ alert(
     );
 
 
-    
+
 
     function exitEditMode() {
 
@@ -467,34 +467,34 @@ alert(
 
     async function loadNotificationCount() {
 
-    try {
+        try {
 
-        const data =
-            await api.get(
-                "/donors/notifications"
+            const data =
+                await api.get(
+                    "/donors/notifications"
+                );
+
+            console.log(
+                "Profile notification response:",
+                data
             );
 
-        console.log(
-            "Profile notification response:",
-            data
-        );
+            const unread =
+                data?.data?.unreadCount || 0;
 
-        const unread =
-            data?.data?.unreadCount || 0;
+            if (notificationCount) {
+                notificationCount.textContent =
+                    unread;
+            }
 
-        if (notificationCount) {
-            notificationCount.textContent =
-                unread;
+        } catch (error) {
+
+            console.error(
+                "Failed to load notification count:",
+                error
+            );
         }
-
-    } catch (error) {
-
-        console.error(
-            "Failed to load notification count:",
-            error
-        );
     }
-}
 
     exitEditMode();
 

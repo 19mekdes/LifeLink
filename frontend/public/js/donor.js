@@ -530,33 +530,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 data
             );
 
-            // -------------------------
-            // Donor
-            // -------------------------
+            
 
             displayDonorInfo(
                 data.donor
             );
 
-            // -------------------------
-            // Statistics
-            // -------------------------
-
+            
             displayDashboardStats(
                 data.stats
             );
 
-            // -------------------------
-            // Requests
-            // -------------------------
+            
 
             displayAvailableRequests(
                 data.availableRequests
             );
 
-            // -------------------------
-            // Activity
-            // -------------------------
 
             displayRecentActivity(
                 data.recentDonations,

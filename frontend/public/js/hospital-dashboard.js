@@ -1,17 +1,10 @@
 import api from '../../src/js/api/api.js';
 
-/**
- * hospital-dashboard.js
- * ------------------------------------------------------------------
- * Controller for the Hospital Dashboard single-page app.
- * Connected to LifeLink Backend REST API via ApiClient (api).
- */
+
 (function () {
   'use strict';
 
-  // ------------------------------------------------------------------
-  // AUTH GUARD
-  // ------------------------------------------------------------------
+
   if (!api.isAuthenticated()) {
     window.location.href = 'login.html';
     return;
@@ -23,9 +16,7 @@ import api from '../../src/js/api/api.js';
     return;
   }
 
-  // ------------------------------------------------------------------
-  // DOM HELPERS & TOAST
-  // ------------------------------------------------------------------
+  
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
@@ -69,9 +60,7 @@ import api from '../../src/js/api/api.js';
     return tr;
   };
 
-  // ------------------------------------------------------------------
-  // ENUM CONVERTERS & FORMATTERS
-  // ------------------------------------------------------------------
+
   const UI_TO_DB_BLOOD = {
     'O+': 'O_POS',
     'O-': 'O_NEG',
@@ -147,9 +136,7 @@ import api from '../../src/js/api/api.js';
     return el('span', { class: `badge ${cls}`, text: label });
   };
 
-  // ------------------------------------------------------------------
-  // REAL API CALLS
-  // ------------------------------------------------------------------
+  
   let cachedProfile = null;
 
   async function fetchHospitalProfile() {
@@ -225,9 +212,7 @@ import api from '../../src/js/api/api.js';
     return res.data;
   }
 
-  // ------------------------------------------------------------------
-  // SIDEBAR & TOPBAR NAVIGATION HANDLERS
-  // ------------------------------------------------------------------
+  
   const hamburgerBtn = $('#hamburger-btn');
   const sidebar = $('#sidebar');
   const sidebarOverlay = $('#sidebar-overlay');
@@ -300,9 +285,7 @@ import api from '../../src/js/api/api.js';
     api.logout();
   });
 
-  // ------------------------------------------------------------------
-  // NAVIGATION & PAGE ROUTING
-  // ------------------------------------------------------------------
+
   const pages = [
     'dashboard',
     'create-request',
@@ -487,9 +470,7 @@ import api from '../../src/js/api/api.js';
     });
   }
 
-  // ------------------------------------------------------------------
-  // MY REQUESTS PAGE
-  // ------------------------------------------------------------------
+  
   let cachedMyRequests = [];
   let currentMyRequestsTab = '';
 
@@ -598,9 +579,7 @@ import api from '../../src/js/api/api.js';
     loadMyRequests(tab.dataset.filter || '');
   });
 
-  // ------------------------------------------------------------------
-  // RESPONSES & DONATIONS PAGE
-  // ------------------------------------------------------------------
+
   let cachedResponses = [];
   let currentResponsesTab = '';
 
@@ -860,9 +839,7 @@ import api from '../../src/js/api/api.js';
     });
   }
 
-  // ------------------------------------------------------------------
-  // EDIT PROFILE MODAL
-  // ------------------------------------------------------------------
+
   const profileModal = $('#edit-profile-modal');
   
   function openEditProfileModal() {
@@ -903,9 +880,7 @@ import api from '../../src/js/api/api.js';
     });
   });
 
-  // ------------------------------------------------------------------
-  // SETTINGS PAGE
-  // ------------------------------------------------------------------
+
   function loadSettings() {
     safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
@@ -1015,9 +990,7 @@ import api from '../../src/js/api/api.js';
     api.logout();
   });
 
-  // ------------------------------------------------------------------
-  // INIT
-  // ------------------------------------------------------------------
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => loadPageData('dashboard'));
   } else {

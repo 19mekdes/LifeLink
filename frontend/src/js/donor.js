@@ -30,9 +30,6 @@ const $ = (id) => document.getElementById(id);
     };
 
 
-    // =====================================================
-    // DASHBOARD ELEMENTS
-    // =====================================================
 
     const topbarName = $("topbarName");
 
@@ -54,9 +51,6 @@ const $ = (id) => document.getElementById(id);
     const notificationPreview = $("notificationPreview");
 
 
-    // =====================================================
-    // DISPLAY DONOR INFORMATION
-    // =====================================================
 
     function displayDonorInfo(donor) {
 
@@ -81,17 +75,12 @@ const $ = (id) => document.getElementById(id);
             initial += nameParts[nameParts.length - 1]?.charAt(0)?.toUpperCase() || '';
         }
 
-        // -------------------------
-        // Name
-        // -------------------------
 
         if (topbarName) {
             topbarName.textContent = `Hi, ${name}`;
         }
 
-        // -------------------------
-        // Initial
-        // -------------------------
+        
 
         if (profileInitial) {
             profileInitial.textContent = initial;
@@ -101,19 +90,14 @@ const $ = (id) => document.getElementById(id);
             dashboardProfileInitial.textContent = initial;
         }
 
-        // -------------------------
-        // Welcome Name
-        // -------------------------
-
+    
         const welcomeDonorName = $("welcomeDonorName");
         if (welcomeDonorName) {
             const firstName = name.split(" ")[0];
             welcomeDonorName.textContent = firstName;
         }
 
-        // -------------------------
-        // Blood Type
-        // -------------------------
+        
 
         if (dashboardBloodType) {
 
@@ -122,9 +106,7 @@ const $ = (id) => document.getElementById(id);
 
         }
 
-        // -------------------------
-        // Location
-        // -------------------------
+    
 
         if (dashboardLocation) {
 
@@ -135,9 +117,7 @@ const $ = (id) => document.getElementById(id);
 
         }
 
-        // -------------------------
-        // Availability
-        // -------------------------
+    
 
         const availability =
             donor.availabilityStatus ||
@@ -150,9 +130,7 @@ const $ = (id) => document.getElementById(id);
 
         }
 
-        // -------------------------
-        // Donation Status
-        // -------------------------
+        
 
         if (donationStatus) {
 
@@ -193,10 +171,6 @@ const $ = (id) => document.getElementById(id);
         }
     }
 
-
-    // =====================================================
-    // DISPLAY DASHBOARD STATS
-    // =====================================================
 
     function displayDashboardStats(stats) {
 
@@ -263,14 +237,7 @@ const $ = (id) => document.getElementById(id);
 
         if (livesImpacted) {
 
-            /*
-             * The backend does not currently provide
-             * a separate livesImpacted value.
-             *
-             * For now, use total donations as the
-             * available value rather than inventing
-             * another backend field.
-             */
+        
 
             livesImpacted.textContent =
                 stats.totalDonations ?? 0;

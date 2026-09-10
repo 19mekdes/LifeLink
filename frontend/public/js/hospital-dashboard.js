@@ -1,6 +1,5 @@
 import api from '../../src/js/api/api.js';
 
-
 (function () {
   'use strict';
 
@@ -16,7 +15,7 @@ import api from '../../src/js/api/api.js';
     return;
   }
 
-  
+
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
@@ -136,7 +135,7 @@ import api from '../../src/js/api/api.js';
     return el('span', { class: `badge ${cls}`, text: label });
   };
 
-  
+
   let cachedProfile = null;
 
   async function fetchHospitalProfile() {
@@ -212,7 +211,7 @@ import api from '../../src/js/api/api.js';
     return res.data;
   }
 
-  
+
   const hamburgerBtn = $('#hamburger-btn');
   const sidebar = $('#sidebar');
   const sidebarOverlay = $('#sidebar-overlay');
@@ -349,9 +348,7 @@ import api from '../../src/js/api/api.js';
     }
   }
 
-  // ------------------------------------------------------------------
-  // DASHBOARD PAGE
-  // ------------------------------------------------------------------
+
   function loadDashboard() {
     // 1. Profile header update
     safeLoad(fetchHospitalProfile).then((profile) => {
@@ -452,7 +449,7 @@ import api from '../../src/js/api/api.js';
             tr.appendChild(el('td', { text: cachedProfile?.hospitalName || 'My Hospital' }));
             tr.appendChild(el('td', { text: r.location || '—' }));
             tr.appendChild(el('td', { text: formatDate(r.createdAt) }));
-            
+
             const actTd = el('td');
             if (['PENDING', 'APPROVED'].includes(r.status)) {
               const cancelBtn = el('button', { class: 'btn-danger btn-sm', text: 'Cancel' });
@@ -470,7 +467,7 @@ import api from '../../src/js/api/api.js';
     });
   }
 
-  
+
   let cachedMyRequests = [];
   let currentMyRequestsTab = '';
 
@@ -503,12 +500,12 @@ import api from '../../src/js/api/api.js';
         const patientInfo = String(r.patientInfo || '').toLowerCase();
 
         return bloodUI.includes(query) ||
-               bloodDB.includes(query) ||
-               urgencyUI.includes(query) ||
-               urgencyDB.includes(query) ||
-               location.includes(query) ||
-               description.includes(query) ||
-               patientInfo.includes(query);
+          bloodDB.includes(query) ||
+          urgencyUI.includes(query) ||
+          urgencyDB.includes(query) ||
+          location.includes(query) ||
+          description.includes(query) ||
+          patientInfo.includes(query);
       });
     }
 
@@ -604,10 +601,10 @@ import api from '../../src/js/api/api.js';
         const bloodType = String(r.bloodType || '').toLowerCase();
 
         return donorName.includes(query) ||
-               donorEmail.includes(query) ||
-               donorPhone.includes(query) ||
-               status.includes(query) ||
-               bloodType.includes(query);
+          donorEmail.includes(query) ||
+          donorPhone.includes(query) ||
+          status.includes(query) ||
+          bloodType.includes(query);
       });
     }
 
@@ -715,9 +712,7 @@ import api from '../../src/js/api/api.js';
     loadResponses(tab.dataset.filter || '');
   });
 
-  // ------------------------------------------------------------------
-  // PROFILE PAGE
-  // ------------------------------------------------------------------
+
   function loadProfile() {
     safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
@@ -841,7 +836,7 @@ import api from '../../src/js/api/api.js';
 
 
   const profileModal = $('#edit-profile-modal');
-  
+
   function openEditProfileModal() {
     if (!profileModal) return;
     if (cachedProfile) {
@@ -950,9 +945,7 @@ import api from '../../src/js/api/api.js';
     $('#password-form').reset();
   });
 
-  // ------------------------------------------------------------------
-  // CREATE REQUEST FORM
-  // ------------------------------------------------------------------
+
   $('#blood-request-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -983,9 +976,7 @@ import api from '../../src/js/api/api.js';
     });
   });
 
-  // ------------------------------------------------------------------
-  // LOGOUT
-  // ------------------------------------------------------------------
+
   $('#logout-btn')?.addEventListener('click', () => {
     api.logout();
   });

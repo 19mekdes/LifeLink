@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-   const sections = document.querySelectorAll(
+    const sections = document.querySelectorAll(
         ".about, .how-it-works, .cta"
     );
 

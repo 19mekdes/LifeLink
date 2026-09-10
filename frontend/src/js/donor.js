@@ -4,7 +4,7 @@ console.log("Donor JS is working!");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-const $ = (id) => document.getElementById(id);
+    const $ = (id) => document.getElementById(id);
 
     const formatDate = (date) => {
         if (!date) return "Not available";
@@ -80,7 +80,7 @@ const $ = (id) => document.getElementById(id);
             topbarName.textContent = `Hi, ${name}`;
         }
 
-        
+
 
         if (profileInitial) {
             profileInitial.textContent = initial;
@@ -90,14 +90,14 @@ const $ = (id) => document.getElementById(id);
             dashboardProfileInitial.textContent = initial;
         }
 
-    
+
         const welcomeDonorName = $("welcomeDonorName");
         if (welcomeDonorName) {
             const firstName = name.split(" ")[0];
             welcomeDonorName.textContent = firstName;
         }
 
-        
+
 
         if (dashboardBloodType) {
 
@@ -106,7 +106,7 @@ const $ = (id) => document.getElementById(id);
 
         }
 
-    
+
 
         if (dashboardLocation) {
 
@@ -117,7 +117,7 @@ const $ = (id) => document.getElementById(id);
 
         }
 
-    
+
 
         const availability =
             donor.availabilityStatus ||
@@ -130,7 +130,7 @@ const $ = (id) => document.getElementById(id);
 
         }
 
-        
+
 
         if (donationStatus) {
 
@@ -237,7 +237,7 @@ const $ = (id) => document.getElementById(id);
 
         if (livesImpacted) {
 
-        
+
 
             livesImpacted.textContent =
                 stats.totalDonations ?? 0;
@@ -544,32 +544,32 @@ const $ = (id) => document.getElementById(id);
                 data
             );
 
-            
+
 
             displayDonorInfo(
                 data.donor
             );
 
-        
+
 
             displayDashboardStats(
                 data.stats
             );
 
-            
+
 
             displayAvailableRequests(
                 data.availableRequests
             );
 
-            
+
 
             displayRecentActivity(
                 data.recentDonations,
                 data.recentNotifications
             );
 
-            
+
 
             displayNotifications(
                 data.recentNotifications,

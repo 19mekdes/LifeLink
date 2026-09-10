@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let markers = [];
 
 
-    
+
     function initMap() {
         const mapEl = document.getElementById("map");
         if (!mapEl) return;

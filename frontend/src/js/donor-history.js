@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
-    
+
 
             const data =
                 await api.get(
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 data?.data?.stats || {};
 
 
-        
+
             if (totalDonations) {
 
                 totalDonations.textContent =
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            
+
 
             if (!donationList) return;
 
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "DONOR PROFILE FOR HISTORY:",
                 profileResponse
             );
-            
+
 
 
             const profile =
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("EXTRACTED PROFILE:", profile);
             console.log("BLOOD TYPE:", profile.bloodType);
 
-            
+
             if (bloodType) {
 
                 bloodType.textContent =
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    
+
 
     async function loadNotificationCount() {
 

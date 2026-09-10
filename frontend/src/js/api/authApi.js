@@ -1,9 +1,5 @@
 import api from './api.js';
 
-/**
- * Authentication API Service
- * Handles all authentication-related requests
- */
 export const authApi = {
   /**
    * Register a new user

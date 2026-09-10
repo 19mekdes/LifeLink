@@ -186,9 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-
-
     async function loadNotificationCount() {
 
         try {

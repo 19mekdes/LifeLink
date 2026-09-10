@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
             profileInitial.textContent =
                 initial;
 
-        }        if (dashboardProfileInitial) {
+        } if (dashboardProfileInitial) {
             dashboardProfileInitial.textContent =
                 initial;
         }

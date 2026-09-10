@@ -40,7 +40,7 @@ if (loginForm) {
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         if (formError) {
             formError.classList.remove('show');
             formError.textContent = '';
@@ -67,9 +67,9 @@ if (loginForm) {
             if (response.success && response.data) {
                 // Save auth data
                 authApi.saveAuth(response.data.token, response.data.user);
-                
+
                 showToast(response.message || 'Login successful! 🎉', 'success');
-                
+
                 // Redirect after delay
                 setTimeout(() => {
                     const dashboard = authApi.getDashboardUrl(response.data.user.role);
@@ -128,7 +128,7 @@ if (registerForm) {
 
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         if (formError) {
             formError.classList.remove('show');
             formError.textContent = '';
@@ -227,7 +227,7 @@ if (registerForm) {
             if (response.success && response.data) {
                 authApi.saveAuth(response.data.token, response.data.user);
                 showToast(response.message || 'Registration successful! 🎉', 'success');
-                
+
                 setTimeout(() => {
                     const dashboard = authApi.getDashboardUrl(response.data.user.role);
                     console.log('Redirecting to:', dashboard);

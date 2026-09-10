@@ -283,10 +283,6 @@ const $ = (id) => document.getElementById(id);
     }
 
 
-    // =====================================================
-    // DISPLAY AVAILABLE REQUESTS
-    // =====================================================
-
     function displayAvailableRequests(requests) {
 
         const requestsList =
@@ -385,10 +381,6 @@ const $ = (id) => document.getElementById(id);
     }
 
 
-    // =====================================================
-    // DISPLAY RECENT ACTIVITY
-    // =====================================================
-
     function displayRecentActivity(
         recentDonations,
         recentNotifications
@@ -458,10 +450,6 @@ const $ = (id) => document.getElementById(id);
     }
 
 
-    // =====================================================
-    // DISPLAY NOTIFICATIONS
-    // =====================================================
-
     function displayNotifications(
         notifications,
         unreadCount
@@ -517,9 +505,6 @@ const $ = (id) => document.getElementById(id);
     }
 
 
-    // =====================================================
-    // LOAD DASHBOARD
-    // =====================================================
 
     async function loadDashboard() {
 
@@ -559,42 +544,32 @@ const $ = (id) => document.getElementById(id);
                 data
             );
 
-            // -------------------------
-            // Donor
-            // -------------------------
+            
 
             displayDonorInfo(
                 data.donor
             );
 
-            // -------------------------
-            // Statistics
-            // -------------------------
+        
 
             displayDashboardStats(
                 data.stats
             );
 
-            // -------------------------
-            // Requests
-            // -------------------------
+            
 
             displayAvailableRequests(
                 data.availableRequests
             );
 
-            // -------------------------
-            // Activity
-            // -------------------------
+            
 
             displayRecentActivity(
                 data.recentDonations,
                 data.recentNotifications
             );
 
-            // -------------------------
-            // Notifications
-            // -------------------------
+            
 
             displayNotifications(
                 data.recentNotifications,
@@ -632,10 +607,6 @@ const $ = (id) => document.getElementById(id);
     }
 
 
-    // =====================================================
-    // SIDEBAR NAVIGATION
-    // =====================================================
-
     document
         .querySelectorAll(".sidebar nav a")
         .forEach(link => {
@@ -653,11 +624,6 @@ const $ = (id) => document.getElementById(id);
             });
 
         });
-
-
-    // =====================================================
-    // START DASHBOARD
-    // =====================================================
 
     loadDashboard();
 

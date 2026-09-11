@@ -1165,9 +1165,7 @@ tbody tr:last-child td {
     margin-top: 4px;
 }
 
-/* ============================================================
-   18. PAGE — BLOOD INVENTORY
-   ============================================================ */
+
 .inventory-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -1262,9 +1260,7 @@ tbody tr:last-child td {
     font-size: 11px;
 }
 
-/* ============================================================
-   19. PAGE — HOSPITAL REQUESTS TOOLBAR
-   ============================================================ */
+
 .requests-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -1314,9 +1310,7 @@ tbody tr:last-child td {
     gap: 6px;
 }
 
-/* ============================================================
-   20. PAGE — BANK PROFILE
-   ============================================================ */
+
 .profile-details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

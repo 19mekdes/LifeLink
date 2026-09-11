@@ -181,9 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Dashboard statistics:", stats);
 
-        // -------------------------
-        // Total Donations
-        // -------------------------
+
 
         if (totalDonations) {
 
@@ -191,9 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 stats.totalDonations ?? 0;
         }
 
-        // -------------------------
-        // Total / Pending Requests
-        // -------------------------
+
 
         if (totalRequests) {
 
@@ -201,9 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 stats.pendingRequests ?? 0;
         }
 
-        // -------------------------
-        // Last Donation
-        // -------------------------
+
 
         if (lastDonation) {
 
@@ -213,9 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     : "No donations yet";
         }
 
-        // -------------------------
-        // Next Eligible Date
-        // -------------------------
+
 
         const nextEligible =
             $("nextEligible");
@@ -228,9 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     : "Not available";
         }
 
-        // -------------------------
-        // Lives Impacted
-        // -------------------------
+
 
         const livesImpacted =
             $("livesImpacted");
@@ -243,9 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 stats.totalDonations ?? 0;
         }
 
-        // -------------------------
-        // Donation Summary
-        // -------------------------
+
 
         const donationTotal =
             $("donationTotal");
@@ -256,9 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 stats.totalDonations ?? 0;
         }
 
-        // -------------------------
-        // Current Year Donations
-        // -------------------------
+
 
         const currentYearDonations =
             $("currentYearDonations");
@@ -266,12 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const previousYearDonations =
             $("previousYearDonations");
 
-        /*
-         * The dashboard endpoint does not currently
-         * provide donations grouped by year.
-         *
-         * Therefore we do not invent these values.
-         */
+
 
         if (currentYearDonations) {
             currentYearDonations.textContent = "—";

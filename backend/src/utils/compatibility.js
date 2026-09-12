@@ -1,10 +1,3 @@
-/**
- * LifeLink - Blood Compatibility Utility
- * Defines biological compatibility rules (ABO & Rh factor) for Red Blood Cells (RBC).
- * Uses Prisma BloodType enum keys: A_POS, A_NEG, B_POS, B_NEG, AB_POS, AB_NEG, O_POS, O_NEG.
- */
-
-// Mapping: Donor Blood Type -> Array of recipient blood types who can receive this blood
 const DONOR_TO_RECIPIENTS_MAP = {
   O_NEG: ['O_NEG', 'O_POS', 'A_NEG', 'A_POS', 'B_NEG', 'B_POS', 'AB_NEG', 'AB_POS'], // Universal Donor
   O_POS: ['O_POS', 'A_POS', 'B_POS', 'AB_POS'],

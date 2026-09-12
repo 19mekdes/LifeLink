@@ -1,11 +1,4 @@
-// backend/src/services/auditService.js
-
 import prisma from '../config/database.js';
-
-/**
- * Audit Service
- * Handles all audit logging and activity tracking
- */
 class AuditService {
   /**
    * Log an audit entry

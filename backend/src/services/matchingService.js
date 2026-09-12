@@ -99,8 +99,7 @@ class MatchingService {
       score += Math.min(15, (daysSinceDonation / 90) * 15);
     }
 
-    // Donation count (15 points)
-    // Donors who have donated before are more reliable
+    
     if (donor.totalDonations > 0) {
       score += Math.min(15, donor.totalDonations * 2);
     }

@@ -44,7 +44,7 @@ router.put('/profile', [
   //  FIX: Replace isMobilePhone with custom validation
   body('phone').optional().custom((value) => {
     if (!value) return true;
-  
+
     const phoneRegex = /^(\+251|0)?[0-9]{9}$/;
     if (!phoneRegex.test(value)) {
       throw new Error('Phone must be a valid Ethiopian number (e.g., +251911111111 or 0911111111)');

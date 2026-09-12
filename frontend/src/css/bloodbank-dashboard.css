@@ -571,10 +571,7 @@ body {
     background: #059669;
 }
 
-/* NOTE: .btn-danger is intentionally defined twice below.
-   Order preserved exactly as in the original file — the second
-   definition overrides background/color of the first. Changing
-   this order would change the rendered result. */
+
 .btn-danger {
     background: #fef2f2;
     color: #dc2626;
@@ -812,9 +809,7 @@ tbody tr:last-child td {
     color: var(--text-muted, #64748b);
 }
 
-/* NOTE: .pagination-controls is intentionally defined twice below.
-   Order preserved exactly as in the original file — the second
-   definition (gap: 10px) overrides the first (gap: 4px). */
+
 .pagination-controls {
     display: flex;
     align-items: center;

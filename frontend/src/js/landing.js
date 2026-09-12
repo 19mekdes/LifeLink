@@ -88,8 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-
-
     const donorButtons = document.querySelectorAll(
         'a[href="register.html"]'
     );

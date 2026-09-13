@@ -230,8 +230,6 @@
     color: var(--primary);
 }
 
-/* ============ LOGIN ROLE SELECTOR ============ */
-
 .login-role-selector {
     display: flex;
     gap: 0.5rem;

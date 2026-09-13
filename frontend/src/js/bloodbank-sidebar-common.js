@@ -35,7 +35,7 @@ export async function withProgress(fn) {
 }
 
 export function initShell() {
-  // Guard: bounce out if not logged in
+ 
   if (!authApi.isAuthenticated()) {
     window.location.href = 'login.html';
     return null;
@@ -77,7 +77,6 @@ export function initShell() {
     paintToggleIcon();
   }
 
-  // Restore desktop collapse preference
   if (!isMobile()) {
     try {
       if (localStorage.getItem(COLLAPSE_STORAGE_KEY) === '1') sidebar.classList.add('collapsed');

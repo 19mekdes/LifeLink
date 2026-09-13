@@ -13,7 +13,6 @@ const hospitalCoordinates = {
     "Bethlehem Hospital": { lat: 9.0150, lng: 38.7700 }
 };
 
-// Default: Addis Ababa center
 const DEFAULT_CENTER = { lat: 9.0192, lng: 38.7525 };
 
 function getHospitalCoords(hospitalName) {
@@ -166,8 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
-    async function loadRequests() {
+   async function loadRequests() {
 
         try {
 

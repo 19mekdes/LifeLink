@@ -903,7 +903,7 @@ body {
 .custom-table tbody tr:hover { background-color: #faf7f7; }
 .custom-table tbody tr.no-hover:hover { background-color: transparent; }
 
-/* ── Reusable Pagination Bar ──────────────────────────────── */
+
 .pagination-wrap {
   display: flex;
   align-items: center;

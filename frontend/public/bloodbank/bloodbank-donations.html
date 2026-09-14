@@ -1,196 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeLink - Donation Records</title>
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Donation Records</title>
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
 
-  <base target="_blank">
-</head>
+    <base target="_blank">
+  </head>
 
-<body>
+  <body>
 
-  <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="logo-area">
-        <a href="../index.html" target="_self" class="logo-link">
-          <div class="logo-icon" data-icon="droplet"></div>
-          <div class="logo-text">LifeLink</div>
-        </a>
-        <button class="sidebar-close" id="sidebar-close">&times;</button>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Main</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span
-                class="nav-icon" data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon" data-icon="droplet"></span><span
-                class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon" data-icon="hospital"></span><span
-                class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon" data-icon="users"></span><span
-                class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item active" href="bloodbank-donations.html" target="_self"><span class="nav-icon" data-icon="inbox"></span><span
-                class="nav-label">Donation Records</span></a></li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Insights</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon" data-icon="trending"></span><span
-                class="nav-label">Analytics</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-notifications.html"><span
-                class="nav-icon" data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
-                id="notif-badge">0</span></a></li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">System</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon" data-icon="hospital"></span><span
-                class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon" data-icon="settings"></span><span
-                class="nav-label">Settings</span></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <span class="status-dot online" id="sidebar-status-dot"></span>
-        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
-      </div>
-      <div class="sidebar-footer-actions">
-        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
-          <span data-icon="logout" data-icon-size="15"></span> Logout
-        </button>
-      </div>
-    </div>
-  </aside>
-  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
-
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-    <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
-      <div class="header-title">
-        <h1 id="page-title">Donation Records</h1>
-        <p>Track donor collection logs.</p>
-      </div>
-      <div class="header-actions">
-        <button class="header-btn" id="notif-header-btn" title="Notifications"
-          onclick="window.location.href='bloodbank-notifications.html'">
-          <span data-icon="bell" data-icon-size="18"></span>
-          <span class="dot" id="header-notif-dot"></span>
-        </button>
-        <div class="user-profile-wrap" id="user-profile-wrap">
-          <div class="user-profile-badge" id="user-profile-toggle">
-            <div class="user-avatar" id="avatar-initials">--</div>
-            <div class="user-info">
-              <div class="user-name" id="user-name">—</div>
-              <div class="user-role">Blood Bank Manager</div>
-            </div>
-          </div>
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
-            <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self"><span data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self"><span data-icon="settings" data-icon-size="15"></span> Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn" target="_self"><span data-icon="logout" data-icon-size="15"></span> Logout</a>
-          </div>
+    <aside class="sidebar" id="sidebar">
+      <div>
+        <div class="logo-area">
+          <a href="../index.html" target="_self" class="logo-link">
+            <div class="logo-icon" data-icon="droplet"></div>
+            <div class="logo-text">LifeLink</div>
+          </a>
+          <button class="sidebar-close" id="sidebar-close">&times;</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="../bloodbank-dashboard.html"><span
+                  class="nav-icon" data-icon="dashboard"></span><span
+                  class="nav-label">Dashboard</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-inventory.html"><span class="nav-icon"
+                  data-icon="droplet"></span><span
+                  class="nav-label">Blood Inventory</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-requests.html"><span class="nav-icon"
+                  data-icon="hospital"></span><span
+                  class="nav-label">Hospital Requests</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-outreach.html"><span class="nav-icon"
+                  data-icon="users"></span><span
+                  class="nav-label">Donor Outreach</span></a></li>
+            <li><a class="nav-item active" href="bloodbank-donations.html"
+                target="_self"><span class="nav-icon"
+                  data-icon="inbox"></span><span
+                  class="nav-label">Donation Records</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Insights</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-analytics.html"><span class="nav-icon"
+                  data-icon="trending"></span><span
+                  class="nav-label">Analytics</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-notifications.html"><span
+                  class="nav-icon" data-icon="bell"></span><span
+                  class="nav-label">Notifications</span> <span class="nav-badge"
+                  id="notif-badge">0</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">System</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-profile.html"><span class="nav-icon"
+                  data-icon="hospital"></span><span
+                  class="nav-label">Bank Profile</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-settings.html"><span class="nav-icon"
+                  data-icon="settings"></span><span
+                  class="nav-label">Settings</span></a></li>
+          </ul>
         </div>
       </div>
-    </header>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="status-dot online" id="sidebar-status-dot"></span>
+          <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
+        </div>
+        <div class="sidebar-footer-actions">
+          <button class="sidebar-logout-btn" id="sidebar-logout-btn"
+            type="button">
+            <span data-icon="logout" data-icon-size="15"></span> Logout
+          </button>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
-    <div class="dashboard-container">
-      <section class="page-content">
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="inbox" data-icon-size="17"></span> Donor Collection Logs</h2>
-            <div class="section-actions">
-              <button class="btn btn-primary" id="open-record-donation-btn">+ Record Donation</button>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle" type="button"
+          aria-label="Toggle sidebar"></button>
+        <div class="header-title">
+          <h1 id="page-title">Donation Records</h1>
+          <p>Track donor collection logs.</p>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" id="notif-header-btn" title="Notifications"
+            onclick="window.location.href='bloodbank-notifications.html'">
+            <span data-icon="bell" data-icon-size="18"></span>
+            <span class="dot" id="header-notif-dot"></span>
+          </button>
+          <div class="user-profile-wrap" id="user-profile-wrap">
+            <div class="user-profile-badge" id="user-profile-toggle">
+              <div class="user-avatar" id="avatar-initials">--</div>
+              <div class="user-info">
+                <div class="user-name" id="user-name">—</div>
+                <div class="user-role">Blood Bank Manager</div>
+              </div>
             </div>
-          </div>
-
-          <!-- ============ FILTER / SEARCH TOOLBAR ============ -->
-          <div class="donations-toolbar">
-            <div class="toolbar-search">
-              <span class="search-icon" data-icon="search" data-icon-size="16"></span>
-              <input type="text" id="donation-search" placeholder="Search by donor name or blood type...">
+            <div class="user-dropdown" id="user-dropdown">
+              <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+              <div class="user-dropdown-role">Blood Bank Manager</div>
+              <a class="user-dropdown-item" href="bloodbank-profile.html"
+                target="_self"><span data-icon="hospital"
+                  data-icon-size="15"></span> Bank Profile</a>
+              <a class="user-dropdown-item" href="bloodbank-settings.html"
+                target="_self"><span data-icon="settings"
+                  data-icon-size="15"></span> Settings</a>
+              <a class="user-dropdown-item danger" id="dropdown-logout-btn"
+                target="_self"><span data-icon="logout"
+                  data-icon-size="15"></span> Logout</a>
             </div>
-            <div class="toolbar-filters">
-              <select id="donation-bloodtype-filter">
-                <option value="">All Blood Types</option>
-                <option value="A_POS">A+</option>
-                <option value="A_NEG">A-</option>
-                <option value="B_POS">B+</option>
-                <option value="B_NEG">B-</option>
-                <option value="AB_POS">AB+</option>
-                <option value="AB_NEG">AB-</option>
-                <option value="O_POS">O+</option>
-                <option value="O_NEG">O-</option>
-              </select>
-              <button class="btn btn-secondary btn-sm" id="clear-donation-filters-btn">Clear</button>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Donor</th>
-                  <th>Blood Group</th>
-                  <th>Units</th>
-                  <th>Collection Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="donations-table">
-                <tr><td colspan="5"><div class="loading-state"><div class="spinner-lg"></div><p>Loading donations…</p></div></td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- ============ PAGINATION ============ -->
-          <div class="pagination-bar" id="pagination-bar" style="display:none;">
-            <span class="pagination-info" id="pagination-info"></span>
-            <div class="pagination-controls" id="pagination-controls"></div>
           </div>
         </div>
-      </section>
-    </div>
-  </main>
-  <div class="modal-overlay" id="recordDonationModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3><span data-icon="inbox" data-icon-size="17"></span> Record Donation</h3>
-        <button class="modal-close" data-close-modal="recordDonationModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group"><label>Donor ID</label><input type="text" id="donation-donor-id"
-            placeholder="Donor profile ID"></div>
-        <div class="form-group"><label>Related Request ID</label><input type="text" id="donation-request-id"
-            placeholder="Blood request ID"></div>
-        <div class="form-group"><label>Units</label><input type="number" id="donation-units" value="1" min="1"></div>
-        <div class="form-group"><label>Notes</label><textarea id="donation-notes" rows="3"></textarea></div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-close-modal="recordDonationModal">Cancel</button>
-        <button class="btn btn-primary" id="submit-donation-btn">
-          <span id="submit-donation-text">Record Donation</span>
-          <span id="submit-donation-spinner" class="spinner"></span>
-        </button>
-      </div>
-    </div>
-  </div>
+      </header>
 
-  <!-- ============ TOAST CONTAINER ============ -->
-  <div id="toastContainer" class="toast-container"></div>
+      <div class="dashboard-container">
+        <section class="page-content">
+          <div class="section-box">
+            <div class="section-header">
+              <h2><span data-icon="inbox" data-icon-size="17"></span> Donor
+                Collection Logs</h2>
+              <div class="section-actions">
+                <button class="btn btn-primary" id="open-record-donation-btn">+
+                  Record Donation</button>
+              </div>
+            </div>
 
-  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
-  <script type="module">
+            <!-- ============ FILTER / SEARCH TOOLBAR ============ -->
+            <div class="donations-toolbar">
+              <div class="toolbar-search">
+                <span class="search-icon" data-icon="search"
+                  data-icon-size="16"></span>
+                <input type="text" id="donation-search"
+                  placeholder="Search by donor name or blood type...">
+              </div>
+              <div class="toolbar-filters">
+                <select id="donation-bloodtype-filter">
+                  <option value>All Blood Types</option>
+                  <option value="A_POS">A+</option>
+                  <option value="A_NEG">A-</option>
+                  <option value="B_POS">B+</option>
+                  <option value="B_NEG">B-</option>
+                  <option value="AB_POS">AB+</option>
+                  <option value="AB_NEG">AB-</option>
+                  <option value="O_POS">O+</option>
+                  <option value="O_NEG">O-</option>
+                </select>
+                <button class="btn btn-secondary btn-sm"
+                  id="clear-donation-filters-btn">Clear</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Blood Group</th>
+                    <th>Units</th>
+                    <th>Collection Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="donations-table">
+                  <tr><td colspan="5"><div class="loading-state"><div
+                          class="spinner-lg"></div><p>Loading
+                          donations…</p></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ============ PAGINATION ============ -->
+            <div class="pagination-bar" id="pagination-bar"
+              style="display:none;">
+              <span class="pagination-info" id="pagination-info"></span>
+              <div class="pagination-controls" id="pagination-controls"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <div class="modal-overlay" id="recordDonationModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><span data-icon="inbox" data-icon-size="17"></span> Record
+            Donation</h3>
+          <button class="modal-close"
+            data-close-modal="recordDonationModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group"><label>Donor ID</label><input type="text"
+              id="donation-donor-id"
+              placeholder="Donor profile ID"></div>
+          <div class="form-group"><label>Related Request ID</label><input
+              type="text" id="donation-request-id"
+              placeholder="Blood request ID"></div>
+          <div class="form-group"><label>Units</label><input type="number"
+              id="donation-units" value="1" min="1"></div>
+          <div class="form-group"><label>Notes</label><textarea
+              id="donation-notes" rows="3"></textarea></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary"
+            data-close-modal="recordDonationModal">Cancel</button>
+          <button class="btn btn-primary" id="submit-donation-btn">
+            <span id="submit-donation-text">Record Donation</span>
+            <span id="submit-donation-spinner" class="spinner"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+    <script type="module">
     import api from '../../src/js/api/api.js';
     import { initShell, loadCommonData, showToast, iconMarkup } from '../../src/js/bloodbank-sidebar-common.js';
 
@@ -377,6 +418,6 @@
       loadDonations();
     }
   </script>
-</body>
+  </body>
 
 </html>

@@ -98,7 +98,6 @@ app.use('/api/audit', auditRoutes);
 app.use(express.static(path.join(FRONTEND_DIR, 'public')));
 app.use('/src', express.static(path.join(FRONTEND_DIR, 'src')));
 
-// Root redirects to the login page
 app.get('/', (req, res) => {
   res.redirect('/login.html');
 });

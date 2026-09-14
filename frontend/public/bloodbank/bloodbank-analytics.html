@@ -1,149 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeLink - Analytics</title>
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Analytics</title>
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
 
-  <base target="_blank">
-</head>
+    <base target="_blank">
+  </head>
 
-<body>
+  <body>
 
-  <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="logo-area">
-        <a href="../index.html" target="_self" class="logo-link">
-          <div class="logo-icon" data-icon="droplet"></div>
-          <div class="logo-text">LifeLink</div>
-        </a>
-        <button class="sidebar-close" id="sidebar-close">&times;</button>
+    <aside class="sidebar" id="sidebar">
+      <div>
+        <div class="logo-area">
+          <a href="../index.html" target="_self" class="logo-link">
+            <div class="logo-icon" data-icon="droplet"></div>
+            <div class="logo-text">LifeLink</div>
+          </a>
+          <button class="sidebar-close" id="sidebar-close">&times;</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="../bloodbank-dashboard.html"><span
+                  class="nav-icon" data-icon="dashboard"></span><span
+                  class="nav-label">Dashboard</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-inventory.html"><span class="nav-icon"
+                  data-icon="droplet"></span><span
+                  class="nav-label">Blood Inventory</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-requests.html"><span class="nav-icon"
+                  data-icon="hospital"></span><span
+                  class="nav-label">Hospital Requests</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-outreach.html"><span class="nav-icon"
+                  data-icon="users"></span><span
+                  class="nav-label">Donor Outreach</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-donations.html"><span class="nav-icon"
+                  data-icon="inbox"></span><span
+                  class="nav-label">Donation Records</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Insights</div>
+          <ul class="nav-links">
+            <li><a class="nav-item active" target="_self"
+                href="bloodbank-analytics.html"><span
+                  class="nav-icon" data-icon="trending"></span><span
+                  class="nav-label">Analytics</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-notifications.html"><span
+                  class="nav-icon" data-icon="bell"></span><span
+                  class="nav-label">Notifications</span> <span class="nav-badge"
+                  id="notif-badge">0</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">System</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-profile.html"><span class="nav-icon"
+                  data-icon="hospital"></span><span
+                  class="nav-label">Bank Profile</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-settings.html"><span class="nav-icon"
+                  data-icon="settings"></span><span
+                  class="nav-label">Settings</span></a></li>
+          </ul>
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Main</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span
-                class="nav-icon" data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon" data-icon="droplet"></span><span
-                class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon" data-icon="hospital"></span><span
-                class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon" data-icon="users"></span><span
-                class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon" data-icon="inbox"></span><span
-                class="nav-label">Donation Records</span></a></li>
-        </ul>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="status-dot online" id="sidebar-status-dot"></span>
+          <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
+        </div>
+        <div class="sidebar-footer-actions">
+          <button class="sidebar-logout-btn" id="sidebar-logout-btn"
+            type="button">
+            <span data-icon="logout" data-icon-size="15"></span> Logout
+          </button>
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Insights</div>
-        <ul class="nav-links">
-          <li><a class="nav-item active" target="_self" href="bloodbank-analytics.html"><span
-                class="nav-icon" data-icon="trending"></span><span class="nav-label">Analytics</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-notifications.html"><span
-                class="nav-icon" data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
-                id="notif-badge">0</span></a></li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">System</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon" data-icon="hospital"></span><span
-                class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon" data-icon="settings"></span><span
-                class="nav-label">Settings</span></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <span class="status-dot online" id="sidebar-status-dot"></span>
-        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
-      </div>
-      <div class="sidebar-footer-actions">
-        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
-          <span data-icon="logout" data-icon-size="15"></span> Logout
-        </button>
-      </div>
-    </div>
-  </aside>
-  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-    <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
-      <div class="header-title">
-        <h1 id="page-title">Analytics</h1>
-        <p>Six-month performance summary.</p>
-      </div>
-      <div class="header-actions">
-        <button class="header-btn" id="notif-header-btn" title="Notifications"
-          onclick="window.location.href='bloodbank-notifications.html'">
-          <span data-icon="bell" data-icon-size="18"></span>
-          <span class="dot" id="header-notif-dot"></span>
-        </button>
-        <div class="user-profile-wrap" id="user-profile-wrap">
-          <div class="user-profile-badge" id="user-profile-toggle">
-            <div class="user-avatar" id="avatar-initials">--</div>
-            <div class="user-info">
-              <div class="user-name" id="user-name">—</div>
-              <div class="user-role">Blood Bank Manager</div>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle" type="button"
+          aria-label="Toggle sidebar"></button>
+        <div class="header-title">
+          <h1 id="page-title">Analytics</h1>
+          <p>Six-month performance summary.</p>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" id="notif-header-btn" title="Notifications"
+            onclick="window.location.href='bloodbank-notifications.html'">
+            <span data-icon="bell" data-icon-size="18"></span>
+            <span class="dot" id="header-notif-dot"></span>
+          </button>
+          <div class="user-profile-wrap" id="user-profile-wrap">
+            <div class="user-profile-badge" id="user-profile-toggle">
+              <div class="user-avatar" id="avatar-initials">--</div>
+              <div class="user-info">
+                <div class="user-name" id="user-name">—</div>
+                <div class="user-role">Blood Bank Manager</div>
+              </div>
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+              <div class="user-dropdown-role">Blood Bank Manager</div>
+              <a class="user-dropdown-item" href="bloodbank-profile.html"
+                target="_self"><span data-icon="hospital"
+                  data-icon-size="15"></span> Bank Profile</a>
+              <a class="user-dropdown-item" href="bloodbank-settings.html"
+                target="_self"><span data-icon="settings"
+                  data-icon-size="15"></span> Settings</a>
+              <a class="user-dropdown-item danger"
+                id="dropdown-logout-btn"><span data-icon="logout"
+                  data-icon-size="15"></span> Logout</a>
             </div>
           </div>
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
-            <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self"><span data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self"><span data-icon="settings" data-icon-size="15"></span> Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn"><span data-icon="logout" data-icon-size="15"></span> Logout</a>
-          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <div class="dashboard-container">
-      <section class="page-content">
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="dashboard" data-icon-size="17"></span> Monthly Summary</h2>
+      <div class="dashboard-container">
+        <section class="page-content">
+          <div class="section-box">
+            <div class="section-header">
+              <h2><span data-icon="dashboard" data-icon-size="17"></span>
+                Monthly Summary</h2>
+            </div>
+            <div class="stat-row"><span class="stat-label">Total Requests
+                Received</span><span class="stat-value"
+                id="an-total-requests">—</span></div>
+            <div class="stat-row"><span class="stat-label">Requests
+                Fulfilled</span><span class="stat-value"
+                id="an-fulfilled-requests">—</span></div>
+            <div class="stat-row"><span class="stat-label">Requests
+                Rejected</span><span class="stat-value"
+                id="an-rejected-requests">—</span></div>
+            <div class="stat-row"><span class="stat-label">Total
+                Donations</span><span class="stat-value"
+                id="an-total-donations">—</span></div>
           </div>
-          <div class="stat-row"><span class="stat-label">Total Requests Received</span><span class="stat-value"
-              id="an-total-requests">—</span></div>
-          <div class="stat-row"><span class="stat-label">Requests Fulfilled</span><span class="stat-value"
-              id="an-fulfilled-requests">—</span></div>
-          <div class="stat-row"><span class="stat-label">Requests Rejected</span><span class="stat-value"
-              id="an-rejected-requests">—</span></div>
-          <div class="stat-row"><span class="stat-label">Total Donations</span><span class="stat-value"
-              id="an-total-donations">—</span></div>
-        </div>
 
-        <div class="charts-grid">
-          <div class="chart-card">
-            <h3><span data-icon="trending" data-icon-size="16"></span> Request Trends (Last 6 Months)</h3>
-            <div id="trend-chart"><div class="loading-state"><div class="spinner-lg"></div><p>Loading chart…</p></div></div>
-            <div class="chart-legend">
-              <span><i style="background:var(--primary,#c0392b)"></i> Total</span>
-              <span><i style="background:#1c7c41"></i> Fulfilled</span>
-              <span><i style="background:#a5382c"></i> Rejected</span>
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h3><span data-icon="trending" data-icon-size="16"></span> Request
+                Trends (Last 6 Months)</h3>
+              <div id="trend-chart"><div class="loading-state"><div
+                    class="spinner-lg"></div><p>Loading chart…</p></div></div>
+              <div class="chart-legend">
+                <span><i style="background:var(--primary,#c0392b)"></i>
+                  Total</span>
+                <span><i style="background:#1c7c41"></i> Fulfilled</span>
+                <span><i style="background:#a5382c"></i> Rejected</span>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3><span data-icon="droplet" data-icon-size="16"></span> Stock by
+                Blood Type</h3>
+              <div id="stock-chart"><div class="loading-state"><div
+                    class="spinner-lg"></div><p>Loading chart…</p></div></div>
             </div>
           </div>
-          <div class="chart-card">
-            <h3><span data-icon="droplet" data-icon-size="16"></span> Stock by Blood Type</h3>
-            <div id="stock-chart"><div class="loading-state"><div class="spinner-lg"></div><p>Loading chart…</p></div></div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
+        </section>
+      </div>
+    </main>
 
-  <!-- ============ TOAST CONTAINER ============ -->
-  <div id="toastContainer" class="toast-container"></div>
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div id="toastContainer" class="toast-container"></div>
 
-  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
-  <script type="module">
+    <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+    <script type="module">
     import api from '../../src/js/api/api.js';
     import { initShell, loadCommonData, showToast, iconMarkup } from '../../src/js/bloodbank-sidebar-common.js';
 
@@ -225,6 +261,6 @@
       renderStockChart(inventory);
     }
   </script>
-</body>
+  </body>
 
 </html>

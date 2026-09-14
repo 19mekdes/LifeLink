@@ -9,7 +9,6 @@ const DONOR_TO_RECIPIENTS_MAP = {
   AB_POS: ['AB_POS']
 };
 
-// Mapping: Recipient Blood Type -> Array of donor blood types this recipient can safely receive
 const RECIPIENT_FROM_DONORS_MAP = {
   O_NEG: ['O_NEG'],
   O_POS: ['O_NEG', 'O_POS'],
@@ -21,7 +20,7 @@ const RECIPIENT_FROM_DONORS_MAP = {
   AB_POS: ['O_NEG', 'O_POS', 'A_NEG', 'A_POS', 'B_NEG', 'B_POS', 'AB_NEG', 'AB_POS'] // Universal Recipient
 };
 
-// Human-readable labels for UI presentation
+
 const BLOOD_TYPE_DISPLAY_MAP = {
   O_NEG: 'O-',
   O_POS: 'O+',
@@ -33,7 +32,7 @@ const BLOOD_TYPE_DISPLAY_MAP = {
   AB_POS: 'AB+'
 };
 
-// Reverse map to parse standard display strings back to Enum format
+
 const DISPLAY_TO_ENUM_MAP = {
   'O-': 'O_NEG',
   'O+': 'O_POS',

@@ -360,8 +360,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-
-
     function exitEditMode() {
 
         document

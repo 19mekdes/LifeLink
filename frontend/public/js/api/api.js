@@ -1,8 +1,5 @@
 const API_BASE_URL = "http://localhost:5000/api";
 
-/* =====================================================
-   API REQUEST
-===================================================== */
 
 async function apiRequest(endpoint, options = {}) {
     const token = localStorage.getItem("token");
@@ -79,10 +76,7 @@ const api = {
         }),
 
 
-    /* =================================================
-       AUTH STORAGE
-    ================================================= */
-
+    
     saveAuth(token, user) {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
@@ -112,9 +106,7 @@ const api = {
     },
 
 
-    /* =================================================
-       DASHBOARD URL
-    ================================================= */
+    
 
     getDashboardUrl(role) {
         const dashboards = {
@@ -128,10 +120,7 @@ const api = {
     },
 
 
-    /* =================================================
-       LOGOUT
-    ================================================= */
-
+    
     logout() {
         this.clearAuth();
 
@@ -142,9 +131,6 @@ const api = {
 };
 
 
-/* =====================================================
-   GLOBAL COMPATIBILITY
-===================================================== */
 
 window.apiRequest = apiRequest;
 window.api = api;

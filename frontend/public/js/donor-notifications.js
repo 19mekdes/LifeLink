@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("markAllReadBtn");
 
 
-    
+
     async function loadNotifications() {
 
         try {

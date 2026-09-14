@@ -14,17 +14,17 @@ function ensureProgressBar() {
   return bar;
 }
 
-/** Shows the top progress bar. Call before an async fetch begins. */
+
 export function showProgress() {
   ensureProgressBar().classList.add('active');
 }
 
-/** Hides the top progress bar. Call once an async fetch settles. */
+
 export function hideProgress() {
   ensureProgressBar().classList.remove('active');
 }
 
-/** Wraps an async function so the top progress bar shows for its duration. */
+
 export async function withProgress(fn) {
   showProgress();
   try {
@@ -116,7 +116,7 @@ export function initShell() {
     }
   });
 
-  // Logout (works for the sidebar footer button and the dropdown item)
+  
   async function logout() {
     if (!confirm('Are you sure you want to logout?')) return;
     try {

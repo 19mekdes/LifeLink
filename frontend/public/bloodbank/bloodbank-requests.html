@@ -1,203 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeLink - Hospital Requests</title>
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Hospital Requests</title>
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
 
-  <base target="_blank">
-</head>
+    <base target="_blank">
+  </head>
 
-<body>
+  <body>
 
-  <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="logo-area">
-        <a href="../index.html" target="_self" class="logo-link">
-          <div class="logo-icon" data-icon="droplet"></div>
-          <div class="logo-text">LifeLink</div>
-        </a>
-        <button class="sidebar-close" id="sidebar-close">&times;</button>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Main</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span class="nav-icon"
-                data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon"
-                data-icon="droplet"></span><span class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item active" target="_self" href="bloodbank-requests.html"><span class="nav-icon"
-                data-icon="hospital"></span><span class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon"
-                data-icon="users"></span><span class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon"
-                data-icon="inbox"></span><span class="nav-label">Donation Records</span></a></li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Insights</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon"
-                data-icon="trending"></span><span class="nav-label">Analytics</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-notifications.html"><span class="nav-icon"
-                data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
-                id="notif-badge">0</span></a></li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">System</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-profile.html"><span class="nav-icon"
-                data-icon="hospital"></span><span class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon"
-                data-icon="settings"></span><span class="nav-label">Settings</span></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <span class="status-dot online" id="sidebar-status-dot"></span>
-        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
-      </div>
-      <div class="sidebar-footer-actions">
-        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
-          <span data-icon="logout" data-icon-size="15"></span> Logout
-        </button>
-      </div>
-    </div>
-  </aside>
-  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
-
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-    <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
-      <div class="header-title">
-        <h1 id="page-title">Hospital Requests</h1>
-        <p>Review and respond to dispatch requests.</p>
-      </div>
-      <div class="header-actions">
-        <button class="header-btn" id="notif-header-btn" title="Notifications"
-          onclick="window.location.href='bloodbank-notifications.html'">
-          <span data-icon="bell" data-icon-size="18"></span>
-          <span class="dot" id="header-notif-dot"></span>
-        </button>
-        <div class="user-profile-wrap" id="user-profile-wrap">
-          <div class="user-profile-badge" id="user-profile-toggle">
-            <div class="user-avatar" id="avatar-initials">--</div>
-            <div class="user-info">
-              <div class="user-name" id="user-name">—</div>
-              <div class="user-role">Blood Bank Manager</div>
-            </div>
-          </div>
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
-            <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self"><span data-icon="hospital"
-                data-icon-size="15"></span> Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self"><span data-icon="settings"
-                data-icon-size="15"></span> Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn"><span data-icon="logout"
-                data-icon-size="15"></span> Logout</a>
-          </div>
+    <aside class="sidebar" id="sidebar">
+      <div>
+        <div class="logo-area">
+          <a href="../index.html" target="_self" class="logo-link">
+            <div class="logo-icon" data-icon="droplet"></div>
+            <div class="logo-text">LifeLink</div>
+          </a>
+          <button class="sidebar-close" id="sidebar-close">&times;</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="../bloodbank-dashboard.html"><span class="nav-icon"
+                  data-icon="dashboard"></span><span
+                  class="nav-label">Dashboard</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-inventory.html"><span class="nav-icon"
+                  data-icon="droplet"></span><span class="nav-label">Blood
+                  Inventory</span></a></li>
+            <li><a class="nav-item active" target="_self"
+                href="bloodbank-requests.html"><span class="nav-icon"
+                  data-icon="hospital"></span><span class="nav-label">Hospital
+                  Requests</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-outreach.html"><span class="nav-icon"
+                  data-icon="users"></span><span class="nav-label">Donor
+                  Outreach</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-donations.html"><span class="nav-icon"
+                  data-icon="inbox"></span><span class="nav-label">Donation
+                  Records</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Insights</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-analytics.html"><span class="nav-icon"
+                  data-icon="trending"></span><span
+                  class="nav-label">Analytics</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-notifications.html"><span class="nav-icon"
+                  data-icon="bell"></span><span
+                  class="nav-label">Notifications</span> <span class="nav-badge"
+                  id="notif-badge">0</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">System</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-profile.html"><span class="nav-icon"
+                  data-icon="hospital"></span><span class="nav-label">Bank
+                  Profile</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-settings.html"><span class="nav-icon"
+                  data-icon="settings"></span><span
+                  class="nav-label">Settings</span></a></li>
+          </ul>
         </div>
       </div>
-    </header>
-
-    <div class="dashboard-container">
-      <section class="page-content">
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="hospital" data-icon-size="17"></span> All Hospital Dispatch Requests</h2>
-          </div>
-
-          <!-- ============ FILTER / SEARCH TOOLBAR ============ -->
-          <div class="requests-toolbar">
-            <div class="toolbar-search">
-              <span class="search-icon" data-icon="search" data-icon-size="16"></span>
-              <input type="text" id="request-search" placeholder="Search by hospital name or request ID...">
-            </div>
-            <div class="toolbar-filters">
-              <select id="status-filter">
-                <option value="">All Statuses</option>
-                <option value="PENDING">Pending</option>
-                <option value="APPROVED">Approved</option>
-                <option value="PROCESSING">Processing</option>
-                <option value="FULFILLED">Fulfilled</option>
-                <option value="REJECTED">Rejected</option>
-              </select>
-              <select id="urgency-filter">
-                <option value="">All Urgency</option>
-                <option value="NORMAL">Normal</option>
-                <option value="URGENT">Urgent</option>
-                <option value="CRITICAL_EMERGENCY">Critical Emergency</option>
-              </select>
-              <button class="btn btn-secondary btn-sm" id="clear-filters-btn">Clear</button>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Request ID</th>
-                  <th>Hospital</th>
-                  <th>Blood Type</th>
-                  <th>Units</th>
-                  <th>Urgency</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="all-requests-table"></tbody>
-            </table>
-          </div>
-
-          <!-- ============ PAGINATION ============ -->
-          <div class="pagination-bar" id="pagination-bar" style="display:none;">
-            <span class="pagination-info" id="pagination-info"></span>
-            <div class="pagination-controls" id="pagination-controls"></div>
-          </div>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="status-dot online" id="sidebar-status-dot"></span>
+          <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
         </div>
-      </section>
-    </div>
-  </main>
-
-  <!-- ============ REJECT REASON MODAL ============ -->
-  <div class="modal-overlay" id="rejectModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3><span data-icon="close" data-icon-size="17"></span> Reject Request</h3>
-        <button class="modal-close" data-close-modal="rejectModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p class="confirm-text">Provide a reason for rejecting this request (optional, but helps the hospital
-          understand).</p>
-        <div class="form-group">
-          <label>Reason</label>
-          <textarea id="reject-reason-input" rows="3"
-            placeholder="e.g. Insufficient stock, incorrect blood type..."></textarea>
+        <div class="sidebar-footer-actions">
+          <button class="sidebar-logout-btn" id="sidebar-logout-btn"
+            type="button">
+            <span data-icon="logout" data-icon-size="15"></span> Logout
+          </button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-close-modal="rejectModal">Cancel</button>
-        <button class="btn btn-danger" id="confirm-reject-btn">
-          <span id="reject-btn-text">Reject Request</span>
-          <span id="reject-btn-spinner" class="spinner"></span>
-        </button>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle" type="button"
+          aria-label="Toggle sidebar"></button>
+        <div class="header-title">
+          <h1 id="page-title">Hospital Requests</h1>
+          <p>Review and respond to dispatch requests.</p>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" id="notif-header-btn" title="Notifications"
+            onclick="window.location.href='bloodbank-notifications.html'">
+            <span data-icon="bell" data-icon-size="18"></span>
+            <span class="dot" id="header-notif-dot"></span>
+          </button>
+          <div class="user-profile-wrap" id="user-profile-wrap">
+            <div class="user-profile-badge" id="user-profile-toggle">
+              <div class="user-avatar" id="avatar-initials">--</div>
+              <div class="user-info">
+                <div class="user-name" id="user-name">—</div>
+                <div class="user-role">Blood Bank Manager</div>
+              </div>
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+              <div class="user-dropdown-role">Blood Bank Manager</div>
+              <a class="user-dropdown-item" href="bloodbank-profile.html"
+                target="_self"><span data-icon="hospital"
+                  data-icon-size="15"></span> Bank Profile</a>
+              <a class="user-dropdown-item" href="bloodbank-settings.html"
+                target="_self"><span data-icon="settings"
+                  data-icon-size="15"></span> Settings</a>
+              <a class="user-dropdown-item danger"
+                id="dropdown-logout-btn"><span data-icon="logout"
+                  data-icon-size="15"></span> Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-container">
+        <section class="page-content">
+          <div class="section-box">
+            <div class="section-header">
+              <h2><span data-icon="hospital" data-icon-size="17"></span> All
+                Hospital Dispatch Requests</h2>
+            </div>
+
+            <!-- ============ FILTER / SEARCH TOOLBAR ============ -->
+            <div class="requests-toolbar">
+              <div class="toolbar-search">
+                <span class="search-icon" data-icon="search"
+                  data-icon-size="16"></span>
+                <input type="text" id="request-search"
+                  placeholder="Search by hospital name or request ID...">
+              </div>
+              <div class="toolbar-filters">
+                <select id="status-filter">
+                  <option value>All Statuses</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="PROCESSING">Processing</option>
+                  <option value="FULFILLED">Fulfilled</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+                <select id="urgency-filter">
+                  <option value>All Urgency</option>
+                  <option value="NORMAL">Normal</option>
+                  <option value="URGENT">Urgent</option>
+                  <option value="CRITICAL_EMERGENCY">Critical Emergency</option>
+                </select>
+                <button class="btn btn-secondary btn-sm"
+                  id="clear-filters-btn">Clear</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Request ID</th>
+                    <th>Hospital</th>
+                    <th>Blood Type</th>
+                    <th>Units</th>
+                    <th>Urgency</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="all-requests-table"></tbody>
+              </table>
+            </div>
+
+            <!-- ============ PAGINATION ============ -->
+            <div class="pagination-bar" id="pagination-bar"
+              style="display:none;">
+              <span class="pagination-info" id="pagination-info"></span>
+              <div class="pagination-controls" id="pagination-controls"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ============ REJECT REASON MODAL ============ -->
+    <div class="modal-overlay" id="rejectModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><span data-icon="close" data-icon-size="17"></span> Reject
+            Request</h3>
+          <button class="modal-close"
+            data-close-modal="rejectModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="confirm-text">Provide a reason for rejecting this request
+            (optional, but helps the hospital
+            understand).</p>
+          <div class="form-group">
+            <label>Reason</label>
+            <textarea id="reject-reason-input" rows="3"
+              placeholder="e.g. Insufficient stock, incorrect blood type..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary"
+            data-close-modal="rejectModal">Cancel</button>
+          <button class="btn btn-danger" id="confirm-reject-btn">
+            <span id="reject-btn-text">Reject Request</span>
+            <span id="reject-btn-spinner" class="spinner"></span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ============ TOAST CONTAINER ============ -->
-  <div id="toastContainer" class="toast-container"></div>
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div id="toastContainer" class="toast-container"></div>
 
-  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
-  <script type="module">
+    <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+    <script type="module">
     import api from '../../src/js/api/api.js';
     import { initShell, loadCommonData, showToast, iconMarkup } from '../../src/js/bloodbank-sidebar-common.js';
 
@@ -462,6 +494,6 @@
       loadRequests();
     }
   </script>
-</body>
+  </body>
 
 </html>

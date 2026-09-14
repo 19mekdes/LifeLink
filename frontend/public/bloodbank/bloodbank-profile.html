@@ -1,231 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeLink - Bank Profile</title>
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Bank Profile</title>
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
 
-  <base target="_blank">
-</head>
+    <base target="_blank">
+  </head>
 
-<body>
+  <body>
 
-  <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="logo-area">
-        <a href="../index.html" target="_self" class="logo-link">
-          <div class="logo-icon" data-icon="droplet"></div>
-          <div class="logo-text">LifeLink</div>
-        </a>
-        <button class="sidebar-close" id="sidebar-close">&times;</button>
+    <aside class="sidebar" id="sidebar">
+      <div>
+        <div class="logo-area">
+          <a href="../index.html" target="_self" class="logo-link">
+            <div class="logo-icon" data-icon="droplet"></div>
+            <div class="logo-text">LifeLink</div>
+          </a>
+          <button class="sidebar-close" id="sidebar-close">&times;</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="../bloodbank-dashboard.html"><span
+                  class="nav-icon" data-icon="dashboard"></span><span
+                  class="nav-label">Dashboard</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-inventory.html"><span class="nav-icon"
+                  data-icon="droplet"></span><span
+                  class="nav-label">Blood Inventory</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-requests.html"><span class="nav-icon"
+                  data-icon="hospital"></span><span
+                  class="nav-label">Hospital Requests</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-outreach.html"><span class="nav-icon"
+                  data-icon="users"></span><span
+                  class="nav-label">Donor Outreach</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-donations.html"><span class="nav-icon"
+                  data-icon="inbox"></span><span
+                  class="nav-label">Donation Records</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Insights</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-analytics.html"><span class="nav-icon"
+                  data-icon="trending"></span><span
+                  class="nav-label">Analytics</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-notifications.html"><span
+                  class="nav-icon" data-icon="bell"></span><span
+                  class="nav-label">Notifications</span> <span class="nav-badge"
+                  id="notif-badge">0</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">System</div>
+          <ul class="nav-links">
+            <li><a class="nav-item active" target="_self"
+                href="bloodbank-profile.html"><span
+                  class="nav-icon" data-icon="hospital"></span><span
+                  class="nav-label">Bank Profile</span></a></li>
+            <li><a class="nav-item" target="_self"
+                href="bloodbank-settings.html"><span class="nav-icon"
+                  data-icon="settings"></span><span
+                  class="nav-label">Settings</span></a></li>
+          </ul>
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Main</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="../bloodbank-dashboard.html"><span
-                class="nav-icon" data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-inventory.html"><span class="nav-icon" data-icon="droplet"></span><span
-                class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-requests.html"><span class="nav-icon" data-icon="hospital"></span><span
-                class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-outreach.html"><span class="nav-icon" data-icon="users"></span><span
-                class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-donations.html"><span class="nav-icon" data-icon="inbox"></span><span
-                class="nav-label">Donation Records</span></a></li>
-        </ul>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="status-dot online" id="sidebar-status-dot"></span>
+          <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
+        </div>
+        <div class="sidebar-footer-actions">
+          <button class="sidebar-logout-btn" id="sidebar-logout-btn"
+            type="button">
+            <span data-icon="logout" data-icon-size="15"></span> Logout
+          </button>
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Insights</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" target="_self" href="bloodbank-analytics.html"><span class="nav-icon" data-icon="trending"></span><span
-                class="nav-label">Analytics</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-notifications.html"><span
-                class="nav-icon" data-icon="bell"></span><span class="nav-label">Notifications</span> <span class="nav-badge"
-                id="notif-badge">0</span></a></li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">System</div>
-        <ul class="nav-links">
-          <li><a class="nav-item active" target="_self" href="bloodbank-profile.html"><span
-                class="nav-icon" data-icon="hospital"></span><span class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" target="_self" href="bloodbank-settings.html"><span class="nav-icon" data-icon="settings"></span><span
-                class="nav-label">Settings</span></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <span class="status-dot online" id="sidebar-status-dot"></span>
-        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
-      </div>
-      <div class="sidebar-footer-actions">
-        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
-          <span data-icon="logout" data-icon-size="15"></span> Logout
-        </button>
-      </div>
-    </div>
-  </aside>
-  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-    <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
-      <div class="header-title">
-        <h1 id="page-title">Bank Profile</h1>
-        <p>Your facility details.</p>
-      </div>
-      <div class="header-actions">
-        <button class="header-btn" id="notif-header-btn" title="Notifications"
-          onclick="window.location.href='bloodbank-notifications.html'">
-          <span data-icon="bell" data-icon-size="18"></span>
-          <span class="dot" id="header-notif-dot"></span>
-        </button>
-        <div class="user-profile-wrap" id="user-profile-wrap">
-          <div class="user-profile-badge" id="user-profile-toggle">
-            <div class="user-avatar" id="avatar-initials">--</div>
-            <div class="user-info">
-              <div class="user-name" id="user-name">—</div>
-              <div class="user-role">Blood Bank Manager</div>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle" type="button"
+          aria-label="Toggle sidebar"></button>
+        <div class="header-title">
+          <h1 id="page-title">Bank Profile</h1>
+          <p>Your facility details.</p>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" id="notif-header-btn" title="Notifications"
+            onclick="window.location.href='bloodbank-notifications.html'">
+            <span data-icon="bell" data-icon-size="18"></span>
+            <span class="dot" id="header-notif-dot"></span>
+          </button>
+          <div class="user-profile-wrap" id="user-profile-wrap">
+            <div class="user-profile-badge" id="user-profile-toggle">
+              <div class="user-avatar" id="avatar-initials">--</div>
+              <div class="user-info">
+                <div class="user-name" id="user-name">—</div>
+                <div class="user-role">Blood Bank Manager</div>
+              </div>
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+              <div class="user-dropdown-role">Blood Bank Manager</div>
+              <a class="user-dropdown-item" href="bloodbank-profile.html"
+                target="_self"><span data-icon="hospital"
+                  data-icon-size="15"></span> Bank Profile</a>
+              <a class="user-dropdown-item" href="bloodbank-settings.html"
+                target="_self"><span data-icon="settings"
+                  data-icon-size="15"></span> Settings</a>
+              <a class="user-dropdown-item danger"
+                id="dropdown-logout-btn"><span data-icon="logout"
+                  data-icon-size="15"></span> Logout</a>
             </div>
           </div>
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
-            <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self"><span data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self"><span data-icon="settings" data-icon-size="15"></span> Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn"><span data-icon="logout" data-icon-size="15"></span> Logout</a>
-          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <div class="dashboard-container">
-      <!-- ====== PROFILE HEADER CARD ====== -->
-      <section class="page-content" style="margin-bottom: 0;">
-        <div class="section-box" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
-          <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#16a34a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;" id="profile-avatar">--</div>
-          <div style="flex:1; min-width:200px;">
-            <h2 id="profile-header-name" style="margin:0 0 4px;">—</h2>
-            <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-              <span id="profile-verification-badge" style="display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;"></span>
-              <span style="color:#6b7280; font-size:13px;" id="profile-member-since">Member since —</span>
+      <div class="dashboard-container">
+        <!-- ====== PROFILE HEADER CARD ====== -->
+        <section class="page-content" style="margin-bottom: 0;">
+          <div class="section-box"
+            style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+            <div
+              style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#16a34a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;"
+              id="profile-avatar">--</div>
+            <div style="flex:1; min-width:200px;">
+              <h2 id="profile-header-name" style="margin:0 0 4px;">—</h2>
+              <div
+                style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                <span id="profile-verification-badge"
+                  style="display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;"></span>
+                <span style="color:#6b7280; font-size:13px;"
+                  id="profile-member-since">Member since —</span>
+              </div>
+            </div>
+            <div>
+              <button id="edit-profile-btn" class="section-box"
+                style="cursor:pointer; padding:8px 20px; border:2px solid #2563eb; color:#2563eb; background:#fff; border-radius:8px; font-weight:600; font-size:14px; display:inline-flex; align-items:center; gap:6px;">
+                <span data-icon="settings" data-icon-size="15"></span> Edit
+                Profile
+              </button>
             </div>
           </div>
-          <div>
-            <button id="edit-profile-btn" class="section-box" style="cursor:pointer; padding:8px 20px; border:2px solid #2563eb; color:#2563eb; background:#fff; border-radius:8px; font-weight:600; font-size:14px; display:inline-flex; align-items:center; gap:6px;">
-              <span data-icon="settings" data-icon-size="15"></span> Edit Profile
-            </button>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ====== VIEW MODE ====== -->
-      <section class="page-content" id="view-mode">
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="hospital" data-icon-size="17"></span> Facility Information</h2>
-          </div>
-          <div class="profile-details-grid">
-            <div class="profile-field"><label>Facility Name</label><span id="view-bank-name" class="skeleton" style="display:inline-block; width:140px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>License Number</label><span id="view-license" class="skeleton" style="display:inline-block; width:100px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>Phone Number</label><span id="view-phone" class="skeleton" style="display:inline-block; width:110px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>Email Address</label><span id="view-email" class="skeleton" style="display:inline-block; width:160px; height:14px;">&nbsp;</span></div>
-          </div>
-        </div>
-
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="trending" data-icon-size="17"></span> Location &amp; Contact</h2>
-          </div>
-          <div class="profile-details-grid">
-            <div class="profile-field"><label>Address</label><span id="view-address" class="skeleton" style="display:inline-block; width:200px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>City</label><span id="view-city" class="skeleton" style="display:inline-block; width:120px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>State / Region</label><span id="view-state" class="skeleton" style="display:inline-block; width:120px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>Country</label><span id="view-country" class="skeleton" style="display:inline-block; width:100px; height:14px;">&nbsp;</span></div>
-            <div class="profile-field"><label>Emergency Contact</label><span id="view-emergency" class="skeleton" style="display:inline-block; width:130px; height:14px;">&nbsp;</span></div>
-          </div>
-        </div>
-
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="dashboard" data-icon-size="17"></span> Account Details</h2>
-          </div>
-          <div class="profile-details-grid">
-            <div class="profile-field"><label>Verification Status</label><span id="view-status">—</span></div>
-            <div class="profile-field"><label>Account Active</label><span id="view-active">—</span></div>
-            <div class="profile-field"><label>Account Created</label><span id="view-created">—</span></div>
-            <div class="profile-field"><label>Last Updated</label><span id="view-updated">—</span></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== EDIT MODE (hidden by default) ====== -->
-      <section class="page-content" id="edit-mode" style="display:none;">
-        <form id="profile-form">
+        <!-- ====== VIEW MODE ====== -->
+        <section class="page-content" id="view-mode">
           <div class="section-box">
             <div class="section-header">
-              <h2><span data-icon="hospital" data-icon-size="17"></span> Facility Information</h2>
+              <h2><span data-icon="hospital" data-icon-size="17"></span>
+                Facility Information</h2>
             </div>
             <div class="profile-details-grid">
-              <div class="profile-field">
-                <label for="edit-bankName">Facility Name</label>
-                <input type="text" id="edit-bankName" name="bankName" placeholder="Enter facility name" required>
-              </div>
-              <div class="profile-field">
-                <label for="edit-phone">Phone Number</label>
-                <input type="tel" id="edit-phone" name="phone" placeholder="Enter phone number">
-              </div>
+              <div class="profile-field"><label>Facility Name</label><span
+                  id="view-bank-name" class="skeleton"
+                  style="display:inline-block; width:140px; height:14px;">&nbsp;</span></div>
+              <div class="profile-field"><label>License Number</label><span
+                  id="view-license" class="skeleton"
+                  style="display:inline-block; width:100px; height:14px;">&nbsp;</span></div>
+              <div class="profile-field"><label>Phone Number</label><span
+                  id="view-phone" class="skeleton"
+                  style="display:inline-block; width:110px; height:14px;">&nbsp;</span></div>
+              <div class="profile-field"><label>Email Address</label><span
+                  id="view-email" class="skeleton"
+                  style="display:inline-block; width:160px; height:14px;">&nbsp;</span></div>
             </div>
           </div>
 
           <div class="section-box">
             <div class="section-header">
-              <h2><span data-icon="trending" data-icon-size="17"></span> Location &amp; Contact</h2>
+              <h2><span data-icon="trending" data-icon-size="17"></span>
+                Location &amp; Contact</h2>
             </div>
             <div class="profile-details-grid">
-              <div class="profile-field" style="grid-column: 1 / -1;">
-                <label for="edit-address">Address</label>
-                <input type="text" id="edit-address" name="address" placeholder="Enter full address" required>
-              </div>
-              <div class="profile-field">
-                <label for="edit-city">City</label>
-                <input type="text" id="edit-city" name="city" placeholder="Enter city" required>
-              </div>
-              <div class="profile-field">
-                <label for="edit-state">State / Region</label>
-                <input type="text" id="edit-state" name="state" placeholder="Enter state or region">
-              </div>
-              <div class="profile-field">
-                <label for="edit-country">Country</label>
-                <input type="text" id="edit-country" name="country" placeholder="Enter country">
-              </div>
-              <div class="profile-field">
-                <label for="edit-emergencyContact">Emergency Contact</label>
-                <input type="text" id="edit-emergencyContact" name="emergencyContact" placeholder="Emergency contact phone">
-              </div>
+              <div class="profile-field"><label>Address</label><span
+                  id="view-address" class="skeleton"
+                  style="display:inline-block; width:200px; height:14px;">&nbsp;</span></div>
+              <div class="profile-field"><label>City</label><span id="view-city"
+                  class="skeleton"
+                  style="display:inline-block; width:120px; height:14px;">&nbsp;</span></div>
+              <div class="profile-field"><label>State / Region</label><span
+                  id="view-state" class="skeleton"
+                  style="display:inline-block; width:120px; height:14px;">&nbsp;</span></div>
+              <div class="profile-field"><label>Country</label><span
+                  id="view-country" class="skeleton"
+                  style="display:inline-block; width:100px; height:14px;">&nbsp;</span></div>
+              <div class="profile-field"><label>Emergency Contact</label><span
+                  id="view-emergency" class="skeleton"
+                  style="display:inline-block; width:130px; height:14px;">&nbsp;</span></div>
             </div>
           </div>
 
-          <div style="display:flex; gap:12px; justify-content:flex-end; padding:16px 0;">
-            <button type="button" id="cancel-edit-btn" style="padding:10px 24px; border:1px solid #d1d5db; background:#fff; border-radius:8px; font-weight:500; cursor:pointer; font-size:14px;">Cancel</button>
-            <button type="submit" id="save-profile-btn" style="padding:10px 24px; border:none; background:#2563eb; color:#fff; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; gap:6px;">
-              <span data-icon="check" data-icon-size="15"></span> Save Changes
-            </button>
+          <div class="section-box">
+            <div class="section-header">
+              <h2><span data-icon="dashboard" data-icon-size="17"></span>
+                Account Details</h2>
+            </div>
+            <div class="profile-details-grid">
+              <div class="profile-field"><label>Verification Status</label><span
+                  id="view-status">—</span></div>
+              <div class="profile-field"><label>Account Active</label><span
+                  id="view-active">—</span></div>
+              <div class="profile-field"><label>Account Created</label><span
+                  id="view-created">—</span></div>
+              <div class="profile-field"><label>Last Updated</label><span
+                  id="view-updated">—</span></div>
+            </div>
           </div>
-        </form>
-      </section>
-    </div>
-  </main>
+        </section>
 
-  <!-- ============ TOAST CONTAINER ============ -->
-  <div id="toastContainer" class="toast-container"></div>
+        <!-- ====== EDIT MODE (hidden by default) ====== -->
+        <section class="page-content" id="edit-mode" style="display:none;">
+          <form id="profile-form">
+            <div class="section-box">
+              <div class="section-header">
+                <h2><span data-icon="hospital" data-icon-size="17"></span>
+                  Facility Information</h2>
+              </div>
+              <div class="profile-details-grid">
+                <div class="profile-field">
+                  <label for="edit-bankName">Facility Name</label>
+                  <input type="text" id="edit-bankName" name="bankName"
+                    placeholder="Enter facility name" required>
+                </div>
+                <div class="profile-field">
+                  <label for="edit-phone">Phone Number</label>
+                  <input type="tel" id="edit-phone" name="phone"
+                    placeholder="Enter phone number">
+                </div>
+              </div>
+            </div>
 
-  <!-- JAVASCRIPT -->
-  <script type="module">
+            <div class="section-box">
+              <div class="section-header">
+                <h2><span data-icon="trending" data-icon-size="17"></span>
+                  Location &amp; Contact</h2>
+              </div>
+              <div class="profile-details-grid">
+                <div class="profile-field" style="grid-column: 1 / -1;">
+                  <label for="edit-address">Address</label>
+                  <input type="text" id="edit-address" name="address"
+                    placeholder="Enter full address" required>
+                </div>
+                <div class="profile-field">
+                  <label for="edit-city">City</label>
+                  <input type="text" id="edit-city" name="city"
+                    placeholder="Enter city" required>
+                </div>
+                <div class="profile-field">
+                  <label for="edit-state">State / Region</label>
+                  <input type="text" id="edit-state" name="state"
+                    placeholder="Enter state or region">
+                </div>
+                <div class="profile-field">
+                  <label for="edit-country">Country</label>
+                  <input type="text" id="edit-country" name="country"
+                    placeholder="Enter country">
+                </div>
+                <div class="profile-field">
+                  <label for="edit-emergencyContact">Emergency Contact</label>
+                  <input type="text" id="edit-emergencyContact"
+                    name="emergencyContact"
+                    placeholder="Emergency contact phone">
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="display:flex; gap:12px; justify-content:flex-end; padding:16px 0;">
+              <button type="button" id="cancel-edit-btn"
+                style="padding:10px 24px; border:1px solid #d1d5db; background:#fff; border-radius:8px; font-weight:500; cursor:pointer; font-size:14px;">Cancel</button>
+              <button type="submit" id="save-profile-btn"
+                style="padding:10px 24px; border:none; background:#2563eb; color:#fff; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; gap:6px;">
+                <span data-icon="check" data-icon-size="15"></span> Save Changes
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JAVASCRIPT -->
+    <script type="module">
     import api from '../../src/js/api/api.js';
     import { initShell, loadCommonData, showToast } from '../../src/js/bloodbank-sidebar-common.js';
     import { applyIcons } from '../../src/js/bloodbank-icons.js';
@@ -419,6 +491,6 @@
       });
     }
   </script>
-</body>
+  </body>
 
 </html>

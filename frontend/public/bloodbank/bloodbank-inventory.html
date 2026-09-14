@@ -1,195 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeLink - Blood Inventory</title>
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
-  <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Blood Inventory</title>
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
+    <link rel="stylesheet" href="../../src/css/bloodbank-dashboard.css">
 
-  <base target="_blank">
-</head>
+    <base target="_blank">
+  </head>
 
-<body>
+  <body>
 
-  <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="logo-area">
-        <a href="../index.html" target="_self" class="logo-link">
-          <div class="logo-icon" data-icon="droplet"></div>
-          <div class="logo-text">LifeLink</div>
-        </a>
-        <button class="sidebar-close" id="sidebar-close">&times;</button>
+    <aside class="sidebar" id="sidebar">
+      <div>
+        <div class="logo-area">
+          <a href="../index.html" target="_self" class="logo-link">
+            <div class="logo-icon" data-icon="droplet"></div>
+            <div class="logo-text">LifeLink</div>
+          </a>
+          <button class="sidebar-close" id="sidebar-close">&times;</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" href="../bloodbank-dashboard.html"
+                target="_self"><span
+                  class="nav-icon" data-icon="dashboard"></span><span
+                  class="nav-label">Dashboard</span></a></li>
+            <li><a class="nav-item active" href="bloodbank-inventory.html"
+                target="_self"><span
+                  class="nav-icon" data-icon="droplet"></span><span
+                  class="nav-label">Blood Inventory</span></a></li>
+            <li><a class="nav-item" href="bloodbank-requests.html"
+                target="_self"><span class="nav-icon"
+                  data-icon="hospital"></span><span
+                  class="nav-label">Hospital Requests</span></a></li>
+            <li><a class="nav-item" href="bloodbank-outreach.html"
+                target="_self"><span class="nav-icon"
+                  data-icon="users"></span><span
+                  class="nav-label">Donor Outreach</span></a></li>
+            <li><a class="nav-item" href="bloodbank-donations.html"
+                target="_self"><span class="nav-icon"
+                  data-icon="inbox"></span><span
+                  class="nav-label">Donation Records</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Insights</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" href="bloodbank-analytics.html"
+                target="_self"><span class="nav-icon"
+                  data-icon="trending"></span><span
+                  class="nav-label">Analytics</span></a></li>
+            <li><a class="nav-item" href="bloodbank-notifications.html"
+                target="_self"><span
+                  class="nav-icon" data-icon="bell"></span><span
+                  class="nav-label">Notifications</span> <span
+                  class="nav-badge" id="notif-badge">0</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">System</div>
+          <ul class="nav-links">
+            <li><a class="nav-item" href="bloodbank-profile.html"
+                target="_self"><span class="nav-icon"
+                  data-icon="hospital"></span><span
+                  class="nav-label">Bank Profile</span></a></li>
+            <li><a class="nav-item" href="bloodbank-settings.html"
+                target="_self"><span class="nav-icon"
+                  data-icon="settings"></span><span
+                  class="nav-label">Settings</span></a></li>
+          </ul>
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Main</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" href="../bloodbank-dashboard.html" target="_self"><span
-                class="nav-icon" data-icon="dashboard"></span><span class="nav-label">Dashboard</span></a></li>
-          <li><a class="nav-item active" href="bloodbank-inventory.html" target="_self"><span
-                class="nav-icon" data-icon="droplet"></span><span class="nav-label">Blood Inventory</span></a></li>
-          <li><a class="nav-item" href="bloodbank-requests.html" target="_self"><span class="nav-icon" data-icon="hospital"></span><span
-                class="nav-label">Hospital Requests</span></a></li>
-          <li><a class="nav-item" href="bloodbank-outreach.html" target="_self"><span class="nav-icon" data-icon="users"></span><span
-                class="nav-label">Donor Outreach</span></a></li>
-          <li><a class="nav-item" href="bloodbank-donations.html" target="_self"><span class="nav-icon" data-icon="inbox"></span><span
-                class="nav-label">Donation Records</span></a></li>
-        </ul>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="status-dot online" id="sidebar-status-dot"></span>
+          <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
+        </div>
+        <div class="sidebar-footer-actions">
+          <button class="sidebar-logout-btn" id="sidebar-logout-btn"
+            type="button">
+            <span data-icon="logout" data-icon-size="15"></span> Logout
+          </button>
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Insights</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" href="bloodbank-analytics.html" target="_self"><span class="nav-icon" data-icon="trending"></span><span
-                class="nav-label">Analytics</span></a></li>
-          <li><a class="nav-item" href="bloodbank-notifications.html" target="_self"><span
-                class="nav-icon" data-icon="bell"></span><span class="nav-label">Notifications</span> <span
-                class="nav-badge" id="notif-badge">0</span></a></li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-title">System</div>
-        <ul class="nav-links">
-          <li><a class="nav-item" href="bloodbank-profile.html" target="_self"><span class="nav-icon" data-icon="hospital"></span><span
-                class="nav-label">Bank Profile</span></a></li>
-          <li><a class="nav-item" href="bloodbank-settings.html" target="_self"><span class="nav-icon" data-icon="settings"></span><span
-                class="nav-label">Settings</span></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <span class="status-dot online" id="sidebar-status-dot"></span>
-        <span class="sidebar-user-name" id="sidebar-user-name-footer">—</span>
-      </div>
-      <div class="sidebar-footer-actions">
-        <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button">
-          <span data-icon="logout" data-icon-size="15"></span> Logout
-        </button>
-      </div>
-    </div>
-  </aside>
-  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-    <header class="top-header">
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle sidebar"></button>
-      <div class="header-title">
-        <h1 id="page-title">Blood Inventory</h1>
-        <p>Manage your complete blood stock.</p>
-      </div>
-      <div class="header-actions">
-        <button class="header-btn" id="notif-header-btn" title="Notifications"
-          onclick="window.location.href='bloodbank-notifications.html'">
-          <span data-icon="bell" data-icon-size="18"></span>
-          <span class="dot" id="header-notif-dot"></span>
-        </button>
-        <div class="user-profile-wrap" id="user-profile-wrap">
-          <div class="user-profile-badge" id="user-profile-toggle">
-            <div class="user-avatar" id="avatar-initials">--</div>
-            <div class="user-info">
-              <div class="user-name" id="user-name">—</div>
-              <div class="user-role">Blood Bank Manager</div>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle" type="button"
+          aria-label="Toggle sidebar"></button>
+        <div class="header-title">
+          <h1 id="page-title">Blood Inventory</h1>
+          <p>Manage your complete blood stock.</p>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" id="notif-header-btn" title="Notifications"
+            onclick="window.location.href='bloodbank-notifications.html'">
+            <span data-icon="bell" data-icon-size="18"></span>
+            <span class="dot" id="header-notif-dot"></span>
+          </button>
+          <div class="user-profile-wrap" id="user-profile-wrap">
+            <div class="user-profile-badge" id="user-profile-toggle">
+              <div class="user-avatar" id="avatar-initials">--</div>
+              <div class="user-info">
+                <div class="user-name" id="user-name">—</div>
+                <div class="user-role">Blood Bank Manager</div>
+              </div>
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <div class="user-dropdown-name" id="dropdown-user-name">—</div>
+              <div class="user-dropdown-role">Blood Bank Manager</div>
+              <a class="user-dropdown-item" href="bloodbank-profile.html"
+                target="_self"><span data-icon="hospital"
+                  data-icon-size="15"></span> Bank Profile</a>
+              <a class="user-dropdown-item" href="bloodbank-settings.html"
+                target="_self"><span data-icon="settings"
+                  data-icon-size="15"></span> Settings</a>
+              <a class="user-dropdown-item danger" id="dropdown-logout-btn"
+                target="_self"><span data-icon="logout"
+                  data-icon-size="15"></span> Logout</a>
             </div>
           </div>
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="user-dropdown-name" id="dropdown-user-name">—</div>
-            <div class="user-dropdown-role">Blood Bank Manager</div>
-            <a class="user-dropdown-item" href="bloodbank-profile.html" target="_self"><span data-icon="hospital" data-icon-size="15"></span> Bank Profile</a>
-            <a class="user-dropdown-item" href="bloodbank-settings.html" target="_self"><span data-icon="settings" data-icon-size="15"></span> Settings</a>
-            <a class="user-dropdown-item danger" id="dropdown-logout-btn" target="_self"><span data-icon="logout" data-icon-size="15"></span> Logout</a>
-          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <div class="dashboard-container">
-      <section class="page-content">
-        <div class="section-box">
-          <div class="section-header">
-            <h2><span data-icon="droplet" data-icon-size="17"></span> Complete Blood Stock Details</h2>
-            <div class="section-actions">
-              <button class="btn btn-secondary btn-sm" id="export-inventory-btn"><span data-icon="download" data-icon-size="15"></span> Export</button>
-              <button class="btn btn-primary" id="open-update-stock-btn">Add Stock</button>
+      <div class="dashboard-container">
+        <section class="page-content">
+          <div class="section-box">
+            <div class="section-header">
+              <h2><span data-icon="droplet" data-icon-size="17"></span> Complete
+                Blood Stock Details</h2>
+              <div class="section-actions">
+                <button class="btn btn-secondary btn-sm"
+                  id="export-inventory-btn"><span data-icon="download"
+                    data-icon-size="15"></span> Export</button>
+                <button class="btn btn-primary" id="open-update-stock-btn">Add
+                  Stock</button>
+              </div>
+            </div>
+            <div class="inventory-grid" id="inventory-grid-body">
+              <div class="loading-state"><div
+                  class="spinner-lg"></div><p>Loading inventory…</p></div>
             </div>
           </div>
-          <div class="inventory-grid" id="inventory-grid-body">
-            <div class="loading-state"><div class="spinner-lg"></div><p>Loading inventory…</p></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ============ ADD / UPDATE STOCK MODAL ============ -->
+    <div class="modal-overlay" id="updateStockModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><span data-icon="droplet" data-icon-size="17"></span> Add Blood
+            Stock</h3>
+          <button class="modal-close"
+            data-close-modal="updateStockModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group"><label>Blood Type</label>
+            <select id="modal-blood-type">
+              <option value="A_POS">A+</option>
+              <option value="A_NEG">A-</option>
+              <option value="B_POS">B+</option>
+              <option value="B_NEG">B-</option>
+              <option value="AB_POS">AB+</option>
+              <option value="AB_NEG">AB-</option>
+              <option value="O_POS">O+</option>
+              <option value="O_NEG">O-</option>
+            </select>
           </div>
+          <div class="form-group"><label>Action</label>
+            <select id="modal-action">
+              <option value="add">Add Units (Donation)</option>
+              <option value="remove">Remove Units (Dispatch)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Units</label><input type="number"
+              id="modal-units" value="1" min="1"></div>
+          <div class="form-group"><label>Minimum Stock Level
+              (optional)</label><input type="number" id="modal-min-level"
+              min="0" placeholder="Leave blank to keep current"></div>
         </div>
-      </section>
-    </div>
-  </main>
-
-  <!-- ============ ADD / UPDATE STOCK MODAL ============ -->
-  <div class="modal-overlay" id="updateStockModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3><span data-icon="droplet" data-icon-size="17"></span> Add Blood Stock</h3>
-        <button class="modal-close" data-close-modal="updateStockModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group"><label>Blood Type</label>
-          <select id="modal-blood-type">
-            <option value="A_POS">A+</option>
-            <option value="A_NEG">A-</option>
-            <option value="B_POS">B+</option>
-            <option value="B_NEG">B-</option>
-            <option value="AB_POS">AB+</option>
-            <option value="AB_NEG">AB-</option>
-            <option value="O_POS">O+</option>
-            <option value="O_NEG">O-</option>
-          </select>
+        <div class="modal-footer">
+          <button class="btn btn-secondary"
+            data-close-modal="updateStockModal">Cancel</button>
+          <button class="btn btn-primary" id="submit-stock-update-btn">
+            <span id="submit-btn-text">Add Stock</span>
+            <span id="submit-btn-spinner" class="spinner"></span>
+          </button>
         </div>
-        <div class="form-group"><label>Action</label>
-          <select id="modal-action">
-            <option value="add">Add Units (Donation)</option>
-            <option value="remove">Remove Units (Dispatch)</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Units</label><input type="number" id="modal-units" value="1" min="1"></div>
-        <div class="form-group"><label>Minimum Stock Level (optional)</label><input type="number" id="modal-min-level"
-            min="0" placeholder="Leave blank to keep current"></div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-close-modal="updateStockModal">Cancel</button>
-        <button class="btn btn-primary" id="submit-stock-update-btn">
-          <span id="submit-btn-text">Add Stock</span>
-          <span id="submit-btn-spinner" class="spinner"></span>
-        </button>
       </div>
     </div>
-  </div>
 
-  <!-- ============ DELETE CONFIRMATION MODAL ============ -->
-  <div class="modal-overlay" id="deleteConfirmModal">
-    <div class="modal modal-sm">
-      <div class="modal-header">
-        <h3><span data-icon="trash" data-icon-size="17"></span> Remove Blood Type</h3>
-        <button class="modal-close" data-close-modal="deleteConfirmModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p class="confirm-text">
-          Are you sure you want to remove <strong id="delete-confirm-type">this blood type</strong>
-          from your inventory? This action cannot be undone.
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-close-modal="deleteConfirmModal">Cancel</button>
-        <button class="btn btn-danger" id="confirm-delete-btn">
-          <span id="delete-btn-text">Remove</span>
-          <span id="delete-btn-spinner" class="spinner"></span>
-        </button>
+    <!-- ============ DELETE CONFIRMATION MODAL ============ -->
+    <div class="modal-overlay" id="deleteConfirmModal">
+      <div class="modal modal-sm">
+        <div class="modal-header">
+          <h3><span data-icon="trash" data-icon-size="17"></span> Remove Blood
+            Type</h3>
+          <button class="modal-close"
+            data-close-modal="deleteConfirmModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="confirm-text">
+            Are you sure you want to remove <strong
+              id="delete-confirm-type">this blood type</strong>
+            from your inventory? This action cannot be undone.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary"
+            data-close-modal="deleteConfirmModal">Cancel</button>
+          <button class="btn btn-danger" id="confirm-delete-btn">
+            <span id="delete-btn-text">Remove</span>
+            <span id="delete-btn-spinner" class="spinner"></span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ============ TOAST CONTAINER ============ -->
-  <div id="toastContainer" class="toast-container"></div>
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div id="toastContainer" class="toast-container"></div>
 
-  <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
-  <script type="module">
+    <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
+    <script type="module">
     import api from '../../src/js/api/api.js';
     import { initShell, loadCommonData, showToast, iconMarkup } from '../../src/js/bloodbank-sidebar-common.js';
 
@@ -412,6 +452,6 @@
       refresh();
     }
   </script>
-</body>
+  </body>
 
 </html>

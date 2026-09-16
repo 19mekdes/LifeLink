@@ -230,10 +230,6 @@ body {
   display: none;
 }
 
-/* =========================
-   MAIN CONTENT
-========================= */
-
 .main {
   margin-left: 250px;
   width: calc(100% - 250px);
@@ -457,10 +453,6 @@ body {
   color: #dc2626;
 }
 
-/* =========================
-   PAGE CONTENT
-========================= */
-
 .content {
   padding: 32px 35px;
 }
@@ -534,10 +526,6 @@ body {
   text-decoration: underline;
 }
 
-/* =========================
-   STAT CARDS
-========================= */
-
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -593,10 +581,6 @@ body {
   color: #9ca3af;
 }
 
-/* =========================
-   CARDS
-========================= */
-
 .card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -617,10 +601,6 @@ body {
   color: #111827;
 }
 
-/* =========================
-   DASHBOARD GRID
-========================= */
-
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -630,10 +610,6 @@ body {
 .dashboard-grid .card {
   margin-bottom: 0;
 }
-
-/* =========================
-   DONUT CHART + STATUS LEGEND
-========================= */
 
 .status-content {
   display: flex;
@@ -708,10 +684,6 @@ body {
 .orange-dot { background: #f59e0b; }
 .green-dot { background: #16a34a; }
 
-/* =========================
-   RECENT REQUESTS LIST
-========================= */
-
 .request-list {
   display: flex;
   flex-direction: column;
@@ -745,9 +717,6 @@ body {
   font-size: 13px;
 }
 
-/* =========================
-   BADGES
-========================= */
 
 .badge {
   display: inline-block;
@@ -767,9 +736,6 @@ body {
 .badge.confirmed { background: #dcfce7; color: #047857; }
 .badge.declined { background: #fef2f2; color: #b91c1c; }
 
-/* =========================
-   DATA TABLE
-========================= */
 
 .table-wrapper {
   width: 100%;
@@ -807,9 +773,6 @@ tbody tr:hover {
   background: #fafafa;
 }
 
-/* =========================
-   URGENCY
-========================= */
 
 .urgency {
   display: inline-block;
@@ -840,9 +803,7 @@ tbody tr:hover {
   color: #ffffff;
 }
 
-/* =========================
-   TABS
-========================= */
+
 
 .tabs {
   display: flex;
@@ -880,9 +841,7 @@ tbody tr:hover {
   display: none;
 }
 
-/* =========================
-   FORMS
-========================= */
+
 
 .form-grid {
   display: grid;
@@ -928,9 +887,6 @@ tbody tr:hover {
   min-height: 110px;
 }
 
-/* =========================
-   PROFILE
-========================= */
 
 .profile-grid {
   display: grid;
@@ -1028,9 +984,7 @@ tbody tr:hover {
   margin-top: 25px;
 }
 
-/* =========================
-   SETTINGS
-========================= */
+
 
 .settings-card {
   max-width: 780px;
@@ -1129,9 +1083,6 @@ tbody tr:hover {
   max-width: 420px;
 }
 
-/* =========================
-   LOADING HINT
-========================= */
 
 .loading-hint {
   padding: 18px;
@@ -1140,23 +1091,13 @@ tbody tr:hover {
   font-size: 13px;
 }
 
-/* =========================
-   MISSING / EMPTY STATE
-========================= */
+
 
 .empty-state-row td {
   text-align: center;
   color: #9ca3af;
   padding: 30px;
 }
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-/* =========================
-   SEARCH & TOOLBAR
-========================= */
 
 .table-toolbar {
   margin-bottom: 18px;

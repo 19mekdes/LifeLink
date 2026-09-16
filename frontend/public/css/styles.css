@@ -1,5 +1,3 @@
-/* src/css/styles.css */
-
 :root {
     --primary: #dc2626;
     --primary-dark: #b91c1c;
@@ -94,7 +92,6 @@ a {
     background: #15803d;
 }
 
-/* Toast */
 .toast-container {
     position: fixed;
     top: 20px;

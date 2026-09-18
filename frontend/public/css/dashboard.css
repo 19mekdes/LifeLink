@@ -1,12 +1,3 @@
-/* =========================================================
-   LIFELINK DONOR DASHBOARD
-   Updated dashboard layout
-   Existing LifeLink colors preserved
-========================================================= */
-
-/* =========================================================
-   DESIGN TOKENS / CSS VARIABLES
-========================================================= */
 :root {
     --primary: #7b1e2b;
     --primary-dark: #611722;
@@ -14,7 +5,7 @@
     --bg-light: #f8f5f3;
     --bg-white: #ffffff;
     --text-main: #2d2424;
-    --text-muted: #6b7280;
+    --text-muted: #6b7280
     --text-light: #9ca3af;
     --border-color: #eee3df;
     --success: #3b8c58;

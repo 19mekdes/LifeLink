@@ -484,9 +484,6 @@ body {
   justify-content: space-between;
 }
 
-/* =========================
-   BUTTONS
-========================= */
 
 .primary-btn {
   display: inline-flex;
@@ -1416,7 +1413,7 @@ tbody tr:hover {
   background: #2563eb;
 }
 
-/* Extended Badge Colors */
+
 .badge.pending {
   background: #fef3c7;
   color: #d97706;

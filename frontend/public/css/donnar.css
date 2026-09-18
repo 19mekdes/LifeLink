@@ -125,7 +125,6 @@ body {
   margin: 0 auto;
 }
 
-/* Page Section Switching */
 .page-content {
   display: none;
 }
@@ -134,7 +133,6 @@ body {
   display: block;
 }
 
-/* Metric Cards */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

@@ -803,9 +803,6 @@ tbody tr:last-child td {
     color: var(--text-muted, #64748b);
 }
 
-/* NOTE: .pagination-controls is intentionally defined twice below.
-   Order preserved exactly as in the original file — the second
-   definition (gap: 10px) overrides the first (gap: 4px). */
 .pagination-controls {
     display: flex;
     align-items: center;
@@ -853,10 +850,6 @@ tbody tr:last-child td {
     opacity: 0.5;
     cursor: not-allowed;
 }
-
-/* ============================================================
-   13. COMPONENT — FORMS
-   ============================================================ */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -895,10 +888,6 @@ tbody tr:last-child td {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(123, 30, 43, 0.1);
 }
-
-/* ============================================================
-   14. COMPONENT — MODAL
-   ============================================================ */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -981,10 +970,6 @@ tbody tr:last-child td {
     justify-content: flex-end;
     gap: 10px;
 }
-
-/* ============================================================
-   15. COMPONENT — EMPTY STATE
-   ============================================================ */
 .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -1007,10 +992,6 @@ tbody tr:last-child td {
 .empty-state p {
     font-size: 14px;
 }
-
-/* ============================================================
-   16. COMPONENT — GENERIC SECTION BOX
-   ============================================================ */
 .section-box {
     background: var(--bg-white);
     border-radius: var(--radius-md);
@@ -1047,10 +1028,6 @@ tbody tr:last-child td {
     gap: 10px;
     align-items: center;
 }
-
-/* ============================================================
-   17. PAGE — DASHBOARD METRICS
-   ============================================================ */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -1170,10 +1147,6 @@ tbody tr:last-child td {
     color: var(--text-light);
     margin-top: 4px;
 }
-
-/* ============================================================
-   18. PAGE — BLOOD INVENTORY
-   ============================================================ */
 .inventory-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -1267,10 +1240,6 @@ tbody tr:last-child td {
     padding: 5px 10px;
     font-size: 11px;
 }
-
-/* ============================================================
-   19. PAGE — HOSPITAL REQUESTS TOOLBAR
-   ============================================================ */
 .requests-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -1319,10 +1288,6 @@ tbody tr:last-child td {
     display: flex;
     gap: 6px;
 }
-
-/* ============================================================
-   20. PAGE — BANK PROFILE
-   ============================================================ */
 .profile-details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

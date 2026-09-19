@@ -230,8 +230,6 @@
     color: var(--primary);
 }
 
-/* ============ LOGIN ROLE SELECTOR ============ */
-
 .login-role-selector {
     display: flex;
     gap: 0.5rem;
@@ -309,11 +307,6 @@
         width: 100%;
     }
 }
-
-
-/* Add to src/css/auth.css */
-
-/* ============ REGISTER SPECIFIC ============ */
 
 .register-card .role-selector {
     display: flex;
@@ -411,8 +404,6 @@
     border-color: var(--primary);
     background: var(--primary-light);
 }
-
-/* Password wrapper for register */
 .register-card .password-wrapper {
     position: relative;
 }

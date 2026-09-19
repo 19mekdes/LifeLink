@@ -484,7 +484,6 @@ body {
   justify-content: space-between;
 }
 
-
 .primary-btn {
   display: inline-flex;
   align-items: center;
@@ -1412,7 +1411,6 @@ tbody tr:hover {
 .toast.info {
   background: #2563eb;
 }
-
 
 .badge.pending {
   background: #fef3c7;

@@ -161,8 +161,6 @@ body {
 .metric-card.highlight {
   border-left: 4px solid var(--primary-red);
 }
-
-/* Section Containers */
 .section-box {
   background: var(--white);
   border-radius: 10px;

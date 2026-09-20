@@ -13,7 +13,6 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Frontend directory
 const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
 
 const app = express();
@@ -72,7 +71,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Import routes
 import authRoutes from './routes/authRoutes.js';
 import hospitalRoutes from './routes/hospitalRoutes.js';
 import donorRoutes from './routes/donorRoutes.js';

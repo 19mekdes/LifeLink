@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
-    
+
             const data =
                 await api.get(
                     "/donors/donations"
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 data?.data?.stats || {};
 
 
-    
+
             if (totalDonations) {
 
                 totalDonations.textContent =
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "DONOR PROFILE FOR HISTORY:",
                 profileResponse
             );
-            
+
 
 
             const profile =

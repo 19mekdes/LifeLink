@@ -189,11 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 error
             );
 
-            /*
-             * Temporary fallback only for development.
-             * It allows the page to remain usable while
-             * the backend is offline.
-             */
+
 
             const saved =
                 localStorage.getItem(

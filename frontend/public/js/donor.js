@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
             topbarName.textContent = `Hi, ${name}`;
         }
 
-    
+
 
         if (profileInitial) {
             profileInitial.textContent = initial;
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        
+
         if (dashboardLocation) {
 
             dashboardLocation.textContent =
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-    
+
 
         const availability =
             donor.availabilityStatus ||
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Dashboard statistics:", stats);
 
-    
+
         if (totalDonations) {
 
             totalDonations.textContent =
@@ -530,18 +530,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 data
             );
 
-            
+
 
             displayDonorInfo(
                 data.donor
             );
 
-            
+
             displayDashboardStats(
                 data.stats
             );
 
-            
+
 
             displayAvailableRequests(
                 data.availableRequests

@@ -27,7 +27,8 @@ class MatchingService {
           ...where,
           OR: [
             { lastDonationDate: null },
-            { lastDonationDate: {
+            {
+              lastDonationDate: {
                 lt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000) // 90 days
               }
             }
@@ -86,7 +87,7 @@ class MatchingService {
       score += 20;
     }
 
-  
+
     score += (donor.reliabilityScore / 100) * 20;
 
     if (!donor.lastDonationDate) {
@@ -95,11 +96,11 @@ class MatchingService {
       const daysSinceDonation = Math.floor(
         (Date.now() - new Date(donor.lastDonationDate).getTime()) / (1000 * 60 * 60 * 24)
       );
-      // More points for longer since last donation
+
       score += Math.min(15, (daysSinceDonation / 90) * 15);
     }
 
-    
+
     if (donor.totalDonations > 0) {
       score += Math.min(15, donor.totalDonations * 2);
     }
@@ -180,7 +181,8 @@ class MatchingService {
           isVerified: true,
           OR: [
             { lastDonationDate: null },
-            { lastDonationDate: {
+            {
+              lastDonationDate: {
                 lt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
               }
             }
@@ -250,7 +252,7 @@ class MatchingService {
       }
     }
 
-  
+
     if (donor.availabilityStatus !== 'AVAILABLE') {
       result.eligible = false;
       result.reasons.push(`Donor is currently ${donor.availabilityStatus.toLowerCase()}`);
@@ -319,7 +321,8 @@ class MatchingService {
             ...where,
             OR: [
               { lastDonationDate: null },
-              { lastDonationDate: {
+              {
+                lastDonationDate: {
                   lt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
                 }
               }

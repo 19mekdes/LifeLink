@@ -1,6 +1,5 @@
 import { body, param, query } from 'express-validator';
 
-
 export const updateUserValidation = [
   param('id')
     .notEmpty()

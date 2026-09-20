@@ -16,7 +16,6 @@ import {
 
 const router = express.Router();
 
-// All inventory routes require authentication and BLOOD_BANK role
 router.use(authenticate);
 router.use(authorize('BLOOD_BANK'));
 

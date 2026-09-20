@@ -1,6 +1,5 @@
 import { body, param, query } from 'express-validator';
 
-// ============ BLOOD TYPE VALIDATION ============
 const BLOOD_TYPES = ['A_POS', 'A_NEG', 'B_POS', 'B_NEG', 'AB_POS', 'AB_NEG', 'O_POS', 'O_NEG'];
 
 const INVENTORY_STATUSES = ['AVAILABLE', 'LOW', 'OUT_OF_STOCK', 'EXPIRED'];

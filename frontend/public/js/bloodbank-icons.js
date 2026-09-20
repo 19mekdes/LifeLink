@@ -1,5 +1,3 @@
-
-
 const PATHS = {
   dashboard: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
   droplet: '<path d="M12 2.5c3.4 4.4 6.5 8.4 6.5 12A6.5 6.5 0 1 1 5.5 14.5c0-3.6 3.1-7.6 6.5-12z"/>',
@@ -30,14 +28,12 @@ const PATHS = {
   calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
 };
 
-/** Returns raw <svg>…</svg> markup for the given icon name. */
 export function iconMarkup(name, { size = 18, className = '' } = {}) {
   const inner = PATHS[name] || PATHS.alert;
   const spin = name === 'spinner' ? ' icon-spin' : '';
   return `<svg class="icon${className ? ' ' + className : ''}${spin}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
 }
 
-/** Replaces every element with a data-icon attribute with its SVG icon. */
 export function applyIcons(root = document) {
   root.querySelectorAll('[data-icon]').forEach((el) => {
     const name = el.getAttribute('data-icon');

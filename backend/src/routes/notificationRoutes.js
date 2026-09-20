@@ -22,7 +22,7 @@ const router = express.Router();
 // All notification routes require authentication
 router.use(authenticate);
 
-// ============ GET NOTIFICATIONS ============
+
 /**
  * @route   GET /api/notifications
  * @desc    Get all notifications for the current user
@@ -91,7 +91,6 @@ router.put(
   markAsRead
 );
 
-// ============ MARK AS UNREAD ============
 /**
  * @route   PUT /api/notifications/:id/unread
  * @desc    Mark a notification as unread

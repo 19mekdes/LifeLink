@@ -66,7 +66,6 @@ router.get(
   getInventoryByBloodType
 );
 
-// ============ CREATE OR UPDATE INVENTORY ============
 /**
  * @route   POST /api/inventory
  * @desc    Create or update inventory item

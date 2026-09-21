@@ -58,9 +58,6 @@ export const updateAvailabilityValidation = [
     .withMessage('Invalid availability status')
 ];
 
-/**
- * Validation rules for donor response
- */
 export const donorResponseValidation = [
   body('response')
     .notEmpty()

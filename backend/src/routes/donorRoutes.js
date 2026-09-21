@@ -16,8 +16,6 @@ import {
 } from '../controllers/donorController.js';
 
 const router = express.Router();
-
-// All donor routes require authentication and DONOR role
 router.use(authenticate);
 router.use(authorize('DONOR'));
 

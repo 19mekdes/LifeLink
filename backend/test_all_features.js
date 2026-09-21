@@ -11,7 +11,6 @@ const BASE = 'http://localhost:5000/api';
 async function main() {
   console.log('Testing all LifeLink features & endpoints...\n');
 
-  // 1. Ensure test admin exists
   let admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } });
   if (!admin) {
     const hashedPassword = await bcrypt.hash('Admin@123456', 10);

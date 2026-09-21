@@ -18,7 +18,6 @@ import {
 
 const router = express.Router();
 
-// All routes require authentication and BLOOD_BANK role
 router.use(authenticate);
 router.use(authorize('BLOOD_BANK'));
 

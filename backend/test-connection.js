@@ -10,7 +10,6 @@ async function testConnection() {
     await prisma.$connect();
     console.log('✅ Connected to Neon PostgreSQL!');
     
-    
     const result = await prisma.$queryRaw`SELECT 1 as test`;
     console.log('✅ Query successful!');
     

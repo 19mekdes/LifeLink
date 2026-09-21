@@ -35,7 +35,6 @@ router.get('/', getAllInventory);
  */
 router.get('/stats', getInventoryStats);
 
-// ============ GET LOW STOCK ITEMS ============
 /**
  * @route   GET /api/inventory/low-stock
  * @desc    Get low stock inventory items

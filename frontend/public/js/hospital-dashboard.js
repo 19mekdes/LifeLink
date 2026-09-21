@@ -239,7 +239,6 @@ import api from '../../src/js/api/api.js';
     if (mainContent) mainContent.classList.toggle('collapsed-sidebar');
   });
 
-  // Topbar hospital account popup dropdown
   const topbarAccount = $('#topbar-hospital-account');
   const accountDropdown = $('#account-dropdown');
 

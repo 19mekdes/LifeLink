@@ -14,7 +14,6 @@ function ensureProgressBar() {
   return bar;
 }
 
-
 export function showProgress() {
   ensureProgressBar().classList.add('active');
 }
@@ -23,7 +22,6 @@ export function showProgress() {
 export function hideProgress() {
   ensureProgressBar().classList.remove('active');
 }
-
 
 export async function withProgress(fn) {
   showProgress();
@@ -77,7 +75,6 @@ export function initShell() {
     paintToggleIcon();
   }
 
-  // Restore desktop collapse preference
   if (!isMobile()) {
     try {
       if (localStorage.getItem(COLLAPSE_STORAGE_KEY) === '1') sidebar.classList.add('collapsed');
@@ -122,7 +119,7 @@ export function initShell() {
     try {
       await authApi.logout();
     } catch (e) {
-      /* proceed to clear local session regardless */
+    
     } finally {
       authApi.clearAuth();
       window.location.href = 'login.html';

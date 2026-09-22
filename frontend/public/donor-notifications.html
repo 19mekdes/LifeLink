@@ -1,170 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LifeLink | Notifications</title>
-    <link rel="stylesheet" href="../src/css/dashboard.css">
-</head>
+    <link rel="stylesheet" href="../src/css/dashboard.css" />
+  </head>
 
-<body>
-
-<aside class="sidebar" id="sidebar">
-
-    <!-- Sidebar toggle -->
-    <button
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <!-- Sidebar toggle -->
+      <button
         class="sidebar-toggle"
         id="sidebarToggle"
         type="button"
         aria-label="Toggle sidebar"
-    >
+      >
         <span></span>
         <span></span>
         <span></span>
-    </button>
+      </button>
 
-    <!-- Logo -->
-    <a href="index.html" class="logo">
+      <!-- Logo -->
+      <a href="index.html" class="logo">
         <span>♥</span>
         <span class="sidebar-text">LifeLink</span>
-    </a>
+      </a>
 
-    <!-- Navigation -->
-        <nav>
+      <!-- Navigation -->
+      <nav>
+        <a href="donor-dashboard.html" class="active">
+          <span class="sidebar-icon">▦</span>
+          <span class="sidebar-text">Dashboard</span>
+        </a>
 
-            <a href="donor-dashboard.html" class="active">
-                <span class="sidebar-icon">▦</span>
-                <span class="sidebar-text">Dashboard</span>
-            </a>
+        <a href="donor-profile.html">
+          <span class="sidebar-icon">○</span>
+          <span class="sidebar-text">My Profile</span>
+        </a>
+        <a href="donor-requests.html">
+          <span class="sidebar-icon">□</span>
+          <span class="sidebar-text">Blood Requests</span>
+        </a>
 
-            <a href="donor-profile.html">
-                <span class="sidebar-icon">○</span>
-                <span class="sidebar-text">My Profile</span>
-            </a>
-            <a href="donor-requests.html">
-                <span class="sidebar-icon">□</span>
-                <span class="sidebar-text">Blood Requests</span>
-            </a>
+        <a href="donor-history.html">
+          <span class="sidebar-icon">◷</span>
+          <span class="sidebar-text">Donation History</span>
+        </a>
 
-            <a href="donor-history.html">
-                <span class="sidebar-icon">◷</span>
-                <span class="sidebar-text">Donation History</span>
-            </a>
+        <a href="donor-notifications.html">
+          <span class="sidebar-icon">♧</span>
+          <span class="sidebar-text">Notifications</span>
+          <span class="notification-count">3</span>
+        </a>
+      </nav>
 
-            <a href="donor-notifications.html">
-                <span class="sidebar-icon">♧</span>
-                <span class="sidebar-text">Notifications</span>
-                <span class="notification-count">3</span>
-            </a>
+      <!-- Logout -->
+      <a href="login.html" class="logout" id="logoutButton">
+        <span class="sidebar-icon">←</span>
+        <span class="sidebar-text">Logout</span>
+      </a>
+    </aside>
 
-        </nav>
+    <main class="main-content">
+      <header class="topbar">
+        <!-- Top actions -->
+        <div class="topbar-actions">
+          <a
+            href="donor-notifications.html"
+            class="top-action notification-btn"
+          >
+            ♧
+            <span>3</span>
+          </a>
 
-    <!-- Logout -->
-    <a href="login.html" class="logout" id="logoutButton">
-    <span class="sidebar-icon">←</span>
-    <span class="sidebar-text">Logout</span>
-</a>
+          <a href="#" class="top-action"> ✉ </a>
 
-</aside>
+          <!-- Profile -->
+          <div class="profile-menu">
+            <button class="profile-button" id="profileButton">
+              <span class="profile-avatar" id="profileInitial">...</span>
 
-<main class="main-content">
-<header class="topbar">
+              <span class="profile-info">
+                <strong id="topbarName">Hi, User</strong>
+                <small>Donor</small>
+              </span>
 
-            <!-- Top actions -->
-            <div class="topbar-actions">
+              <span class="profile-arrow">⌄</span>
+            </button>
 
-                <a href="donor-notifications.html" class="top-action notification-btn">
-                    ♧
-                    <span>3</span>
-                </a>
-
-                <a href="#" class="top-action">
-                    ✉
-                </a>
-
-                <!-- Profile -->
-                <div class="profile-menu">
-
-                    <button class="profile-button" id="profileButton">
-
-                        <span class="profile-avatar" id="profileInitial">...</span>
-
-                        <span class="profile-info">
-                                <strong id="topbarName">Hi, User</strong>
-                                <small>Donor</small>
-                        </span>
-
-                        <span class="profile-arrow">⌄</span>
-
-                    </button>
-
-
-                    <div class="profile-dropdown" id="profileDropdown">
-
-                        <div class="profile-dropdown-header">
-
-                            <div class="profile-avatar large" id="dashboardProfileInitial">
-                                ...
-                            </div>
-
-                            <div>
-                                <strong id="dashboardProfileName">User</strong>
-                                <small>Donor</small>
-                            </div>
-
-                        </div>
-
-                        <div class="dropdown-divider"></div>
-
-                        <a href="donor-profile.html">
-                            👤 My Profile
-                        </a>
-
-                        <a href="donor-notifications.html">
-                            🔔 Notifications
-                        </a>
-
-                        <a href="#">
-                            ⚙️ Account Settings
-                        </a>
-
-                        <div class="dropdown-divider"></div>
-
-                        <a href="#" id="dropdownLogoutButton" class="logout">
-                            🚪 Logout
-                        </a>
-
-                    </div>
-
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="profile-dropdown-header">
+                <div class="profile-avatar large" id="dashboardProfileInitial">
+                  ...
                 </div>
 
+                <div>
+                  <strong id="dashboardProfileName">User</strong>
+                  <small>Donor</small>
+                </div>
+              </div>
+
+              <div class="dropdown-divider"></div>
+
+              <a href="donor-profile.html"> 👤 My Profile </a>
+
+              <a href="donor-notifications.html"> 🔔 Notifications </a>
+
+              <a href="#"> ⚙️ Account Settings </a>
+
+              <div class="dropdown-divider"></div>
+
+              <a href="#" id="dropdownLogoutButton" class="logout">
+                🚪 Logout
+              </a>
             </div>
+          </div>
+        </div>
+      </header>
 
-        </header>
-
-    <section class="dashboard-section">
-
+      <section class="dashboard-section">
         <div class="section-header">
-            <div>
-                <h1>Notifications</h1>
-<p>Stay updated about donation requests.</p>
-            </div>
+          <div>
+            <h1>Notifications</h1>
+            <p>Stay updated about donation requests.</p>
+          </div>
 
-            <button class="edit-profile-btn" id="markAllRead">
-                Mark All Read
-            </button>
+          <button class="edit-profile-btn" id="markAllRead">
+            Mark All Read
+          </button>
         </div>
 
         <div id="notificationList">
-            <p>Loading notifications...</p>
+          <p>Loading notifications...</p>
         </div>
+      </section>
+    </main>
 
-    </section>
-
-</main>
-
-<script type="module" src="../src/js/api/api.js?v=2"></script>
-<script type="module" src="../src/js/donor-common.js?v=2"></script>
-<script type="module" src="../src/js/donor-notifications.js?v=2"></script>
-</body>
+    <script type="module" src="../src/js/api/api.js?v=2"></script>
+    <script type="module" src="../src/js/donor-common.js?v=2"></script>
+    <script type="module" src="../src/js/donor-notifications.js?v=2"></script>
+  </body>
 </html>

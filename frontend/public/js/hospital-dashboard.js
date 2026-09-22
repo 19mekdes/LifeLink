@@ -253,7 +253,6 @@ import api from '../../src/js/api/api.js';
     toggleAccountDropdown();
   });
 
-  // Close account dropdown when clicking outside
   document.addEventListener('click', (e) => {
     if (accountDropdown && !accountDropdown.contains(e.target) && topbarAccount && !topbarAccount.contains(e.target)) {
       toggleAccountDropdown(false);

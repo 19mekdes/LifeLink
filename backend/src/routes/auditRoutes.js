@@ -15,11 +15,9 @@ import {
 
 const router = express.Router();
 
-// All audit routes require authentication and ADMIN role
 router.use(authenticate);
 router.use(authorize('ADMIN'));
 
-// ============ GET AUDIT LOGS ============
 /**
  * @route   GET /api/audit/logs
  * @desc    Get all audit logs with filters
@@ -40,7 +38,6 @@ router.get(
   getAuditLogs
 );
 
-// ============ GET AUDIT LOG BY ID ============
 /**
  * @route   GET /api/audit/logs/:id
  * @desc    Get audit log by ID

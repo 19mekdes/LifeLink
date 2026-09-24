@@ -21,7 +21,6 @@ const router = express.Router();
 router.use(authenticate);
 router.use(authorize('BLOOD_BANK'));
 
-// ============ PROFILE ============
 /**
  * @route   GET /api/blood-banks/profile
  * @desc    Get blood bank profile
@@ -42,7 +41,6 @@ router.put('/profile', [
   body('emergencyContact').optional().isString().withMessage('Emergency contact must be a string')
 ], updateProfile);
 
-// ============ STATISTICS ============
 /**
  * @route   GET /api/blood-banks/stats
  * @desc    Get blood bank statistics
@@ -50,7 +48,6 @@ router.put('/profile', [
  */
 router.get('/stats', getStats);
 
-// ============ DASHBOARD ============
 /**
  * @route   GET /api/blood-banks/dashboard
  * @desc    Get blood bank dashboard
@@ -58,7 +55,6 @@ router.get('/stats', getStats);
  */
 router.get('/dashboard', getDashboard);
 
-// ============ INVENTORY ============
 /**
  * @route   GET /api/blood-banks/inventory
  * @desc    Get all inventory items
@@ -104,7 +100,6 @@ router.delete(
   deleteInventoryItem
 );
 
-// ============ REQUESTS ============
 /**
  * @route   GET /api/blood-banks/requests
  * @desc    Get all blood requests

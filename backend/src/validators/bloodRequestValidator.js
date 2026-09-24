@@ -49,9 +49,6 @@ export const createBloodRequestValidation = [
     .trim(),
 ];
 
-/**
- * Validation rules for updating a blood request
- */
 export const updateBloodRequestValidation = [
   body('bloodType')
     .optional()
@@ -93,9 +90,7 @@ export const updateBloodRequestValidation = [
     .trim(),
 ];
 
-/**
- * Validation rules for updating request status
- */
+
 export const updateRequestStatusValidation = [
   body('status')
     .notEmpty()
@@ -110,9 +105,6 @@ export const updateRequestStatusValidation = [
     .trim(),
 ];
 
-/**
- * Validation rules for canceling a request
- */
 export const cancelRequestValidation = [
   body('notes')
     .optional()
@@ -121,9 +113,6 @@ export const cancelRequestValidation = [
     .trim(),
 ];
 
-/**
- * Validation rules for donor response to request
- */
 export const donorResponseValidation = [
   body('response')
     .notEmpty()
@@ -138,9 +127,6 @@ export const donorResponseValidation = [
     .trim(),
 ];
 
-/**
- * Validation rules for request ID parameter
- */
 export const requestIdParamValidation = [
   param('id')
     .notEmpty()
@@ -151,9 +137,6 @@ export const requestIdParamValidation = [
     .withMessage('Invalid request ID'),
 ];
 
-/**
- * Validation rules for filtering requests
- */
 export const filterRequestsValidation = [
   query('status')
     .optional()
@@ -193,9 +176,6 @@ export const filterRequestsValidation = [
     .withMessage('Sort order must be asc or desc'),
 ];
 
-/**
- * Validation rules for request allocation
- */
 export const allocateRequestValidation = [
   body('inventoryId')
     .notEmpty()
@@ -210,9 +190,6 @@ export const allocateRequestValidation = [
     .withMessage('Units allocated must be at least 1'),
 ];
 
-/**
- * Validation rules for emergency request
- */
 export const emergencyRequestValidation = [
   body('bloodType')
     .notEmpty()
@@ -241,7 +218,6 @@ export const emergencyRequestValidation = [
     .trim(),
 ];
 
-// Export all validations as a single object
 export default {
   createBloodRequestValidation,
   updateBloodRequestValidation,

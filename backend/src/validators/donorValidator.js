@@ -47,9 +47,7 @@ export const updateProfileValidation = [
     .trim()
 ];
 
-/**
- * Validation rules for availability update
- */
+
 export const updateAvailabilityValidation = [
   body('availabilityStatus')
     .notEmpty()

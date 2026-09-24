@@ -50,8 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const recentActivity = $("recentActivity");
     const notificationPreview = $("notificationPreview");
 
-
-
     function displayDonorInfo(donor) {
 
         if (!donor) {

@@ -105,7 +105,6 @@
         }
     </script>
 
-                <!-- ============ LOGIN SCRIPT ============ -->
                 <script type="module">
         
         import authApi from './js/api/authApi.js';
@@ -188,7 +187,6 @@
             rememberMe.checked = true;
         }
 
-        // Save email when remember me is checked
         rememberMe.addEventListener('change', () => {
             if (rememberMe.checked) {
                 localStorage.setItem('rememberedEmail', emailInput.value);

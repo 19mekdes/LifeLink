@@ -179,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!requestList) return;
 
-            // Add markers to map
             addHospitalMarkers(requests);
 
             if (!requests.length) {

@@ -55,9 +55,6 @@ export const upsertInventoryValidation = [
     .withMessage(`Invalid status. Must be one of: ${INVENTORY_STATUSES.join(', ')}`)
 ];
 
-/**
- * Validation for updating inventory units
- */
 export const updateInventoryUnitsValidation = [
   param('bloodType')
     .notEmpty()
@@ -78,9 +75,7 @@ export const updateInventoryUnitsValidation = [
     .withMessage('Operation must be set, add, or subtract')
 ];
 
-/**
- * Validation for bulk update inventory
- */
+
 export const bulkUpdateInventoryValidation = [
   body('items')
     .notEmpty()
@@ -128,9 +123,6 @@ export const bulkUpdateInventoryValidation = [
     .withMessage(`Invalid status. Must be one of: ${INVENTORY_STATUSES.join(', ')}`)
 ];
 
-/**
- * Validation for get inventory filters
- */
 export const getInventoryFiltersValidation = [
   query('bloodType')
     .optional()
@@ -177,9 +169,6 @@ export const getInventoryFiltersValidation = [
     .withMessage('Sort order must be asc or desc')
 ];
 
-/**
- * Validation for transfer inventory
- */
 export const transferInventoryValidation = [
   body('fromBloodBankId')
     .notEmpty()
@@ -215,18 +204,10 @@ export const transferInventoryValidation = [
     .trim()
 ];
 
-// ============ COMBINED VALIDATIONS ============
-
-/**
- * Validation for creating inventory
- */
 export const createInventoryValidation = [
   ...upsertInventoryValidation
 ];
 
-/**
- * Validation for updating inventory
- */
 export const updateInventoryValidation = [
   ...bloodTypeParamValidation,
   body('unitsAvailable')
@@ -275,8 +256,6 @@ export const inventoryIdValidation = [
     .isLength({ min: 10 })
     .withMessage('Invalid inventory ID')
 ];
-
-// ============ EXPORT ALL ============
 
 export default {
   bloodTypeParamValidation,

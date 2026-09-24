@@ -186,9 +186,6 @@ body {
   color: white;
 }
 
-/* =========================
-   SIDEBAR COLLAPSED STATE (DESKTOP)
-========================= */
 
 .sidebar.collapsed {
   width: 76px;
@@ -1244,9 +1241,6 @@ tbody tr:hover {
   }
 }
 
-/* =========================
-   MODAL & TOAST STYLES
-========================= */
 
 .modal-backdrop {
   position: fixed;
@@ -1364,7 +1358,6 @@ tbody tr:hover {
   font-size: 12px;
 }
 
-/* Toast Notifications */
 .toast-container {
   position: fixed;
   bottom: 24px;

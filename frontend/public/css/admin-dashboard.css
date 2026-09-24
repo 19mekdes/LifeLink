@@ -414,7 +414,6 @@ body {
   stroke: #ffffff;
 }
 
-/* Collapsed sidebar behavior */
 .sidebar.collapsed .nav-item-parent-left span,
 .sidebar.collapsed .nav-chevron,
 .sidebar.collapsed .nav-submenu {

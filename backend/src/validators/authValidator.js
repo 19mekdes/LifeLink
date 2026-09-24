@@ -1,8 +1,7 @@
 import { body } from 'express-validator';
 
-
 export const registerValidation = [
-  // Common fields
+  
   body('name')
     .notEmpty()
     .withMessage('Name is required')
@@ -85,9 +84,6 @@ export const registerValidation = [
     .trim(),
 ];
 
-/**
- * Validation rules for user login
- */
 export const loginValidation = [
   body('email')
     .notEmpty()
@@ -103,9 +99,6 @@ export const loginValidation = [
     .withMessage('Password must be at least 6 characters long'),
 ];
 
-/**
- * Validation rules for updating profile
- */
 export const updateProfileValidation = [
   body('name')
     .optional()
@@ -131,9 +124,6 @@ export const updateProfileValidation = [
     .trim(),
 ];
 
-/**
- * Validation rules for password change
- */
 export const changePasswordValidation = [
   body('currentPassword')
     .notEmpty()
@@ -166,9 +156,7 @@ export const forgotPasswordValidation = [
     .normalizeEmail(),
 ];
 
-/**
- * Validation rules for reset password
- */
+
 export const resetPasswordValidation = [
   body('token')
     .notEmpty()
@@ -198,7 +186,6 @@ export const verifyEmailValidation = [
     .withMessage('Verification token is required'),
 ];
 
-// Export all validations as a single object
 export default {
   registerValidation,
   loginValidation,

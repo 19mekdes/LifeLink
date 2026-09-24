@@ -35,7 +35,6 @@ export const updateUserValidation = [
     .withMessage('isActive must be a boolean value')
 ];
 
-
 export const createAdminValidation = [
   body('name')
     .trim()

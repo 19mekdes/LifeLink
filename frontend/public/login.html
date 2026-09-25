@@ -109,7 +109,6 @@
         
         import authApi from './js/api/authApi.js';
         
-        // ============ DOM ELEMENTS ============
         const loginForm = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
@@ -120,7 +119,6 @@
         const rememberMe = document.getElementById('rememberMe');
         const selectedRoleHint = document.getElementById('selectedRoleHint');
 
-        // ============ ROLE SELECTION ============
         let selectedRole = 'HOSPITAL';
         const roleBtns = document.querySelectorAll('.login-role-selector .role-btn');
 
@@ -157,7 +155,7 @@
             }, 4000);
         }
 
-        // ============ PASSWORD TOGGLE ============
+    
         if (togglePassword) {
             togglePassword.addEventListener('click', () => {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -180,7 +178,7 @@
         }
 
         // ============ REMEMBER ME FUNCTIONALITY ============
-        // Load saved email if remember me was checked
+    
         const savedEmail = localStorage.getItem('rememberedEmail');
         if (savedEmail) {
             emailInput.value = savedEmail;
@@ -199,7 +197,6 @@
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Reset error
             formError.classList.remove('show');
             formError.textContent = '';
             loginBtn.disabled = true;
@@ -208,7 +205,7 @@
             const email = emailInput.value.trim();
             const password = passwordInput.value;
 
-            // Validate
+            
             if (!email || !password) {
                 showToast('Please enter email and password', 'error');
                 loginBtn.disabled = false;
@@ -222,18 +219,18 @@
                 console.log('Login response:', response);
 
                 if (response && response.success && response.data) {
-                    // Save auth data
+                    
                     authApi.saveAuth(response.data.token, response.data.user);
                     
                     showToast(response.message || 'Login successful! 🎉', 'success');
                     
-                    // Redirect immediately — use the user's actual role from the server response
+                    
                     const userRole = response.data.user?.role || selectedRole;
                     const dashboard = authApi.getDashboardUrl(userRole);
                     console.log('Redirecting to:', dashboard, '(role:', userRole, ')');
                     window.location.href = dashboard;
                 } else {
-                    // Server returned an error response — show it to the user
+                    
                     const errorMsg = response?.message || 'Login failed. Please check your credentials and try again.';
                     showToast(errorMsg, 'error');
                     formError.textContent = errorMsg;

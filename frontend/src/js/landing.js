@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // Close mobile menu on resize to desktop
         window.addEventListener("resize", () => {
             if (window.innerWidth > 900) {
                 hamburger.classList.remove("active");

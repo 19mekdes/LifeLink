@@ -94,8 +94,7 @@ export function initShell() {
   window.addEventListener('resize', paintToggleIcon);
   sidebarClose?.addEventListener('click', closeDrawer);
   backdrop?.addEventListener('click', closeDrawer);
-
-  // Close the mobile drawer automatically after following a nav link
+  
   document.querySelectorAll('.nav-links a').forEach((link) => {
     link.addEventListener('click', () => {
       if (isMobile()) closeDrawer();
@@ -115,7 +114,6 @@ export function initShell() {
     }
   });
 
-  // Logout (works for the sidebar footer button and the dropdown item)
   async function logout() {
     if (!confirm('Are you sure you want to logout?')) return;
     try {
@@ -194,7 +192,6 @@ export async function loadCommonData(api, paintProfile) {
   }
 }
 
-/* ---------- Shared toast helper ---------- */
 export function showToast(message, type = 'success') {
   const toastContainer = document.getElementById('toastContainer');
   if (!toastContainer) return;

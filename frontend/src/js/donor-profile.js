@@ -420,8 +420,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
-                // Update local donor
-
+                
                 donor.availability =
                     newAvailability;
 

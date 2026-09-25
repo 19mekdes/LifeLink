@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .addTo(map)
             .bindPopup("<strong>Your Location</strong>");
 
-        // Try to get real location
+    
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {

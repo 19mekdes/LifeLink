@@ -52,13 +52,13 @@ class MatchingService {
         take: limit
       });
 
-      // Calculate match score for each donor
+      
       const matchedDonors = donors.map(donor => ({
         ...donor,
         matchScore: this.calculateMatchScore(donor, request)
       }));
 
-      // Sort by match score (highest first)
+   
       matchedDonors.sort((a, b) => b.matchScore - a.matchScore);
 
       return matchedDonors;
@@ -77,12 +77,12 @@ class MatchingService {
   calculateMatchScore(donor, request) {
     let score = 0;
 
-    // Blood type match (30 points)
+    
     if (donor.bloodType === request.bloodType) {
       score += 30;
     }
 
-    // Location match (20 points)
+    
     if (donor.city.toLowerCase() === request.location.toLowerCase()) {
       score += 20;
     }

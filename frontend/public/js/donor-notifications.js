@@ -157,8 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }).join("");
 
 
-        // Attach mark-as-read buttons
-
+        
         document
             .querySelectorAll(".mark-read-btn")
             .forEach(button => {

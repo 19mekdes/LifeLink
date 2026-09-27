@@ -97,9 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /*
-         * Update profile menu if it exists.
-         */
 
         const profileNames =
             document.querySelectorAll(
@@ -308,12 +305,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // Remove donor authentication data
+            
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             localStorage.removeItem("lifelinkDonor");
 
-            // Go to login page
+            
             window.location.href = "login.html";
 
         });
@@ -349,9 +346,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (window.innerWidth > 768) {
 
-            /*
-             * Desktop starts expanded.
-             */
 
             sidebar.classList.add(
                 "open"
@@ -359,10 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } else {
 
-            /*
-             * Mobile starts collapsed.
-             */
-
+    
             sidebar.classList.remove(
                 "open"
             );
@@ -397,11 +388,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.innerWidth;
 
 
-                /*
-                 * Only change the state when
-                 * crossing the desktop/mobile
-                 * breakpoint.
-                 */
 
                 const crossedBreakpoint =
                     (

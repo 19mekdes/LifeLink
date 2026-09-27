@@ -33,7 +33,7 @@ export async function withProgress(fn) {
 }
 
 export function initShell() {
-  // Guard: bounce out if not logged in
+  
   if (!authApi.isAuthenticated()) {
     window.location.href = 'login.html';
     return null;
@@ -93,14 +93,13 @@ export function initShell() {
   sidebarClose?.addEventListener('click', closeDrawer);
   backdrop?.addEventListener('click', closeDrawer);
 
-  // Close the mobile drawer automatically after following a nav link
+  
   document.querySelectorAll('.nav-links a').forEach((link) => {
     link.addEventListener('click', () => {
       if (isMobile()) closeDrawer();
     });
   });
 
-  // Profile dropdown
   const toggle = document.getElementById('user-profile-toggle');
   const dropdown = document.getElementById('user-dropdown');
   toggle?.addEventListener('click', (e) => {
@@ -192,7 +191,6 @@ export async function loadCommonData(api, paintProfile) {
   }
 }
 
-/* ---------- Shared toast helper ---------- */
 export function showToast(message, type = 'success') {
   const toastContainer = document.getElementById('toastContainer');
   if (!toastContainer) return;

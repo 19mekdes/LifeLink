@@ -69,7 +69,7 @@ async function main() {
     }
   }
 
-  // Profile Update test
+  
   try {
     const updateRes = await fetch(`${BASE}/admin/profile`, {
       method: 'PUT',

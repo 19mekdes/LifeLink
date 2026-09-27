@@ -348,7 +348,7 @@ import api from '../../src/js/api/api.js';
 
 
   function loadDashboard() {
-    // 1. Profile header update
+    
     safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
       const hospitalName = profile.hospitalName || profile.user?.name || 'Hospital';
@@ -372,7 +372,6 @@ import api from '../../src/js/api/api.js';
       const stats = data.stats || {};
       const recentRequests = data.recentRequests || [];
 
-      // Stat cards
       $('#stat-total-requests').textContent = stats.totalRequests ?? 0;
       $('#stat-active-requests').textContent = stats.activeRequests ?? 0;
       $('#stat-total-responses').textContent = stats.approvedRequests ?? 0;

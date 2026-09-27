@@ -539,9 +539,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 data.recentNotifications
             );
 
-            // -------------------------
-            // Notifications
-            // -------------------------
+            
 
             displayNotifications(
                 data.recentNotifications,

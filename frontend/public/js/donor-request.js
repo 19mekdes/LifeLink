@@ -13,7 +13,7 @@ const hospitalCoordinates = {
     "Bethlehem Hospital": { lat: 9.0150, lng: 38.7700 }
 };
 
-// Default: Addis Ababa center
+
 const DEFAULT_CENTER = { lat: 9.0192, lng: 38.7525 };
 
 function getHospitalCoords(hospitalName) {
@@ -27,7 +27,7 @@ function getHospitalCoords(hospitalName) {
             return coords;
         }
     }
-    // Random offset from center for unknown hospitals
+
     return {
         lat: DEFAULT_CENTER.lat + (Math.random() - 0.5) * 0.04,
         lng: DEFAULT_CENTER.lng + (Math.random() - 0.5) * 0.04

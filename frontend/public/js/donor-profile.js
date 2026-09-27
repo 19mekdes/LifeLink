@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     result
                 );
 
-                // Backend response is inside result.data
+
                 displayProfile(result.data);
 
                 exitEditMode();

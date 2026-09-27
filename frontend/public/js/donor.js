@@ -74,9 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initial += nameParts[nameParts.length - 1]?.charAt(0)?.toUpperCase() || '';
         }
 
-        // -------------------------
-        // Name
-        // -------------------------
+    
 
         if (topbarName) {
             topbarName.textContent = `Hi, ${name}`;
@@ -223,14 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (livesImpacted) {
 
-            /*
-             * The backend does not currently provide
-             * a separate livesImpacted value.
-             *
-             * For now, use total donations as the
-             * available value rather than inventing
-             * another backend field.
-             */
+        
 
             livesImpacted.textContent =
                 stats.totalDonations ?? 0;
@@ -253,12 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const previousYearDonations =
             $("previousYearDonations");
 
-        /*
-         * The dashboard endpoint does not currently
-         * provide donations grouped by year.
-         *
-         * Therefore we do not invent these values.
-         */
+        
 
         if (currentYearDonations) {
             currentYearDonations.textContent = "—";

@@ -259,7 +259,6 @@ import api from '../../src/js/api/api.js';
     }
   });
 
-  // Account dropdown menu navigation actions
   $('#dropdown-item-profile')?.addEventListener('click', () => {
     toggleAccountDropdown(false);
     showPage('profile');
@@ -359,14 +358,12 @@ import api from '../../src/js/api/api.js';
       if ($('#dropdown-hospital-name')) $('#dropdown-hospital-name').textContent = hospitalName;
       if ($('#dropdown-hospital-email')) $('#dropdown-hospital-email').textContent = hospitalEmail;
 
-      // Default location in create request form if empty
       const locInput = $('#location');
       if (locInput && !locInput.value) {
         locInput.value = profile.city || profile.address || '';
       }
     });
 
-    // 2. Dashboard Stats & Lists
     safeLoad(fetchDashboardStats).then((data) => {
       if (!data) return;
       const stats = data.stats || {};
@@ -766,7 +763,7 @@ import api from '../../src/js/api/api.js';
       }
     });
 
-    // Average Response Time calculated from hospital request history
+    
     safeLoad(() => fetchMyRequests('')).then((requests) => {
       if (!requests || requests.length === 0) {
         $('#profile-stat-avg-response').textContent = 'N/A';
@@ -827,7 +824,7 @@ import api from '../../src/js/api/api.js';
         }
       }
     }).catch(() => {
-      // Suppress error if raw query stats API endpoint fails on backend
+      
     });
   }
 
@@ -882,7 +879,6 @@ import api from '../../src/js/api/api.js';
       $('#settings-contact').textContent = profile.emergencyContact || profile.user?.name || '—';
     });
 
-    // Load saved notification preferences from localStorage
     const savedPrefs = localStorage.getItem('hospital_notification_prefs');
     if (savedPrefs) {
       try {

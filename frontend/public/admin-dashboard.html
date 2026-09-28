@@ -406,9 +406,6 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 3: DONORS                                  -->
-      <!-- ═══════════════════════════════════════════════ -->
       <section id="view-donors" class="view-section">
         <div class="data-card">
           <div class="data-card-header">
@@ -445,10 +442,6 @@
           <div class="pagination-wrap" id="donors-pagination"></div>
         </div>
       </section>
-
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 4: HOSPITALS                               -->
-      <!-- ═══════════════════════════════════════════════ -->
       <section id="view-hospitals" class="view-section">
         <div class="data-card">
           <div class="data-card-header">
@@ -479,9 +472,7 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 5: BLOOD BANKS                             -->
-      <!-- ═══════════════════════════════════════════════ -->
+      
       <section id="view-blood-banks" class="view-section">
         <div class="data-card">
           <div class="data-card-header">
@@ -512,9 +503,6 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 6: DONATIONS                               -->
-      <!-- ═══════════════════════════════════════════════ -->
       <section id="view-donations" class="view-section">
         <div class="data-card">
           <div class="data-card-header">
@@ -545,9 +533,6 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 7: STATISTICS                              -->
-      <!-- ═══════════════════════════════════════════════ -->
       <section id="view-statistics" class="view-section">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
           <div role="group" aria-label="Time range filter" class="time-range-bar" id="stats-time-range-bar" style="margin-bottom:0;">
@@ -751,9 +736,6 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 8: REPORTS & EXPORT                        -->
-      <!-- ═══════════════════════════════════════════════ -->
       <section id="view-reports" class="view-section">
         <div class="data-card no-print" style="padding:1.75rem;margin-bottom:1.5rem;">
           <h2 class="data-card-title" style="margin-bottom:0.5rem;">Generate System Reports & Export</h2>
@@ -811,9 +793,6 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 9: USERS (With Unified Search & Pagination)-->
-      <!-- ═══════════════════════════════════════════════ -->
       <section id="view-users" class="view-section">
         <div class="data-card">
           <div class="data-card-header">
@@ -851,9 +830,6 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- VIEW 10: ADMIN PROFILE & SETTINGS               -->
-      <!-- ═══════════════════════════════════════════════ -->
       <section id="view-settings" class="view-section">
         <!-- Admin Profile Form -->
         <div class="data-card" style="padding:1.75rem;margin-bottom:1.5rem;">
@@ -962,10 +938,7 @@
     </main>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════ -->
-  <!-- MODALS                                              -->
-  <!-- ═══════════════════════════════════════════════════ -->
-
+  
   <!-- Confirm Modal -->
   <div class="modal-backdrop" id="confirmModal" role="dialog" aria-modal="true">
     <div class="modal-card">
@@ -1050,9 +1023,6 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="false"></div>
 
-  <!-- ═══════════════════════════════════════════════════ -->
-  <!-- DASHBOARD JAVASCRIPT LOGIC                          -->
-  <!-- ═══════════════════════════════════════════════════ -->
   <script>
     const API_BASE = 'http://localhost:5000/api';
     let adminToken = (typeof localStorage !== 'undefined' ? (localStorage.getItem('token') || localStorage.getItem('auth_token')) : null);
@@ -1083,9 +1053,9 @@
     // Chart instances
     let inventoryChartInstance = null;
     let signupsChartInstance = null;
-    let currentInventorySeries = 'all'; // all | donated | issued | inStock
-    let currentSignupsPeriod = 'daily'; // daily | weekly | monthly
-    let currentSignupsSeries = 'all';   // all | bloodBanks | hospitals | donors
+    let currentInventorySeries = 'all'; 
+    let currentSignupsPeriod = 'daily'; 
+    let currentSignupsSeries = 'all';   
 
     // ─────────────────────────────────────────────────────────────────
     //  Default empty datasets (all data fetched from backend)

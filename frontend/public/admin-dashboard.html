@@ -1057,9 +1057,6 @@
     let currentSignupsPeriod = 'daily'; 
     let currentSignupsSeries = 'all';   
 
-    // ─────────────────────────────────────────────────────────────────
-    //  Default empty datasets (all data fetched from backend)
-    // ─────────────────────────────────────────────────────────────────
     let defaultUsers = [];
     let defaultHospitals = [];
     let defaultBloodBanks = [];
@@ -1168,9 +1165,6 @@
       }
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  Offline State Tracker
-    // ─────────────────────────────────────────────────────────────────
     const _offlineKeys = new Set();
 
     function markOffline(key) {
@@ -1219,9 +1213,7 @@
       if (btn) { btn.disabled = false; btn.textContent = '↺ Retry'; }
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  Network request helper
-    // ─────────────────────────────────────────────────────────────────
+    
     async function apiFetch(endpoint, options = {}) {
       const url = `${API_BASE}${endpoint}`;
       const headers = { 'Content-Type': 'application/json' };
@@ -1243,9 +1235,6 @@
       }
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  Initialisation
-    // ─────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
       loadAdminProfileInfo();
       fetchDashboardOverview();
@@ -1266,9 +1255,6 @@
       initModalFocusTrap();
     });
 
-    // ─────────────────────────────────────────────────────────────────
-    //  View Switching & Submenu Accordion
-    // ─────────────────────────────────────────────────────────────────
     function toggleUserMenu(event) {
       if (event) event.stopPropagation();
       const submenu = document.getElementById('nav-user-submenu');
@@ -1364,9 +1350,6 @@
       }
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  1. Dashboard Overview & Summary Counts
-    // ─────────────────────────────────────────────────────────────────
     function setDashboardTimeframe(timeframe) {
       currentDashboardTimeframe = timeframe;
       const buttons = document.querySelectorAll('#dashboard-time-range-bar .time-range-btn');

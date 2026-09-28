@@ -1516,9 +1516,6 @@
       `).join('');
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  2. Interactive Charts (Chart.js)
-    // ─────────────────────────────────────────────────────────────────
     async function fetchInventoryChartData(timeframe = currentDashboardTimeframe) {
       const res = await apiFetch(`/admin/stats/blood-inventory?timeframe=${timeframe}`);
       if (res && res.success && res.data) {
@@ -1750,9 +1747,6 @@
       renderSignupsChart();
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  3. Notifications System
-    // ─────────────────────────────────────────────────────────────────
     async function fetchNotifications() {
       const res = await apiFetch('/admin/notifications?limit=10');
       if (res && res.success && res.data) {
@@ -1815,9 +1809,6 @@
       fetchNotifications();
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  4. Reusable Pagination Component
-    // ─────────────────────────────────────────────────────────────────
     function renderPaginationUI(viewKey, total, page, limit, containerId, onPageChange) {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -1873,10 +1864,6 @@
         _debouncedResetAndFilterInternal(viewKey);
       }
     }
-
-    // ─────────────────────────────────────────────────────────────────
-    //  5. Unified Users Management
-    // ─────────────────────────────────────────────────────────────────
     async function loadUsersList(page = paginationState.users.page) {
       paginationState.users.page = page;
       const role   = document.getElementById('filter-user-role')?.value || '';
@@ -2007,9 +1994,7 @@
       });
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  6. Hospitals Management
-    // ─────────────────────────────────────────────────────────────────
+
     async function loadHospitalsList(page = paginationState.hospitals.page) {
       paginationState.hospitals.page = page;
       const status = document.getElementById('filter-hosp-status')?.value || '';
@@ -2095,9 +2080,6 @@
       });
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  7. Blood Banks Management
-    // ─────────────────────────────────────────────────────────────────
     async function loadBloodBanksList(page = paginationState.bloodBanks.page) {
       paginationState.bloodBanks.page = page;
       const status = document.getElementById('filter-bb-status')?.value || '';
@@ -2182,9 +2164,6 @@
       });
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  8. Donors Management
-    // ─────────────────────────────────────────────────────────────────
     async function loadDonorsList(page = paginationState.donors.page) {
       paginationState.donors.page = page;
       const bloodType = document.getElementById('filter-donor-blood')?.value || '';
@@ -2295,9 +2274,6 @@
       document.getElementById('donorDetailModal').classList.add('show');
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  9. Requests & Donations Lists
-    // ─────────────────────────────────────────────────────────────────
     async function loadRequestsList(page = paginationState.requests.page) {
       paginationState.requests.page = page;
       const status  = document.getElementById('filter-req-status')?.value || '';
@@ -2427,9 +2403,6 @@
       `).join('');
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  10. Audit Logs List
-    // ─────────────────────────────────────────────────────────────────
     async function loadAuditLogsList(page = paginationState.audit.page) {
       paginationState.audit.page = page;
       const search = (document.getElementById('search-audit')?.value || '').toLowerCase();
@@ -2476,9 +2449,6 @@
       `).join('');
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  11. Admin Profile & Password Management
-    // ─────────────────────────────────────────────────────────────────
     async function loadAdminProfileInfo() {
       const res = await apiFetch('/admin/profile');
       let name = 'System Administrator';
@@ -2590,9 +2560,6 @@
       }
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  12. Statistics Summary & Operational Analytics
-    // ─────────────────────────────────────────────────────────────────
     let summaryTotalsRaw = null;
     let fulfillmentStatsRaw = null;
     let geographicStatsRaw = null;
@@ -2870,9 +2837,6 @@
       showToast(`Hospital rankings sorted by ${key} (${hospitalRankingSort.asc ? 'Ascending' : 'Descending'}).`);
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  13. Reports & Data Export
-    // ─────────────────────────────────────────────────────────────────
     function updateReportPreview() {
       const type = document.getElementById('report-type')?.value || 'users';
       const thead = document.getElementById('report-preview-thead');
@@ -2932,9 +2896,6 @@
       window.print();
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  14. Header Search, Global Search & Modals
-    // ─────────────────────────────────────────────────────────────────
     const _debouncedHeaderSearchInternal = debounce((query) => {
       const q = (query || '').trim();
       const hospSearch = document.getElementById('search-hospitals');
@@ -3007,9 +2968,6 @@
       });
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  15. Responsive Sidebar & Logout
-    // ─────────────────────────────────────────────────────────────────
     function toggleDesktopSidebar() {
       if (window.innerWidth <= 1024) {
         const sidebar = document.getElementById('sidebar');

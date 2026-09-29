@@ -2871,7 +2871,7 @@
           showToast(`Exported ${entity} as ${format.toUpperCase()}.`);
         })
         .catch(() => {
-          // Fallback client-side CSV generator with injection guard & proper quote escaping
+          
           const csvHeader = 'ID,Name,Email,Role,Status\n';
           const csvRows = usersData.map(u => [
             escapeCsvCell(u.id),
@@ -2911,7 +2911,6 @@
       loadBloodBanksList(1);
       loadDonorsList(1);
 
-      // If user is currently on an unrelated view, switch to hospitals (first user subview)
       const currentActive = document.querySelector('.view-section.active');
       const currentId = currentActive ? currentActive.id : '';
       if (q && !['view-hospitals', 'view-blood-banks', 'view-donors'].includes(currentId)) {

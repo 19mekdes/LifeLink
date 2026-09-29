@@ -279,7 +279,7 @@ body {
     padding: 11px;
 }
 
-/* Collapsed sidebar (desktop) */
+
 .sidebar.collapsed {
     width: var(--sidebar-width-collapsed);
     padding-left: 12px;

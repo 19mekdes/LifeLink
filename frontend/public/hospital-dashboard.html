@@ -93,7 +93,6 @@
         </button>
       </aside>
 
-      <!-- Mobile Sidebar Backdrop Overlay -->
       <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
       <!-- ================= MAIN AREA ================= -->
@@ -165,8 +164,6 @@
                 Welcome back, <span id="welcome-hospital-name">Hospital</span>!
               </p>
             </div>
-
-            <!-- STAT CARDS (populated by JS) -->
             <div class="stats-grid">
               <div class="stat-card">
                 <div class="stat-icon red">♧</div>
@@ -207,7 +204,6 @@
 
             <!-- DASHBOARD GRID -->
             <div class="dashboard-grid">
-              <!-- REQUEST STATUS OVERVIEW -->
               <div class="card status-card">
                 <div class="card-header">
                   <h2>Request Status Overview</h2>
@@ -252,7 +248,7 @@
                   </button>
                 </div>
 
-                <!-- Recent requests are rendered by JS from hospitalApi.getRecentRequests() -->
+                
                 <div class="request-list" id="recent-requests-list">
                   <p class="loading-hint">Loading recent requests...</p>
                 </div>
@@ -282,7 +278,6 @@
                     </tr>
                   </thead>
 
-                  <!-- Rows rendered by JS from hospitalApi.getUrgentRequests() -->
                   <tbody id="urgent-requests-body">
                     <tr>
                       <td colspan="7" class="loading-hint">
@@ -478,7 +473,6 @@
                     </tr>
                   </thead>
 
-                  <!-- Rows rendered by JS from hospitalApi.getResponses() -->
                   <tbody id="responses-body">
                     <tr>
                       <td colspan="5" class="loading-hint">
@@ -656,7 +650,7 @@
               <div class="settings-section" id="settings-account">
                 <h2>Hospital Account Information</h2>
 
-                <!-- Values populated by JS from hospital profile data -->
+              
                 <div class="settings-grid">
                   <div>
                     <span>Hospital Name</span>
@@ -798,8 +792,6 @@
         </section>
       </main>
     </div>
-
-    <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
 
     <!-- Edit Profile Modal -->
@@ -853,7 +845,6 @@
       </div>
     </div>
 
-    <!-- API service layer + dashboard controller module -->
     <script type="module" src="js/hospital-dashboard.js"></script>
   </body>
 </html>

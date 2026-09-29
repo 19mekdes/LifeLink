@@ -953,7 +953,7 @@ body {
   border-color: var(--primary);
 }
 
-/* Badges & Buttons */
+
 .blood-badge {
   display: inline-flex;
   align-items: center;
@@ -1006,7 +1006,7 @@ body {
 .btn-sm-warning:hover { background: #fef3c7; }
 .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
 
-/* ── Statistics Bars & Tabs ── */
+
 .time-range-bar {
   display: flex; gap: 6px; flex-wrap: wrap;
   background: var(--bg-card);
@@ -1067,7 +1067,7 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
   margin-left: 6px;
 }
 
-/* ── Modal ──────────────────────────────────────────────── */
+
 .modal-backdrop {
   display: none;
   position: fixed; inset: 0;
@@ -1118,28 +1118,28 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
 .modal-detail-label { color: var(--text-muted); font-weight: 600; }
 .modal-detail-value { font-weight: 700; color: var(--text-main); }
 
-/* ── Toast ──────────────────────────────────────────────── */
+
 .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
 .toast { background: var(--text-main); color: white; padding: 14px 20px; border-radius: var(--radius-lg); font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(20px); transition: var(--transition); pointer-events: auto; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast-icon-success { width: 22px; height: 22px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
 .toast-icon-danger  { width: 22px; height: 22px; background: var(--danger);  border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
 
-/* Mobile overlay dimmer */
+
 .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(45,36,36,0.45); z-index: 99; }
 
-/* Settings form */
+
 .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .form-label { font-size: 0.8rem; font-weight: 700; color: var(--text-light); display: block; margin-bottom: 4px; }
 .form-input { width: 100%; padding: 9px 12px; font-size: 0.88rem; border: 1px solid var(--border-dark); border-radius: var(--radius-md); outline: none; font-family: inherit; color: var(--text-main); background: #ffffff; }
 .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(123,30,43,0.08); }
 .section-divider { font-size: 1rem; font-weight: 800; color: var(--text-main); margin: 1.75rem 0 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border-color); }
 
-/* Loading & Empty states */
+
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border-color); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
 
-/* ── Responsive media queries ─────────────────────────── */
+
 @media (max-width: 1200px) {
   .stat-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -1425,9 +1425,8 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
   }
 }
 
-/* ==========================================================================
-   Offline / Sample Data Banner
-   ========================================================================== */
+
+   
 #offline-banner {
   display: none;
   align-items: center;
@@ -1493,7 +1492,7 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
 #offline-retry-btn:hover { background: #b45309; }
 #offline-retry-btn:active { transform: scale(0.97); }
 
-/* ── Critical Alerts Banner ── */
+
 .critical-alert-banner {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.04) 100%);
   border: 1px solid rgba(239, 68, 68, 0.35);
@@ -1572,7 +1571,6 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
   transform: translateY(-1px);
 }
 
-/* ── KPI Badges ── */
 .kpi-badge-healthy {
   display: inline-flex;
   align-items: center;
@@ -1607,7 +1605,6 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
   font-weight: 600;
 }
 
-/* ── Fulfillment Performance Grid ── */
 .fulfillment-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1678,7 +1675,7 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Geographic Distribution Grid ── */
+
 .geo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1742,7 +1739,7 @@ tr.low-stock td:first-child { border-left: 3px solid var(--warning); }
   font-weight: 700;
 }
 
-/* ── Stock status tags for summary tables ── */
+
 .stock-healthy-tag {
   display: inline-block;
   background: #dcfce7;

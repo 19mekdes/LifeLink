@@ -170,7 +170,7 @@
     text-decoration: underline;
 }
 
-/* Password Toggle */
+
 .password-wrapper {
     position: relative;
 }
@@ -197,7 +197,7 @@
     color: var(--gray-600);
 }
 
-/* Test Credentials */
+
 .test-credentials {
     margin-top: 1.5rem;
     padding: 1rem;
@@ -307,8 +307,6 @@
         width: 100%;
     }
 }
-
-/* ============ REGISTER SPECIFIC ============ */
 
 .register-card .role-selector {
     display: flex;
@@ -450,7 +448,7 @@
     display: block;
 }
 
-/* Responsive */
+
 @media (max-width: 480px) {
     .register-card .role-selector {
         flex-direction: column;

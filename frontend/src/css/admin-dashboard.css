@@ -91,7 +91,6 @@ body {
 }
 .icon-lg { width: 22px; height: 22px; }
 
-/* ── Sidebar ─────────────────────── */
 .sidebar {
   width: var(--sidebar-width);
   background-color: var(--bg-sidebar);
@@ -106,8 +105,6 @@ body {
   transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
   overflow: hidden;
 }
-
-/* Desktop collapsed state */
 .sidebar.collapsed { width: 72px; }
 .sidebar.collapsed .sidebar-header {
   padding: 0;
@@ -361,7 +358,6 @@ body {
   stroke: #ffffff;
 }
 
-/* Collapsed sidebar behavior */
 .sidebar.collapsed .nav-item-parent-left span,
 .sidebar.collapsed .nav-chevron,
 .sidebar.collapsed .nav-submenu {
@@ -662,7 +658,6 @@ body {
 .stat-value { font-size: 1.6rem; font-weight: 800; color: var(--text-main); line-height: 1.2; margin: 2px 0 2px; }
 .stat-footer-text { font-size: 0.75rem; color: var(--text-light); font-weight: 600; }
 
-/* ── Interactive Charts Section ──────────────────────────────── */
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -730,7 +725,7 @@ body {
   color: var(--text-muted);
 }
 
-/* ── Middle Two-Column Grid (Recent Requests + Recent Actions) ── */
+
 .dashboard-mid-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -766,7 +761,7 @@ body {
 }
 .view-all-link:hover { text-decoration: underline; color: var(--primary-hover); }
 
-/* Recent Actions Feed */
+
 .recent-actions-list {
   display: flex;
   flex-direction: column;
@@ -805,7 +800,7 @@ body {
 .action-user { font-size: 0.74rem; color: var(--text-muted); }
 .action-time { font-size: 0.72rem; color: var(--text-light); white-space: nowrap; }
 
-/* Status Pills */
+
 .status-pill {
   display: inline-flex;
   align-items: center;

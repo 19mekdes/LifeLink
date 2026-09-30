@@ -17,7 +17,7 @@ const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
 
 const app = express();
 
-// ============ MIDDLEWARE ============
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -53,7 +53,7 @@ app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Logging
+
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
   next();
@@ -100,7 +100,7 @@ app.get('/', (req, res) => {
   res.redirect('/login.html');
 });
 
-// ============ ERROR HANDLING ============
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 

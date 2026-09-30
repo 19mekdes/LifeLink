@@ -218,7 +218,7 @@ a {
     position: relative;
 }
 
-/* Small decorative line */
+
 .hero-card::before {
     content: "";
 

@@ -24,11 +24,11 @@ function showToast(message, type = 'success') {
     }, 4000);
 }
 
-// ============ LOGIN FUNCTIONALITY ============
+
 const loginForm = document.getElementById('loginForm');
 
 if (loginForm) {
-    // Check if already logged in
+  
     if (authApi.isAuthenticated()) {
         const user = authApi.getCurrentUser();
         if (user) {
@@ -70,7 +70,7 @@ if (loginForm) {
 
                 showToast(response.message || 'Login successful! 🎉', 'success');
 
-                // Redirect after delay
+                
                 setTimeout(() => {
                     const dashboard = authApi.getDashboardUrl(response.data.user.role);
                     console.log('Redirecting to:', dashboard);

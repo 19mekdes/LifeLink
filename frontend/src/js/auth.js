@@ -65,7 +65,7 @@ if (loginForm) {
             console.log('Login response:', response);
 
             if (response.success && response.data) {
-                // Save auth data
+               
                 authApi.saveAuth(response.data.token, response.data.user);
 
                 showToast(response.message || 'Login successful! 🎉', 'success');
@@ -94,13 +94,13 @@ if (loginForm) {
     });
 }
 
-// ============ REGISTER FUNCTIONALITY ============
+
 const registerForm = document.getElementById('registerForm');
 
 if (registerForm) {
     let selectedRole = 'DONOR';
 
-    // Role selection
+    
     const roleBtns = document.querySelectorAll('.role-btn');
     roleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -158,7 +158,7 @@ if (registerForm) {
             role: selectedRole
         };
 
-        // Add role-specific fields
+    
         if (selectedRole === 'DONOR') {
             const age = document.getElementById('age').value;
             const gender = document.getElementById('gender').value;
@@ -254,7 +254,7 @@ if (registerForm) {
     });
 }
 
-// ============ LOGOUT FUNCTIONALITY ============
+
 document.querySelectorAll('.logout-btn, #logoutBtn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
         e.preventDefault();

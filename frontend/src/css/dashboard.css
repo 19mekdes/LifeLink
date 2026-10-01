@@ -1239,8 +1239,6 @@ a {
   color: var(--success);
 }
 
-/* Edit inputs */
-
 .profile-input {
   display: none;
   width: 100%;
@@ -1260,7 +1258,6 @@ a {
   box-shadow: 0 0 0 3px rgba(123, 30, 43, 0.08);
 }
 
-/* Profile action buttons */
 
 .profile-actions {
   display: none;
@@ -1530,7 +1527,7 @@ a {
   cursor: default;
 }
 
-/* Request card responsive */
+
 @media (max-width: 900px) {
   .request-card {
     grid-template-columns: 50px 1fr auto;

@@ -280,7 +280,7 @@
     color: var(--primary);
 }
 
-/* Responsive */
+
 @media (max-width: 480px) {
     .auth-card {
         padding: 1.5rem;
@@ -405,7 +405,7 @@
     background: var(--primary-light);
 }
 
-/* Password wrapper for register */
+
 .register-card .password-wrapper {
     position: relative;
 }
@@ -432,7 +432,7 @@
     color: var(--gray-600);
 }
 
-/* Error message */
+
 .register-card .error-message {
     color: var(--primary);
     font-size: 0.875rem;

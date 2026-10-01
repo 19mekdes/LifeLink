@@ -95,11 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 name;
         }
 
-
-        /*
-         * Update profile menu if it exists.
-         */
-
         const profileNames =
             document.querySelectorAll(
                 ".profile-name"
@@ -306,12 +301,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // Remove donor authentication data
+            
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             localStorage.removeItem("lifelinkDonor");
 
-            // Go to login page
+            
             window.location.href = "login.html";
 
         });

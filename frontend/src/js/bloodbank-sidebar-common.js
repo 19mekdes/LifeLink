@@ -101,7 +101,7 @@ export function initShell() {
     });
   });
 
-  // Profile dropdown
+  
   const toggle = document.getElementById('user-profile-toggle');
   const dropdown = document.getElementById('user-dropdown');
   toggle?.addEventListener('click', (e) => {
@@ -119,7 +119,7 @@ export function initShell() {
     try {
       await authApi.logout();
     } catch (e) {
-      /* proceed to clear local session regardless */
+      
     } finally {
       authApi.clearAuth();
       window.location.href = 'login.html';

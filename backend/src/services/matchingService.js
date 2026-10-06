@@ -173,7 +173,7 @@ class MatchingService {
         return exactMatch;
       }
 
-      // Find compatible donors
+      
       const compatibleDonors = await prisma.donorProfile.findMany({
         where: {
           bloodType: { in: compatibleTypes },

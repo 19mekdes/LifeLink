@@ -244,9 +244,7 @@ export const updateInventoryValidation = [
     .withMessage(`Invalid status. Must be one of: ${INVENTORY_STATUSES.join(', ')}`)
 ];
 
-/**
- * Validation for inventory ID parameter
- */
+
 export const inventoryIdValidation = [
   param('id')
     .notEmpty()

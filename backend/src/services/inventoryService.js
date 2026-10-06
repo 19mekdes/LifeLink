@@ -1,5 +1,4 @@
 import prisma from '../config/database.js';
-
 class InventoryService {
   /**
    * Check if inventory is sufficient for a request

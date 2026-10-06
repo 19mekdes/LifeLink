@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
 
 export const registerValidation = [
-  
+
   body('name')
     .notEmpty()
     .withMessage('Name is required')
@@ -35,7 +35,7 @@ export const registerValidation = [
     .isIn(['DONOR', 'HOSPITAL', 'BLOOD_BANK', 'ADMIN'])
     .withMessage('Invalid role specified'),
 
-  // Donor specific fields
+
   body('age')
     .optional()
     .isInt({ min: 16, max: 100 })
@@ -63,7 +63,7 @@ export const registerValidation = [
     .withMessage('City must be between 2 and 100 characters')
     .trim(),
 
-  // Hospital specific fields
+
   body('hospitalName')
     .optional()
     .isLength({ min: 2, max: 100 })
@@ -76,7 +76,7 @@ export const registerValidation = [
     .withMessage('License number must be between 5 and 50 characters')
     .trim(),
 
-  // Blood Bank specific fields
+
   body('bankName')
     .optional()
     .isLength({ min: 2, max: 100 })
@@ -177,9 +177,7 @@ export const resetPasswordValidation = [
     .withMessage('Passwords do not match'),
 ];
 
-/**
- * Validation rules for email verification
- */
+
 export const verifyEmailValidation = [
   body('token')
     .notEmpty()

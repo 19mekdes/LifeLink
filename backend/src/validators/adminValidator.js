@@ -112,9 +112,7 @@ export const verifyBloodBankValidation = [
     .withMessage('verified must be a boolean')
 ];
 
-/**
- * Validation for verifying a donor
- */
+
 export const verifyDonorValidation = [
   param('id')
     .notEmpty()
@@ -131,9 +129,7 @@ export const verifyDonorValidation = [
     .withMessage('verified must be a boolean')
 ];
 
-/**
- * Validation for export endpoint
- */
+
 export const exportValidation = [
   query('entity')
     .optional()

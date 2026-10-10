@@ -144,9 +144,6 @@ export const changePasswordValidation = [
     .withMessage('Passwords do not match'),
 ];
 
-/**
- * Validation rules for forgot password
- */
 export const forgotPasswordValidation = [
   body('email')
     .notEmpty()

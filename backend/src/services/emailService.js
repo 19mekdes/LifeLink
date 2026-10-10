@@ -36,7 +36,6 @@ export const sendEmail = async ({ to, subject, html, text }) => {
   }
 };
 
-// ============ EMAIL TEMPLATES ============
 export const welcomeEmail = (name, email) => {
   return {
     subject: 'Welcome to LifeLink! 🩸',

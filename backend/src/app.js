@@ -59,7 +59,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ============ ROUTES ============
+
 
 app.get('/api/health', (req, res) => {
   res.json({

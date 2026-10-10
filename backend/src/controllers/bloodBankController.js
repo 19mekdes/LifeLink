@@ -21,7 +21,6 @@ const serializeData = (data) => {
   );
 };
 
-// ============ GET BLOOD BANK PROFILE ============
 
 export const getProfile = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
@@ -56,7 +55,6 @@ export const getProfile = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ UPDATE BLOOD BANK PROFILE ============
 
 export const updateProfile = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
@@ -128,7 +126,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ GET BLOOD BANK STATISTICS ============
 
 export const getStats = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
@@ -191,7 +188,6 @@ export const getStats = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ GET BLOOD BANK DASHBOARD ============
 export const getDashboard = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id },
@@ -350,7 +346,6 @@ export const getDashboard = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ GET INVENTORY ============
 export const getInventory = asyncHandler(async (req, res) => {
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { userId: req.user.id }
@@ -392,7 +387,6 @@ export const getInventory = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ UPDATE INVENTORY ============
 export const updateInventory = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -448,7 +442,7 @@ export const updateInventory = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ DELETE INVENTORY ITEM ============
+
 export const deleteInventoryItem = asyncHandler(async (req, res) => {
   const { bloodType } = req.params;
 
@@ -496,7 +490,7 @@ export const deleteInventoryItem = asyncHandler(async (req, res) => {
     message: 'Inventory item deleted successfully'
   });
 });
-// ============ GET BLOOD REQUESTS ============
+
 export const getRequests = asyncHandler(async (req, res) => {
   const { status, urgency, page = 1, limit = 10 } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -577,7 +571,7 @@ export const getRequests = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ APPROVE BLOOD REQUEST ============
+
 export const approveRequest = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { notes } = req.body;
@@ -726,7 +720,7 @@ export const approveRequest = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ REJECT BLOOD REQUEST ============
+
 export const rejectRequest = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { reason } = req.body;
@@ -800,7 +794,7 @@ export const rejectRequest = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ RECORD DONATION ============
+
 export const recordDonation = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -945,7 +939,7 @@ export const recordDonation = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ HELPER FUNCTIONS ============
+
 
 const findMatchingDonors = async (request) => {
   try {

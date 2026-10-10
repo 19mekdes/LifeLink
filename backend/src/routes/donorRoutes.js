@@ -19,10 +19,8 @@ const router = express.Router();
 router.use(authenticate);
 router.use(authorize('DONOR'));
 
-// ============ DASHBOARD ============
 router.get('/dashboard', getDashboard);
 
-// ============ PROFILE ============
 router.get('/profile', getProfile);
 router.put('/profile', [
   body('name').optional().isLength({ min: 2, max: 100 }).withMessage('Name must be between 2 and 100 characters'),
@@ -34,28 +32,23 @@ router.put('/profile', [
   body('city').optional().isLength({ min: 2 }).withMessage('City must be at least 2 characters')
 ], updateProfile);
 
-// ============ AVAILABILITY ============
 router.put('/availability', [
   body('availabilityStatus').isIn(['AVAILABLE', 'TEMPORARILY_UNAVAILABLE', 'UNAVAILABLE'])
     .withMessage('Invalid availability status')
 ], updateAvailability);
 
-// ============ REQUESTS ============
 router.get('/requests', getAvailableRequests);
 router.post('/requests/:id/respond', [
   body('response').isIn(['ACCEPTED', 'DECLINED', 'MAYBE']).withMessage('Invalid response'),
   body('message').optional().isString().withMessage('Message must be a string')
 ], respondToRequest);
 
-// ============ DONATIONS ============
 router.get('/donations', getDonations);
 
-// ============ NOTIFICATIONS ============
 router.get('/notifications', getNotifications);
 router.put('/notifications/:id/read', markNotificationRead);
 router.put('/notifications/read-all', markAllNotificationsRead);
 
-// ============ STATISTICS ============
 router.get('/stats', getStats);
 
 export default router;

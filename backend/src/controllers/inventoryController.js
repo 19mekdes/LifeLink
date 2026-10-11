@@ -127,7 +127,6 @@ export const upsertInventory = asyncHandler(async (req, res) => {
     }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -179,7 +178,6 @@ export const updateInventoryUnits = asyncHandler(async (req, res) => {
 
   let newUnits = parseInt(unitsAvailable);
 
-  // If operation is 'add' or 'subtract', modify existing units
   if (operation === 'add') {
     newUnits = existingInventory.unitsAvailable + parseInt(unitsAvailable);
   } else if (operation === 'subtract') {
@@ -202,7 +200,6 @@ export const updateInventoryUnits = asyncHandler(async (req, res) => {
     }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -255,7 +252,6 @@ export const deleteInventory = asyncHandler(async (req, res) => {
     }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -435,7 +431,6 @@ export const bulkUpdateInventory = asyncHandler(async (req, res) => {
     results.push(inventory);
   }
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,

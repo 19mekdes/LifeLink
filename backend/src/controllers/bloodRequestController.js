@@ -3,7 +3,7 @@ import { ApiError, asyncHandler } from '../middleware/errorHandler.js';
 import { sendEmail, emergencyRequestEmail, requestStatusUpdateEmail } from '../services/emailService.js';
 import prisma from '../config/database.js';
 
-// ============ HELPER FUNCTIONS ============
+
 
 const findMatchingDonors = async (request) => {
   try {
@@ -64,7 +64,7 @@ const createDonorNotifications = async (donors, request) => {
   }
 };
 
-// ============ CREATE BLOOD REQUEST ============
+
 
 export const createRequest = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
@@ -265,7 +265,6 @@ export const createRequest = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ GET REQUESTS ============
 
 export const getRequests = asyncHandler(async (req, res) => {
   const { status, urgency, page = 1, limit = 10 } = req.query;
@@ -359,7 +358,7 @@ export const getRequests = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ GET REQUEST BY ID ============
+
 
 export const getRequestById = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -443,7 +442,7 @@ export const getRequestById = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ CANCEL REQUEST ============
+
 
 
 export const cancelRequest = asyncHandler(async (req, res) => {
@@ -565,7 +564,7 @@ export const cancelRequest = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ UPDATE REQUEST STATUS ============
+
 
 export const updateRequestStatus = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -643,7 +642,7 @@ export const updateRequestStatus = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ RESPOND TO REQUEST (DONOR) ============
+
 
 export const respondToRequest = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -787,7 +786,7 @@ export const respondToRequest = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ GET DONATIONS ============
+
 
 export const getDonations = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
@@ -850,7 +849,7 @@ export const getDonations = asyncHandler(async (req, res) => {
   });
 });
 
-// ============ GET STATISTICS ============
+
 
 export const getStats = asyncHandler(async (req, res) => {
   const hospital = await prisma.hospital.findUnique({

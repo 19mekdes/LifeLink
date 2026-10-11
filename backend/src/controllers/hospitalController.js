@@ -89,7 +89,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
     }
   });
 
-  // Update user name if provided
+  
   if (req.body.name) {
     await prisma.user.update({
       where: { id: req.user.id },
@@ -97,7 +97,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
     });
   }
 
-  // Log action
+  
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -180,7 +180,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     })
   ]);
 
-  // Get recent requests
   const recentRequests = await prisma.bloodRequest.findMany({
     where: { hospitalId: hospital.id },
     include: {
@@ -236,7 +235,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     take: 10
   });
 
-  // Get monthly request trends
   const monthlyTrends = await prisma.$queryRaw`
     SELECT 
       DATE_TRUNC('month', "createdAt") as month,
@@ -249,8 +247,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     GROUP BY DATE_TRUNC('month', "createdAt")
     ORDER BY month DESC
   `;
-
-  // Get blood type distribution
   const bloodTypeDistribution = await prisma.$queryRaw`
     SELECT 
       "bloodType",
@@ -413,7 +409,6 @@ export const createRequest = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Hospital not found');
   }
 
-  // Find available blood bank in same city
   const bloodBank = await prisma.bloodBank.findFirst({
     where: {
       city: hospital.city,
@@ -422,7 +417,7 @@ export const createRequest = asyncHandler(async (req, res) => {
     }
   });
 
-  // Create request
+
   const request = await prisma.bloodRequest.create({
     data: {
       hospitalId: hospital.id,
@@ -467,7 +462,6 @@ export const createRequest = asyncHandler(async (req, res) => {
     }
   });
 
-  // Create notification for blood bank
   if (bloodBank) {
     await prisma.notification.create({
       data: {
@@ -480,7 +474,6 @@ export const createRequest = asyncHandler(async (req, res) => {
     });
   }
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -659,7 +652,6 @@ export const cancelRequest = asyncHandler(async (req, res) => {
     });
   }
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -752,8 +744,6 @@ export const getStats = asyncHandler(async (req, res) => {
   if (!hospital) {
     throw new ApiError(404, 'Hospital not found');
   }
-
-  // Get monthly request counts
   const monthlyCounts = await prisma.$queryRaw`
     SELECT 
       DATE_TRUNC('month', "createdAt") as month,
@@ -765,7 +755,6 @@ export const getStats = asyncHandler(async (req, res) => {
     ORDER BY month DESC
   `;
 
-  // Get average response time
   const avgResponseTime = await prisma.$queryRaw`
     SELECT 
       AVG(EXTRACT(EPOCH FROM ("approvedAt" - "createdAt"))) as avg_seconds
@@ -774,7 +763,7 @@ export const getStats = asyncHandler(async (req, res) => {
       AND "approvedAt" IS NOT NULL
   `;
 
-  // Get fulfillment rate
+
   const fulfillmentRate = await prisma.$queryRaw`
     SELECT 
       COUNT(*) as total,

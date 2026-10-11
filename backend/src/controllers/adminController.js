@@ -14,7 +14,6 @@ const serializeData = (data) => {
   );
 };
 
-// ============ DASHBOARD STATISTICS ============
 export const getDashboardStats = asyncHandler(async (req, res) => {
   const [
     totalUsers,
@@ -110,7 +109,6 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     ORDER BY month DESC
   `;
 
-  // Critical alerts: critical emergency requests that are still active
   const criticalAlerts = await prisma.bloodRequest.count({
     where: {
       urgency: 'CRITICAL_EMERGENCY',
@@ -361,13 +359,13 @@ export const getHospitals = asyncHandler(async (req, res) => {
   });
 });
 
-//  verifyHospital function
+
 export const verifyHospital = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status: statusRaw, verificationStatus, notes } = req.body;
   const status = verificationStatus || statusRaw;
 
-  // Check if hospital exists
+  
   const hospital = await prisma.hospital.findUnique({
     where: { id },
     include: {

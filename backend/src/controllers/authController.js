@@ -113,7 +113,7 @@ export const register = asyncHandler(async (req, res) => {
     JWT_SECRET,
     { expiresIn: JWT_EXPIRE }
   );
- // Get complete user data with profile
+ 
   const user = await prisma.user.findUnique({
     where: { id: result.id },
     include: {
@@ -160,7 +160,7 @@ export const login = asyncHandler(async (req, res) => {
 
   const { email, password } = req.body;
 
-  // Only select columns needed for login — avoids heavy JOINs
+  
   const user = await prisma.user.findUnique({
     where: { email },
     select: {
@@ -186,7 +186,7 @@ export const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'Invalid email or password.');
   }
 
-  // Fire-and-forget: update lastLogin without blocking the response
+  
   prisma.user.update({
     where: { id: user.id },
     data: { lastLogin: new Date() }

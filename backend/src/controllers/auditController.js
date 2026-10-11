@@ -126,7 +126,7 @@ export const cleanupAuditLogs = asyncHandler(async (req, res) => {
 
   const result = await auditService.cleanupOldLogs(parseInt(days));
 
-  // Log the cleanup action
+  
   await auditService.log({
     userId: req.user.id,
     action: 'CLEANUP_AUDIT_LOGS',

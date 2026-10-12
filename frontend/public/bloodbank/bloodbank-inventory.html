@@ -304,7 +304,6 @@
     <!-- ============ TOAST CONTAINER ============ -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
     <script type="module">
       import api from "../../src/js/api/api.js";
       import {
@@ -316,7 +315,7 @@
 
       const shell = initShell();
       if (shell) {
-        // ---------- Blood type display mapping ----------
+        
         const BLOOD_TYPE_TO_ENUM = {
           "A+": "A_POS",
           "A-": "A_NEG",
@@ -340,7 +339,6 @@
         let currentModalMode = "add";
         let pendingDeleteType = null;
 
-        // ---------- Element refs: Add/Update modal ----------
         const modalEl = document.getElementById("updateStockModal");
         const modalTitleEl = document.querySelector(
           "#updateStockModal .modal-header h3"

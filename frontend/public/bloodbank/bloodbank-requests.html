@@ -291,7 +291,6 @@
     <!-- ============ TOAST CONTAINER ============ -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
     <script type="module">
       import api from "../../src/js/api/api.js";
       import {
@@ -305,14 +304,12 @@
       if (shell) {
         await loadCommonData(api, shell.paintProfile);
 
-        // ---------- State ----------
         let requestsData = [];
         let pagination = { page: 1, limit: 10, total: 0, pages: 0 };
         let searchTerm = "";
         let pendingRejectId = null;
         let searchDebounceTimer = null;
 
-        // ---------- Element refs ----------
         const tableBody = document.getElementById("all-requests-table");
         const statusFilterEl = document.getElementById("status-filter");
         const urgencyFilterEl = document.getElementById("urgency-filter");
@@ -330,7 +327,6 @@
         const rejectBtnText = document.getElementById("reject-btn-text");
         const rejectBtnSpinner = document.getElementById("reject-btn-spinner");
 
-        // ---------- Helpers ----------
         const hospitalName = (req) =>
           req.hospital?.hospitalName || req.hospital?.user?.name || "—";
         const urgencyBadge = (u) =>
@@ -371,7 +367,6 @@
           paginationBar.style.display = "none";
         }
 
-        // ---------- Client-side search on top of server-filtered page ----------
         function getFilteredForDisplay() {
           if (!searchTerm.trim()) return requestsData;
           const term = searchTerm.trim().toLowerCase();
@@ -383,7 +378,6 @@
           );
         }
 
-        // ---------- Render table ----------
         function renderRequests() {
           const reqs = getFilteredForDisplay();
 
@@ -429,7 +423,6 @@
           renderPagination();
         }
 
-        // ---------- Pagination ----------
         function renderPagination() {
           const controls = document.getElementById("pagination-controls");
           if (pagination.pages <= 1 && requestsData.length === 0) {
@@ -501,7 +494,6 @@
             });
         }
 
-        // ---------- Approve ----------
         async function approveRequest(id, btnEl) {
           const row = btnEl.closest("tr");
           const buttons = row.querySelectorAll("button");
@@ -523,7 +515,6 @@
           }
         }
 
-        // ---------- Reject (via modal) ----------
         function openRejectModal(id) {
           pendingRejectId = id;
           rejectReasonInput.value = "";
@@ -568,7 +559,6 @@
           );
         });
 
-        // ---------- Filters ----------
         function resetToFirstPageAndLoad() {
           pagination.page = 1;
           loadRequests();
@@ -595,7 +585,6 @@
             resetToFirstPageAndLoad();
           });
 
-        // ---------- Load from server ----------
         async function loadRequests() {
           renderLoadingState();
           try {

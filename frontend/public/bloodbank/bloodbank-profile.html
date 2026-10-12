@@ -538,7 +538,6 @@
       } from "../../src/js/bloodbank-sidebar-common.js";
       import { applyIcons } from "../../src/js/bloodbank-icons.js";
 
-      /* ---------- helpers ---------- */
       function clearSkeleton(el) {
         if (!el) return;
         el.classList.remove("skeleton");
@@ -563,10 +562,8 @@
         return div.innerHTML;
       }
 
-      /* ---------- state ---------- */
       let profileData = null;
 
-      /* ---------- render view mode ---------- */
       function renderView(p) {
         const set = (id, val) => {
           const el = document.getElementById(id);
@@ -575,7 +572,6 @@
           el.innerHTML = val;
         };
 
-        // Header
         const name = p.bankName || p.name || "—";
         const initials =
           name
@@ -591,7 +587,6 @@
           "profile-member-since"
         ).textContent = `Member since ${formatDate(p.createdAt)}`;
 
-        // Verification badge
         const badge = document.getElementById("profile-verification-badge");
         const vStatus = p.verificationStatus || "UNKNOWN";
         const badgeColors = {
@@ -654,7 +649,6 @@
         });
       }
 
-      /* ---------- toggle edit/view ---------- */
       function showViewMode() {
         document.getElementById("view-mode").style.display = "";
         document.getElementById("edit-mode").style.display = "none";
@@ -667,17 +661,16 @@
         document.getElementById("edit-profile-btn").style.display = "none";
       }
 
-      /* ---------- init ---------- */
       const shell = initShell();
       if (shell) {
         try {
-          // Load sidebar header data + dedicated profile endpoint in parallel
+        
           const [common, profileRes] = await Promise.allSettled([
             loadCommonData(api, shell.paintProfile),
             api.get("/blood-banks/profile"),
           ]);
 
-          // Prefer the dedicated profile endpoint for full data
+        
           const dashboardProfile =
             common.status === "fulfilled" ? common.value.profile : {};
           const fullProfile =
@@ -685,7 +678,6 @@
               ? profileRes.value.data
               : {};
 
-          // Merge: dashboard profile has user data, profile endpoint has full fields
           profileData = { ...dashboardProfile, ...fullProfile };
 
           if (profileData && profileData.bankName) {
@@ -741,7 +733,7 @@
               const res = await api.put("/blood-banks/profile", formData);
 
               if (res.success) {
-                // Update local data (res.data is the updated blood bank object)
+                
                 const updated = res.data || {};
                 profileData = { ...profileData, ...formData, ...updated };
                 renderView(profileData);
@@ -761,7 +753,7 @@
             }
           });
 
-        // Keyboard shortcut: Escape to cancel edit
+        
         document.addEventListener("keydown", (e) => {
           if (
             e.key === "Escape" &&

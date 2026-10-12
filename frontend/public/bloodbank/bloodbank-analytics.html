@@ -278,7 +278,7 @@
         document.getElementById("an-total-donations").innerText =
           stats.totalDonations ?? "—";
 
-        // ---------- Request trend chart (grouped bars, SVG) ----------
+        
         function renderTrendChart(trends) {
           const el = document.getElementById("trend-chart");
           if (!trends || trends.length === 0) {
@@ -333,7 +333,7 @@
         </svg>`;
         }
 
-        // ---------- Stock-by-type chart (horizontal bars, SVG) ----------
+        
         function renderStockChart(inv) {
           const el = document.getElementById("stock-chart");
           if (!inv || inv.length === 0) {

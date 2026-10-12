@@ -343,7 +343,6 @@
         const { profile } = await loadCommonData(api, shell.paintProfile);
         const bloodBankId = profile?.id;
 
-        // ---------- State ----------
         let donations = [];
         let pagination = { page: 1, limit: 10, total: 0, pages: 0 };
         let searchTerm = "";

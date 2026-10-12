@@ -603,20 +603,20 @@
         badge.style.color = bc.color;
         badge.textContent = `${bc.icon} ${vStatus}`;
 
-        // Facility info
+        
         set("view-bank-name", escapeHtml(p.bankName || "—"));
         set("view-license", escapeHtml(p.licenseNumber || "—"));
         set("view-phone", escapeHtml(p.phone || p.user?.phone || "—"));
         set("view-email", escapeHtml(p.user?.email || "—"));
 
-        // Location
+        
         set("view-address", escapeHtml(p.address || "—"));
         set("view-city", escapeHtml(p.city || "—"));
         set("view-state", escapeHtml(p.state || "—"));
         set("view-country", escapeHtml(p.country || "—"));
         set("view-emergency", escapeHtml(p.emergencyContact || "—"));
 
-        // Account
+        
         set(
           "view-status",
           `<span style="color:${bc.color};font-weight:600;">${vStatus}</span>`
@@ -631,7 +631,7 @@
         set("view-updated", formatDate(p.updatedAt));
       }
 
-      /* ---------- populate edit form ---------- */
+      
       function populateEditForm(p) {
         if (!p) return;
         const fields = [
@@ -692,7 +692,7 @@
           showToast("Failed to load profile details.", "error");
         }
 
-        // Edit button
+        
         document
           .getElementById("edit-profile-btn")
           ?.addEventListener("click", () => {
@@ -701,7 +701,7 @@
             showEditMode();
           });
 
-        // Cancel
+        
         document
           .getElementById("cancel-edit-btn")
           ?.addEventListener("click", () => {
@@ -753,7 +753,6 @@
             }
           });
 
-        
         document.addEventListener("keydown", (e) => {
           if (
             e.key === "Escape" &&

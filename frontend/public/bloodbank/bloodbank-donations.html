@@ -318,7 +318,6 @@
     <!-- ============ TOAST CONTAINER ============ -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <!-- JAVASCRIPT (module, shares auth/shell with every page) -->
     <script type="module">
       import api from "../../src/js/api/api.js";
       import {
@@ -515,7 +514,6 @@
             loadDonations();
           });
 
-        // ---------- Record donation modal ----------
         const modal = document.getElementById("recordDonationModal");
         const submitBtn = document.getElementById("submit-donation-btn");
         const submitText = document.getElementById("submit-donation-text");

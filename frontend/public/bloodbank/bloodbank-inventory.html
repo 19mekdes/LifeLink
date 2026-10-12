@@ -360,7 +360,6 @@
         const deleteBtnText = document.getElementById("delete-btn-text");
         const deleteBtnSpinner = document.getElementById("delete-btn-spinner");
 
-        // ---------- Rendering ----------
         function renderInventory() {
           const renderCard = (item) => {
             const displayType =
@@ -402,7 +401,7 @@
               { size: 34 }
             )}</div><h4>No inventory yet</h4><p>Use "Add Stock" to record your first blood units.</p></div>`;
 
-          // Re-attach listeners every render, since the buttons are recreated each time
+          
           document.querySelectorAll("[data-quick-add]").forEach((btn) => {
             btn.addEventListener("click", () =>
               openStockModal(btn.dataset.quickAdd, "add")
@@ -429,7 +428,7 @@
         `;
         }
 
-        // ---------- Add/Update modal mode ----------
+        
         function syncModalMode(enumType) {
           const existingItem = inventoryData.find(
             (i) => i.bloodType === enumType
@@ -475,7 +474,7 @@
           );
         });
 
-        // ---------- Submit Add/Update (with loading/spinner state) ----------
+        
         function setSubmitLoading(loading) {
           submitBtn.disabled = loading;
           submitBtnSpinner.classList.toggle("active", loading);
@@ -519,7 +518,7 @@
           }
         });
 
-        // ---------- Delete confirmation modal ----------
+        
         function openDeleteModal(enumType) {
           pendingDeleteType = enumType;
           deleteConfirmTypeEl.textContent =
@@ -556,7 +555,7 @@
           }
         });
 
-        // ---------- Export ----------
+        
         document
           .getElementById("export-inventory-btn")
           ?.addEventListener("click", () => {
@@ -579,7 +578,7 @@
             URL.revokeObjectURL(url);
           });
 
-        // ---------- Initial load ----------
+        
         async function refresh() {
           renderLoadingState();
           try {

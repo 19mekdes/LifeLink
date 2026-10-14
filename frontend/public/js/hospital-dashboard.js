@@ -218,7 +218,6 @@ import api from '../../src/js/api/api.js';
   const sidebarToggleBtn = $('#sidebar-toggle-btn');
   const mainContent = $('#main-content');
 
-  // Mobile sidebar toggle
   function toggleSidebar() {
     if (sidebar) sidebar.classList.toggle('open');
     if (sidebarOverlay) sidebarOverlay.classList.toggle('open');
@@ -232,7 +231,6 @@ import api from '../../src/js/api/api.js';
   hamburgerBtn?.addEventListener('click', toggleSidebar);
   sidebarOverlay?.addEventListener('click', closeSidebar);
 
-  // Desktop sidebar collapse toggle (3-line button next to LifeLink)
   sidebarToggleBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     if (sidebar) sidebar.classList.toggle('collapsed');
@@ -347,7 +345,7 @@ import api from '../../src/js/api/api.js';
 
 
   function loadDashboard() {
-    
+
     safeLoad(fetchHospitalProfile).then((profile) => {
       if (!profile) return;
       const hospitalName = profile.hospitalName || profile.user?.name || 'Hospital';
@@ -374,7 +372,6 @@ import api from '../../src/js/api/api.js';
       $('#stat-total-responses').textContent = stats.approvedRequests ?? 0;
       $('#stat-completed-donations').textContent = stats.totalDonations ?? 0;
 
-      // Status Overview breakdown
       const active = stats.pendingRequests || 0;
       const inProgress = stats.approvedRequests || 0;
       const completed = stats.fulfilledRequests || 0;
@@ -759,7 +756,7 @@ import api from '../../src/js/api/api.js';
       }
     });
 
-    
+
     safeLoad(() => fetchMyRequests('')).then((requests) => {
       if (!requests || requests.length === 0) {
         $('#profile-stat-avg-response').textContent = 'N/A';
@@ -800,7 +797,7 @@ import api from '../../src/js/api/api.js';
       }
     });
 
-    // Also attempt backend stats endpoint if available
+
     fetchHospitalStatsApi().then((statsData) => {
       if (!statsData) return;
       const fulfillment = statsData.fulfillmentRate;
@@ -820,7 +817,7 @@ import api from '../../src/js/api/api.js';
         }
       }
     }).catch(() => {
-      
+
     });
   }
 

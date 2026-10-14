@@ -20,7 +20,6 @@ function getHospitalCoords(hospitalName) {
     if (hospitalCoordinates[hospitalName]) {
         return hospitalCoordinates[hospitalName];
     }
-    // Fuzzy match
     for (const [name, coords] of Object.entries(hospitalCoordinates)) {
         if (hospitalName.toLowerCase().includes(name.toLowerCase()) ||
             name.toLowerCase().includes(hospitalName.toLowerCase())) {
@@ -65,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
             maxZoom: 18
         }).addTo(map);
 
-        // Add user location marker
         const userIcon = L.divIcon({
             className: "user-marker",
             html: '<div style="width:16px;height:16px;background:#4285f4;border:3px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>',
@@ -97,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function addHospitalMarkers(requests) {
         if (!map) return;
 
-        // Clear existing markers
         markers.forEach(m => map.removeLayer(m));
         markers = [];
 
@@ -111,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const bounds = [];
 
-        // Group requests by hospital
         const hospitalMap = {};
         requests.forEach(req => {
             const name = req.hospital?.user?.name || req.hospital?.name || "Hospital";

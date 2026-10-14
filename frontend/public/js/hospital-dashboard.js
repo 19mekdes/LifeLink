@@ -425,7 +425,6 @@ import api from '../../src/js/api/api.js';
         }
       }
 
-      // Urgent Requests Table
       const urgentRequests = recentRequests.filter(
         (r) => r.urgency === 'URGENT' || r.urgency === 'CRITICAL_EMERGENCY'
       );
@@ -560,8 +559,6 @@ import api from '../../src/js/api/api.js';
       loadDashboard();
     });
   }
-
-  // Wire filter tabs for My Requests
   $('#my-requests-tabs')?.addEventListener('click', (e) => {
     const tab = e.target.closest('.tab');
     if (!tab) return;
@@ -752,7 +749,6 @@ import api from '../../src/js/api/api.js';
       $('#profile-stat-total-responses').textContent = stats.approvedRequests ?? '—';
       $('#profile-stat-completed-donations').textContent = stats.totalDonations ?? '—';
 
-      // Fulfillment Rate calculated from stats
       const total = stats.totalRequests || 0;
       const fulfilled = stats.fulfilledRequests || 0;
       if (total > 0) {

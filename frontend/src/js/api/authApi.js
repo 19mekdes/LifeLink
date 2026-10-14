@@ -61,9 +61,6 @@ export const authApi = {
     api.saveAuth(token, user);
   },
 
-  /**
-   * Clear authentication data
-   */
   clearAuth: () => {
     api.clearAuth();
   },
@@ -77,9 +74,6 @@ export const authApi = {
     return api.getDashboardUrl(role);
   },
 
-  /**
-   * Logout and redirect to login
-   */
   logoutAndRedirect: () => {
     api.logout();
   }

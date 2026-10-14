@@ -387,7 +387,6 @@ export const verifyHospital = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Invalid verification status. Must be PENDING, VERIFIED, or REJECTED');
   }
 
-  // Update hospital verification status
   const updatedHospital = await prisma.hospital.update({
     where: { id },
     data: {
@@ -492,7 +491,6 @@ export const verifyBloodBank = asyncHandler(async (req, res) => {
   const { status: statusRaw, verificationStatus, notes } = req.body;
   const status = verificationStatus || statusRaw;
 
-  // Check if blood bank exists
   const bloodBank = await prisma.bloodBank.findUnique({
     where: { id },
     include: {
@@ -513,8 +511,6 @@ export const verifyBloodBank = asyncHandler(async (req, res) => {
   if (!status || !['PENDING', 'VERIFIED', 'REJECTED'].includes(status)) {
     throw new ApiError(400, 'Invalid verification status. Must be PENDING, VERIFIED, or REJECTED');
   }
-
-  // Update blood bank verification status
   const updatedBloodBank = await prisma.bloodBank.update({
     where: { id },
     data: {
@@ -530,7 +526,6 @@ export const verifyBloodBank = asyncHandler(async (req, res) => {
     }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -610,11 +605,9 @@ export const getDonors = asyncHandler(async (req, res) => {
   });
 });
 
-//  verifyDonor function
 export const verifyDonor = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  // Check if donor exists
   const existingDonor = await prisma.donorProfile.findUnique({
     where: { id },
     include: {
@@ -631,7 +624,6 @@ export const verifyDonor = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Donor not found');
   }
 
-  // Update donor verification status
   const donor = await prisma.donorProfile.update({
     where: { id },
     data: { isVerified: true },
@@ -645,7 +637,6 @@ export const verifyDonor = asyncHandler(async (req, res) => {
     }
   });
 
-  // Log action
   await prisma.auditLog.create({
     data: {
       userId: req.user.id,
@@ -685,7 +676,7 @@ export const getAdminProfile = asyncHandler(async (req, res) => {
       }
     });
   } catch (e) {
-    // Fallback if AdminProfile table doesn't exist yet
+
     user = await prisma.user.findUnique({
       where: { id: req.user.id },
       select: {
@@ -1030,7 +1021,6 @@ export const getBloodInventoryStats = asyncHandler(async (req, res) => {
     _sum: { units: true }
   });
 
-  // Get donor blood types for donated
   const donorIds = donationsByType.map(d => d.donorId);
   const donorProfiles = await prisma.donorProfile.findMany({
     where: { id: { in: donorIds } },
@@ -1047,7 +1037,6 @@ export const getBloodInventoryStats = asyncHandler(async (req, res) => {
     }
   });
 
-  // Get fulfilled requests per blood type (issued)
   const fulfilledWhere = cutoff
     ? { status: 'FULFILLED', fulfilledAt: { gte: cutoff } }
     : { status: 'FULFILLED' };
@@ -1063,8 +1052,6 @@ export const getBloodInventoryStats = asyncHandler(async (req, res) => {
       issuedMap[r.bloodType] = r._sum.unitsFulfilled || 0;
     }
   });
-
-  // Get current inventory
   const inventoryItems = await prisma.inventoryItem.findMany({
     select: { bloodType: true, unitsAvailable: true }
   });
@@ -1116,7 +1103,7 @@ export const getSignupsStats = asyncHandler(async (req, res) => {
       donorCounts.push(dnr);
     }
   } else if (period === 'monthly') {
-    // Last 12 months
+    
     for (let m = 11; m >= 0; m--) {
       const d = new Date(now.getFullYear(), now.getMonth() - m, 1);
       const nextMonth = new Date(d.getFullYear(), d.getMonth() + 1, 1);
@@ -1147,7 +1134,7 @@ export const getSignupsStats = asyncHandler(async (req, res) => {
       donorCounts.push(dnr);
     }
   } else {
-    // daily (default): last 14 days
+
     for (let d = 13; d >= 0; d--) {
       const day = new Date(now);
       day.setDate(day.getDate() - d);

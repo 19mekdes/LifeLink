@@ -309,7 +309,6 @@ export const recordDonation = asyncHandler(async (req, res) => {
       }
     });
 
-    // 2. Update Donor Profile
     const updatedDonor = await tx.donorProfile.update({
       where: { id: donorId },
       data: {
@@ -322,7 +321,6 @@ export const recordDonation = asyncHandler(async (req, res) => {
       }
     });
 
-    // 3. Update Associated BloodRequest
     const newFulfilledCount = bloodRequest.unitsFulfilled + unitCount;
     const isFullyFulfilled = newFulfilledCount >= bloodRequest.unitsRequired;
 
@@ -335,7 +333,6 @@ export const recordDonation = asyncHandler(async (req, res) => {
       }
     });
 
-    // 4. Update Inventory
     await tx.inventoryItem.upsert({
       where: {
         bloodBankId_bloodType: {
@@ -354,7 +351,6 @@ export const recordDonation = asyncHandler(async (req, res) => {
       }
     });
 
-    // 5. Create Notification for Donor
     await tx.notification.create({
       data: {
         userId: donorProfile.userId,
@@ -370,7 +366,6 @@ export const recordDonation = asyncHandler(async (req, res) => {
       }
     });
 
-    // 6. Audit Log
     await tx.auditLog.create({
       data: {
         userId,
@@ -390,7 +385,6 @@ export const recordDonation = asyncHandler(async (req, res) => {
     return donation;
   });
 
-  // ✅ Send donation confirmation email to donor
   if (donorProfile.user?.email) {
     try {
       const emailTemplate = donationConfirmationEmail(donorProfile.user.name, {
@@ -412,7 +406,6 @@ export const recordDonation = asyncHandler(async (req, res) => {
     }
   }
 
-  // ✅ Send notification to hospital
   if (bloodRequest.hospital?.user?.email) {
     try {
       const subject = `✅ Donation Recorded: ${bloodRequest.bloodType}`;
@@ -760,7 +753,6 @@ export const updateDonationStatus = asyncHandler(async (req, res) => {
       return updatedDonation;
     });
 
-    // ✅ Send donation confirmation email to donor
     if (existingDonation.donor?.user?.email) {
       try {
         const emailTemplate = donationConfirmationEmail(existingDonation.donor.user.name, {
@@ -782,7 +774,6 @@ export const updateDonationStatus = asyncHandler(async (req, res) => {
       }
     }
 
-    // ✅ Send notification to hospital
     if (existingDonation.request?.hospital?.user?.email) {
       try {
         const subject = `✅ Donation Completed: ${existingDonation.request.bloodType}`;
@@ -843,7 +834,6 @@ export const updateDonationStatus = asyncHandler(async (req, res) => {
     });
   }
 
-  // Default status update (e.g., CANCELLED)
   const updatedDonation = await prisma.donation.update({
     where: { id },
     data: {
@@ -862,7 +852,6 @@ export const updateDonationStatus = asyncHandler(async (req, res) => {
     }
   });
 
-  // ✅ Send cancellation notification to hospital
   if (status === 'CANCELLED' && existingDonation.request?.hospital?.user?.email) {
     try {
       const subject = `📋 Donation Cancelled: ${existingDonation.request.bloodType}`;

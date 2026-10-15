@@ -65,7 +65,6 @@ export const getNotifications = asyncHandler(async (req, res) => {
     prisma.notification.count({ where })
   ]);
 
-  // Get unread count
   const unreadCount = await prisma.notification.count({
     where: {
       userId: req.user.id,
@@ -322,7 +321,6 @@ export const getNotificationStats = asyncHandler(async (req, res) => {
     })
   ]);
 
-  // Get notifications by type
   const byType = await prisma.$queryRaw`
     SELECT 
       type,
@@ -398,13 +396,12 @@ export const sendSystemNotification = asyncHandler(async (req, res) => {
 
   const { title, message, type, roles, data } = req.body;
 
-  // Build where clause for users
+  
   const where = { isActive: true };
   if (roles && roles.length > 0) {
     where.role = { in: roles };
   }
 
-  // Get all users matching the criteria
   const users = await prisma.user.findMany({
     where,
     select: { id: true }
@@ -414,7 +411,6 @@ export const sendSystemNotification = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'No users found matching the criteria');
   }
 
-  // Create notifications for all users
   const notifications = await prisma.$transaction(
     users.map(user =>
       prisma.notification.create({

@@ -475,7 +475,6 @@ class AuditService {
         take: 100
       });
 
-      // Group by date
       const timeline = {};
       logs.forEach(log => {
         const date = log.createdAt.toISOString().split('T')[0];

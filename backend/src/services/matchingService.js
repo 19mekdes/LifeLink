@@ -226,7 +226,7 @@ class MatchingService {
       nextEligibleDate: null
     };
 
-    // Check age
+  
     if (donor.age < 16) {
       result.eligible = false;
       result.reasons.push('Donor must be at least 16 years old');
@@ -237,7 +237,6 @@ class MatchingService {
       result.reasons.push('Donor must be under 70 years old');
     }
 
-    // Check last donation date (90-day rule)
     if (donor.lastDonationDate) {
       const daysSinceDonation = Math.floor(
         (Date.now() - new Date(donor.lastDonationDate).getTime()) / (1000 * 60 * 60 * 24)
@@ -258,7 +257,6 @@ class MatchingService {
       result.reasons.push(`Donor is currently ${donor.availabilityStatus.toLowerCase()}`);
     }
 
-    // Check verification status
     if (!donor.isVerified) {
       result.eligible = false;
       result.reasons.push('Donor is not verified');

@@ -425,10 +425,9 @@ class InventoryService {
    */
   async transferInventory(fromBloodBankId, toBloodBankId, bloodType, units) {
     try {
-      // Remove from source
+    
       const fromInventory = await this.removeInventoryUnits(fromBloodBankId, bloodType, units);
 
-      // Add to destination
       const toInventory = await this.addInventoryUnits(toBloodBankId, bloodType, units);
 
       return {
@@ -444,5 +443,4 @@ class InventoryService {
   }
 }
 
-// Export singleton instance
 export default new InventoryService();
